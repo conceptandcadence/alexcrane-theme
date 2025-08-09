@@ -1,0 +1,143 @@
+{% comment %}
+  Renders a simplified media carousel for product cards
+
+  Accepts:
+  - product: {Object} Product liquid object (required)
+  - card_id: {String} Unique identifier for this card instance (required)
+  - media_aspect_ratio: {String} Size of the media. Values are "square", "portrait", "adapt" (optional)
+  - lazy_load: {Boolean} Image should be lazy loaded. Default: true (optional)
+
+  Usage:
+  {% render 'card-media-carousel', product: card_product, card_id: card_product.id %}
+{% endcomment %}
+
+{%- liquid
+  unless lazy_load == false
+    assign lazy = 'lazy'
+  endunless
+
+  assign ratio = 1
+  if product.featured_media and media_aspect_ratio == 'portrait'
+    assign ratio = 0.8
+  elsif product.featured_media and media_aspect_ratio == 'adapt'
+    assign ratio = product.featured_media.aspect_ratio
+  endif
+  if ratio == 0 or ratio == null
+    assign ratio = 1
+  endif
+
+  assign media_count = product.media.size
+  assign has_multiple_media = false
+  if media_count > 1
+    assign has_multiple_media = true
+  endif
+
+  assign unique_id = card_id | append: '-' | append: product.id
+-%}
+
+{%- if product.media.size > 0 -%}
+  <div class='card-media-carousel' data-product-id='{{ product.id }}' data-card-id='{{ card_id }}'>
+    <slider-component class='card-slider'>
+      <ul
+        id='CardSlider-{{ unique_id }}'
+        class='card-media-list slider slider--mobile list-unstyled'
+        role='list'
+      >
+        {%- for media in product.media -%}
+          <li
+            id='CardSlide-{{ unique_id }}-{{ media.id }}'
+            class='card-media-item slider__slide{% if forloop.first %} is-active{% endif %}'
+            data-media-id='{{ unique_id }}-{{ media.id }}'
+          >
+            <div class='card-media-container' style='--ratio-percent: {{ 1 | divided_by: ratio | times: 100 }}%;'>
+              {%- if media.media_type == 'image' -%}
+                <img
+                  srcset='
+                    {%- if media.width >= 165 -%}{{ media | image_url: width: 165 }} 165w,{%- endif -%}
+                    {%- if media.width >= 360 -%}{{ media | image_url: width: 360 }} 360w,{%- endif -%}
+                    {%- if media.width >= 533 -%}{{ media | image_url: width: 533 }} 533w,{%- endif -%}
+                    {%- if media.width >= 720 -%}{{ media | image_url: width: 720 }} 720w,{%- endif -%}
+                    {{ media | image_url }} {{ media.width }}w
+                  '
+                  src='{{ media | image_url: width: 533 }}'
+                  sizes='(min-width: {{ settings.page_width }}px) {{ settings.page_width | minus: 130 | divided_by: 4 }}px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)'
+                  alt='{{ media.alt | escape }}'
+                  class='motion-reduce card-media-image'
+                  {% unless lazy_load == false %}
+                    loading='{{ lazy }}'
+                  {% endunless %}
+                  width='{{ media.width }}'
+                  height='{{ media.height }}'
+                >
+              {%- else -%}
+                {%- comment -%} Handle video/other media types {%- endcomment -%}
+                <div class='card-media-placeholder' style='aspect-ratio: {{ media.aspect_ratio | default: 1.0 }}'>
+                  <img
+                    src='{{ media.preview_image | image_url: width: 533 }}'
+                    alt='{{ media.alt | escape }}'
+                    class='motion-reduce card-media-image'
+                    width='{{ media.preview_image.width | default: 533 }}'
+                    height='{{ media.preview_image.height | default: 533 }}'
+                    {% unless lazy_load == false %}
+                      loading='{{ lazy }}'
+                    {% endunless %}
+                  >
+                  <div class='card-media-icon'>
+                    {%- case media.media_type -%}
+                      {%- when 'video', 'external_video' -%}
+                        <span class='svg-wrapper'>
+                          {{- 'icon-play.svg' | inline_asset_content -}}
+                        </span>
+                      {%- when 'model' -%}
+                        <span class='svg-wrapper'>
+                          {{- 'icon-3d-model.svg' | inline_asset_content -}}
+                        </span>
+                    {%- endcase -%}
+                  </div>
+                </div>
+              {%- endif -%}
+            </div>
+          </li>
+        {%- endfor -%}
+      </ul>
+
+      {%- if has_multiple_media -%}
+        <div class='card-slider-buttons'>
+          <button
+            type='button'
+            class='card-slider-button card-slider-button--prev'
+            name='previous'
+            aria-label='{{ 'general.slider.previous_slide' | t }}'
+          >
+            <span class='svg-wrapper'>
+              {{- 'icon-caret.svg' | inline_asset_content -}}
+            </span>
+          </button>
+          <button
+            type='button'
+            class='card-slider-button card-slider-button--next'
+            name='next'
+            aria-label='{{ 'general.slider.next_slide' | t }}'
+          >
+            <span class='svg-wrapper'>
+              {{- 'icon-caret.svg' | inline_asset_content -}}
+            </span>
+          </button>
+        </div>
+
+        {%- if media_count > 2 -%}
+          <div class='card-slider-dots'>
+            {%- for media in product.media -%}
+              <button
+                type='button'
+                class='card-slider-dot{% if forloop.first %} is-active{% endif %}'
+                data-slide-index='{{ forloop.index0 }}'
+                aria-label='Go to slide {{ forloop.index }}'
+              ></button>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      {%- endif -%}
+    </slider-component>
+  </div>
+{%- endif -%}

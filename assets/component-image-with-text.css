@@ -363,12 +363,17 @@
 
 @media screen and (min-width: 990px) {
   .image-with-text__content {
-    padding: 6rem 7rem 7rem;
+    padding: 0 7rem 0 0;
+    justify-content: space-between;
   }
 }
 
 .image-with-text__content > * + * {
   margin-top: 2rem;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0;
+  font-weight: 500;
 }
 
 .image-with-text__content > .image-with-text__text:empty ~ a {

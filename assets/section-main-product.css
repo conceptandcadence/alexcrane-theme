@@ -21,10 +21,14 @@ product-info {
 
 @media screen and (min-width: 750px) {
   .product__column-sticky {
-    display: block;
+    display: flex;
+    flex-direction: column;
     position: sticky;
     top: 3rem;
     z-index: 2;
+  }
+  media-gallery.product__column-sticky {
+    flex-direction: row-reverse;
   }
 
   .product--thumbnail .thumbnail-list {
@@ -174,7 +178,7 @@ product-info {
 .product-form__input {
   flex: 0 0 100%;
   padding: 0;
-  margin: 0 0 1.2rem 0;
+  margin: 0;
   max-width: 44rem;
   min-width: fit-content;
   border: none;
@@ -190,10 +194,6 @@ product-info {
 
 .product-form__input .svg-wrapper {
   right: 1.5rem;
-}
-
-.product-form__submit {
-  margin-bottom: 1rem;
 }
 
 .product-form__submit[aria-disabled='true']
@@ -219,13 +219,13 @@ product-info {
 
 .shopify-payment-button__button {
   font-size: 1.5rem;
-  letter-spacing: 0.1rem;
+  letter-spacing: 0;
 }
 
 /* Product info */
 
 .product__info-container > * + * {
-  margin: 1.5rem 0;
+  margin: 0;
 }
 
 .product__info-container iframe {
@@ -235,7 +235,7 @@ product-info {
 .product__info-container .product-form,
 .product__info-container .product__description,
 .product__info-container .icon-with-text {
-  margin: 2.5rem 0;
+  margin: 12px 0;
 }
 
 .product__text {
@@ -254,7 +254,6 @@ a.product__text {
 
 .product__title {
   word-break: break-word;
-  margin-bottom: 1.5rem;
 }
 
 .product__title > * {
@@ -282,7 +281,7 @@ a.product__text {
 }
 
 .product .price__container {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0;
 }
 
 .product .price dl {
@@ -951,7 +950,7 @@ a.product__text {
 
 .thumbnail-list {
   flex-wrap: wrap;
-  grid-gap: 1rem;
+  grid-gap: 16px;
 }
 
 /* Fix to show some space at the end of our sliders in all browsers to be applied on thumbnails */
@@ -1017,13 +1016,17 @@ a.product__text {
 
 @media screen and (min-width: 750px) {
   .product--thumbnail_slider .thumbnail-slider {
+    --thumbnail-width: 7.5vw;
     display: flex;
+    flex-direction: column;
     align-items: center;
+    width: var(--thumbnail-width);
   }
 
   .thumbnail-slider .thumbnail-list.slider--tablet-up {
     display: flex;
-    padding: 0.5rem;
+    flex-direction: column;
+    padding: 0;
     flex: 1;
     scroll-padding-left: 0.5rem;
   }
@@ -1049,7 +1052,7 @@ a.product__text {
   }
 
   .thumbnail-list.slider--tablet-up .thumbnail-list__item.slider__slide {
-    width: calc(20% - 0.8rem);
+    width: var(--thumbnail-width);
   }
 }
 
@@ -1203,7 +1206,7 @@ a.product__text {
 .thumbnail-list__item::before {
   content: '';
   display: block;
-  padding-bottom: 100%;
+  padding-bottom: 125%;
 }
 
 .product:not(.featured-product) .product__view-details {
@@ -1541,5 +1544,33 @@ a.product__text {
 
   .recipient-form > input[type='checkbox']:checked + label .icon-checkmark {
     border: none;
+  }
+}
+
+.quick-add-only {
+  display: none !important;
+}
+
+.product__description table,
+.product__description p:not(:first-of-type) {
+  display: none;
+}
+
+.product__description * {
+  font-size: 12px;
+  line-height: 15px;
+  letter-spacing: 0;
+  font-weight: 500;
+}
+
+.product-header .price .price-item {
+  font-size: 18px;
+  line-height: 24px;
+}
+
+@media screen and (min-width: 990px) {
+  .product-header .price .price-item {
+    font-size: 20px;
+    line-height: 32px;
   }
 }

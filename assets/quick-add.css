@@ -1,7 +1,7 @@
 .quick-add {
   position: relative;
   grid-row-start: 4;
-  margin: 0 0 1rem;
+  margin: 0;
   z-index: 1;
 }
 
@@ -26,7 +26,7 @@
 .quick-add-modal[open] {
   opacity: 1;
   visibility: visible;
-  z-index: 101;
+  z-index: 9999999999; /* we have to set this to a high number to ensure it's on top of 3rd party elements */
 }
 
 .quick-add-modal .scroll-trigger.scroll-trigger {
@@ -47,8 +47,8 @@
   --modal-height-offset: 3.2rem;
   position: absolute;
   top: 0;
-  left: 50%;
-  transform: translateX(-50%);
+  right: 24px;
+  /* transform: translateX(-50%); */
   margin: var(--modal-height-offset) auto 0;
   width: 100%;
   background-color: rgb(var(--color-background));
@@ -59,22 +59,23 @@
 
 @media screen and (min-width: 750px) {
   .quick-add-modal__content {
-    --modal-height-offset: 10rem;
+    --modal-height-offset: 24px;
     margin-top: var(--modal-height-offset);
     width: 80%;
-    max-height: calc(100% - var(--modal-height-offset) * 2);
+    height: 100%;
+    max-height: 100%;
     overflow-y: auto;
   }
 
   quick-add-modal .quick-add-modal__toggle {
-    top: 2rem;
-    right: 2rem;
+    top: 54px;
+    right: 64px;
   }
 }
 
 @media screen and (min-width: 990px) {
   .quick-add-modal__content {
-    width: 70%;
+    width: 360px;
   }
 }
 
@@ -214,7 +215,7 @@
   padding-right: 4.4rem;
   display: flex;
   overflow-y: auto;
-  padding: var(--modal-padding);
+  padding: var(--modal-padding) 4rem;
   height: 100%;
 }
 
@@ -250,19 +251,17 @@
 
 .quick-add-modal__toggle {
   background-color: rgb(var(--color-background));
-  border: 0.1rem solid rgba(var(--color-foreground), 0.1);
-  border-radius: 50%;
-  color: rgba(var(--color-foreground), 0.55);
+  color: rgba(var(--color-foreground), 1);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  padding: 1.2rem;
+  padding: 0;
   z-index: 5;
-  width: 4rem;
+  width: 16px;
   position: fixed;
-  top: 1.5rem;
-  right: 1.5rem;
+  top: 24px;
+  right: 24px;
 }
 
 .quick-add-modal__toggle:hover {
@@ -272,21 +271,28 @@
 .quick-add-modal__toggle .icon {
   height: auto;
   margin: 0;
-  width: 2.2rem;
+  width: 12px;
+}
+
+.quick-add-modal__toggle .icon path {
+  stroke: #000;
 }
 
 quick-add-modal .product:not(.featured-product) .product__view-details {
-  display: block;
+  display: flex;
 }
 
 .quick-add-modal__content--bulk .product__view-details .icon {
   margin-left: 1.2rem;
 }
 
-quick-add-modal .quick-add-hidden,
-quick-add-modal .product__modal-opener:not(.product__modal-opener--image),
-quick-add-modal .product__media-item:not(:first-child) {
+quick-add-modal .quick-add-hidden {
   display: none !important;
+}
+
+quick-add-modal .quick-add-only {
+  display: flex !important;
+  flex-direction: column;
 }
 
 quick-add-modal .slider.slider--mobile {
@@ -309,15 +315,49 @@ quick-add-modal .product__column-sticky {
 
 @media screen and (min-width: 750px) {
   quick-add-modal .product:not(.product--no-media) .product__media-wrapper {
-    max-width: 45%;
-    width: calc(45% - var(--grid-desktop-horizontal-spacing) / 2);
+    max-width: 100%;
+    width: 100%;
   }
 
   quick-add-modal .product:not(.product--no-media) .product__info-wrapper {
-    padding-top: 2rem;
-    padding-left: 4rem;
-    max-width: 54%;
-    width: calc(54% - var(--grid-desktop-horizontal-spacing) / 2);
+    padding-top: 16px;
+    padding-left: 0;
+    max-width: 100%;
+    width: 100%;
+  }
+
+  quick-add-modal .product__description table {
+    display: none;
+  }
+
+  quick-add-modal .product__description p:not(:first-of-type) {
+    display: none;
+  }
+
+  quick-add-modal .product__description * {
+    font-size: 12px;
+    line-height: 15px;
+    font-weight: 500;
+  }
+
+  quick-add-modal .price .price-item {
+    font-size: 12px;
+    line-height: 15px;
+    letter-spacing: 0;
+    font-weight: 400;
+  }
+
+  @media screen and (min-width: 990px) {
+    quick-add-modal .price .price-item {
+      flex-direction: column;
+      font-size: 17px;
+      line-height: 17px;
+    }
+  }
+
+  quick-add-modal .quick-add-modal__header {
+    margin-bottom: 24px;
+    margin-top: 36px;
   }
 
   quick-add-modal
@@ -340,7 +380,7 @@ quick-add-modal .product__column-sticky {
 }
 
 quick-add-modal .page-width {
-  padding: 0;
+  padding: 0 0 64px;
 }
 
 quick-add-modal .product__title > h1 {
@@ -351,22 +391,52 @@ quick-add-modal .product__title > a {
   display: block;
   text-decoration: none;
 }
-
+/*
 quick-add-modal .product__title > a:hover {
   color: rgb(var(--color-foreground));
   text-decoration: underline;
   text-underline-offset: 0.2rem;
   text-decoration-thickness: 0.3rem;
 }
+*/
 
 quick-add-modal .product-form__buttons {
   max-width: initial;
+  margin-top: 28px;
 }
 
 .quick-add__submit {
-  padding: 0.8rem;
-  min-width: 100%;
+  font-size: 12px;
+  padding: 0;
   box-sizing: border-box;
+  border-radius: 2px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  min-height: 40px;
+  transition: box-shadow 0.5s ease, opacity 0.5s ease,
+    background-color 0.5s ease, width 0.5s ease;
+  background-color: rgba(var(--color-button), 0.9);
+}
+
+.quick-add__submit:hover {
+  background-color: rgba(var(--color-button), 1);
+}
+
+.quick-add__submit[aria-disabled='true'] {
+  opacity: 1 !important;
+  background-color: rgba(var(--color-button), 1) !important;
+}
+
+.card__quick-add {
+  transition: box-shadow 0.5s ease, opacity 0.5s ease;
+}
+
+.quick-add__submit:before,
+.quick-add__submit:after {
+  content: none;
 }
 
 quick-add-modal .product-media-container.constrain-height {
@@ -416,4 +486,14 @@ quick-add-bulk .quantity__input {
 
 .quantity__input-disabled {
   pointer-events: none;
+}
+
+.quick-add-modal__content .product {
+  flex-direction: column !important;
+}
+
+quick-add-modal .badge {
+  position: absolute;
+  top: 24px;
+  left: 40px;
 }

@@ -189,7 +189,7 @@
                           <span class='visually-hidden'>
                             {{- 'products.product.quantity.decrease' | t: product: product.title | escape -}}
                           </span>
-                          <span class="svg-wrapper">
+                          <span class='svg-wrapper'>
                             {{- 'icon-minus.svg' | inline_asset_content -}}
                           </span>
                         </button>
@@ -213,7 +213,7 @@
                           <span class='visually-hidden'>
                             {{- 'products.product.quantity.increase' | t: product: product.title | escape -}}
                           </span>
-                          <span class="svg-wrapper">
+                          <span class='svg-wrapper'>
                             {{- 'icon-plus.svg' | inline_asset_content -}}
                           </span>
                         </button>
@@ -385,6 +385,8 @@
                     block: block,
                     product_form_id: product_form_id
                   %}
+                {%- when 'swatch_picker' -%}
+                  {% render 'product-swatch-picker', product: product %}
                 {%- when 'buy_buttons' -%}
                   {%- render 'buy-buttons',
                     block: block,
@@ -601,6 +603,11 @@
     {
       "type": "quantity_selector",
       "name": "t:sections.featured-product.blocks.quantity_selector.name",
+      "limit": 1
+    },
+    {
+      "type": "swatch_picker",
+      "name": "Swatch picker",
       "limit": 1
     },
     {

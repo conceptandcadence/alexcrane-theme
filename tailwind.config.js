@@ -1,11 +1,19 @@
 module.exports = {
-  prefix: 'twcss-',
+  prefix: 'tw-',
+  safelist: [
+    'tw-group',
+    'tw-opacity-0',
+    'tw-pointer-events-none',
+    'tw-transition-opacity',
+    'tw-duration-300',
+    'tw-group-hover:opacity-100',
+    'tw-group-hover:pointer-events-auto',
+  ],
   content: [
-    './layout/*.liquid',
-    './templates/*.liquid',
-    './templates/customers/*.liquid',
-    './sections/*.liquid',
-    './snippets/*.liquid',
+    './layout/**/*.liquid',
+    './templates/**/*.liquid',
+    './sections/**/*.liquid',
+    './snippets/**/*.liquid',
   ],
   theme: {
     screens: {

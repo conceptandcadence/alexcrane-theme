@@ -58,7 +58,7 @@
     }
   },
   "newsletter": {
-    "label": "Email",
+    "label": "Enter your email",
     "success": "Thanks for subscribing",
     "button_label": "Subscribe"
   },
@@ -107,8 +107,8 @@
   "products": {
     "product": {
       "add_to_cart": "Add to cart",
-      "choose_options": "Choose options",
-      "choose_product_options": "Choose options for {{ product_name }}",
+      "choose_options": "View options",
+      "choose_product_options": "View options for {{ product_name }}",
       "description": "Description",
       "inventory_in_stock": "In stock",
       "inventory_in_stock_show_count": "{{ quantity }} in stock",

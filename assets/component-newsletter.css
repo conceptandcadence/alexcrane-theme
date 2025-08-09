@@ -43,7 +43,7 @@
 }
 
 .newsletter-form__button {
-  width: 4.4rem;
+  width: 2.4rem;
   margin: 0;
   right: var(--inputs-border-width);
   top: 0;
@@ -69,5 +69,5 @@
 }
 
 .newsletter-form__button .icon {
-  width: 1.5rem;
+  width: 1.25rem;
 }
