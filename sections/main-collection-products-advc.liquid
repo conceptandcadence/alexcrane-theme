@@ -23,16 +23,19 @@
 {%- endif -%}
 
 {%- style -%}
-  .section-{{ section.id }}-padding {
-    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
-    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
-  }
+   .section-{{ section.id }}-padding {
+     padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+     padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+   }
 
-  @media screen and (min-width: 750px) {
-    .section-{{ section.id }}-padding {
-      padding-top: {{ section.settings.padding_top }}px;
-      padding-bottom: {{ section.settings.padding_bottom }}px;
-    }
+   @media screen and (min-width: 750px) {
+     .section-{{ section.id }}-padding {
+       padding-top: {{ section.settings.padding_top }}px;
+       padding-bottom: {{ section.settings.padding_bottom }}px;
+     }
+   }
+  .plp-actions {
+  	display: none;
   }
 {%- endstyle -%}
 
@@ -160,6 +163,303 @@
                   ],
                 },
               });
+            </script>
+
+            <!-- Swiper CSS and JS for GrapheneHC Carousels -->
+            <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.0.5/swiper-bundle.min.css'>
+            <script src='https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.0.5/swiper-bundle.min.js'></script>
+            {{ 'component-card-media-carousel.css' | asset_url | stylesheet_tag }}
+
+            <!-- GrapheneHC Carousel Manager -->
+            <script>
+              (function () {
+                'use strict';
+
+                console.log('🎠 GrapheneHC Carousel Manager Loading...');
+
+                // Wait for Swiper to load with multiple fallback strategies
+                function waitForSwiper(callback, attempts = 0, maxAttempts = 20) {
+                  if (window.Swiper && typeof window.Swiper === 'function') {
+                    console.log('✅ Swiper loaded successfully');
+                    callback();
+                    return;
+                  }
+
+                  if (attempts >= maxAttempts) {
+                    console.error('❌ Failed to load Swiper after max attempts');
+                    return;
+                  }
+
+                  console.log(`🔍 Swiper check attempt ${attempts + 1}: ${typeof window.Swiper}`);
+
+                  // Try alternative CDN at attempt 10
+                  if (attempts === 10) {
+                    console.log('🔄 Trying alternative Swiper CDN...');
+                    const script = document.createElement('script');
+                    script.src = 'https://unpkg.com/swiper@11/swiper-bundle.min.js';
+                    script.onload = () => {
+                      console.log('✅ Alternative Swiper CDN loaded');
+                    };
+                    document.head.appendChild(script);
+                  }
+
+                  setTimeout(() => waitForSwiper(callback, attempts + 1, maxAttempts), 300);
+                }
+
+                // Card Media Carousel Manager
+                class GrapheneCarouselManager {
+                  constructor() {
+                    this.carousels = new Map();
+                    this.observer = null;
+                    console.log('📝 GrapheneCarouselManager instance created');
+                  }
+
+                  init() {
+                    // Wait for Swiper, then start watching for content
+                    waitForSwiper(() => {
+                      console.log('🚀 Starting GrapheneHC content monitoring...');
+                      this.startContentMonitoring();
+                      this.setupExistingCarousels();
+                    });
+                  }
+
+                  startContentMonitoring() {
+                    // Watch for changes in the #Results div
+                    const resultsDiv = document.getElementById('Results');
+                    if (!resultsDiv) {
+                      console.log('⚠️ #Results div not found, retrying...');
+                      setTimeout(() => this.startContentMonitoring(), 1000);
+                      return;
+                    }
+
+                    console.log('👀 Monitoring #Results for GrapheneHC content...');
+
+                    // Create mutation observer to watch for new content
+                    this.observer = new MutationObserver((mutations) => {
+                      let hasNewCarousels = false;
+
+                      mutations.forEach((mutation) => {
+                        if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+                          mutation.addedNodes.forEach((node) => {
+                            if (node.nodeType === 1) {
+                              // Element node
+                              if (
+                                node.classList?.contains('card-media-carousel') ||
+                                node.querySelector?.('.card-media-carousel')
+                              ) {
+                                hasNewCarousels = true;
+                              }
+                            }
+                          });
+                        }
+                      });
+
+                      if (hasNewCarousels) {
+                        console.log('🎠 New carousel content detected!');
+                        setTimeout(() => this.setupExistingCarousels(), 100);
+                      }
+                    });
+
+                    this.observer.observe(resultsDiv, {
+                      childList: true,
+                      subtree: true,
+                    });
+                  }
+
+                  setupExistingCarousels() {
+                    const carouselElements = document.querySelectorAll('.card-media-carousel.has-multiple-media');
+                    console.log(`🔍 Found ${carouselElements.length} carousel elements to set up`);
+
+                    carouselElements.forEach((carouselElement, index) => {
+                      console.log(`🎠 Setting up carousel ${index + 1}/${carouselElements.length}`);
+                      this.setupCarousel(carouselElement);
+                    });
+
+                    console.log(`✅ Carousel setup complete: ${this.carousels.size} carousels initialized`);
+                  }
+
+                  setupCarousel(carouselElement) {
+                    const productId = carouselElement.getAttribute('data-product-id');
+                    const cardId = carouselElement.getAttribute('data-card-id');
+                    const carouselId = `${cardId}-${productId}`;
+
+                    // Check if already initialized
+                    if (this.carousels.has(carouselId)) {
+                      return;
+                    }
+
+                    const swiperElement = carouselElement.querySelector('.card-slider.swiper');
+                    const hasMultipleMedia = carouselElement.classList.contains('has-multiple-media');
+
+                    if (!swiperElement) {
+                      return;
+                    }
+
+                    // Get navigation elements
+                    const prevButton = carouselElement.querySelector('.card-slider-button--prev');
+                    const nextButton = carouselElement.querySelector('.card-slider-button--next');
+                    const dots = carouselElement.querySelectorAll('.card-slider-dot');
+
+                    // Capture manager reference for callbacks
+                    const manager = this;
+
+                    // Initialize Swiper with debugging
+                    console.log(`🎯 Initializing Swiper for carousel: ${carouselId}`);
+
+                    let swiper;
+                    try {
+                      swiper = new window.Swiper(swiperElement, {
+                        slidesPerView: 1,
+                        spaceBetween: 0,
+                        loop: hasMultipleMedia && carouselElement.querySelectorAll('.swiper-slide').length > 1,
+                        touchRatio: hasMultipleMedia ? 1 : 0,
+                        allowTouchMove: hasMultipleMedia,
+                        grabCursor: hasMultipleMedia,
+                        resistance: true,
+                        resistanceRatio: 0.85,
+                        initialSlide: hasMultipleMedia ? 1 : 0,
+                        navigation: hasMultipleMedia
+                          ? {
+                              nextEl: nextButton,
+                              prevEl: prevButton,
+                            }
+                          : false,
+                        pagination:
+                          hasMultipleMedia && dots.length > 0
+                            ? {
+                                el: carouselElement.querySelector('.card-slider-dots'),
+                                clickable: true,
+                                bulletClass: 'card-slider-dot',
+                                bulletActiveClass: 'card-slider-dot--active',
+                                renderBullet: function (index, className) {
+                                  return `<button type="button" class="${className}" aria-label="Go to slide ${
+                                    index + 1
+                                  }"></button>`;
+                                },
+                              }
+                            : false,
+                        on: {
+                          slideChange: function () {
+                            manager.updateButtonStates(carouselId, this);
+                          },
+                        },
+                      });
+                      console.log(`✅ Swiper initialized successfully for ${carouselId}`);
+                    } catch (error) {
+                      console.error(`❌ Failed to initialize Swiper for ${carouselId}:`, error);
+                      return;
+                    }
+
+                    // Store carousel state
+                    const state = {
+                      element: carouselElement,
+                      swiper: swiper,
+                      prevButton: prevButton,
+                      nextButton: nextButton,
+                      dots: dots,
+                    };
+
+                    this.carousels.set(carouselId, state);
+
+                    // Create swipe zones for better UX
+                    this.createSwipeZones(carouselElement, swiper);
+                  }
+
+                  createSwipeZones(carouselElement, swiper) {
+                    // Create left and right swipe zones
+                    const leftZone = document.createElement('div');
+                    const rightZone = document.createElement('div');
+
+                    Object.assign(leftZone.style, {
+                      position: 'absolute',
+                      top: '0',
+                      left: '0',
+                      width: '30%',
+                      height: '100%',
+                      zIndex: '5',
+                      cursor: 'grab',
+                      pointerEvents: 'none',
+                    });
+
+                    Object.assign(rightZone.style, {
+                      position: 'absolute',
+                      top: '0',
+                      right: '0',
+                      width: '30%',
+                      height: '100%',
+                      zIndex: '5',
+                      cursor: 'grab',
+                      pointerEvents: 'none',
+                    });
+
+                    // Create center product link zone
+                    const productLinkArea = document.createElement('div');
+                    Object.assign(productLinkArea.style, {
+                      position: 'absolute',
+                      top: '0',
+                      left: '30%',
+                      width: '40%',
+                      height: '100%',
+                      zIndex: '4',
+                      cursor: 'pointer',
+                      pointerEvents: 'auto',
+                      background: 'transparent',
+                    });
+
+                    // Handle click on product link area
+                    productLinkArea.addEventListener('click', function (e) {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      const productLink = carouselElement.closest('.card').querySelector('.card__heading a');
+                      if (productLink) {
+                        window.location.href = productLink.href;
+                      }
+                    });
+
+                    carouselElement.appendChild(leftZone);
+                    carouselElement.appendChild(rightZone);
+                    carouselElement.appendChild(productLinkArea);
+                  }
+
+                  updateButtonStates(carouselId, swiper) {
+                    const state = this.carousels.get(carouselId);
+                    if (!state) return;
+
+                    const { prevButton, nextButton, dots } = state;
+
+                    // Update button states
+                    if (prevButton) {
+                      prevButton.disabled = swiper.isBeginning && !swiper.params.loop;
+                    }
+                    if (nextButton) {
+                      nextButton.disabled = swiper.isEnd && !swiper.params.loop;
+                    }
+
+                    // Update dot states
+                    if (dots.length > 0) {
+                      dots.forEach((dot, index) => {
+                        if (index === swiper.realIndex) {
+                          dot.classList.add('card-slider-dot--active');
+                        } else {
+                          dot.classList.remove('card-slider-dot--active');
+                        }
+                      });
+                    }
+                  }
+                }
+
+                // Initialize the carousel manager
+                window.GrapheneCarouselManager = new GrapheneCarouselManager();
+
+                // Start initialization when DOM is ready
+                if (document.readyState === 'loading') {
+                  document.addEventListener('DOMContentLoaded', () => {
+                    window.GrapheneCarouselManager.init();
+                  });
+                } else {
+                  window.GrapheneCarouselManager.init();
+                }
+              })();
             </script>
 
             {% comment %}

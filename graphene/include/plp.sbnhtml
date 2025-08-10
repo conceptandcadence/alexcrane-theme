@@ -59,11 +59,10 @@
       <!-- facets -->
       {{ include "plp_facets" }}
     </section>
-    <section class="plp-products">
+		
       <!-- products -->
       {{ include "plp_products" }}
-      
-    </section>
+
   <section class="plp-pagination">
     {{ include "plp_paging" }}
   </section>
