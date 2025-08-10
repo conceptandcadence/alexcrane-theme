@@ -1,5 +1,6 @@
-// Enhanced Card Media Carousel functionality
-// This works alongside Dawn's existing slider-component
+// Enhanced Card Media Carousel with Swiper.js
+// This provides smooth touch/swipe functionality for product card carousels
+
 if (typeof window.CardMediaCarouselManager === 'undefined') {
   window.CardMediaCarouselManager = class CardMediaCarouselManager {
     constructor() {
@@ -8,6 +9,12 @@ if (typeof window.CardMediaCarouselManager === 'undefined') {
     }
 
     init() {
+      // Wait for Swiper to be available
+      if (typeof Swiper === 'undefined') {
+        setTimeout(() => this.init(), 100);
+        return;
+      }
+
       // Initialize existing carousels
       this.initializeCarousels();
 
@@ -23,8 +30,7 @@ if (typeof window.CardMediaCarouselManager === 'undefined') {
     }
 
     setupCarousel(carouselElement) {
-      const sliderComponent = carouselElement.querySelector('slider-component');
-      const slider = carouselElement.querySelector('.card-media-list');
+      const swiperElement = carouselElement.querySelector('.swiper');
       const dots = carouselElement.querySelectorAll('.card-slider-dot');
       const prevButton = carouselElement.querySelector(
         '.card-slider-button--prev',
@@ -33,160 +39,148 @@ if (typeof window.CardMediaCarouselManager === 'undefined') {
         '.card-slider-button--next',
       );
 
-      if (!sliderComponent || !slider) return;
+      if (!swiperElement) return;
 
       carouselElement.setAttribute('data-carousel-initialized', 'true');
 
       const carouselId =
         carouselElement.dataset.cardId ||
         Math.random().toString(36).substr(2, 9);
+      const totalSlides =
+        swiperElement.querySelectorAll('.swiper-slide').length;
 
-      // Create carousel state
+      // Only initialize Swiper for multiple images
+      if (totalSlides <= 1) return;
+
+      // Initialize Swiper
+      console.log('Initializing Swiper with loop:', totalSlides > 1);
+      const swiper = new Swiper(swiperElement, {
+        // Core settings
+        slidesPerView: 1,
+        spaceBetween: 0,
+        loop: true, // Enable wrapping/looping
+        initialSlide: totalSlides > 1 ? 1 : 0, // Start on second image for reveal effect
+
+        // Touch settings for smooth mobile experience
+        touchRatio: 1,
+        touchAngle: 45,
+        grabCursor: false, // Disable grab cursor, we'll handle this with zones
+
+        // Resistance for better UX at boundaries
+        resistance: true,
+        resistanceRatio: 0.85,
+
+        // Smooth transitions
+        speed: 300,
+
+        // Navigation
+        navigation: {
+          nextEl: nextButton,
+          prevEl: prevButton,
+        },
+
+        // Pagination (dots)
+        pagination:
+          dots.length > 0
+            ? {
+                el: carouselElement.querySelector('.card-slider-dots'),
+                clickable: true,
+                bulletClass: 'card-slider-dot',
+                bulletActiveClass: 'is-active',
+                renderBullet: (index, className) => {
+                  return `<button class="${className}" aria-label="Go to slide ${
+                    index + 1
+                  }"></button>`;
+                },
+              }
+            : false,
+
+        // Events
+        on: {
+          init: (swiper) => {
+            this.updateButtonStates(carouselId, swiper);
+          },
+          slideChange: (swiper) => {
+            this.updateButtonStates(carouselId, swiper);
+          },
+        },
+      });
+
+      // Store carousel state
       const state = {
         element: carouselElement,
-        slider: slider,
-        sliderComponent: sliderComponent,
-        dots: dots,
+        swiper: swiper,
+        totalSlides: totalSlides,
         prevButton: prevButton,
         nextButton: nextButton,
-        currentSlide: 0,
-        totalSlides:
-          carouselElement.querySelectorAll('.card-media-item').length,
+        dots: dots,
       };
 
       this.carousels.set(carouselId, state);
 
-      // Set up arrow navigation
-      if (prevButton) {
-        prevButton.addEventListener('click', () =>
-          this.goToPrevSlide(carouselId),
-        );
-      }
-
-      if (nextButton) {
-        nextButton.addEventListener('click', () =>
-          this.goToNextSlide(carouselId),
-        );
-      }
-
-      // Set up dot navigation if dots exist
-      if (dots.length > 0) {
-        dots.forEach((dot, index) => {
-          dot.addEventListener('click', () =>
-            this.goToSlide(carouselId, index),
-          );
-        });
-      }
-
-      // Listen to slider component events
-      if (sliderComponent.slider) {
-        sliderComponent.slider.addEventListener(
-          'scroll',
-          this.debounce(() => {
-            this.updateActiveSlide(carouselId);
-          }, 100),
-        );
-      }
+      // Set up product link area only (no interfering swipe zones)
+      this.setupProductLink(carouselElement);
     }
 
-    goToSlide(carouselId, slideIndex) {
-      const state = this.carousels.get(carouselId);
-      if (!state || slideIndex < 0 || slideIndex >= state.totalSlides) return;
+    setupProductLink(carouselElement) {
+      // Only create the center product link area
+      const productLinkArea = document.createElement('a');
 
-      const slideWidth = state.slider.clientWidth;
-      state.currentSlide = slideIndex;
-
-      state.slider.scrollTo({
-        left: slideWidth * slideIndex,
-        behavior: 'smooth',
+      // Product link area (center 50%)
+      Object.assign(productLinkArea.style, {
+        position: 'absolute',
+        top: '0',
+        left: '25%',
+        width: '50%',
+        height: '100%',
+        zIndex: '998',
+        cursor: 'pointer',
+        display: 'block',
+        background: 'transparent',
+        pointerEvents: 'auto',
       });
+      productLinkArea.className = 'product-link-area';
+      productLinkArea.innerHTML = '&nbsp;'; // Prevent empty element hiding
 
-      this.updateDotStates(carouselId);
-      this.updateButtonStates(carouselId);
-    }
-
-    goToNextSlide(carouselId) {
-      const state = this.carousels.get(carouselId);
-      if (!state) return;
-
-      const nextIndex = (state.currentSlide + 1) % state.totalSlides;
-      this.goToSlide(carouselId, nextIndex);
-    }
-
-    goToPrevSlide(carouselId) {
-      const state = this.carousels.get(carouselId);
-      if (!state) return;
-
-      const prevIndex =
-        state.currentSlide === 0
-          ? state.totalSlides - 1
-          : state.currentSlide - 1;
-      this.goToSlide(carouselId, prevIndex);
-    }
-
-    updateActiveSlide(carouselId) {
-      const state = this.carousels.get(carouselId);
-      if (!state) return;
-
-      const slideWidth = state.slider.clientWidth;
-      const scrollLeft = state.slider.scrollLeft;
-      const newCurrentSlide = Math.round(scrollLeft / slideWidth);
-
-      if (
-        newCurrentSlide !== state.currentSlide &&
-        newCurrentSlide < state.totalSlides
-      ) {
-        state.currentSlide = newCurrentSlide;
-        this.updateDotStates(carouselId);
-        this.updateButtonStates(carouselId);
+      // Get the product URL
+      const productLink = carouselElement
+        .closest('.card-wrapper')
+        .querySelector('.card__heading a, .card-link');
+      if (productLink) {
+        productLinkArea.href = productLink.href;
+        productLinkArea.setAttribute(
+          'aria-label',
+          productLink.getAttribute('aria-label') || 'View product',
+        );
       }
+
+      // Add product link to carousel
+      carouselElement.style.position = 'relative';
+      carouselElement.appendChild(productLinkArea);
     }
 
-    updateButtonStates(carouselId) {
+    updateButtonStates(carouselId, swiper) {
       const state = this.carousels.get(carouselId);
-      if (!state || !state.prevButton || !state.nextButton) return;
+      if (!state) return;
 
-      // For infinite loop, we don't disable buttons
-      // But you could add logic here to disable at start/end if desired
-      state.prevButton.disabled = false;
-      state.nextButton.disabled = false;
-    }
+      // For loop mode, never disable buttons since we can always navigate
+      if (state.prevButton) {
+        state.prevButton.disabled = false;
+        state.prevButton.setAttribute('aria-disabled', 'false');
+      }
 
-    updateDotStates(carouselId) {
-      const state = this.carousels.get(carouselId);
-      if (!state || !state.dots.length) return;
-
-      state.dots.forEach((dot, index) => {
-        if (index === state.currentSlide) {
-          dot.classList.add('is-active');
-        } else {
-          dot.classList.remove('is-active');
-        }
-      });
+      if (state.nextButton) {
+        state.nextButton.disabled = false;
+        state.nextButton.setAttribute('aria-disabled', 'false');
+      }
     }
 
     observeNewCarousels() {
-      const observer = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-          mutation.addedNodes.forEach((node) => {
-            if (node.nodeType === Node.ELEMENT_NODE) {
-              // Check if the added node is a carousel or contains carousels
-              const carousels =
-                node.matches && node.matches('.card-media-carousel')
-                  ? [node]
-                  : node.querySelectorAll
-                  ? Array.from(node.querySelectorAll('.card-media-carousel'))
-                  : [];
-
-              carousels.forEach((carousel) => {
-                if (!carousel.hasAttribute('data-carousel-initialized')) {
-                  this.setupCarousel(carousel);
-                }
-              });
-            }
-          });
-        });
-      });
+      const observer = new MutationObserver(
+        this.debounce(() => {
+          this.initializeCarousels();
+        }, 100),
+      );
 
       observer.observe(document.body, {
         childList: true,
@@ -194,7 +188,6 @@ if (typeof window.CardMediaCarouselManager === 'undefined') {
       });
     }
 
-    // Utility function for debouncing
     debounce(func, wait) {
       let timeout;
       return function executedFunction(...args) {
@@ -211,7 +204,6 @@ if (typeof window.CardMediaCarouselManager === 'undefined') {
 
 // Initialize on DOM ready
 if (!window.cardCarouselInitialized) {
-  // Initialize the carousel manager
   let cardCarouselManager;
 
   document.addEventListener('DOMContentLoaded', () => {

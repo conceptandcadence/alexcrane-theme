@@ -24,7 +24,7 @@
 {%- unless skip_styles -%}
   {{ 'component-rating.css' | asset_url | stylesheet_tag }}
   {{ 'component-volume-pricing.css' | asset_url | stylesheet_tag }}
-  {{ 'component-card-media-carousel.css' | asset_url | stylesheet_tag }}
+  <link href='{{ 'component-card-media-carousel.css' | asset_url }}?v={{ 'now' | date: '%s' }}' rel='stylesheet'>
 
   {{ 'component-price.css' | asset_url | stylesheet_tag }}
   {{ 'quick-order-list.css' | asset_url | stylesheet_tag }}
@@ -43,7 +43,10 @@
     endif
   -%}
   {%- if card_product.media.size > 0 -%}
-    <script src='{{ 'card-media-carousel.js' | asset_url }}' defer='defer'></script>
+    <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css'>
+    <script src='https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js'></script>
+    <script src='{{ 'card-media-carousel.js' | asset_url }}?v={{ 'now' | date: '%s' }}&t=2' defer='defer'></script>
+    <script src='{{ 'swatch-quick-add.js' | asset_url }}?v={{ 'now' | date: '%s' }}&fix=1' defer='defer'></script>
   {%- endif -%}
   <div class='card-wrapper product-card-wrapper'>
     <div
@@ -252,36 +255,19 @@
                     >
                       <div class='quick-add__content-info__media'>
                         <div class='quick-add__info'>
-                          {%- if card_product.featured_media -%}
-                            <div
-                              class='quick-add__product-media'
-                            >
-                              <div class='quick-add__product-container global-media-settings'>
-                                {% comment %}theme-check-disable ImgLazyLoading{% endcomment %}
-                                <img
-                                  srcset='
-                                    {%- if card_product.featured_media.width >= 165 -%}{{ card_product.featured_media | image_url: width: 165 }} 165w,{%- endif -%}
-                                    {%- if card_product.featured_media.width >= 360 -%}{{ card_product.featured_media | image_url: width: 360 }} 360w,{%- endif -%}
-                                    {%- if card_product.featured_media.width >= 533 -%}{{ card_product.featured_media | image_url: width: 533 }} 533w,{%- endif -%}
-                                    {%- if card_product.featured_media.width >= 720 -%}{{ card_product.featured_media | image_url: width: 720 }} 720w,{%- endif -%}
-                                    {%- if card_product.featured_media.width >= 940 -%}{{ card_product.featured_media | image_url: width: 940 }} 940w,{%- endif -%}
-                                    {%- if card_product.featured_media.width >= 1066 -%}{{ card_product.featured_media | image_url: width: 1066 }} 1066w,{%- endif -%}
-                                    {{ card_product.featured_media | image_url }} {{ card_product.featured_media.width }}w
-                                  '
-                                  src='{{ card_product.featured_media | image_url: width: 533 }}'
-                                  sizes='(min-width: {{ settings.page_width }}px) {{ settings.page_width | minus: 130 | divided_by: 4 }}px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)'
-                                  alt='{{ card_product.featured_media.alt | escape }}'
-                                  class='motion-reduce'
-                                  {% unless lazy_load == false %}
-                                    loading='lazy'
-                                  {% endunless %}
-                                  width='{{ card_product.featured_media.width }}'
-                                  height='{{ card_product.featured_media.height }}'
-                                >
-                                {% comment %}theme-check-enable ImgLazyLoading{% endcomment %}
-                              </div>
-                            </div>
-                          {%- endif -%}
+                          <!-- TEST: About to render modal carousel -->
+                          {% render 'modal-media-carousel',
+                            product: card_product,
+                            modal_id: card_product.id,
+                            media_aspect_ratio: 1,
+                            lazy_load: lazy_load
+                          %}
+                          <!-- TEST: Finished rendering modal carousel -->
+
+                          <!-- FALLBACK: Static test content -->
+                          <div style='background: blue; color: white; padding: 1rem; margin: 1rem 0;'>
+                            TEST: This should appear in the modal. Product: {{ card_product.title }}
+                          </div>
                           <a
                             {% if card_product == blank %}
                               role='link' aria-disabled='true'
@@ -531,23 +517,18 @@
                 {% assign swatches_used = 0 %}
                 {% assign swatch_count = 0 %}
                 {% for colorset in card_product.metafields.options.colorsets.value %}
-                  <script>
-                    console.log('colorset', {{ colorset | json }});
-                  </script>
                   {% for colorway in colorset.colorways.value %}
-                    <script>
-                      console.log('colorway', {{ colorway.product.value.url | json }});
-                    </script>
                     {% assign swatch = colorway.swatch.value %}
                     {%- if swatches_used < 5 -%}
-                      <li class='tw-flex tw-flex-col tw-items-center tw-justify-center tw-overflow-hidden tw-rounded-[2px] hover:tw-scale-110 tw-transition-all tw-duration-300'>
-                        <button class='tw-flex tw-flex-col tw-items-center tw-justify-center'>
+                      <li class='product-swatch-item tw-flex tw-flex-col tw-items-center tw-justify-center tw-overflow-hidden tw-rounded-[2px] hover:tw-scale-110 tw-transition-all tw-duration-300'>
+                        <button class='product-swatch-button tw-flex tw-flex-col tw-items-center tw-justify-center'>
                           <img
-                            class='tw-image-cover tw-w-[18px] tw-h-[12px] tw-overflow-hidden'
+                            class='tw-image-cover tw-w-[18px] tw-h-[12px] tw-overflow-hidden tw-pointer-events-none'
                             src='{{ swatch.image.value | image_url: width: 28 }}'
                             alt='{{ swatch.title }}'
                             width='14'
                             height='14'
+                            data-product-url='{{ colorway.product.value.url }}'
                           >
                         </button>
                       </li>
@@ -796,36 +777,19 @@
                       >
                         <div class='quick-add__content-info__media'>
                           <div class='quick-add__info'>
-                            {%- if card_product.featured_media -%}
-                              <div
-                                class='quick-add__product-media'
-                              >
-                                <div class='quick-add__product-container global-media-settings'>
-                                  {% comment %}theme-check-disable ImgLazyLoading{% endcomment %}
-                                  <img
-                                    srcset='
-                                      {%- if card_product.featured_media.width >= 165 -%}{{ card_product.featured_media | image_url: width: 165 }} 165w,{%- endif -%}
-                                      {%- if card_product.featured_media.width >= 360 -%}{{ card_product.featured_media | image_url: width: 360 }} 360w,{%- endif -%}
-                                      {%- if card_product.featured_media.width >= 533 -%}{{ card_product.featured_media | image_url: width: 533 }} 533w,{%- endif -%}
-                                      {%- if card_product.featured_media.width >= 720 -%}{{ card_product.featured_media | image_url: width: 720 }} 720w,{%- endif -%}
-                                      {%- if card_product.featured_media.width >= 940 -%}{{ card_product.featured_media | image_url: width: 940 }} 940w,{%- endif -%}
-                                      {%- if card_product.featured_media.width >= 1066 -%}{{ card_product.featured_media | image_url: width: 1066 }} 1066w,{%- endif -%}
-                                      {{ card_product.featured_media | image_url }} {{ card_product.featured_media.width }}w
-                                    '
-                                    src='{{ card_product.featured_media | image_url: width: 533 }}'
-                                    sizes='(min-width: {{ settings.page_width }}px) {{ settings.page_width | minus: 130 | divided_by: 4 }}px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)'
-                                    alt='{{ card_product.featured_media.alt | escape }}'
-                                    class='motion-reduce'
-                                    {% unless lazy_load == false %}
-                                      loading='lazy'
-                                    {% endunless %}
-                                    width='{{ card_product.featured_media.width }}'
-                                    height='{{ card_product.featured_media.height }}'
-                                  >
-                                  {% comment %}theme-check-enable ImgLazyLoading{% endcomment %}
-                                </div>
-                              </div>
-                            {%- endif -%}
+                            <!-- TEST 2: About to render modal carousel -->
+                            {% render 'modal-media-carousel',
+                              product: card_product,
+                              modal_id: card_product.id,
+                              media_aspect_ratio: 1,
+                              lazy_load: lazy_load
+                            %}
+                            <!-- TEST 2: Finished rendering modal carousel -->
+
+                            <!-- FALLBACK 2: Static test content -->
+                            <div style='background: green; color: white; padding: 1rem; margin: 1rem 0;'>
+                              TEST 2: This should also appear in the modal. Product: {{ card_product.title }}
+                            </div>
                             <a
                               {% if card_product == blank %}
                                 role='link' aria-disabled='true'

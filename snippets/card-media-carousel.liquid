@@ -36,17 +36,46 @@
 -%}
 
 {%- if product.media.size > 0 -%}
-  <div class='card-media-carousel' data-product-id='{{ product.id }}' data-card-id='{{ card_id }}'>
-    <slider-component class='card-slider'>
-      <ul
+  <div
+    class='card-media-carousel{% if has_multiple_media %} has-multiple-media{% endif %}'
+    data-product-id='{{ product.id }}'
+    data-card-id='{{ card_id }}'
+  >
+    {%- if has_multiple_media -%}
+      <!-- Static hover image (shows by default, hides on hover) -->
+      <div class='card-media-static'>
+        <div class='card-media-container' style='--ratio-percent: {{ 1 | divided_by: ratio | times: 100 }}%;'>
+          <img
+            srcset='
+              {%- if product.featured_media.width >= 165 -%}{{ product.featured_media | image_url: width: 165 }} 165w,{%- endif -%}
+              {%- if product.featured_media.width >= 360 -%}{{ product.featured_media | image_url: width: 360 }} 360w,{%- endif -%}
+              {%- if product.featured_media.width >= 533 -%}{{ product.featured_media | image_url: width: 533 }} 533w,{%- endif -%}
+              {%- if product.featured_media.width >= 720 -%}{{ product.featured_media | image_url: width: 720 }} 720w,{%- endif -%}
+              {{ product.featured_media | image_url }} {{ product.featured_media.width }}w
+            '
+            src='{{ product.featured_media | image_url: width: 533 }}'
+            sizes='(min-width: {{ settings.page_width }}px) {{ settings.page_width | minus: 130 | divided_by: 4 }}px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)'
+            alt='{{ product.featured_media.alt | escape }}'
+            class='card-media-image'
+            width='{{ product.featured_media.width }}'
+            height='{{ product.featured_media.height }}'
+            {% unless lazy_load == false %}
+              loading='lazy'
+            {% endunless %}
+          >
+        </div>
+      </div>
+    {%- endif -%}
+    <div class='card-slider swiper'>
+      <div
         id='CardSlider-{{ unique_id }}'
-        class='card-media-list slider slider--mobile list-unstyled'
+        class='card-media-list swiper-wrapper'
         role='list'
       >
         {%- for media in product.media -%}
-          <li
+          <div
             id='CardSlide-{{ unique_id }}-{{ media.id }}'
-            class='card-media-item slider__slide{% if forloop.first %} is-active{% endif %}'
+            class='card-media-item swiper-slide{% if forloop.index == 2 and has_multiple_media %} is-hover-active{% elsif forloop.first %} is-active{% endif %}'
             data-media-id='{{ unique_id }}-{{ media.id }}'
           >
             <div class='card-media-container' style='--ratio-percent: {{ 1 | divided_by: ratio | times: 100 }}%;'>
@@ -97,9 +126,9 @@
                 </div>
               {%- endif -%}
             </div>
-          </li>
+          </div>
         {%- endfor -%}
-      </ul>
+      </div>
 
       {%- if has_multiple_media -%}
         <div class='card-slider-buttons'>
@@ -138,6 +167,6 @@
           </div>
         {%- endif -%}
       {%- endif -%}
-    </slider-component>
+    </div>
   </div>
 {%- endif -%}

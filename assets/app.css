@@ -755,8 +755,29 @@ video {
   border-radius: 2px;
 }
 
+.tw-border-2 {
+  border-width: 2px;
+}
+
+.tw-border {
+  border-width: 1px;
+}
+
+.tw-border-\[\#000\] {
+  --tw-border-opacity: 1;
+  border-color: rgb(0 0 0 / var(--tw-border-opacity));
+}
+
 .tw-p-4 {
   padding: 1rem;
+}
+
+.tw-p-2 {
+  padding: 0.5rem;
+}
+
+.tw-p-1 {
+  padding: 0.25rem;
 }
 
 .tw-py-3 {
@@ -881,6 +902,10 @@ video {
 
   .lg\:tw-h-\[28px\] {
     height: 28px;
+  }
+
+  .lg\:tw-h-\[20px\] {
+    height: 20px;
   }
 
   .lg\:tw-w-\[40px\] {

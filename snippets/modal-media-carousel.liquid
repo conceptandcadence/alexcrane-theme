@@ -1,0 +1,132 @@
+{% comment %}
+  Renders a media carousel for quick-add modal
+
+  Accepts:
+  - product: {Object} Product liquid object
+  - modal_id: {String} Unique identifier for the modal
+  - media_aspect_ratio: {Number} aspect ratio for media
+  - lazy_load: {Boolean} whether to lazy load images
+
+  Usage:
+  {% render 'modal-media-carousel', product: product, modal_id: modal_id %}
+{% endcomment %}
+
+{%- liquid
+  if media_aspect_ratio == null
+    assign ratio = 1
+  else
+    assign ratio = media_aspect_ratio
+  endif
+
+  assign has_multiple_media = false
+  if product.media.size > 1
+    assign has_multiple_media = true
+  endif
+
+  assign unique_id = modal_id | append: '-' | append: product.id
+-%}
+
+<!--
+  Modal Carousel Debug: product.media.size = {{ product.media.size }}, product.id = {{ product.id }}, modal_id = {{ modal_id }}
+-->
+{%- if product.media.size > 0 -%}
+  <!-- Rendering modal carousel -->
+  <div
+    class='modal-media-carousel{% if has_multiple_media %} has-multiple-media{% endif %}'
+    data-product-id='{{ product.id }}'
+    data-modal-id='{{ modal_id }}'
+  >
+    <div class='modal-slider swiper'>
+      <div
+        id='ModalSlider-{{ unique_id }}'
+        class='modal-media-list swiper-wrapper'
+        role='list'
+      >
+        {%- for media in product.media -%}
+          <div
+            id='ModalSlide-{{ unique_id }}-{{ media.id }}'
+            class='modal-media-item swiper-slide{% if forloop.first %} is-active{% endif %}'
+            data-media-id='{{ unique_id }}-{{ media.id }}'
+          >
+            <div class='modal-media-container' style='--ratio-percent: {{ 1 | divided_by: ratio | times: 100 }}%;'>
+              {%- if media.media_type == 'image' -%}
+                <img
+                  srcset='
+                    {%- if media.width >= 300 -%}{{ media | image_url: width: 300 }} 300w,{%- endif -%}
+                    {%- if media.width >= 400 -%}{{ media | image_url: width: 400 }} 400w,{%- endif -%}
+                    {%- if media.width >= 500 -%}{{ media | image_url: width: 500 }} 500w,{%- endif -%}
+                    {%- if media.width >= 600 -%}{{ media | image_url: width: 600 }} 600w,{%- endif -%}
+                    {%- if media.width >= 800 -%}{{ media | image_url: width: 800 }} 800w,{%- endif -%}
+                    {{ media | image_url }} {{ media.width }}w
+                  '
+                  src='{{ media | image_url: width: 500 }}'
+                  sizes='(min-width: 990px) 400px, (min-width: 750px) 350px, 300px'
+                  alt='{{ media.alt | escape }}'
+                  class='modal-media-image'
+                  width='{{ media.width }}'
+                  height='{{ media.height }}'
+                  {% unless lazy_load == false %}
+                    loading='lazy'
+                  {% endunless %}
+                >
+              {%- else -%}
+                <div class='modal-media-placeholder'>
+                  {%- case media.media_type -%}
+                    {%- when 'video', 'external_video' -%}
+                      <span class='svg-wrapper'>
+                        {{- 'icon-play.svg' | inline_asset_content -}}
+                      </span>
+                    {%- when 'model' -%}
+                      <span class='svg-wrapper'>
+                        {{- 'icon-3d-model.svg' | inline_asset_content -}}
+                      </span>
+                  {%- endcase -%}
+                </div>
+              {%- endif -%}
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+
+      {%- if has_multiple_media -%}
+        <div class='modal-slider-buttons'>
+          <button
+            type='button'
+            class='modal-slider-button modal-slider-button--prev'
+            name='previous'
+            aria-label='{{ 'general.slider.previous_slide' | t }}'
+          >
+            <span class='svg-wrapper'>
+              {{- 'icon-caret.svg' | inline_asset_content -}}
+            </span>
+          </button>
+          <button
+            type='button'
+            class='modal-slider-button modal-slider-button--next'
+            name='next'
+            aria-label='{{ 'general.slider.next_slide' | t }}'
+          >
+            <span class='svg-wrapper'>
+              {{- 'icon-caret.svg' | inline_asset_content -}}
+            </span>
+          </button>
+        </div>
+
+        <div class='modal-slider-dots'>
+          {%- for media in product.media -%}
+            <button
+              type='button'
+              class='modal-slider-dot'
+              aria-label='{{ 'general.slider.go_to_slide' | t: index: forloop.index }}'
+            ></button>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+{%- else -%}
+  <!-- No media found for product -->
+  <div class='modal-media-carousel-debug' style='background: red; color: white; padding: 1rem;'>
+    DEBUG: Modal carousel called but no media found. Product ID: {{ product.id }}
+  </div>
+{%- endif -%}

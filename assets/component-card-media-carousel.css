@@ -1,40 +1,82 @@
-/* Card Media Carousel */
+/* Card Media Carousel with Swiper */
 .card-media-carousel {
   position: relative;
   width: 100%;
   overflow: hidden;
 }
 
-.card-slider {
+/* Static image that shows by default and hides on hover */
+.card-media-static {
   position: relative;
   width: 100%;
+  z-index: 2;
+  transition: opacity 0.3s ease;
 }
 
-.card-media-list {
-  display: flex;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+/* For single image products, only show the carousel */
+.card-media-carousel:not(.has-multiple-media) .card-media-static {
+  display: none;
+}
+
+.card-slider.swiper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+/* For single image products, position carousel normally */
+.card-media-carousel:not(.has-multiple-media) .card-slider.swiper {
+  position: relative;
+}
+
+.card-media-list.swiper-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
   margin: 0;
   padding: 0;
+  display: flex;
 }
+
+/* Reserve space for future hover carousel behavior if needed */
 
 .card-media-list::-webkit-scrollbar {
   display: none;
 }
 
-.card-media-item {
+.card-media-item.swiper-slide {
   flex: 0 0 100%;
-  scroll-snap-align: start;
   position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* Swiper handles visibility, but we keep these for compatibility */
+.card-media-item {
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.card-media-item.is-active {
+  opacity: 1;
+}
+
+.card-media-item.is-hover-active {
+  opacity: 1;
+}
+
+/* Hover behavior: hide static image to reveal carousel */
+.card-wrapper:hover .card-media-static {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .card-media-container {
   position: relative;
-  width: 100%;
+  width: calc(100% - 3px);
   height: 0;
   padding-bottom: var(--ratio-percent);
   overflow: hidden;
@@ -48,6 +90,7 @@
   height: 100%;
   object-fit: cover;
   transition: transform 0.3s ease;
+  pointer-events: none;
 }
 
 .card-media-placeholder {
@@ -99,35 +142,32 @@
   align-items: center;
   justify-content: space-between;
   pointer-events: none;
-  opacity: 1; /* Always visible */
+  opacity: 0; /* Hidden by default */
   transition: opacity 0.3s ease;
 }
 
-.card-media-carousel:hover .card-slider-buttons {
+.card-wrapper:hover .card-slider-buttons {
   opacity: 1;
 }
 
 .card-slider-button {
-  background: rgba(255, 255, 255, 0.95);
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: transparent;
   border-radius: 50%;
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 2rem;
+  height: 2rem;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   pointer-events: auto;
   transition: all 0.3s ease;
-  margin: 0 0.5rem;
+  margin: 0 1rem;
   z-index: 2;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 .card-slider-button:hover {
-  background: rgba(255, 255, 255, 1);
+  background: rgba(255, 255, 255, 0.5);
   transform: scale(1.1);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .card-slider-button:active {
@@ -144,6 +184,7 @@
 .card-slider-button .svg-wrapper {
   width: 1rem;
   height: 1rem;
+  pointer-events: none;
 }
 
 .card-slider-button--prev .svg-wrapper {
@@ -158,6 +199,7 @@
   width: 100%;
   height: 100%;
   fill: rgb(var(--color-foreground));
+  pointer-events: none;
 }
 
 /* Slider Dots */
@@ -168,12 +210,12 @@
   transform: translateX(-50%);
   display: flex;
   gap: 0.375rem;
-  opacity: 1; /* Always visible */
+  opacity: 0; /* Hidden by default */
   transition: opacity 0.3s ease;
   z-index: 3;
 }
 
-.card-media-carousel:hover .card-slider-dots {
+.card-wrapper:hover .card-slider-dots {
   opacity: 1;
 }
 
@@ -202,14 +244,6 @@
 
 /* Mobile optimizations */
 @media screen and (max-width: 749px) {
-  .card-slider-buttons {
-    opacity: 1; /* Always show on mobile */
-  }
-
-  .card-slider-dots {
-    opacity: 1; /* Always show on mobile */
-  }
-
   .card-slider-button {
     width: 2rem;
     height: 2rem;
@@ -231,10 +265,53 @@
   }
 }
 
+/* Swiper handles touch/drag automatically */
+
+/* Visual swipe zones using CSS pseudo-elements (no event interference) */
+.card-media-carousel.has-multiple-media::before,
+.card-media-carousel.has-multiple-media::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  width: 25%;
+  height: 100%;
+  z-index: 999;
+  pointer-events: none; /* Never interfere with events */
+}
+
+.card-media-carousel.has-multiple-media::before {
+  left: 0; /* Left swipe zone */
+}
+
+.card-media-carousel.has-multiple-media::after {
+  right: 0; /* Right swipe zone */
+}
+
+/* Cursor zones without elements - applied to the carousel areas */
+.card-media-carousel.has-multiple-media {
+  position: relative;
+}
+
+/* Left and right 25% areas get grab cursor */
+.card-slider.swiper:hover {
+  cursor: grab;
+  cursor: -webkit-grab;
+}
+
+.card-slider.swiper:active {
+  cursor: grabbing;
+  cursor: -webkit-grabbing;
+}
+
+.product-link-area {
+  cursor: pointer;
+}
+
 /* Accessibility improvements */
 @media (prefers-reduced-motion: reduce) {
   .card-media-list {
     scroll-behavior: auto;
+    transition: none;
   }
 
   .card-media-image,
@@ -247,15 +324,19 @@
   }
 }
 
+.card-slider-dots {
+  display: none;
+}
+
 /* Focus styles */
 .card-slider-button:focus,
 .card-slider-dot:focus {
-  outline: 2px solid rgb(var(--color-foreground));
-  outline-offset: 2px;
+  outline: 2px solid rgba(255, 255, 255, 0.5);
+  outline-offset: 0px;
 }
 
 .card-slider-button:focus-visible,
 .card-slider-dot:focus-visible {
-  outline: 2px solid rgb(var(--color-foreground));
-  outline-offset: 2px;
+  outline: 2px solid rgba(255, 255, 255, 0.5);
+  outline-offset: 0px;
 }

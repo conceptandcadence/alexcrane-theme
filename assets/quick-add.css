@@ -55,8 +55,12 @@
   overflow: hidden;
   max-width: var(--page-width);
   width: calc(100% - 3rem);
+  height: calc(100vh - 48px);
+  border-radius: 2px;
 }
-
+quick-add-modal .quick-add-modal__toggle {
+  background-color: transparent;
+}
 @media screen and (min-width: 750px) {
   .quick-add-modal__content {
     --modal-height-offset: 24px;

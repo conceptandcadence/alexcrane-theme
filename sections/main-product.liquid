@@ -15,6 +15,7 @@
   {{ 'component-slider.css' | asset_url | stylesheet_tag }}
   {{ 'component-rating.css' | asset_url | stylesheet_tag }}
   {{ 'component-deferred-media.css' | asset_url | stylesheet_tag }}
+  {{ 'component-modal-media-carousel.css' | asset_url | stylesheet_tag }}
 
   {% unless product.has_only_default_variant %}
     {{ 'component-product-variant-picker.css' | asset_url | stylesheet_tag }}
@@ -49,6 +50,9 @@
   {% if section.settings.image_zoom == 'hover' %}
     <script id='EnableZoomOnHover-main' src='{{ 'magnify.js' | asset_url }}' defer='defer'></script>
   {% endif %}
+  <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css'>
+  <script src='https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js'></script>
+  <script src='{{ 'modal-media-carousel.js' | asset_url }}?v={{ 'now' | date: '%s' }}&debug=1' defer='defer'></script>
   {%- if request.design_mode -%}
     <script src='{{ 'theme-editor.js' | asset_url }}' defer='defer'></script>
   {%- endif -%}
@@ -96,7 +100,20 @@
         {%- endif -%}
       </div>
       <div class='grid__item product__media-wrapper'>
-        {% render 'product-media-gallery', variant_images: variant_images %}
+        <!-- Default media gallery for main product page -->
+        <div class='quick-add-hidden'>
+          {% render 'product-media-gallery', variant_images: variant_images %}
+        </div>
+
+        <!-- Modal carousel for quick-add modal only -->
+        <div class='quick-add-only'>
+          {% render 'modal-media-carousel',
+            product: product,
+            modal_id: section.id,
+            media_aspect_ratio: product.featured_media.aspect_ratio,
+            lazy_load: true
+          %}
+        </div>
       </div>
       <div class='product__info-wrapper grid__item{% if settings.page_width > 1400 and section.settings.media_size == "small" %} product__info-wrapper--extra-padding{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}'>
         <section
