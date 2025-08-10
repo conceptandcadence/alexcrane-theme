@@ -76,10 +76,13 @@
 
 .card-media-container {
   position: relative;
-  width: calc(100% - 3px);
   height: 0;
   padding-bottom: var(--ratio-percent);
   overflow: hidden;
+}
+
+.card-slider .card-media-container {
+  width: calc(100% + 2px);
 }
 
 .card-media-image {

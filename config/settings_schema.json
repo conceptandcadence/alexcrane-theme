@@ -1,4 +1,57 @@
-[
+[  
+	{
+	"name": "GrapheneHC Settings",
+	"settings": [
+		{
+			"type": "checkbox",
+			"id": "graphenehc_enabled",
+			"label": "Enable GrapheneHC?",
+			"info": "Enable/disable the GrapheneHC integration.",
+			"default": false
+		},
+		{
+			"type": "text",
+			"id": "graphenehc_js_url",
+			"label": "GrapheneHC JS Library URL",
+			"default": "https://domainkey-1.store.advancedcommerce.services/graphenehc.js"
+		},
+		{
+			"type": "checkbox",
+			"id": "graphenehc_autocomplete_enabled",
+			"label": "Autocomplete",
+			"info": "Enable/disable GrapheneHC autocomplete. This will replace the shopify suggest.",
+			"default": true
+		},
+		{
+			"type": "checkbox",
+			"id": "graphenehc_search_enabled",
+			"label": "Search",
+			"info": "Enable/disable GrapheneHC search. This will replace shopify search.",
+			"default": true
+		},
+		{
+			"type": "checkbox",
+			"id": "graphenehc_collections_enabled",
+			"label": "Collections",
+			"info": "When enabled, collection pages will be delivered and merchandised by GrapheneHC",
+			"default": true
+		},
+		{
+			"type": "checkbox",
+			"id": "graphenehc_product_enabled",
+			"label": "Product",
+			"info": "Merchandise the product detail page",
+			"default": true
+		},
+		{
+			"type": "checkbox",
+			"id": "graphenehc_home_enabled",
+			"label": "Home Page",
+			"info": "Merchandise the home page",
+			"default": true
+		}
+	]
+	},
   {
     "name": "theme_info",
     "theme_name": "Breezy",

@@ -1,0 +1,12 @@
+{% comment %}
+GrapheneHC core JavaScript + CSS - Required
+{% endcomment %}
+{%- if settings.graphenehc_enabled -%}
+{{ "graphenehc.css" | asset_url | stylesheet_tag }}
+<script src="{{ settings.graphenehc_js_url }}"></script>
+<script>
+  graphenehc.init({
+    theme: "38caf17c88c5431c932b42cdc117b64e"
+  });
+</script>
+{%- endif -%}

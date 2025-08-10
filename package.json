@@ -24,6 +24,7 @@
   "devDependencies": {
     "@playwright/test": "^1.40.1",
     "autoprefixer": "^10.4.4",
+    "dotenv": "^17.2.1",
     "husky": "^7.0.4",
     "lint-staged": "^12.3.3",
     "postcss": "^8.4.12",

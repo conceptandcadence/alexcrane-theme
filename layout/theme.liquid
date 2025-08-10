@@ -43,6 +43,7 @@
       <script src='{{ 'animations.js' | asset_url }}' defer='defer'></script>
     {%- endif -%}
 
+    {%- render 'graphenehc-header' -%}
     {{ content_for_header }}
 
     {%- liquid
@@ -372,6 +373,8 @@
         countrySelectorSearchCount: `{{ 'localization.country_results_count' | t: count: '[count]' }}`,
       };
     </script>
+
+    {%- render 'graphenehc-autocomplete' -%}
 
     {%- if settings.predictive_search_enabled -%}
       <script src='{{ 'predictive-search.js' | asset_url }}' defer='defer'></script>

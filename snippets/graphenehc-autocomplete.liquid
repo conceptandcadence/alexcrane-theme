@@ -1,0 +1,19 @@
+{% comment %}
+GrapheneHC autocomplete/typeahead setup
+{% endcomment %}
+{% if settings.graphenehc_enabled and settings.graphenehc_autocomplete_enabled %}
+<div class="acs_auto_popup acs_scroll"><!-- GrapheneHC will add content here --></div>
+<script>
+  
+graphenehc.autocomplete({
+    input_selector          : "input[name='q']",
+    page_context            : { currency_id: window.Shopify.currency.active },
+    dropdown_selector       : ".acs_auto_popup",
+    position                : function(input) {}
+});
+// Replaces the default search url to use /pages/search that Graphene search use.
+document.querySelectorAll("form[action='/search'], form.search").forEach(item => {
+    item.action = `${window.theme.marketDirectory}/pages/search/zzz`;
+});
+</script>
+{% endif %}
