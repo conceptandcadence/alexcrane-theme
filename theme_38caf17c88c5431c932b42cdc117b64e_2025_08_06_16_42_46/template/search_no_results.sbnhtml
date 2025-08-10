@@ -1,0 +1,52 @@
+{{~
+    $element        = elements.search
+    $query_tokens   = $element.products?.meta?.query_tokens[0]
+    $orig_term   	= $query_tokens?.original
+~}}
+<div class="search-noresults-header" style="display: flex; padding: 10px 5px 10px 20px; align-items: center;border-bottom: solid 1px var(--color-grey-soft);">
+  <button class="button newsearch" onclick="document.querySelector('.search__input').focus()"><span>Search again</span></button>
+  <span>Sorry, we can't find any results for "{{ $query_tokens?.original }}" please try searching again</span> 
+</div>
+<section class="plp-products">
+{{ element "search_recs_1" }}
+</section>
+<style>
+  #shopify-section-plp-navigation { display: none; }
+  
+  #Results > div {
+    grid-column-end: span 2;
+  }
+
+  section.plp-products > div {
+    grid-column-end: span 2;
+    position: relative;
+    margin: 0 -1px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-column-gap: 0;
+    grid-row-gap: 0;
+  }
+  section.plp-products {
+  	border-bottom: 0;
+  }
+  @media (min-width: 700px) {
+    #Results > div {
+      grid-column-end: span 3;
+    }
+    section.plp-products .plp-item:nth-of-type(4) {
+      display: none;
+    }
+    section.plp-products > div {
+        grid-template-columns: 1fr 1fr 1fr;
+      grid-column-end: span 3;
+    }
+  }
+  @media (max-width: 699px) {
+    .search-noresults-header {
+      flex-direction: column-reverse;
+    }
+    .button.newsearch {
+      margin: 10px auto 6px;
+    }
+  }
+  </style>

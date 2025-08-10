@@ -305,6 +305,38 @@
         document.documentElement.classList.add('shopify-design-mode');
       }
     </script>
+
+    <script> 
+			document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
+			window.theme = {
+				strings: {
+						addToCart: {{ 'products.product.add_to_cart' | t | json }},
+						quickAddToCart: {{ 'products.product.quick_add_to_cart' | t | json }},
+						soldOut: {{ 'products.product.sold_out' | t | json }},
+						unavailable: {{ 'products.product.unavailable' | t | json }}
+				},
+				moneyFormat: {{ shop.money_format | json }},
+				country_code: Shopify.currency.active.slice(0, -1),
+				currency_code:   '{{ cart.currency.iso_code }}',
+				currency_symbol: '{{ cart.currency.symbol }}'
+			};
+			window.theme.marketDirectory = window.theme.country_code === 'CA' || window.theme.country_code === 'GB' ? `/en-${window.theme.country_code?.toLowerCase()}` : '';
+    </script>
+
+    <!-- Google Tag Manager -->
+    <script>
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != 'dataLayer' ? '&l=' + l : '';
+        j.async = true;
+        j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, 'script', 'dataLayer', 'GTM-WGZP6CR');
+    </script>
+    <!-- End Google Tag Manager -->
   </head>
 
   <body class='gradient{% if settings.animations_hover_elements != 'none' %} animate--hover-{{ settings.animations_hover_elements }}{% endif %}'>

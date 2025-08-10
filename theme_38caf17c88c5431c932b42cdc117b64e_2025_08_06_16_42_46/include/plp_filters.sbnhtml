@@ -1,0 +1,37 @@
+{{~ if $filters.all | object.size > 0 ~}}
+  <div class="plp-products-filters">
+      <div class="filter-container">
+        <label><a class="aaa show-filters{{ if $filters.all | object.size > 0 }} active{{ end }}" href="#">Filtering by:</a></label>
+        <ul class="filter-list">
+          {{~ if $filters.all | object.size > 0 ~}}
+            {{~ for $filter in $filters.all ~}}
+                {{~ $attribute_title = $filter.titles?.default ?? $filter.id ~}}
+                {{~ for $item in $filter.items ~}}
+                  <li>
+                    {{~ if $filter.type == "value" ~}}
+                        {{~ $item_title = $item.titles?.default ?? $item.id ~}}
+                        <a href="{{ $item.url }}" class="filter-single" title="Remove {{ $attribute_title }} {{ $item_title }}">{{ $item_title }}</a>
+                    {{~ else ~}}
+                        <a href="{{ $item.url }}" class="filter-range" title="Remove {{ $attribute_title }}">{{ $item.from | money }} - {{ $item.to | money }}</a>
+                    {{~ end ~}}
+                  </li>
+                {{~ end ~}}
+            {{~ end ~}}
+          {{~ end ~}}
+        <ul>
+       <div class="filter-actions">
+        {{~ if $filters.all | object.size > 0 ~}}
+          <a class="clear-filters" href="{{ $filters.clear_all_url }}" aria-label='{{ label "plp.filters.clear_all" }}'>{{ label "plp.filters.clear_all" }}</a>
+        {{~ end ~}}
+      </div>
+    </div>
+  </div>
+{{~ else ~}}
+<!--
+  <div class="plp-products-filters">
+    <div class="filter-container">
+      <span class="facets__heading">{{ $meta.count }} products{{~ if $is_search }} found{{ end ~}}</span>
+    </div>
+  </div>
+-->
+{{~ end ~}}

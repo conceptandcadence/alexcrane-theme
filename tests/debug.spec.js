@@ -2,8 +2,10 @@ const { test, expect } = require('@playwright/test');
 
 test.describe('Debug Development Theme', () => {
   test('inspect page structure and scripts', async ({ page }) => {
-    // Navigate to the collection page
-    await page.goto('/collections/bestsellers/men');
+    // Navigate to the collection page with preview parameters
+    await page.goto(
+      '/collections/bestsellers/men?_cd=1b89b03c2b57cf4dbb88a0adde2ee219143547c3b7dd9c5dbc6acbd4e7557bd4&_uid=4619010077&preview_theme_id=138154934361&preview_token=81kjn4p8oi7gxvem8qftx8gpay3mot6b',
+    );
 
     console.log('=== PAGE DEBUG INFO ===');
 

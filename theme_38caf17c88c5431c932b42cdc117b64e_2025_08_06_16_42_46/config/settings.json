@@ -1,0 +1,52 @@
+{
+  "sorting": {
+    "sort": {
+      "sort1_field": "default",
+      "sort2_field": "average_purchases~desc",
+      "sort3_field": "new_in~desc",
+      "sort4_field": "title~asc",
+      "sort5_field": "title~desc",
+      "sort6_field": "price~asc",
+      "sort7_field": "price~desc",
+      "sort8_field": ""
+    }
+  },
+  "search": {
+    "config": {
+      "search_path": "/pages/search"
+    }
+  },
+  "autocomplete": {
+    "general": {
+      "product_grid_size": "2",
+      "history_count": "3",
+      "advert_enabled": false,
+      "advert_path": "",
+      "advert_link": ""
+    },
+    "manual_searches": {
+      "text1": "Bo Shorts",
+      "text2": "Cham Pants",
+      "text3": "Playa Shirt",
+      "text4": "Caza Hoodie",
+      "text5": "",
+      "text6": "",
+      "text7": "",
+      "text8": ""
+    },
+    "help": {
+      "slot1_text": "FAQs",
+      "slot1_link": "https://alexcrane.co/pages/faqs",
+      "slot2_text": "Returns & Exchanges",
+      "slot2_link": "https://alexcrane.co/pages/returns-exchanges",
+      "slot3_text": "Stores",
+      "slot3_link": "https://alexcrane.co/pages/store-locator",
+      "slot4_text": "Contact Us",
+      "slot4_link": "https://alexcrane.co/pages/contact",
+      "slot5_text": "",
+      "slot5_link": "",
+      "slot6_text": "",
+      "slot6_link": ""
+    }
+  }
+}

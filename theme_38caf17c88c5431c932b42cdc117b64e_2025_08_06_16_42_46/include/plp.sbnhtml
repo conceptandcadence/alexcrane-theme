@@ -1,0 +1,70 @@
+{{~
+    $meta           = current_element.products.meta
+    $results        = current_element.products.results
+    $facets         = current_element.products.facets
+    $filters        = current_element.products.filters
+    include "functions"
+~}}
+{{~ if context.is_paging_request ~}}
+
+    {{# lazy loading paging request, just show products }}
+    <!-- product list -->
+    {{ include "plp_products" }}
+
+{{~ else ~}}
+
+    {{# full request, show facets and products }}
+    {{ capture response.sub_templates.sort_and_filters_html }}
+
+      {{ if $is_search }}
+        <div class="plp-products-count">
+          <button class="button newsearch" onclick="document.querySelector('.search__input').focus()"><span>Search</span></button>
+         {{ if $meta.query_tokens }}
+            <span class="search-text mobile">({{ $meta.count }})</span>
+            <span class="search-text desktop">{{ $meta.count }} results for "{{ search_summary $meta.query_tokens }}"</span>
+          {{ end }}
+        </div>
+      {{ end }}
+
+      {{ if $is_search }}<div class="search-filters">{{ end }}
+
+      {{ include "plp_sorting" }}
+      {{~ if $filters.all | object.size > 0 ~}}
+        {{ $active_filters = 0 }}
+        {{~ for $filter in $filters.all ~}}
+            {{~ for $item in $filter.items ~}}
+                {{ $active_filters = $active_filters | math.plus 1 }}
+            {{~ end ~}}
+        {{~ end ~}}
+      {{~ end ~}}
+      <div class="plp-products-filter filter-trigger">
+        <button class="plp-products-filter--trigger{{ if $active_filters > 0 }} open{{ end }}" name="filter" onclick="this.classList.toggle('open');">
+          <span>Filter</span>
+
+            {{ if $active_filters > 0 }}
+              <span class="active-filters-count">{{ $active_filters }}</span>
+            {{ else }}
+              <svg width="8px" height="5px" viewBox="0 0 8 5" enable-background="new 0 0 8 5" xml:space="preserve"><path fill="#000" d="M0,0c0,0,3.4,4.4,3.5,4.4C3.7,4.4,7.1,0,7.1,0H0z"/></svg>
+            {{ end }}
+        </button>
+        {{ if $active_filters > 0 }}
+          <a class="clear-filters" href="{{ $filters.clear_all_url }}" aria-label='{{ label "plp.filters.clear_all" }}'>
+            <span class="filter-toggle-icon icon-closez">&times;</span>
+          </a>
+        {{ end }}
+      </div>
+      {{ if $is_search }}</div>{{ end }}
+   {{ end }}
+    <section class="plp-actions">
+      <!-- facets -->
+      {{ include "plp_facets" }}
+    </section>
+    <section class="plp-products">
+      <!-- products -->
+      {{ include "plp_products" }}
+      
+    </section>
+  <section class="plp-pagination">
+    {{ include "plp_paging" }}
+  </section>
+{{~ end ~}}

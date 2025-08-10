@@ -1,0 +1,746 @@
+{
+  "meta": {
+    "parent_id": "df98543157c84ec5b3117dc5891a2644",
+    "id": "38caf17c88c5431c932b42cdc117b64e",
+    "name": "Standard Shopify Theme",
+    "abstract": "Shopify theme with a predefined set of templates + configurable autocomplete",
+    "version": "1.0"
+  },
+  "schema": [
+    {
+      "id": "sorting",
+      "label": "Sorting",
+      "abstract": "Sort configuration",
+      "sections": [
+        {
+          "id": "sort",
+          "label": "Sort options",
+          "abstract": "Configure sort options available to front end customers. To edit the text please see the \"Labels\" section of this theme",
+          "items": [
+            {
+              "id": "sort1_field",
+              "type": "options",
+              "label": "1st sort field",
+              "abstract": "Define the 1st sort field",
+              "default": "",
+              "options": [
+                {
+                  "value": "default",
+                  "label": "Default order"
+                },
+                {
+                  "value": "price~asc",
+                  "label": "Price (lowest to highest)"
+                },
+                {
+                  "value": "price~desc",
+                  "label": "Price (highest to lowest)"
+                },
+                {
+                  "value": "title~asc",
+                  "label": "Title (A-Z)"
+                },
+                {
+                  "value": "title~desc",
+                  "label": "Title (Z-A)"
+                },
+                {
+                  "value": "new_in~asc",
+                  "label": "New in (oldest first)"
+                },
+                {
+                  "value": "new_in~desc",
+                  "label": "New in (newest first)"
+                },
+                {
+                  "value": "rating_percent~desc",
+                  "label": "Ratings (highest score first)"
+                },
+                {
+                  "value": "rating_count~desc",
+                  "label": "Ratings (highest count first)"
+                },
+                {
+                  "value": "average_views~desc",
+                  "label": "Most viewed"
+                },
+                {
+                  "value": "average_purchases~desc",
+                  "label": "Best selling"
+                }
+              ]
+            },
+            {
+              "id": "sort2_field",
+              "type": "options",
+              "label": "2nd sort field",
+              "abstract": "Define the 2nd sort field",
+              "default": "",
+              "options": [
+                {
+                  "value": "",
+                  "label": "None"
+                },
+                {
+                  "value": "price~asc",
+                  "label": "Price (lowest to highest)"
+                },
+                {
+                  "value": "price~desc",
+                  "label": "Price (highest to lowest)"
+                },
+                {
+                  "value": "title~asc",
+                  "label": "Title (A-Z)"
+                },
+                {
+                  "value": "title~desc",
+                  "label": "Title (Z-A)"
+                },
+                {
+                  "value": "new_in~asc",
+                  "label": "New in (oldest first)"
+                },
+                {
+                  "value": "new_in~desc",
+                  "label": "New in (newest first)"
+                },
+                {
+                  "value": "rating_percent~desc",
+                  "label": "Ratings (highest score first)"
+                },
+                {
+                  "value": "rating_count~desc",
+                  "label": "Ratings (highest count first)"
+                },
+                {
+                  "value": "average_views~desc",
+                  "label": "Most viewed"
+                },
+                {
+                  "value": "average_purchases~desc",
+                  "label": "Best selling"
+                }
+              ]
+            },
+            {
+              "id": "sort3_field",
+              "type": "options",
+              "label": "3rd sort field",
+              "abstract": "Define the 3rd sort field",
+              "default": "",
+              "options": [
+                {
+                  "value": "",
+                  "label": "None"
+                },
+                {
+                  "value": "price~asc",
+                  "label": "Price (lowest to highest)"
+                },
+                {
+                  "value": "price~desc",
+                  "label": "Price (highest to lowest)"
+                },
+                {
+                  "value": "title~asc",
+                  "label": "Title (A-Z)"
+                },
+                {
+                  "value": "title~desc",
+                  "label": "Title (Z-A)"
+                },
+                {
+                  "value": "new_in~asc",
+                  "label": "New in (oldest first)"
+                },
+                {
+                  "value": "new_in~desc",
+                  "label": "New in (newest first)"
+                },
+                {
+                  "value": "rating_percent~desc",
+                  "label": "Ratings (highest score first)"
+                },
+                {
+                  "value": "rating_count~desc",
+                  "label": "Ratings (highest count first)"
+                },
+                {
+                  "value": "average_views~desc",
+                  "label": "Most viewed"
+                },
+                {
+                  "value": "average_purchases~desc",
+                  "label": "Best selling"
+                }
+              ]
+            },
+            {
+              "id": "sort4_field",
+              "type": "options",
+              "label": "4th sort field",
+              "abstract": "Define the 4th sort field",
+              "default": "",
+              "options": [
+                {
+                  "value": "",
+                  "label": "None"
+                },
+                {
+                  "value": "price~asc",
+                  "label": "Price (lowest to highest)"
+                },
+                {
+                  "value": "price~desc",
+                  "label": "Price (highest to lowest)"
+                },
+                {
+                  "value": "title~asc",
+                  "label": "Title (A-Z)"
+                },
+                {
+                  "value": "title~desc",
+                  "label": "Title (Z-A)"
+                },
+                {
+                  "value": "new_in~asc",
+                  "label": "New in (oldest first)"
+                },
+                {
+                  "value": "new_in~desc",
+                  "label": "New in (newest first)"
+                },
+                {
+                  "value": "rating_percent~desc",
+                  "label": "Ratings (highest score first)"
+                },
+                {
+                  "value": "rating_count~desc",
+                  "label": "Ratings (highest count first)"
+                },
+                {
+                  "value": "average_views~desc",
+                  "label": "Most viewed"
+                },
+                {
+                  "value": "average_purchases~desc",
+                  "label": "Best selling"
+                }
+              ]
+            },
+            {
+              "id": "sort5_field",
+              "type": "options",
+              "label": "5th sort field",
+              "abstract": "Define the 5th sort field",
+              "default": "",
+              "options": [
+                {
+                  "value": "",
+                  "label": "None"
+                },
+                {
+                  "value": "price~asc",
+                  "label": "Price (lowest to highest)"
+                },
+                {
+                  "value": "price~desc",
+                  "label": "Price (highest to lowest)"
+                },
+                {
+                  "value": "title~asc",
+                  "label": "Title (A-Z)"
+                },
+                {
+                  "value": "title~desc",
+                  "label": "Title (Z-A)"
+                },
+                {
+                  "value": "new_in~asc",
+                  "label": "New in (oldest first)"
+                },
+                {
+                  "value": "new_in~desc",
+                  "label": "New in (newest first)"
+                },
+                {
+                  "value": "rating_percent~desc",
+                  "label": "Ratings (highest score first)"
+                },
+                {
+                  "value": "rating_count~desc",
+                  "label": "Ratings (highest count first)"
+                },
+                {
+                  "value": "average_views~desc",
+                  "label": "Most viewed"
+                },
+                {
+                  "value": "average_purchases~desc",
+                  "label": "Best selling"
+                }
+              ]
+            },
+            {
+              "id": "sort6_field",
+              "type": "options",
+              "label": "6th sort field",
+              "abstract": "Define the 6th sort field",
+              "default": "",
+              "options": [
+                {
+                  "value": "",
+                  "label": "None"
+                },
+                {
+                  "value": "price~asc",
+                  "label": "Price (lowest to highest)"
+                },
+                {
+                  "value": "price~desc",
+                  "label": "Price (highest to lowest)"
+                },
+                {
+                  "value": "title~asc",
+                  "label": "Title (A-Z)"
+                },
+                {
+                  "value": "title~desc",
+                  "label": "Title (Z-A)"
+                },
+                {
+                  "value": "new_in~asc",
+                  "label": "New in (oldest first)"
+                },
+                {
+                  "value": "new_in~desc",
+                  "label": "New in (newest first)"
+                },
+                {
+                  "value": "rating_percent~desc",
+                  "label": "Ratings (highest score first)"
+                },
+                {
+                  "value": "rating_count~desc",
+                  "label": "Ratings (highest count first)"
+                },
+                {
+                  "value": "average_views~desc",
+                  "label": "Most viewed"
+                },
+                {
+                  "value": "average_purchases~desc",
+                  "label": "Best selling"
+                }
+              ]
+            },
+            {
+              "id": "sort7_field",
+              "type": "options",
+              "label": "7th sort field",
+              "abstract": "Define the 7th sort field",
+              "default": "",
+              "options": [
+                {
+                  "value": "",
+                  "label": "None"
+                },
+                {
+                  "value": "price~asc",
+                  "label": "Price (lowest to highest)"
+                },
+                {
+                  "value": "price~desc",
+                  "label": "Price (highest to lowest)"
+                },
+                {
+                  "value": "title~asc",
+                  "label": "Title (A-Z)"
+                },
+                {
+                  "value": "title~desc",
+                  "label": "Title (Z-A)"
+                },
+                {
+                  "value": "new_in~asc",
+                  "label": "New in (oldest first)"
+                },
+                {
+                  "value": "new_in~desc",
+                  "label": "New in (newest first)"
+                },
+                {
+                  "value": "rating_percent~desc",
+                  "label": "Ratings (highest score first)"
+                },
+                {
+                  "value": "rating_count~desc",
+                  "label": "Ratings (highest count first)"
+                },
+                {
+                  "value": "average_views~desc",
+                  "label": "Most viewed"
+                },
+                {
+                  "value": "average_purchases~desc",
+                  "label": "Best selling"
+                }
+              ]
+            },
+            {
+              "id": "sort8_field",
+              "type": "options",
+              "label": "8th sort field",
+              "abstract": "Define the 8th sort field",
+              "default": "",
+              "options": [
+                {
+                  "value": "",
+                  "label": "None"
+                },
+                {
+                  "value": "price~asc",
+                  "label": "Price (lowest to highest)"
+                },
+                {
+                  "value": "price~desc",
+                  "label": "Price (highest to lowest)"
+                },
+                {
+                  "value": "title~asc",
+                  "label": "Title (A-Z)"
+                },
+                {
+                  "value": "title~desc",
+                  "label": "Title (Z-A)"
+                },
+                {
+                  "value": "new_in~asc",
+                  "label": "New in (oldest first)"
+                },
+                {
+                  "value": "new_in~desc",
+                  "label": "New in (newest first)"
+                },
+                {
+                  "value": "rating_percent~desc",
+                  "label": "Ratings (highest score first)"
+                },
+                {
+                  "value": "rating_count~desc",
+                  "label": "Ratings (highest count first)"
+                },
+                {
+                  "value": "average_views~desc",
+                  "label": "Most viewed"
+                },
+                {
+                  "value": "average_purchases~desc",
+                  "label": "Best selling"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "search",
+      "icon": "search",
+      "label": "Search",
+      "abstract": "Search options",
+      "sections": [
+        {
+          "id": "config",
+          "label": "Config",
+          "abstract": "General search options",
+          "items": [
+            {
+              "id": "search_path",
+              "type": "text",
+              "label": "Search path",
+              "abstract": "URL for search page",
+              "default": "/pages/search"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "autocomplete",
+      "label": "Autocomplete",
+      "abstract": "Misc autocomplete settings",
+      "sections": [
+        {
+          "id": "general",
+          "label": "General",
+          "abstract": "Misc settings for autocomplete",
+          "items": [
+            {
+              "id": "product_grid_size",
+              "type": "options",
+              "label": "Product grid",
+              "abstract": "Choose grid size for products",
+              "default": "4",
+              "options": [
+                {
+                  "value": "1",
+                  "label": "1"
+                },
+                {
+                  "value": "2",
+                  "label": "2"
+                },
+                {
+                  "value": "3",
+                  "label": "3"
+                },
+                {
+                  "value": "4",
+                  "label": "4"
+                },
+                {
+                  "value": "5",
+                  "label": "5"
+                },
+                {
+                  "value": "6",
+                  "label": "6"
+                }
+              ]
+            },
+            {
+              "id": "history_count",
+              "type": "options",
+              "label": "History count",
+              "abstract": "Number of previous search history items to show",
+              "default": "6",
+              "options": [
+                {
+                  "value": "0",
+                  "label": "None"
+                },
+                {
+                  "value": "1",
+                  "label": "1"
+                },
+                {
+                  "value": "2",
+                  "label": "2"
+                },
+                {
+                  "value": "3",
+                  "label": "3"
+                },
+                {
+                  "value": "4",
+                  "label": "4"
+                },
+                {
+                  "value": "5",
+                  "label": "5"
+                },
+                {
+                  "value": "6",
+                  "label": "6"
+                },
+                {
+                  "value": "7",
+                  "label": "7"
+                },
+                {
+                  "value": "8",
+                  "label": "8"
+                },
+                {
+                  "value": "9",
+                  "label": "9"
+                },
+                {
+                  "value": "10",
+                  "label": "10"
+                }
+              ]
+            },
+            {
+              "id": "advert_enabled",
+              "type": "boolean",
+              "label": "Show advert",
+              "abstract": "Show advert/promo on autocomplete home page",
+              "default": false
+            },
+            {
+              "id": "advert_path",
+              "type": "text",
+              "label": "Image path",
+              "abstract": "Full image path",
+              "default": ""
+            },
+            {
+              "id": "advert_link",
+              "type": "text",
+              "label": "Image link",
+              "abstract": "Link for advert",
+              "default": ""
+            }
+          ]
+        },
+        {
+          "id": "manual_searches",
+          "label": "Manual Popular Searches",
+          "abstract": "Manually defined popular search terms",
+          "items": [
+            {
+              "id": "text1",
+              "type": "text",
+              "label": "Search term 1",
+              "abstract": "Leave blank if not required",
+              "default": ""
+            },
+            {
+              "id": "text2",
+              "type": "text",
+              "label": "Search term 2",
+              "abstract": "Leave blank if not required",
+              "default": ""
+            },
+            {
+              "id": "text3",
+              "type": "text",
+              "label": "Search term 3",
+              "abstract": "Leave blank if not required",
+              "default": ""
+            },
+            {
+              "id": "text4",
+              "type": "text",
+              "label": "Search term 4",
+              "abstract": "Leave blank if not required",
+              "default": ""
+            },
+            {
+              "id": "text5",
+              "type": "text",
+              "label": "Search term 5",
+              "abstract": "Leave blank if not required",
+              "default": ""
+            },
+            {
+              "id": "text6",
+              "type": "text",
+              "label": "Search term 6",
+              "abstract": "Leave blank if not required",
+              "default": ""
+            },
+            {
+              "id": "text7",
+              "type": "text",
+              "label": "Search term 7",
+              "abstract": "Leave blank if not required",
+              "default": ""
+            },
+            {
+              "id": "text8",
+              "type": "text",
+              "label": "Search term 8",
+              "abstract": "Leave blank if not required",
+              "default": ""
+            }
+          ]
+        },
+        {
+          "id": "help",
+          "label": "How can we help",
+          "abstract": "Options for managing help links",
+          "items": [
+            {
+              "id": "slot1_text",
+              "type": "text",
+              "label": "Slot 1 text",
+              "abstract": "Leave blank if not required",
+              "default": ""
+            },
+            {
+              "id": "slot1_link",
+              "type": "text",
+              "label": "Slot 1 link",
+              "abstract": "Leave blank if not required",
+              "default": ""
+            },
+            {
+              "id": "slot2_text",
+              "type": "text",
+              "label": "Slot 2 text",
+              "abstract": "Leave blank if not required",
+              "default": ""
+            },
+            {
+              "id": "slot2_link",
+              "type": "text",
+              "label": "Slot 2 link",
+              "abstract": "Leave blank if not required",
+              "default": ""
+            },
+            {
+              "id": "slot3_text",
+              "type": "text",
+              "label": "Slot 3 text",
+              "abstract": "Leave blank if not required",
+              "default": ""
+            },
+            {
+              "id": "slot3_link",
+              "type": "text",
+              "label": "Slot 3 link",
+              "abstract": "Leave blank if not required",
+              "default": ""
+            },
+            {
+              "id": "slot4_text",
+              "type": "text",
+              "label": "Slot 4 text",
+              "abstract": "Leave blank if not required",
+              "default": ""
+            },
+            {
+              "id": "slot4_link",
+              "type": "text",
+              "label": "Slot 4 link",
+              "abstract": "Leave blank if not required",
+              "default": ""
+            },
+            {
+              "id": "slot5_text",
+              "type": "text",
+              "label": "Slot 5 text",
+              "abstract": "Leave blank if not required",
+              "default": ""
+            },
+            {
+              "id": "slot5_link",
+              "type": "text",
+              "label": "Slot 5 link",
+              "abstract": "Leave blank if not required",
+              "default": ""
+            },
+            {
+              "id": "slot6_text",
+              "type": "text",
+              "label": "Slot 6 text",
+              "abstract": "Leave blank if not required",
+              "default": ""
+            },
+            {
+              "id": "slot6_link",
+              "type": "text",
+              "label": "Slot 6 link",
+              "abstract": "Leave blank if not required",
+              "default": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

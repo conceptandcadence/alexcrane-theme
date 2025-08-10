@@ -1,0 +1,227 @@
+{{~
+# get first/default feature option
+func get_first_option
+    $entry = $0?.options | array.first
+    if $entry
+        ret $entry.value?.definition?.titles?.default
+    else
+        ret ""
+    end
+end
+
+# resize shopify image
+func resize_image
+    $match = $0 | regex.match "(.*).(jpg|gif|png|webp)"
+    if $match | array.size == 3
+        ret $match[1] + "_x" + $1 + "." + $match[2]
+    else
+        ret $0
+    end
+end
+
+# build search summary
+func search_summary
+    $summary = ""
+    for $term in $0
+        if $summary != ""
+            $summary = $summary + "&nbsp;"
+        end
+
+        if $term.spell_corrected
+            $summary = $summary + "<strike>" + ($term.original | html.escape) + "</strike>&nbsp;" + ($term.final | html.escape)
+        else
+            $summary = $summary + ($term.final | html.escape)
+        end
+    end
+
+    ret $summary
+end
+
+# get shopify image src and srcset
+func get_image_srcs
+  $image = $0
+  $sizes = $1
+  if ($image && $sizes)
+    $desired_sizes = string.split $sizes ','
+    $supported_sizes = ''
+    $srcset = ''
+	$src = ''
+
+    for $size in $desired_sizes
+      $size_as_int = $size * 1
+      $image_base_url 	= $image.src
+      $image_suffix 		= $image_base_url | regex.match `(\.jpg|.gif|.png|\.webp)` | regex.escape
+      $image_sized_url 	= string.replace_first $image_base_url $image_suffix $"_{$size}x{$image_suffix}" true
+	  $srcset 			= $"{$srcset} {$image_sized_url} {$size}w,"
+      $supported_sizes	= $"{$supported_sizes} {$size},"
+
+	  if $src == ''
+	  	$src = $image_sized_url
+	  end
+
+    end
+
+    if $supported_sizes == ''
+      $supported_sizes = image.width
+    end
+
+    if $image?.width < $size_as_int
+      break
+    end
+                                     
+    ret { src: $src, srcset: $srcset }
+
+  end
+end
+
+# product cart template
+func autocomplete_product_card
+    $result		= $0
+    $product    = $result.item
+    $variants 				= $product?.variants?.size?.options
+    $default_variant	= $variants | array.first
+    $title      			= $product.titles?.default ?? $product.id
+    $pricing    			= $product.min_pricing ?? $product.pricing ?? {}
+    $hover_enabled		= false
+    $primary_image 		= get_image_srcs $product.media?.default '100,200,400,600,700,800,900,1000,1200'
+    $is_gift_card 		= $product?.tags | array.contains 'gift-card'
+
+    $locale_iso_code	= localization?.country?.currency?.iso_code
+    $currency_prefix	= ""
+    $currency_suffix	= ""
+
+    if $product?.media?.alt
+        $hover_image 		= get_image_srcs $product.media.alt '100,200,400,600,700,800,900,1000,1200'
+        $hover_enabled 	= true
+    else
+        $hover_image 		= get_image_srcs $product.media.default '100,200,400,600,700,800,900,1000,1200'
+    end
+                                   
+}}
+<li class="plp-item{{ if !$product?.variants?.size > 1 }} no-variants{{ end }}" data-id="{{ $product?.id }}" data-handle="{{ $product?.handle }}" data-state="default" data-default-variant="{{ $default_variant?.value?.id }}">
+  {{~ if $primary_image?.src ~}}
+        <div class="plp-item__images">
+          <img 
+              class="plp-item__images-image lifestyle" 
+              loading="lazy"
+              src="{{ $hover_image?.src }}"
+              sizes="(max-width: 700px) 50vw,33.33vw"
+              srcset="{{ $hover_image?.srcset }}"
+              alt="{{ $title }}">
+          <img 
+              class="plp-item__images-image flat" 
+              loading="lazy"
+              src="{{ $primary_image?.src }}"
+              sizes="(max-width: 700px) 50vw,33.33vw"
+              srcset="{{ $primary_image?.srcset }}"
+              alt="{{ $title }}">	
+        </div>
+
+        {{~ if $product?.tags | array.contains 'ac-pick' ~}}
+          <svg class="badge ac-pick" viewBox="0 0 47 32" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M19.4214 30.7924C19.7633 31.0525 20.1947 31.3806 20.7007 31.0537C20.7081 31.0493 22.4624 30.1089 23.1529 29.7516C23.9938 29.31 24.8374 28.8732 25.6808 28.4362L25.6811 28.4359C26.7302 27.8927 27.7793 27.3493 28.8236 26.7966C30.7878 25.7581 32.7444 24.7025 34.6938 23.6301C35.6312 23.1197 36.5612 22.5781 37.4539 21.9933C38.7263 21.1677 39.9689 20.3098 41.2286 19.44L41.2818 19.4034C41.4097 19.315 41.538 19.2265 41.6663 19.1379C42.1708 18.7899 42.6747 18.4394 43.1787 18.0887L43.179 18.0885C44.0841 17.4586 44.9906 16.8279 45.9043 16.2095C46.2047 16.0057 46.2614 15.7944 46.0858 15.5191C45.8819 15.2007 43.269 12.9776 42.4699 12.3363C41.0445 11.1965 39.613 10.0671 38.1547 8.97345C37.1579 8.22499 36.1251 7.53011 35.0836 6.83521C34.2197 6.25627 33.3456 5.69128 32.4718 5.12624C32.1687 4.93028 31.8657 4.7343 31.563 4.53775C30.5044 3.84833 29.444 3.16186 28.3818 2.47839L28.3815 2.47833C27.581 1.96201 26.7807 1.4457 25.9667 0.951712C25.8175 0.890445 25.6502 0.890445 25.5009 0.951712C25.3652 1.00288 25.239 1.07799 25.1125 1.15324C25.0183 1.20929 24.9238 1.26543 24.8255 1.31181C24.1191 1.64218 23.4117 1.97146 22.7042 2.3008L22.7029 2.30139L22.7026 2.30156L22.7023 2.30167C21.3933 2.91097 20.0838 3.52046 18.7812 4.1375C18.5752 4.23423 18.3688 4.33004 18.1624 4.42586C17.3846 4.78692 16.6072 5.1478 15.8558 5.55704C14.2934 6.40083 12.7473 7.27285 11.2005 8.14521C10.707 8.42355 10.2135 8.70191 9.71931 8.97939C8.45553 9.68669 7.19669 10.4009 5.94281 11.1221C5.77495 11.2179 5.60687 11.3134 5.43881 11.4088L5.43856 11.409L5.43822 11.4092L5.43789 11.4094L5.43755 11.4096L5.4372 11.4098C4.72385 11.8149 4.01063 12.22 3.31501 12.6532C2.38849 13.2336 1.47884 13.8397 0.586044 14.4716C0.565386 14.4861 0.544594 14.5004 0.523861 14.5147C0.338504 14.6426 0.157925 14.7671 0.121792 14.9879C0.103428 15.0587 0.106182 15.1333 0.129713 15.2026C0.153244 15.2719 0.196524 15.3328 0.254223 15.3778C0.712155 15.7668 1.17355 16.1547 1.63567 16.5432C2.08199 16.9184 2.52907 17.2943 2.97427 17.6722C3.75397 18.3379 4.53019 19.007 5.30296 19.6795C5.62774 19.9616 5.94896 20.2484 6.27026 20.5354C6.8778 21.078 7.4856 21.6207 8.11823 22.1317C9.05468 22.8883 10.0092 23.6243 10.963 24.3599L10.9636 24.3604C11.5085 24.7804 12.0532 25.2006 12.5941 25.624C13.0487 25.9797 13.5015 26.3379 13.9543 26.6964L13.9547 26.6966C14.7823 27.3516 15.61 28.0068 16.4495 28.646C17.2166 29.2268 18.0053 29.7848 18.7934 30.3423L18.7944 30.3432C18.9552 30.457 19.116 30.5708 19.2767 30.6846C19.323 30.7176 19.3712 30.7544 19.4214 30.7924Z" fill="#62DECC"/><path d="M26.9613 10.0034L27.6418 9.36403C27.8224 9.61958 28.1692 9.74787 28.5676 9.50994C28.8698 9.32944 28.9196 9.08533 28.813 8.90676C28.7227 8.75566 28.5459 8.69356 28.2521 8.7945L27.7441 8.95812C27.0055 9.2036 26.4763 8.98851 26.1933 8.51461C25.8323 7.91021 26.0685 7.08886 26.7966 6.65402C27.7581 6.07971 28.446 6.49818 28.7046 6.83758L28.0448 7.46463C27.8984 7.28186 27.6024 7.11388 27.2177 7.34361C26.9774 7.48718 26.8712 7.74628 26.9861 7.93859C27.0845 8.10342 27.2697 8.1326 27.4756 8.05619L28.0179 7.87205C28.7662 7.6115 29.3448 7.81572 29.6401 8.31023C29.9683 8.85968 29.8789 9.67721 28.9929 10.2064C27.9764 10.8135 27.2323 10.3634 26.9613 10.0034Z" fill="white"/><path d="M23.6791 7.24869C23.5191 6.98083 23.6063 6.61194 23.9291 6.41914C24.2931 6.20172 24.7072 6.36444 24.9246 6.72846C25.4743 7.64879 25.0434 8.36274 24.6353 8.66239L24.3851 8.24343C24.6215 8.04633 24.7746 7.64739 24.5996 7.32325C24.5776 7.36437 24.5377 7.40682 24.4759 7.44374C24.1668 7.62834 23.8514 7.53715 23.6791 7.24869Z" fill="white"/><path d="M22.5506 13.9143L22.7393 11.5L20.5323 10.5352L21.6175 9.88701C21.845 10.0027 22.6619 10.372 22.8895 10.4877L22.9568 9.08707L23.9938 8.46764L23.8012 10.8285L26.0533 11.8222L24.9819 12.4621L23.6551 11.8475C23.6422 12.1068 23.5868 13.0438 23.5808 13.299L22.5506 13.9143Z" fill="white"/><path d="M18.6405 13.4357L20.1515 12.5332C19.9368 12.2048 19.5201 12.0064 18.9981 12.3182C18.5242 12.6013 18.4765 13.1143 18.6405 13.4357ZM20.7659 13.359L21.6636 13.1303C21.8406 13.8166 21.5961 14.6243 20.7651 15.1206C19.8379 15.6744 18.6227 15.4964 17.9417 14.3563C17.2977 13.2779 17.6759 12.1015 18.5413 11.5847C19.5853 10.9611 20.6082 11.254 21.2564 12.3392C21.3343 12.4697 21.4026 12.6153 21.4108 12.629L18.9932 14.073C19.2805 14.5071 19.851 14.6043 20.3043 14.3335C20.7301 14.0792 20.8365 13.7268 20.7659 13.359Z" fill="white"/><path d="M18.2352 16.4919L17.3217 17.0375L14.3517 12.0649L15.2652 11.5193L18.2352 16.4919Z" fill="white"/><path d="M15.7374 17.9838L14.6676 17.1132L12.6896 18.2946L12.9489 19.6493L11.9462 20.2482L10.9058 14.2629L12.0047 13.6065L16.7676 17.3684L15.7374 17.9838ZM12.0623 14.9978L12.4886 17.2405L13.8348 16.4365L12.0623 14.9978Z" fill="white"/><path d="M30.2854 15.3256L29.7815 17.5555L32.3312 18.6884L31.2117 19.357L29.5476 18.5991L29.4078 19.2231L29.941 20.1159L29.0276 20.6615L26.0576 15.689L26.971 15.1434L28.6735 17.9937L29.0903 16.0394L30.2854 15.3256Z" fill="white"/><path d="M25.194 19.3731C24.727 19.652 24.5365 20.2224 24.9016 20.8337C25.2667 21.4449 25.8702 21.5504 26.3372 21.2715C26.8043 20.9925 26.8532 20.544 26.7728 20.2379L27.7364 20.0258C27.9217 20.6792 27.7374 21.572 26.8377 22.1094C25.8418 22.7042 24.6076 22.4164 23.9882 21.3793C23.3646 20.3353 23.6867 19.1272 24.6689 18.5406C25.5892 17.9909 26.4517 18.2492 26.9364 18.7331L26.2832 19.496C26.0325 19.2636 25.6473 19.1023 25.194 19.3731Z" fill="white"/><path d="M24.2735 23.5011L23.36 24.0467L21.3417 20.6676L22.2552 20.122L24.2735 23.5011ZM20.5713 19.6274C20.3826 19.3115 20.485 18.9056 20.7941 18.721C21.11 18.5323 21.509 18.6387 21.6977 18.9547C21.8782 19.2569 21.7828 19.6587 21.4668 19.8474C21.1578 20.032 20.7518 19.9296 20.5713 19.6274Z" fill="white"/><path d="M18.6347 23.272L19.3833 22.8249C19.8573 22.5418 19.9816 22.0948 19.7314 21.6758C19.473 21.2431 19.0245 21.1476 18.5506 21.4306L17.802 21.8778L18.6347 23.272ZM19.9883 23.5724L19.116 24.0934L20.2113 25.9272L19.2635 26.4933L16.355 21.6238L18.1751 20.5367C19.1366 19.9624 20.1569 20.2196 20.682 21.0987C21.2112 21.9847 20.9498 22.9981 19.9883 23.5724Z" fill="white"/></svg>
+        {{~ end ~}}
+
+
+        {{~ badgeShortsLength = false ~}}
+        {{~ badgePantsLength = false ~}}
+        {{~ lengthTitles = 'Length,Inseam'~}}
+
+
+        {{~ if $lengthOptions | array.contains '5.5"' ~}}
+          <div class="badge shorts-length">Available in 5.5"</div>
+        {{~ end ~}}
+
+        {{~ if $lengthOptions | array.contains "Long" ~}}
+          <div class="badge shorts-length">Longer Inseam Available</div>
+        {{~ end ~}}
+
+    {{~ end ~}}
+
+    <div class="plp-item__info{{ if !$hover_enabled }} no-hover{{ end }}">
+        <h2 class="plp-item__title">{{ $title }}</h2>
+        <div class="plp-item__title plp-item__price">
+            {{~ if $is_gift_card ~}}
+                {{ $product?.min_pricing.price | money | string.remove '.00' }}&ndash;{{ $product?.max_pricing.price | money | string.remove '.00' }}
+            {{~ else ~}}
+                {{~ if $product?.price_varies }}
+                    {{ $product?.max_pricing.price | money | string.remove '.00' }}
+                {{~ else ~}}
+                    <span class="sale-price">{{ $pricing.price | money | string.remove '.00' }}</span>
+                    {{~ if $pricing?.was > $pricing?.price }}
+                        <s>{{ $pricing.was | money | string.remove '.00' }}</s>
+                        {{ $price_difference = $pricing?.was - $pricing?.price }}
+                        {{ $percentage_difference = $pricing?.price | math.divided_by $pricing?.was }}
+                        {{ $percentage_difference = 1 | math.minus $percentage_difference | math.times 100 | math.round }}
+                        {{ $percentage_difference = $"{$percentage_difference}% Off" }}
+                        <span class="discount-percentage">{{ $percentage_difference }}</span>
+                    {{~ end ~}}
+
+                {{~ end ~}}
+            {{~ end ~}}
+        </div>
+    </div>
+
+    <a class="plp-item__link" href="{{ $product?.url }}"><span class="visually-hidden">View {{ $title }}</span></a>
+
+    <div class="plp-item__purchase">
+        <div class="plp-item__sizes">
+
+          {{~ if $lengthOptions | object.size > 0 ~}}
+            <ul class="plp-item__size-list plp-item__lengths"> 
+              {{ for option in $lengthOptions }}
+                <li class="variant-length {{ if for.first }}selected{{ end }}" tabindex="0">
+                  <input type="radio" name="id" value="{{ option | string.escape }}" id="length_{{ option | string.escape }}"{{ if for.first }} checked="checked"{{ end }} tabindex="-1"/> 
+                  <label class="label" for="length_{{ option | string.escape }}" tabindex="-1">{{ option }}</label>
+                </li> 
+              {{ end }}
+            </ul>
+          {{~ end ~}}
+
+          <ul class="plp-item__size-list plp-item__sizes"> 
+            {{ for $variant in $variants }}
+              {{ variantLengthOptions = $variant?.value?.attributes?.length?.options | object.values }}
+              <li class="variant{{ if $lengthOptions | object.size > 0 }} size{{ end }}{{ if $variant?.value?.stock <= 0 }} soldout{{ end }}" 
+                data-variant="{{ $variant?.key }}"
+                data-variant-id="{{ if variantLengthOptions[0]?.id }}{{ variantLengthOptions[0]?.id }}{{ else }}{{ $variant?.value?.id }}{{ end }}"
+                data-product="{{ $title }}"
+                data-price="{{~ $variant?.value?.pricing?.price }}"
+                data-compare-price="{{~ $variant?.value?.pricing?.was ~}}"
+                data-hierarchy="{{~ $variant?.value?.hierarchy_id ~}}"
+                data-stock="{{~ $variant?.value?.stock ~}}"
+                {{ for option in variantLengthOptions }}
+                    data-option{{ option?.definition?.id }}="{{ option?.id }}"
+                {{ end }}>                         
+                <span class="label">{{ $variant?.key }}</span>
+              </li> 
+            {{ end }}
+          </ul>
+        </div>
+      {{~ if $is_gift_card }}
+        <a href="{{ $product?.url }}" class="plp-item__button">
+          <span class="default">View Product</span>
+        </a>
+      {{ else }}
+        <div class="plp-item__button" data-variant="">
+          <span class="default">Quick Add</span>
+          <span class="add">Add to cart</span>
+          <span class="select-size">Select a size</span>
+          <span class="adding">Adding to cart...</span>
+          <span class="success">Added to cart!</span>
+          <span class="error">Sorry there was a problem</span>
+          <span class="soldout">Out of Stock</span>
+        </div>
+      {{ end }}
+    </div>
+</li>
+{{
+end
+~}}
+
+
+
+
+
+
+
+
+

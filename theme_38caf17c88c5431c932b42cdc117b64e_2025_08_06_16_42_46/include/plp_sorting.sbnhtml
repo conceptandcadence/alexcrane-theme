@@ -1,0 +1,41 @@
+<!-- sort by list -->
+<div class="plp-products-sort{{ if $is_search }} search{{ end }}">
+  {{~
+      func func_render_sort_option
+          $sort_field	= current_sort_field
+          $sort_dir 	= current_sort_direction
+          $url 		= sort_url $0 $1 | html.escape
+          $label 		= $2
+
+          if $0 == "default"
+              $url    = sort_url "" "" | html.escape
+          end
+
+          if $sort_field == $0 && $sort_dir == $1
+              $option = "<option selected=\"selected\" value=\"" + $url + "\">" + $label + "</option>"
+          else
+              $option = "<option value=\"" + $url + "\">" + $label + "</option>"
+          end
+
+          ret $option
+      end
+  ~}}
+  <div class="filter-trigger">
+    <label for="sort"><span class="visually-hidden">{{ label "plp.sorting.title" }}:</span></label>
+    <select name="sort" onchange="graphenehc.reload({url: this.value});">
+      {{ if current_sort_field | string.size == 0 }}
+        <option disabled="disabled" selected="selected" value="">{{ label "plp.sorting.title" }}</option>
+      {{ end }}
+      {{
+        for $sort in settings.sorting?.sort
+          if $sort?.value && $sort?.value != ""
+            $sort_fields  = $sort.value | string.split "~"
+            $sort_key		= $sort.value | string.replace "~" "_"
+            $label        = labels.plp.sorting[$sort_key] ?? $sort.value
+            func_render_sort_option $sort_fields[0] $sort_fields[1] $label
+          end
+        end
+      }}
+    </select>
+  </div>
+</div>

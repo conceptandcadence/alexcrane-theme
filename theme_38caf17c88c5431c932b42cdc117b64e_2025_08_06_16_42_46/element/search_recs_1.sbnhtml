@@ -1,0 +1,9 @@
+{{~ $results = current_element.products.results ~}}
+{{~ include "functions" ~}}
+{{~ for $result in $results
+    $product    = $result.item
+    $title      = $product.titles?.default ?? $product.id
+    $pricing    = $product.min_pricing ?? $product.pricing
+~}}
+  {{ autocomplete_product_card $result }}
+{{~ end ~}}

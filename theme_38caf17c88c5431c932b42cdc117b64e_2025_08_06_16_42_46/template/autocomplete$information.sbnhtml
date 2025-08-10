@@ -1,0 +1,6 @@
+<div class="acs_auto_info">
+{{~ for $strategy in elements.autocomplete.strategies ~}}
+    <h4>{{ $strategy.titles?.default }}</h4>
+    {{ $strategy.abstracts?.default }}
+{{~ end ~}}
+</div>

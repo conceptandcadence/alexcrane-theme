@@ -1,0 +1,46 @@
+{{~ if paging && paging.last.page > 1 ~}}
+	{{~
+		$paging_method	= "delta" # method can be "delta" or "all"
+		$paging_items	= paging.items method: $paging_method delta: 2
+		$paging_map		= $paging_items | array.map "page"
+		$paging_start	= $paging_map | array.first
+		$paging_finish	= $paging_map | array.last
+	~}}
+	{{~ if $paging_method == "delta" ~}}
+		<div class="plp-products__pagination advc">
+          <div class="prev-and-numbered">
+			{{~ if paging.show_previous ~}}
+				<a class="pagination__link button button--secondary prev" href="{{ paging.previous.url }}">Previous</a>
+			{{~ end ~}}
+			{{~ if $paging_start > 1 ~}}
+				<a class="pagination__link button button--secondary" href="{{ paging.first.url }}">1</a> ...
+			{{~ end ~}}
+			{{~ for $paging_item in $paging_items ~}}
+				{{~ if $paging_item.selected ~}}
+					<a class="pagination__link button button--secondary" href="{{ $paging_item.url }}" style="pointer-events:none; background-color: #f2f2f2;"><strong>{{ $paging_item.page }}</strong></a>
+				{{~ else ~}}
+					<a class="pagination__link button button--secondary" href="{{ $paging_item.url }}">{{ $paging_item.page }}</a>
+				{{~ end ~}}
+			{{~ end ~}}
+			{{~ if paging.last.page > $paging_finish ~}}
+				... <a class="pagination__link button button--secondary" href="{{ paging.last.url }}">{{ paging.last.page }}</a>
+			{{~ end ~}}
+          </div>
+			{{~ if paging.show_next ~}}
+              <div class="next">
+				<a class="button button--primary next pagination__link pagination__next" href="{{ paging.next.url }}">Next</a>
+              </div>
+            {{~ else if paging.show_previous ~}}
+              <div class="next">
+				<a class="pagination__link button button--secondary prev" href="{{ paging.previous.url }}">Previous</a>
+              </div>
+			{{~ end ~}}
+		</div>
+	{{~ else ~}}
+		<div>
+			{{~ if paging.show_next ~}}
+				<a class="pagination__link pagination__next" href="{{ paging.next.url }}">Next</a>
+			{{~ end ~}}
+		</div>
+	{{~ end ~}}
+{{~ end ~}}

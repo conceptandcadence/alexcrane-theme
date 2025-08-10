@@ -1,0 +1,107 @@
+{{~
+    ##
+    # function for rendering facet item
+    # used in the theme version 3 layout
+    # $0 is the first param and $1 the second and so on..
+    ##
+
+    func func_render_facet_item
+        $item 		= $0
+        $url        = $item.url
+        $label      = ($item.titles?.default ?? $item.id)
+        $count      = $item.count
+        $properties = $item.properties
+        $media 		= $item.media
+        $selected	= $item.selected
+        $facet		= $1
+        $index		= $2
+        $style      = $3
+		$label		=  $label | string.replace "-" " "
+
+    if $facet.data_type == "numeric" && $facet.ranges
+        $label = (($item.from | price ) + " - " + ($item.to | price ))
+    end
+}}
+  {{~ if $label != "Suiting"   ~}}
+      <li class="shop-filter">
+          <input type="checkbox" name="filter.v.{{ $facet.id }}" value="{{ $url }}" id="Filter-filter.v.{{ $facet.id }}-{{ $index }}" {{~ if $selected ~}} checked="checked" {{~ end ~}} onchange="graphenehc.reload({url: this.value});" {{~ if $count == 0 ~}} disabled{{~ end ~}}>
+          <label for="Filter-filter.v.{{ $facet.id }}-{{ $index }}" class="shop-filter-toggle shop-filter-item{{ if $count == 0 }} disabled{{ end }}">
+            {{~ 
+                  if $facet.properties?.is_color 
+                      $color      = $properties?.color
+                      $css        = ""
+                      if $color?.hex
+                        $css    = "display: inline-block; width: 20px; height: 20px; margin-right: 8px; border-radius: 24px; border: solid 2px #fff; background: #" + $color.hex
+                      else if $color?.css
+                        $css    = "display: inline-block; width: 20px; height: 20px; margin-right: 8px; border-radius: 24px; border: solid 2px #fff; " + $color.css
+                      end
+              }}
+                  <span class="shop-filter-label">
+                    <span style="{{ $css }}" aria-hidden="true"{{ if $count == 0 }} class="disabled"{{ end }}></span>
+                    <span>{{ $label }}</span>
+                  </span>
+              {{~ else if $facet.properties?.is_icon  ~}}
+
+                    {{ capture $css }}display: inline-block; width: 20px; height: 20px; margin-right: 8px; transition: transform .5s ease-in-out, background-color .5s ease-in-out; background-color: var(--color-blue-light); -webkit-mask: url({{ $media?.default?.src }}) no-repeat center; mask: url({{ $media?.default?.src }}) no-repeat center;  mask-size: contain; {{ end }}
+                    <span class="shop-filter-label">
+                      <span style="{{ $css }}" aria-hidden="true"{{ if $count == 0 }} class="shop-filter-icon disabled"{{ else }} class="shop-filter-icon"{{ end }}></span>
+                      <span>{{ $label }}</span>
+                    </span>
+              {{~ else ~}}
+                  <span class="shop-filter-label">{{ $label }}</span>
+              {{~ end ~}}
+          </label>
+      </li>
+  {{~ end ~}}
+{{ end ~}}
+
+{{~ if $filters.all | object.size > 0 ~}}
+  {{ $active_filters = 0 }}
+  {{~ for $filter in $filters.all ~}}
+      {{~ for $item in $filter.items ~}}
+          {{ $active_filters = $active_filters | math.plus 1 }}
+      {{~ end ~}}
+  {{~ end ~}}
+{{~ end ~}}
+
+<div class="shop-filters__container {{ if $active_filters > 0 }} plp-nav-expanded{{ end }}" style="height: var(--filters-height);">
+  
+          <!-- filters -->
+          {{ # include "plp_filters" }}
+  
+  <form id="FacetFiltersForm" class="facets__form">
+    
+    {{~ for $facet in $facets ~}}
+        {{~
+        $label        = $facet.titles?.default ?? $facet.id
+        $count        = $facet.selected_count
+        $facet_index  = for.index
+    ~}}
+      <div id="Details-{{ $facet_index }}-template" class="shop-filters__wrapper" data-filterset="{{ $label }}"  data-index="{{ $facet_index }}">
+        <span class="filter-label">{{ $label }}</span>
+        <ul class="shop-filter-group {{ $label | string.downcase }}s{{ if $facet.properties?.is_icon }} icons{{ end }}" aria-label="{{ $label }} ({{ $count }} selected)" role="list">
+          {{~ if $facet.data_type == "numeric" && $facet.ranges ~}}
+            {{~ for $item in $facet.ranges ~}}
+              {{ 
+                ## 
+                # Call function func_render_facet_item with 4 parameters 
+                # param $item 
+                # param $facet is the parent of the item
+                # param index of the loop, used for unique identifier
+                # param $style, used to specify the input style
+                ##
+
+                func_render_facet_item $item $facet for.index "standard"
+              }}
+            {{~ end ~}}
+          {{~ else ~}}
+            {{~ for $item in $facet.items ~}}
+              {{ func_render_facet_item $item $facet for.index "standard" }}
+            {{~ end ~}}
+          {{~ end ~}}
+        </ul>
+      </div>
+    {{~ end ~}}
+    
+  </form>
+</div>

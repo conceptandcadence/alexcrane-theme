@@ -1,0 +1,100 @@
+{
+  "items": [
+    {
+      "titles": {
+        "en-us": {
+          "default": "Shop All"
+        }
+      },
+      "url": "https://alexcrane.co/collections/men"
+    },
+    {
+      "titles": {
+        "en-us": {
+          "default": "Crewnecks"
+        }
+      },
+      "url": "https://alexcrane.co/collections/crewnecks/men"
+    },
+    {
+      "titles": {
+        "en-us": {
+          "default": "Hoodies"
+        }
+      },
+      "url": "https://alexcrane.co/collections/hoodies/men"
+    },
+    {
+      "titles": {
+        "en-us": {
+          "default": "Shirts"
+        }
+      },
+      "url": "https://alexcrane.co/collections/shirts/men"
+    },
+    {
+      "titles": {
+        "en-us": {
+          "default": "Polos"
+        }
+      },
+      "url": "https://alexcrane.co/collections/polos/men"
+    },
+    {
+      "titles": {
+        "en-us": {
+          "default": "Tees"
+        }
+      },
+      "url": "https://alexcrane.co/collections/tees/men"
+    },
+    {
+      "titles": {
+        "en-us": {
+          "default": "Pants"
+        }
+      },
+      "url": "https://alexcrane.co/collections/pants/men"
+    },
+    {
+      "titles": {
+        "en-us": {
+          "default": "Jackets"
+        }
+      },
+      "url": "https://alexcrane.co/collections/jackets/men"
+    },
+    {
+      "titles": {
+        "en-us": {
+          "default": "Shorts"
+        }
+      },
+      "url": "https://alexcrane.co/collections/bo-shorts/men"
+    },
+    {
+      "titles": {
+        "en-us": {
+          "default": "Swim"
+        }
+      },
+      "url": "https://alexcrane.co/collections/swim/men"
+    },
+    {
+      "titles": {
+        "en-us": {
+          "default": "Accessories"
+        }
+      },
+      "url": "https://alexcrane.co/collections/accessories/men"
+    },
+    {
+      "titles": {
+        "en-us": {
+          "default": "Under $100"
+        }
+      },
+      "url": "https://alexcrane.co/collections/under-100/men"
+    }
+  ]
+}

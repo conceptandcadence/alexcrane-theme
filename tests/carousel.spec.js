@@ -4,7 +4,9 @@ test.describe('Product Card Carousel', () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to a collection page with products
     // You'll need to replace this with your actual Shopify store URL
-    await page.goto('/collections/bestsellers/men');
+    await page.goto(
+      '/collections/bestsellers/men?_cd=1b89b03c2b57cf4dbb88a0adde2ee219143547c3b7dd9c5dbc6acbd4e7557bd4&_uid=4619010077&preview_theme_id=138154934361&preview_token=81kjn4p8oi7gxvem8qftx8gpay3mot6b',
+    );
 
     // Wait for product cards to load
     await page.waitForSelector('.card-wrapper');
@@ -117,7 +119,9 @@ test.describe('Product Card Carousel', () => {
 test.describe('Quick-Add Modal Carousel', () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to a collection page with products that have swatches
-    await page.goto('/collections/bestsellers/men');
+    await page.goto(
+      '/collections/bestsellers/men?_cd=1b89b03c2b57cf4dbb88a0adde2ee219143547c3b7dd9c5dbc6acbd4e7557bd4&_uid=4619010077&preview_theme_id=138154934361&preview_token=81kjn4p8oi7gxvem8qftx8gpay3mot6b',
+    );
     await page.waitForSelector('.product-swatch-button');
   });
 

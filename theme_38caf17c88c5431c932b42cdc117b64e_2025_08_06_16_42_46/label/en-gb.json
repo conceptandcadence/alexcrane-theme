@@ -1,0 +1,44 @@
+{
+  "autocomplete": {
+    "headings": {
+      "popular_searches": "Popular Searches",
+      "help": "Can we help?",
+      "suggested_searches": "Suggestions",
+      "previous_searches": "Recent Searches",
+      "category_searches": "Category",
+      "page_searches": "Related Articles",
+      "home_products": "Trending Products",
+      "products": "Products",
+      "view_all": "View all"
+    },
+    "no_results": {
+      "title": "We're sorry your search has no results",
+      "text": "We can't find any results for \"{{ $original_term | html.escape }}\" please try searching again",
+      "search_tip1": "Double-check the spellings",
+      "search_tip2": "Try using fewer keywords.",
+      "search_tip3": "Try a more general keyword.",
+      "search_tip4": "Try using a different word.",
+      "search_tip5": ""
+    }
+  },
+  "plp": {
+    "sorting": {
+      "title": "Sort by:",
+      "default": "Featured",
+      "price_asc": "Price (low to high)",
+      "price_desc": "Price (high to low)",
+      "title_asc": "Alphabetically (A-Z)",
+      "title_desc": "Alphabetically (Z-A)",
+      "new_in_asc": "New In (Oldest first)",
+      "new_in_desc": "New In",
+      "rating_percent_desc": "Ratings (highest score first)",
+      "rating_count_desc": "Ratings (highest count first)",
+      "average_views_desc": "Most Viewed",
+      "average_purchases_desc": "Best Selling"
+    },
+    "filters": {
+      "title": "Filters",
+      "clear_all": "Clear All"
+    }
+  }
+}
