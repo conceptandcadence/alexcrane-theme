@@ -201,6 +201,10 @@ $product_index = 0
 			$is_gift_card = $product?.tags | array.contains 'gift-card'
 			$unique_id = $product.id
 			
+			# Debug info (temporary)
+			$variant_count = $variants | array.size
+			$default_stock = $default_variant?.value?.stock ?? -1
+			
 			# Image handling - restored functionality
 			$primary_image = { src: '', srcset: '' }
 			$hover_image = { src: '', srcset: '' }
@@ -245,7 +249,7 @@ $product_index = 0
 			end
 		~}}
 
-		<li class="grid__item scroll-trigger animate--slide-in" data-cascade style="--animation-order: {{ $product_index }};">
+ 		<li class="grid__item scroll-trigger animate--slide-in" data-cascade style="--animation-order: {{ $product_index }};">
 			<div class="card-wrapper product-card-wrapper">
 				<div class="card card--standard tw-group card--media color-{{ settings.card_color_scheme }} gradient card--extend-height" 
 					 data-id="{{ $product?.id }}" 
@@ -254,33 +258,33 @@ $product_index = 0
 					 data-default-variant="{{ $default_variant?.value?.id }}" 
 					 style="--ratio-percent: {{ $ratio_percent }}%;">
 					<div class="card__inner color-{{ settings.card_color_scheme }} gradient ratio" style="--ratio-percent: {{ $ratio_percent }}%;">
-						{{~ if $primary_image?.src ~}}
-							<div class="card__media">
+					{{~ if $primary_image?.src ~}}
+						<div class="card__media">
 								{{~ if $has_multiple_media ~}}
-									<!-- Enhanced Media Gallery with Carousel -->
+						<!-- Enhanced Media Gallery with Carousel -->
 									<div class="card-media-carousel has-multiple-media" 
 										data-product-id="{{ $product.id }}" 
 										data-card-id="{{ $product.id }}">
 										
-										<!-- Static hover image (shows by default, hides on hover) -->
-										<div class="card-media-static">
-											<div class="card-media-container" style="--ratio-percent: {{ $ratio_percent }}%;">
-												<img class="card-media-image" 
+									<!-- Static hover image (shows by default, hides on hover) -->
+									<div class="card-media-static">
+										<div class="card-media-container" style="--ratio-percent: {{ $ratio_percent }}%;">
+											<img class="card-media-image" 
 													srcset="{{ $primary_image.srcset }}"
 													src="{{ $primary_image.src }}"
-													sizes="(min-width: 1200px) 300px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)"
-													alt="{{ $title }}"
-													width="533"
-													height="533"
-													loading="lazy">
-											</div>
+												sizes="(min-width: 1200px) 300px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)"
+												alt="{{ $title }}"
+												width="533"
+												height="533"
+												loading="lazy">
 										</div>
-										
-										<!-- Swiper Carousel -->
-										<div class="card-slider swiper">
-											<div id="CardSlider-{{ $unique_id }}" class="card-media-list swiper-wrapper" role="list">
-												{{~ $slide_index = 0 ~}}
-												{{~ for $media in $media_array ~}}
+									</div>
+								
+								<!-- Swiper Carousel -->
+								<div class="card-slider swiper">
+									<div id="CardSlider-{{ $unique_id }}" class="card-media-list swiper-wrapper" role="list">
+										{{~ $slide_index = 0 ~}}
+										{{~ for $media in $media_array ~}}
 													{{~
 														$media_image_url = $media.src + "_165x"
 														$media_image = {
@@ -289,51 +293,51 @@ $product_index = 0
 														}
 													~}}
 													<div class="card-media-item swiper-slide" data-media-id="{{ $unique_id }}-{{ $slide_index }}">
-														<div class="card-media-container" style="--ratio-percent: {{ $ratio_percent }}%;">
-															<img class="card-media-image" 
+												<div class="card-media-container" style="--ratio-percent: {{ $ratio_percent }}%;">
+													<img class="card-media-image" 
 																srcset="{{ $media_image.srcset }}"
 																src="{{ $media_image.src }}"
-																sizes="(min-width: 1200px) 300px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)"
-																alt="{{ $title }}"
-																width="533"
-																height="533"
-																loading="lazy">
-														</div>
-													</div>
-													{{~ $slide_index = $slide_index + 1 ~}}
+														sizes="(min-width: 1200px) 300px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)"
+														alt="{{ $title }}"
+														width="533"
+														height="533"
+														loading="lazy">
+												</div>
+											</div>
+											{{~ $slide_index = $slide_index + 1 ~}}
+										{{~ end ~}}
+									</div>
+
+										<!-- Navigation Buttons -->
+										<div class="card-slider-buttons">
+											<button type="button" class="card-slider-button card-slider-button--prev" name="previous" aria-label="Previous slide">
+												<span class='svg-wrapper'>
+													<svg class="icon icon-caret" viewBox="0 0 10 6"><path fill="currentColor" fill-rule="evenodd" d="M9.354.646a.5.5 0 0 0-.708 0L5 4.293 1.354.646a.5.5 0 0 0-.708.708l4 4a.5.5 0 0 0 .708 0l4-4a.5.5 0 0 0 0-.708" clip-rule="evenodd"/></svg>
+												</span>
+											</button>
+											<button type="button" class="card-slider-button card-slider-button--next" name="next" aria-label="Next slide">
+												<span class='svg-wrapper'>
+													<svg class="icon icon-caret" viewBox="0 0 10 6"><path fill="currentColor" fill-rule="evenodd" d="M9.354.646a.5.5 0 0 0-.708 0L5 4.293 1.354.646a.5.5 0 0 0-.708.708l4 4a.5.5 0 0 0 .708 0l4-4a.5.5 0 0 0 0-.708" clip-rule="evenodd"/></svg>
+												</span>
+											</button>
+										</div>
+
+										{{~ if $media_count > 2 ~}}
+											<!-- Dots Navigation -->
+											<div class="card-slider-dots">
+												{{~ $dot_index = 0 ~}}
+												{{~ for $media in $media_array ~}}
+													<button type="button" 
+																class="card-slider-dot{{ if $dot_index == 0 }} card-slider-dot--active{{ end }}" 
+															data-slide-index="{{ $dot_index }}"
+															aria-label="Go to slide {{ $dot_index + 1 }}"></button>
+													{{~ $dot_index = $dot_index + 1 ~}}
 												{{~ end ~}}
 											</div>
-
-											<!-- Navigation Buttons -->
-											<div class="card-slider-buttons">
-												<button type="button" class="card-slider-button card-slider-button--prev" name="previous" aria-label="Previous slide">
-													<span class='svg-wrapper'>
-														<svg class="icon icon-caret" viewBox="0 0 10 6"><path fill="currentColor" fill-rule="evenodd" d="M9.354.646a.5.5 0 0 0-.708 0L5 4.293 1.354.646a.5.5 0 0 0-.708.708l4 4a.5.5 0 0 0 .708 0l4-4a.5.5 0 0 0 0-.708" clip-rule="evenodd"/></svg>
-													</span>
-												</button>
-												<button type="button" class="card-slider-button card-slider-button--next" name="next" aria-label="Next slide">
-													<span class='svg-wrapper'>
-														<svg class="icon icon-caret" viewBox="0 0 10 6"><path fill="currentColor" fill-rule="evenodd" d="M9.354.646a.5.5 0 0 0-.708 0L5 4.293 1.354.646a.5.5 0 0 0-.708.708l4 4a.5.5 0 0 0 .708 0l4-4a.5.5 0 0 0 0-.708" clip-rule="evenodd"/></svg>
-													</span>
-												</button>
-											</div>
-
-											{{~ if $media_count > 2 ~}}
-												<!-- Dots Navigation -->
-												<div class="card-slider-dots">
-													{{~ $dot_index = 0 ~}}
-													{{~ for $media in $media_array ~}}
-														<button type="button" 
-																class="card-slider-dot{{ if $dot_index == 0 }} card-slider-dot--active{{ end }}" 
-																data-slide-index="{{ $dot_index }}"
-																aria-label="Go to slide {{ $dot_index + 1 }}"></button>
-														{{~ $dot_index = $dot_index + 1 ~}}
-													{{~ end ~}}
-												</div>
-											{{~ end ~}}
-										</div>
-									</div>
-								{{~ else ~}}
+									{{~ end ~}}
+								</div>
+							</div>
+						{{~ else ~}}
 									<!-- Single image display -->
 									<div class="card-media-container" style="--ratio-percent: {{ $ratio_percent }}%;">
 										<img class="card-media-image" 
@@ -345,48 +349,94 @@ $product_index = 0
 											height="533"
 											loading="lazy">
 									</div>
-								{{~ end ~}}
-							</div>
+																{{~ end ~}}
+				</div>
 						{{~ end ~}}
 
-						<!-- Quick Add Button (on hover) -->
-						{{~ $product_form_id = "quick-add-" + $unique_id + $product.id ~}}
+				<!-- Quick Add Button (on hover) -->
+				{{~ $product_form_id = "quick-add-" + $unique_id + $product.id ~}}
 						<div class="card__quick-add">
-							{{~ if $variants && $variants.length && $variants.length > 1 ~}}
-								<!-- Multiple variants - show Choose Options button -->
-								<div class="quick-add no-js-hidden">
-									<button type="button" 
-											class="quick-add__submit button button--full-width button--primary"
-											aria-haspopup="dialog"
-											aria-labelledby="{{ $product_form_id }}-submit"
-											data-product-url="{{ $product.url }}">
-										Choose Options
-										<div class="loading__spinner hidden">
-											<svg aria-hidden="true" focusable="false" class="spinner" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
-												<circle class="path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle>
-											</svg>
-										</div>
-									</button>
+							{{~ if $variants | array.size > 1 ~}}
+								<!-- Multiple variants - show Choose Options modal -->
+						<div class="quick-add no-js-hidden">
+									<modal-opener data-modal="#QuickAdd-{{ $product.id }}">
+							<button type="button" 
+												id="{{ $product_form_id }}-submit"
+												name="add"
+												class="quick-add__submit button button--full-width button--secondary tw-text-[10px] lg:tw-text-[12px] tw-rounded-[2px]"
+									aria-haspopup="dialog"
+												aria-labelledby="{{ $product_form_id }}-submit title-{{ $product.id }}"
+												data-product-url="{{ $product.url }}">
+								Choose Options
+								<div class="loading__spinner hidden">
+									<svg aria-hidden="true" focusable="false" class="spinner" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+										<circle class="path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle>
+									</svg>
 								</div>
-							{{~ else ~}}
-								<div class="quick-add no-js-hidden">
-									<form action="/cart/add" method="post" enctype="multipart/form-data" id="{{ $product_form_id }}" class="form">
-										<input type="hidden" name="id" value="{{ $default_variant?.value?.id }}">
-										<button type="submit" 
-												name="add" 
-												class="quick-add__submit button button--full-width button--secondary"
-												aria-labelledby="{{ $product_form_id }}-submit">
-											Quick Add
-											<div class="loading__spinner hidden">
-												<svg aria-hidden="true" focusable="false" class="spinner" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
-													<circle class="path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle>
+							</button>
+									</modal-opener>
+									<quick-add-modal id="QuickAdd-{{ $product.id }}" class="quick-add-modal">
+										<div role="dialog" 
+											 aria-label="Choose product options for {{ $title }}"
+											 aria-modal="true"
+											 class="quick-add-modal__content global-settings-popup"
+											 tabindex="-1">
+											<button id="ModalClose-{{ $product.id }}"
+													type="button"
+													class="quick-add-modal__toggle"
+													aria-label="Close">
+												<svg class="icon icon-close" aria-hidden="true" focusable="false" viewBox="0 0 18 17">
+													<path d="m.865 15.978a.5.5 0 00.707.707l7.433-7.431 7.579 7.282a.501.501 0 00.846-.37.5.5 0 00-.153-.351L9.712 8.546l7.417-7.416a.5.5 0 10-.707-.708L8.991 7.853 1.413.573a.5.5 0 10-.693.72l7.563 7.268-7.418 7.417z" fill="currentColor">
 												</svg>
-											</div>
-										</button>
-									</form>
-								</div>
-							{{~ end ~}}
+											</button>
+											<div id="QuickAddInfo-{{ $product.id }}" class="quick-add-modal__content-info"></div>
+										</div>
+									</quick-add-modal>
 						</div>
+					{{~ else ~}}
+								<!-- Single variant - direct add to cart -->
+						<div class="quick-add no-js-hidden">
+									<product-form data-section-id="main-collection-product-grid">
+										<form action="/cart/add" 
+											  method="post" 
+											  enctype="multipart/form-data" 
+											  id="{{ $product_form_id }}" 
+											  class="form"
+											  novalidate="novalidate"
+											  data-type="add-to-cart-form">
+																						<input type="hidden" 
+												   name="id" 
+												   value="{{ $default_variant?.value?.id }}"
+												   class="product-variant-id"
+												   {{~ if $default_variant?.value?.stock <= 0 ~}}disabled{{~ end ~}}>
+											<button type="submit" 
+													id="{{ $product_form_id }}-submit"
+													name="add" 
+													class="quick-add__submit button button--full-width button--secondary tw-text-[10px] lg:tw-text-[12px] tw-rounded-[2px]"
+													aria-haspopup="dialog"
+													aria-labelledby="{{ $product_form_id }}-submit title-{{ $product.id }}"
+													aria-live="polite"
+													data-sold-out-message="true"
+													{{~ if $default_variant?.value?.stock <= 0 ~}}disabled{{~ end ~}}>
+												<span>
+													{{~ if $default_variant?.value?.stock > 0 ~}}
+														Add to cart
+													{{~ else ~}}
+														Sold out
+													{{~ end ~}}
+												</span>
+												<span class="sold-out-message hidden">Sold out</span>
+									<div class="loading__spinner hidden">
+										<svg aria-hidden="true" focusable="false" class="spinner" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+											<circle class="path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle>
+										</svg>
+									</div>
+								</button>
+							</form>
+									</product-form>
+						</div>
+					{{~ end ~}}
+				</div>
 
 						<!-- Badges -->
 						{{~ if $product?.tags | array.contains 'ac-pick' ~}}
@@ -394,65 +444,69 @@ $product_index = 0
 						{{~ end ~}}
 					</div>
 
-					<!-- Card Content -->
-					<div class="card__content">
-						<div class="card__information">
-							<h3 class="card__heading">
+									<!-- Card Content -->
+				<div class="card__content">
+					<!-- Debug Info (temporary) -->
+					<div style="font-size: 10px; color: red; background: #ffe; padding: 2px;">
+						DEBUG: Variants={{ $variant_count }}, Stock={{ $default_stock }}, ID={{ $default_variant?.value?.id }}
+					</div>
+					<div class="card__information">
+					<h3 class="card__heading">
 								<a href="{{ $product.url }}" class="full-unstyled-link">{{ $title }}</a>
-							</h3>
-							<div class="price">
-								{{~ if $is_gift_card ~}}
+					</h3>
+					<div class="price">
+						{{~ if $is_gift_card ~}}
 									{{ $product.min_pricing.price | money | string.remove '.00' }}&ndash;{{ $product.max_pricing.price | money | string.remove '.00' }}
-								{{~ else ~}}
+						{{~ else ~}}
 									{{~ if $product?.price_varies ~}}
 										{{ $product.max_pricing.price | money | string.remove '.00' }}
-									{{~ else ~}}
-										<span class="price__sale">{{ $pricing.price | money | string.remove '.00' }}</span>
+							{{~ else ~}}
+								<span class="price__sale">{{ $pricing.price | money | string.remove '.00' }}</span>
 										{{~ if $pricing?.was > $pricing?.price ~}}
-											<span class="price__regular">{{ $pricing.was | money | string.remove '.00' }}</span>
+									<span class="price__regular">{{ $pricing.was | money | string.remove '.00' }}</span>
 											{{~ $price_difference = $pricing.was - $pricing.price ~}}
 											{{~ $percentage_difference = $pricing.price / $pricing.was ~}}
 											{{~ $percentage_difference = (1 - $percentage_difference) * 100 | math.round ~}}
 											<span class="discount-percentage">{{ $percentage_difference }}% Off</span>
+								{{~ end ~}}
+							{{~ end ~}}
+												{{~ end ~}}
+					</div>
+
+					<!-- Product Swatches -->
+					{{~ if $product?.metafields?.options?.colorsets?.value ~}}
+								<div class="secondary tw-flex tw-flex-col tw-gap-3 tw-pt-[1px]">
+									<ul class="tw-flex tw-flex-row tw-gap-2">
+							{{~ $swatches_used = 0 ~}}
+							{{~ $swatch_count = 0 ~}}
+								{{~ for $colorset in $product.metafields.options.colorsets.value ~}}
+									{{~ for $colorway in $colorset.colorways.value ~}}
+												{{~ $swatch = $colorway.swatch.value ~}}
+										{{~ if $swatches_used < 5 ~}}
+											<li class="product-swatch-item tw-flex tw-flex-col tw-items-center tw-justify-center tw-overflow-hidden tw-rounded-[2px] hover:tw-scale-110 tw-transition-all tw-duration-300">
+												<button class="product-swatch-button tw-flex tw-flex-col tw-items-center tw-justify-center">
+															{{~ if $swatch?.image?.value?.src ~}}
+													<img class="tw-image-cover tw-w-[18px] tw-h-[12px] tw-overflow-hidden tw-pointer-events-none"
+																	 src="{{ $swatch.image.value.src }}_28x"
+														 alt="{{ $swatch.title }}"
+														 width="14"
+														 height="14"
+														 data-product-url="{{ $colorway.product.value.url }}">
+															{{~ end ~}}
+												</button>
+											</li>
+											{{~ $swatches_used = $swatches_used + 1 ~}}
+										{{~ else ~}}
+											{{~ $swatch_count = $swatch_count + 1 ~}}
 										{{~ end ~}}
 									{{~ end ~}}
 								{{~ end ~}}
-							</div>
-
-							<!-- Product Swatches -->
-							{{~ if $product?.metafields?.options?.colorsets?.value ~}}
-								<div class="secondary tw-flex tw-flex-col tw-gap-3 tw-pt-[1px]">
-									<ul class="tw-flex tw-flex-row tw-gap-2">
-										{{~ $swatches_used = 0 ~}}
-										{{~ $swatch_count = 0 ~}}
-										{{~ for $colorset in $product.metafields.options.colorsets.value ~}}
-											{{~ for $colorway in $colorset.colorways.value ~}}
-												{{~ $swatch = $colorway.swatch.value ~}}
-												{{~ if $swatches_used < 5 ~}}
-													<li class="product-swatch-item tw-flex tw-flex-col tw-items-center tw-justify-center tw-overflow-hidden tw-rounded-[2px] hover:tw-scale-110 tw-transition-all tw-duration-300">
-														<button class="product-swatch-button tw-flex tw-flex-col tw-items-center tw-justify-center">
-															{{~ if $swatch?.image?.value?.src ~}}
-																<img class="tw-image-cover tw-w-[18px] tw-h-[12px] tw-overflow-hidden tw-pointer-events-none"
-																	 src="{{ $swatch.image.value.src }}_28x"
-																	 alt="{{ $swatch.title }}"
-																	 width="14"
-																	 height="14"
-																	 data-product-url="{{ $colorway.product.value.url }}">
-															{{~ end ~}}
-														</button>
-													</li>
-													{{~ $swatches_used = $swatches_used + 1 ~}}
-												{{~ else ~}}
-													{{~ $swatch_count = $swatch_count + 1 ~}}
-												{{~ end ~}}
-											{{~ end ~}}
-										{{~ end ~}}
-									</ul>
-									{{~ if $swatch_count > 0 ~}}
+							</ul>
+							{{~ if $swatch_count > 0 ~}}
 										<div class="tw-text-[10px] tw-leading-[12px] tw-text-[#767676] tw-text-right">+ {{ $swatch_count }} styles</div>
-									{{~ end ~}}
-								</div>
 							{{~ end ~}}
+						</div>
+					{{~ end ~}}
 						</div>
 					</div>
 				</div>
