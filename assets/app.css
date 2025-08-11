@@ -814,6 +814,37 @@ video {
   font-size: 18px;
 }
 
+.tw-w-\[18px\] {
+  width: 18px;
+}
+
+.tw-h-\[12px\] {
+  height: 12px;
+}
+
+.tw-image-cover {
+  object-fit: cover;
+}
+
+.tw-bg-gray-200 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(229 231 235 / var(--tw-bg-opacity));
+}
+
+.tw-text-xs {
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
+.tw-text-gray-500 {
+  --tw-text-opacity: 1;
+  color: rgb(107 114 128 / var(--tw-text-opacity));
+}
+
+.tw-pt-\[1px\] {
+  padding-top: 1px;
+}
+
 .tw-font-medium {
   font-weight: 500;
 }
@@ -883,6 +914,10 @@ video {
 
 .tw-group:hover .group-hover\:tw-opacity-100 {
   opacity: 1;
+}
+
+.product-swatch-item:hover {
+  transform: scale(1.1);
 }
 
 @media (min-width: 750px) {

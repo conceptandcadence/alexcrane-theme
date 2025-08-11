@@ -3,7 +3,6 @@
     $results        = current_element.products.results
     $facets         = current_element.products.facets
     $filters        = current_element.products.filters
-    include "functions"
 ~}}
 {{~ if context.is_paging_request ~}}
 
