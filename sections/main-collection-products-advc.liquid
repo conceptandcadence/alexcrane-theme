@@ -35,10 +35,9 @@
      }
    }
   .plp-actions {
-  	display: none;
-  }
+   	display: none !important;
+   }
 {%- endstyle -%}
-
 <div class='section-{{ section.id }}-padding gradient color-{{ section.settings.color_scheme }}'>
   {%- paginate collection.products by section.settings.products_per_page -%}
     {% comment %} Sort is the first tabbable element when filter type is vertical {% endcomment %}
@@ -238,27 +237,56 @@
 
                     // Create mutation observer to watch for new content
                     this.observer = new MutationObserver((mutations) => {
-                      let hasNewCarousels = false;
+                      let shouldReinitialize = false;
 
                       mutations.forEach((mutation) => {
-                        if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
-                          mutation.addedNodes.forEach((node) => {
-                            if (node.nodeType === 1) {
-                              // Element node
-                              if (
-                                node.classList?.contains('card-media-carousel') ||
-                                node.querySelector?.('.card-media-carousel')
-                              ) {
-                                hasNewCarousels = true;
+                        if (mutation.type === 'childList') {
+                          // Check for any added nodes (including complete content replacement)
+                          if (mutation.addedNodes.length > 0) {
+                            mutation.addedNodes.forEach((node) => {
+                              if (node.nodeType === 1) {
+                                // Element node - check if it contains carousel elements
+                                if (
+                                  node.classList?.contains('card-media-carousel') ||
+                                  node.querySelector?.('.card-media-carousel') ||
+                                  node.classList?.contains('product-card-wrapper') ||
+                                  node.querySelector?.('.product-card-wrapper') ||
+                                  // Check for GrapheneHC product listings
+                                  node.tagName === 'UL' ||
+                                  node.querySelector?.('ul') ||
+                                  node.querySelector?.('li')
+                                ) {
+                                  shouldReinitialize = true;
+                                  console.log('🔄 Content change detected:', node.tagName, node.classList);
+                                }
                               }
-                            }
-                          });
+                            });
+                          }
+
+                          // Also check for removed nodes (content replacement)
+                          if (mutation.removedNodes.length > 0) {
+                            mutation.removedNodes.forEach((node) => {
+                              if (
+                                node.nodeType === 1 &&
+                                (node.classList?.contains('card-media-carousel') ||
+                                  node.querySelector?.('.card-media-carousel') ||
+                                  node.tagName === 'UL' ||
+                                  node.querySelector?.('ul'))
+                              ) {
+                                shouldReinitialize = true;
+                                console.log('🗑️ Content removal detected:', node.tagName, node.classList);
+                              }
+                            });
+                          }
                         }
                       });
 
-                      if (hasNewCarousels) {
-                        console.log('🎠 New carousel content detected!');
-                        setTimeout(() => this.setupExistingCarousels(), 100);
+                      if (shouldReinitialize) {
+                        console.log('🎠 Content change detected - reinitializing carousels!');
+                        // Clear existing carousels first
+                        this.destroyAllCarousels();
+                        // Reinitialize after a short delay to ensure DOM is ready
+                        setTimeout(() => this.setupExistingCarousels(), 200);
                       }
                     });
 
@@ -448,6 +476,26 @@
                       });
                     }
                   }
+
+                  destroyAllCarousels() {
+                    console.log(`🧹 Destroying ${this.carousels.size} existing carousels...`);
+
+                    // Destroy all existing Swiper instances
+                    this.carousels.forEach((state, carouselId) => {
+                      if (state.swiper) {
+                        try {
+                          state.swiper.destroy(true, true);
+                          console.log(`✅ Destroyed carousel: ${carouselId}`);
+                        } catch (error) {
+                          console.warn(`⚠️ Error destroying carousel ${carouselId}:`, error);
+                        }
+                      }
+                    });
+
+                    // Clear the carousels map
+                    this.carousels.clear();
+                    console.log('🧹 All carousels destroyed and cleared');
+                  }
                 }
 
                 // Initialize the carousel manager
@@ -460,6 +508,199 @@
                   });
                 } else {
                   window.GrapheneCarouselManager.init();
+                }
+              })();
+            </script>
+
+            <script data-refactor>
+              // Vanilla JS Navigation Manager
+              (function () {
+                // Helper functions for DOM manipulation
+                function $(selector) {
+                  return document.querySelector(selector);
+                }
+
+                function $$(selector) {
+                  return document.querySelectorAll(selector);
+                }
+
+                function hasClass(element, className) {
+                  return element && element.classList.contains(className);
+                }
+
+                function addClass(elements, className) {
+                  if (!elements) return;
+                  if (elements.length !== undefined) {
+                    elements.forEach((el) => el.classList.add(className));
+                  } else {
+                    elements.classList.add(className);
+                  }
+                }
+
+                function removeClass(elements, className) {
+                  if (!elements) return;
+                  if (elements.length !== undefined) {
+                    elements.forEach((el) => el.classList.remove(className));
+                  } else {
+                    elements.classList.remove(className);
+                  }
+                }
+
+                function setHeight(element, height) {
+                  if (!element) return;
+                  element.style.height = height;
+                }
+
+                function getHeight(element) {
+                  if (!element) return 0;
+                  return element.offsetHeight + 'px';
+                }
+
+                // Initialize navigation heights and states
+                function initializeNavigation() {
+                  const shopFiltersContainer = $('.shop-filters__container');
+                  const collectionNav = $('#collection-nav .collection-nav');
+
+                  if (shopFiltersContainer) {
+                    setHeight(shopFiltersContainer, getHeight(shopFiltersContainer));
+                    removeClass(shopFiltersContainer, 'plp-nav-expanded');
+                    removeClass(shopFiltersContainer, 'init');
+                  }
+
+                  if (collectionNav) {
+                    setHeight(collectionNav, getHeight(collectionNav));
+                    removeClass(collectionNav, 'plp-nav-expanded');
+                    removeClass(collectionNav, 'init');
+                  }
+                }
+
+                // Recalculate heights on window resize
+                function handleResize() {
+                  const shopFiltersContainer = $('.shop-filters__container');
+                  const collectionNav = $('#collection-nav .collection-nav');
+
+                  if (shopFiltersContainer) {
+                    setHeight(shopFiltersContainer, '');
+                    addClass(shopFiltersContainer, 'plp-nav-expanded');
+                    addClass(shopFiltersContainer, 'init');
+                    setHeight(shopFiltersContainer, getHeight(shopFiltersContainer));
+                    removeClass(shopFiltersContainer, 'plp-nav-expanded');
+                    removeClass(shopFiltersContainer, 'init');
+                  }
+
+                  if (collectionNav) {
+                    setHeight(collectionNav, '');
+                    addClass(collectionNav, 'plp-nav-expanded');
+                    addClass(collectionNav, 'init');
+                    setHeight(collectionNav, getHeight(collectionNav));
+                    removeClass(collectionNav, 'plp-nav-expanded');
+                    removeClass(collectionNav, 'init');
+                  }
+                }
+
+                // Handle shop navigation toggle
+                function handleShopToggle(e) {
+                  e.preventDefault();
+
+                  const collectionNav = $('#collection-nav .collection-nav');
+                  const shopNavItems = $$('.collection-nav-mobile__item.shop');
+                  const filterNavItems = $$('.collection-nav-mobile__item.filter');
+                  const shopFiltersContainer = $('.shop-filters__container');
+
+                  if (hasClass(collectionNav, 'plp-nav-expanded')) {
+                    // Close
+                    removeClass(shopNavItems, 'plp-nav-expanded');
+                    removeClass(shopNavItems, 'disabled');
+                    removeClass(filterNavItems, 'disabled');
+                    removeClass(filterNavItems, 'plp-nav-expanded');
+                    removeClass(collectionNav, 'plp-nav-expanded');
+                    removeClass(shopFiltersContainer, 'plp-nav-expanded');
+                    console.log('shop close');
+                  } else {
+                    // Open
+                    addClass(shopNavItems, 'plp-nav-expanded');
+                    removeClass(shopNavItems, 'disabled');
+                    addClass(filterNavItems, 'disabled');
+                    removeClass(filterNavItems, 'plp-nav-expanded');
+                    addClass(collectionNav, 'plp-nav-expanded');
+                    removeClass(shopFiltersContainer, 'plp-nav-expanded');
+                    console.log('shop open');
+                  }
+                }
+
+                // Handle filter navigation toggle
+                function handleFilterToggle(e) {
+                  e.preventDefault();
+
+                  setTimeout(() => {
+                    const shopFiltersContainer = $('.shop-filters__container');
+                    const shopNavItems = $$('.collection-nav-mobile__item.shop');
+                    const filterNavItems = $$('.collection-nav-mobile__item.filter');
+                    const collectionNav = $('#collection-nav .collection-nav');
+
+                    if (hasClass(shopFiltersContainer, 'plp-nav-expanded')) {
+                      // Close
+                      removeClass(shopNavItems, 'plp-nav-expanded');
+                      removeClass(shopNavItems, 'disabled');
+                      removeClass(filterNavItems, 'disabled');
+                      removeClass(filterNavItems, 'plp-nav-expanded');
+                      removeClass(collectionNav, 'plp-nav-expanded');
+                      removeClass(shopFiltersContainer, 'plp-nav-expanded');
+                      console.log('filter close');
+                    } else {
+                      // Open
+                      addClass(shopNavItems, 'disabled');
+                      removeClass(shopNavItems, 'plp-nav-expanded');
+                      addClass(filterNavItems, 'plp-nav-expanded');
+                      removeClass(filterNavItems, 'disabled');
+                      removeClass(collectionNav, 'plp-nav-expanded');
+                      addClass(shopFiltersContainer, 'plp-nav-expanded');
+                      console.log('filter open');
+                    }
+                  }, 100);
+                }
+
+                // Body click handler (commented out problematic code)
+                function handleBodyClick(e) {
+                  console.log(e.target);
+                  // Note: Original code had issues - preventing all body clicks and broken logic
+                  // Commented out the problematic parts:
+                  // e.preventDefault();
+                  // setTimeout(() => {
+                  //   if (hasClass($('.shop-filters__container'), 'plp-nav-expanded')) {
+                  //     removeClass($('.shop-filters__toggle'), 'open');
+                  //     removeClass($('.shop-filters__container'), 'plp-nav-expanded');
+                  //   } else {
+                  //     addClass($('.shop-filters__toggle'), 'open');
+                  //     addClass($('.shop-filters__container'), 'plp-nav-expanded');
+                  //   }
+                  // }, 100);
+                }
+
+                // Initialize when DOM is ready
+                function init() {
+                  initializeNavigation();
+
+                  // Event listeners
+                  document.body.addEventListener('click', handleBodyClick);
+                  window.addEventListener('resize', handleResize);
+
+                  // Shop navigation toggle
+                  $$('.collection-nav-mobile__item.shop').forEach((item) => {
+                    item.addEventListener('click', handleShopToggle);
+                  });
+
+                  // Filter navigation toggle
+                  $$('.collection-nav-mobile__item.filter').forEach((item) => {
+                    item.addEventListener('click', handleFilterToggle);
+                  });
+                }
+
+                // Initialize immediately if DOM is ready, otherwise wait
+                if (document.readyState === 'loading') {
+                  document.addEventListener('DOMContentLoaded', init);
+                } else {
+                  init();
                 }
               })();
             </script>

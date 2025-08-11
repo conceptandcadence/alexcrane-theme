@@ -1383,7 +1383,10 @@
 					"name": "Image with text",
 					"settings": {
 							"image": {
-									"label": "Image"
+									"label": "Image 1"
+							},
+							"image_2": {
+									"label": "Image 2"
 							},
 							"height": {
 									"options__1": {

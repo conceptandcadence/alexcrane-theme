@@ -1,0 +1,23 @@
+{{~
+$results = current_element.products.results
+~}}
+
+<!-- SIMPLE TEST: GrapheneHC is working -->
+<div style="font-size: 20px; color: red; background: yellow; padding: 10px; margin: 10px; border: 3px solid red;">
+	🔥 GRAPHENE HC TEMPLATE IS WORKING! Results: {{ $results | array.size }} 🔥
+</div>
+
+{{~ for $result in $results ~}}
+	{{~ if $result?.item?.type == "product" ~}}
+		{{~
+			$product = $result.item
+			$title = $product?.titles?.default ?? $product.id
+		~}}
+
+		<!-- MINIMAL PRODUCT TEST -->
+		<div style="border: 2px solid blue; padding: 10px; margin: 5px;">
+			PRODUCT: {{ $title }}
+		</div>
+
+	{{~ end ~}}
+{{~ end ~}}
