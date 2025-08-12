@@ -1,0 +1,108 @@
+/** * Product Swiper Gallery with Left Thumbnails * Handles Swiper initialization and synchronization between main
+gallery and thumbnails */
+
+(function() { 'use strict';
+
+class ProductSwiperGallery { constructor(container) { this.container = container; this.productId =
+container.dataset.productId; this.sectionId = container.dataset.sectionId; this.mainSwiper = null; this.thumbnailSwiper
+= null; this.init(); }
+
+init() { // Wait for Swiper to load this.waitForSwiper(() => { this.initializeSwiper(); this.setupEventListeners(); });
+}
+
+waitForSwiper(callback, attempts = 0, maxAttempts = 50) { if (window.Swiper) { callback(); return; }
+
+if (attempts >= maxAttempts) { console.error('Swiper library failed to load'); return; }
+
+setTimeout(() => this.waitForSwiper(callback, attempts + 1, maxAttempts), 100); }
+
+initializeSwiper() { const mainGallery = this.container.querySelector('.product-main-swiper'); const thumbnailGallery =
+this.container.querySelector('.product-thumbnails-swiper');
+
+if (!mainGallery) return;
+
+// Initialize thumbnail swiper first (if exists) if (thumbnailGallery) { this.thumbnailSwiper = new
+Swiper(thumbnailGallery, { direction: window.innerWidth > 749 ? 'vertical' : 'horizontal', slidesPerView:
+window.innerWidth > 749 ? 5 : 4, spaceBetween: 12, freeMode: true, watchSlidesProgress: true, navigation: { nextEl:
+'.product-thumbnails-nav--next', prevEl: '.product-thumbnails-nav--prev', }, breakpoints: { 750: { direction:
+'vertical', slidesPerView: 5, }, 0: { direction: 'horizontal', slidesPerView: 4, } }, on: { init: () => {
+console.log('Thumbnail swiper initialized'); } } }); }
+
+// Initialize main swiper this.mainSwiper = new Swiper(mainGallery, { slidesPerView: 1, spaceBetween: 0, loop: false,
+navigation: { nextEl: '.product-main-nav--next', prevEl: '.product-main-nav--prev', }, thumbs: this.thumbnailSwiper ? {
+swiper: this.thumbnailSwiper, } : undefined, keyboard: { enabled: true, onlyInViewport: true, }, mousewheel: {
+forceToAxis: true, sensitivity: 1, releaseOnEdges: true, }, on: { init: () => { console.log('Main swiper initialized');
+this.updateCounter(); }, slideChange: () => { this.updateCounter(); this.handleSlideChange(); } } });
+
+// Handle responsive changes this.handleResize(); }
+
+setupEventListeners() { // Handle thumbnail clicks directly const thumbnails =
+this.container.querySelectorAll('.product-thumbnail__button'); thumbnails.forEach((thumbnail, index) => {
+thumbnail.addEventListener('click', (e) => { e.preventDefault(); if (this.mainSwiper) { this.mainSwiper.slideTo(index);
+} }); });
+
+// Handle resize window.addEventListener('resize', () => { this.handleResize(); });
+
+// Handle variant changes document.addEventListener('variant:change', (event) => {
+this.handleVariantChange(event.detail); }); }
+
+handleResize() { if (!this.thumbnailSwiper) return;
+
+const isDesktop = window.innerWidth > 749; // Update thumbnail swiper direction based on screen size
+this.thumbnailSwiper.changeDirection(isDesktop ? 'vertical' : 'horizontal'); this.thumbnailSwiper.params.slidesPerView =
+isDesktop ? 5 : 4; this.thumbnailSwiper.update(); }
+
+updateCounter() { const counterCurrent = this.container.querySelector('.product-gallery-current'); const counterTotal =
+this.container.querySelector('.product-gallery-total'); if (counterCurrent && this.mainSwiper) {
+counterCurrent.textContent = this.mainSwiper.realIndex + 1; } }
+
+handleSlideChange() { // Update active thumbnail const thumbnails =
+this.container.querySelectorAll('.product-thumbnail__button'); thumbnails.forEach((thumbnail, index) => {
+thumbnail.classList.toggle('active', index === this.mainSwiper.realIndex); });
+
+// Trigger media events for video/model handling const currentSlide = this.mainSwiper.slides[this.mainSwiper.realIndex];
+if (currentSlide) { const mediaId = currentSlide.dataset.mediaId; const mediaType = currentSlide.dataset.mediaType; //
+Pause videos in other slides this.pauseAllMedia(); // Handle current media if (mediaType === 'video' || mediaType ===
+'external_video') { this.handleVideoSlide(currentSlide); } else if (mediaType === 'model') {
+this.handleModelSlide(currentSlide); } } }
+
+pauseAllMedia() { // Pause all videos const videos = this.container.querySelectorAll('video'); videos.forEach(video => {
+if (!video.paused) { video.pause(); } });
+
+// Pause all external videos (YouTube, Vimeo) const iframes = this.container.querySelectorAll('iframe');
+iframes.forEach(iframe => { const src = iframe.src; if (src.includes('youtube.com') || src.includes('vimeo.com')) { //
+Remove and re-add src to stop video iframe.src = ''; setTimeout(() => { iframe.src = src; }, 100); } }); }
+
+handleVideoSlide(slide) { const video = slide.querySelector('video'); const deferredMedia =
+slide.querySelector('deferred-media'); if (deferredMedia && !deferredMedia.hasAttribute('loaded')) {
+deferredMedia.loadContent(); } }
+
+handleModelSlide(slide) { const modelViewer = slide.querySelector('model-viewer'); const deferredMedia =
+slide.querySelector('deferred-media'); if (deferredMedia && !deferredMedia.hasAttribute('loaded')) {
+deferredMedia.loadContent(); } }
+
+handleVariantChange(variant) { if (!variant || !variant.featured_media) return;
+
+// Find the slide with the variant's featured media const slides = this.mainSwiper.slides; const targetSlideIndex =
+Array.from(slides).findIndex(slide => slide.dataset.mediaId === variant.featured_media.id.toString() );
+
+if (targetSlideIndex !== -1 && this.mainSwiper) { this.mainSwiper.slideTo(targetSlideIndex); } }
+
+// Public method to go to specific media goToMedia(mediaId) { if (!this.mainSwiper) return;
+
+const slides = this.mainSwiper.slides; const targetSlideIndex = Array.from(slides).findIndex(slide =>
+slide.dataset.mediaId === mediaId.toString() );
+
+if (targetSlideIndex !== -1) { this.mainSwiper.slideTo(targetSlideIndex); } }
+
+// Public method to destroy swipers destroy() { if (this.mainSwiper) { this.mainSwiper.destroy(true, true); } if
+(this.thumbnailSwiper) { this.thumbnailSwiper.destroy(true, true); } } }
+
+// Auto-initialize galleries document.addEventListener('DOMContentLoaded', () => { const galleries =
+document.querySelectorAll('.product-swiper-gallery'); galleries.forEach(gallery => { new ProductSwiperGallery(gallery);
+}); });
+
+// Handle dynamic content (AJAX, quick view, etc.) document.addEventListener('gallery:init', (event) => { const gallery
+= event.target.closest('.product-swiper-gallery'); if (gallery) { new ProductSwiperGallery(gallery); } });
+
+// Export for external use window.ProductSwiperGallery = ProductSwiperGallery; })();

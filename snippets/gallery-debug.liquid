@@ -1,0 +1,41 @@
+<script>
+  // Temporary debugging script
+  console.log('🔧 Gallery Debug Script Loaded');
+
+  document.addEventListener('DOMContentLoaded', function () {
+    console.log('🔧 DOM loaded, checking gallery structure...');
+
+    const container = document.querySelector('.product-gallery-swiper');
+    console.log('Container:', container);
+
+    const wrapper = document.querySelector('.swiper-wrapper');
+    console.log('Wrapper:', wrapper);
+
+    const allSlides = document.querySelectorAll('.swiper-slide');
+    const gallerySlides = container ? container.querySelectorAll('.swiper-slide') : [];
+    console.log('All slides on page:', allSlides.length, allSlides);
+    console.log('Gallery slides only:', gallerySlides.length, gallerySlides);
+
+    const navPrev = document.querySelector('.product-gallery-nav--prev');
+    const navNext = document.querySelector('.product-gallery-nav--next');
+    console.log('Navigation:', { prev: navPrev, next: navNext });
+
+    // Test Swiper availability
+    console.log('Swiper available:', typeof window.Swiper);
+
+    // Check for conflicting slider components
+    const sliderComponents = document.querySelectorAll('slider-component');
+    console.log('Slider components found:', sliderComponents.length, sliderComponents);
+
+    // Test manual navigation
+    if (navPrev && navNext) {
+      navPrev.addEventListener('click', function () {
+        console.log('🔧 Prev button clicked!');
+      });
+
+      navNext.addEventListener('click', function () {
+        console.log('🔧 Next button clicked!');
+      });
+    }
+  });
+</script>

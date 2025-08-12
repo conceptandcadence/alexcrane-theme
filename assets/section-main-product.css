@@ -583,6 +583,7 @@ a.product__text {
 }
 
 .product__media-toggle {
+  display: none !important;
   display: flex;
   border: none;
   background-color: transparent;
@@ -1016,11 +1017,13 @@ a.product__text {
 
 @media screen and (min-width: 750px) {
   .product--thumbnail_slider .thumbnail-slider {
-    --thumbnail-width: 7.5vw;
+    --thumbnail-width: 9.125vw; /*7.5vw;*/
     display: flex;
     flex-direction: column;
     align-items: center;
     width: var(--thumbnail-width);
+    max-height: 67.25vw !important;
+    overflow: hidden;
   }
 
   .thumbnail-slider .thumbnail-list.slider--tablet-up {

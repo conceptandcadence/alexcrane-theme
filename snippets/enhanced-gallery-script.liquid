@@ -1,0 +1,419 @@
+/**
+ * Enhanced Product Gallery with Swiper
+ * Adds navigation arrows, swipe functionality, and looping to existing .product__media-list
+ */
+
+(function() {
+  'use strict';
+
+  class EnhancedProductGallery {
+    constructor() {
+      this.swiper = null;
+      this.init();
+    }
+
+    init() {
+      // Wait for Swiper to load
+      this.waitForSwiper(() => {
+        this.initializeSwiper();
+        this.setupEventListeners();
+      });
+    }
+
+    waitForSwiper(callback, attempts = 0, maxAttempts = 50) {
+      if (window.Swiper) {
+        console.log('✅ Swiper loaded for enhanced gallery');
+        callback();
+        return;
+      }
+
+      if (attempts >= maxAttempts) {
+        console.error('❌ Swiper library failed to load for enhanced gallery');
+        return;
+      }
+
+      setTimeout(() => this.waitForSwiper(callback, attempts + 1, maxAttempts), 100);
+    }
+
+    initializeSwiper() {
+      const swiperContainer = document.querySelector('.product-gallery-swiper');
+      
+      if (!swiperContainer) {
+        console.log('❌ No enhanced gallery container found');
+        console.log('Available elements:', document.querySelectorAll('[class*="gallery"]'));
+        return;
+      }
+
+      console.log('✅ Found swiper container:', swiperContainer);
+      
+      // Check if Swiper is already initialized and destroy it
+      if (swiperContainer.swiper) {
+        console.log('🔄 Destroying existing Swiper instance');
+        swiperContainer.swiper.destroy(true, true);
+      }
+
+      const mediaList = swiperContainer.querySelector('.product__media-list');
+      const mediaCount = mediaList ? mediaList.children.length : 0;
+      
+      // Count only gallery slides, not modal slides
+      const gallerySlides = swiperContainer.querySelectorAll('.swiper-slide');
+      console.log('📊 Gallery-only slides:', gallerySlides.length);
+
+      console.log('📊 Media list:', mediaList);
+      console.log('📊 Media count:', mediaCount);
+
+      if (mediaCount <= 1) {
+        console.log('⚠️ Single or no media items, skipping Swiper initialization');
+        return;
+      }
+
+      console.log(`🎠 Initializing enhanced gallery with ${mediaCount} media items`);
+      
+      // Check for navigation elements
+      const prevBtn = document.querySelector('.product-gallery-nav--prev');
+      const nextBtn = document.querySelector('.product-gallery-nav--next');
+      const pagination = document.querySelector('.product-gallery-pagination');
+      
+      console.log('🔍 Navigation elements:');
+      console.log('  - Prev button:', prevBtn);
+      console.log('  - Next button:', nextBtn);
+      console.log('  - Pagination:', pagination);
+
+      // Initialize Swiper
+      try {
+        console.log('🎯 Creating Swiper instance...');
+        this.swiper = new Swiper(swiperContainer, {
+        // Basic settings
+        slidesPerView: 1,
+        spaceBetween: 0,
+        loop: mediaCount > 1, // Enable loop only if we have multiple slides
+        speed: 400,
+        allowTouchMove: true,
+        watchSlidesProgress: true,
+        
+        // Navigation arrows
+        navigation: {
+          nextEl: swiperContainer.querySelector('.product-gallery-nav--next'),
+          prevEl: swiperContainer.querySelector('.product-gallery-nav--prev'),
+        },
+        
+        // Pagination dots
+        pagination: {
+          el: '.product-gallery-pagination',
+          clickable: true,
+          dynamicBullets: true,
+          dynamicMainBullets: 5,
+        },
+        
+        // Touch/swipe settings
+        touchRatio: 1,
+        touchAngle: 45,
+        grabCursor: true,
+        
+        // Keyboard navigation
+        keyboard: {
+          enabled: true,
+          onlyInViewport: true,
+        },
+        
+        // Mouse wheel support
+        mousewheel: {
+          forceToAxis: true,
+          sensitivity: 1,
+          releaseOnEdges: true,
+        },
+        
+        // Auto height for different media sizes
+        autoHeight: false,
+        
+        // Responsive breakpoints
+        breakpoints: {
+          750: {
+            touchRatio: 1,
+          },
+          0: {
+            touchRatio: 1,
+          }
+        },
+
+        // Event callbacks
+        on: {
+          init: () => {
+            console.log('✅ Enhanced gallery Swiper initialized');
+            this.updateCounter();
+            this.handleSlideChange();
+          },
+          
+          slideChange: () => {
+            this.updateCounter();
+            this.handleSlideChange();
+          },
+          
+          slideChangeTransitionEnd: () => {
+            this.handleMediaLoad();
+          }
+        }
+      });
+      
+      console.log('✅ Swiper instance created successfully:', this.swiper);
+      console.log('🔍 Swiper properties:');
+      console.log('  - Slides:', this.swiper.slides.length);
+      console.log('  - Active index:', this.swiper.activeIndex);
+      console.log('  - Loop enabled:', this.swiper.params.loop);
+      console.log('  - Navigation enabled:', this.swiper.navigation.enabled);
+      
+      // Force enable navigation if it's disabled
+      if (this.swiper.navigation && !this.swiper.navigation.enabled) {
+        console.log('🔧 Force enabling navigation...');
+        this.swiper.navigation.enable();
+        this.swiper.navigation.update();
+      }
+      
+      // Remove lock classes manually if they exist
+      const prevBtn = swiperContainer.querySelector('.product-gallery-nav--prev');
+      const nextBtn = swiperContainer.querySelector('.product-gallery-nav--next');
+      const pagination = swiperContainer.querySelector('.product-gallery-pagination');
+      
+      if (prevBtn) {
+        prevBtn.classList.remove('swiper-button-lock', 'swiper-button-disabled');
+        prevBtn.setAttribute('tabindex', '0');
+        console.log('🔧 Removed lock from prev button');
+      }
+      
+      if (nextBtn) {
+        nextBtn.classList.remove('swiper-button-lock', 'swiper-button-disabled');
+        nextBtn.setAttribute('tabindex', '0');
+        console.log('🔧 Removed lock from next button');
+      }
+      
+      if (pagination) {
+        pagination.classList.remove('swiper-pagination-lock');
+        console.log('🔧 Removed lock from pagination');
+      }
+      
+      // Add manual click handlers as backup
+      if (prevBtn && this.swiper) {
+        prevBtn.addEventListener('click', () => {
+          console.log('🔧 Manual prev click triggered - Current index:', this.swiper.activeIndex);
+          this.swiper.slidePrev();
+          setTimeout(() => {
+            console.log('🔧 After prev - New index:', this.swiper.activeIndex);
+          }, 100);
+        });
+      }
+      
+      if (nextBtn && this.swiper) {
+        nextBtn.addEventListener('click', () => {
+          console.log('🔧 Manual next click triggered - Current index:', this.swiper.activeIndex);
+          this.swiper.slideNext();
+          setTimeout(() => {
+            console.log('🔧 After next - New index:', this.swiper.activeIndex);
+          }, 100);
+        });
+      }
+      
+      } catch (error) {
+        console.error('❌ Failed to initialize Swiper:', error);
+        console.log('Swiper container:', swiperContainer);
+        console.log('Container classes:', swiperContainer.className);
+        console.log('Wrapper element:', swiperContainer.querySelector('.swiper-wrapper'));
+        console.log('Slides:', swiperContainer.querySelectorAll('.swiper-slide'));
+      }
+    }
+
+    setupEventListeners() {
+      // Handle variant changes
+      document.addEventListener('variant:change', (event) => {
+        this.handleVariantChange(event.detail);
+      });
+
+      // Handle window resize
+      window.addEventListener('resize', () => {
+        if (this.swiper) {
+          this.swiper.update();
+        }
+      });
+
+      // Integration with existing media gallery events
+      document.addEventListener('media:change', (event) => {
+        this.goToMedia(event.detail.mediaId);
+      });
+    }
+
+    updateCounter() {
+      const counterCurrent = document.querySelector('.product-gallery-counter-current');
+      const counterTotal = document.querySelector('.product-gallery-counter-total');
+      
+      if (counterCurrent && this.swiper) {
+        counterCurrent.textContent = this.swiper.realIndex + 1;
+      }
+      
+      if (counterTotal && this.swiper) {
+        counterTotal.textContent = this.swiper.slides.length;
+      }
+    }
+
+    handleSlideChange() {
+      if (!this.swiper) return;
+
+      const activeSlide = this.swiper.slides[this.swiper.activeIndex];
+      if (!activeSlide) return;
+
+      // Update active states
+      this.swiper.slides.forEach(slide => {
+        slide.classList.remove('is-active');
+      });
+      activeSlide.classList.add('is-active');
+
+      // Pause all media first
+      this.pauseAllMedia();
+
+      // Handle current media
+      const mediaType = activeSlide.dataset.mediaType;
+      if (mediaType === 'video' || mediaType === 'external_video') {
+        this.handleVideoSlide(activeSlide);
+      } else if (mediaType === 'model') {
+        this.handleModelSlide(activeSlide);
+      }
+
+      // Update URL hash for deep linking
+      const mediaId = activeSlide.dataset.mediaId;
+      if (mediaId && history.replaceState) {
+        const newUrl = window.location.pathname + window.location.search + '#' + mediaId.split('-').pop();
+        history.replaceState(null, '', newUrl);
+      }
+
+      // Trigger custom event for other components
+      document.dispatchEvent(new CustomEvent('gallery:slideChange', {
+        detail: {
+          activeSlide: activeSlide,
+          slideIndex: this.swiper.realIndex,
+          mediaId: mediaId
+        }
+      }));
+    }
+
+    handleMediaLoad() {
+      if (!this.swiper) return;
+
+      const activeSlide = this.swiper.slides[this.swiper.activeIndex];
+      if (!activeSlide) return;
+
+      // Load deferred media
+      const deferredMedia = activeSlide.querySelector('deferred-media');
+      if (deferredMedia && !deferredMedia.hasAttribute('loaded')) {
+        deferredMedia.loadContent();
+      }
+    }
+
+    pauseAllMedia() {
+      // Pause all videos
+      const videos = document.querySelectorAll('.product-gallery-swiper video');
+      videos.forEach(video => {
+        if (!video.paused) {
+          video.pause();
+        }
+      });
+
+      // Stop external videos
+      const iframes = document.querySelectorAll('.product-gallery-swiper iframe');
+      iframes.forEach(iframe => {
+        if (iframe.src && (iframe.src.includes('youtube.com') || iframe.src.includes('vimeo.com'))) {
+          // Pause by sending postMessage (for YouTube/Vimeo API)
+          try {
+            iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+          } catch (e) {
+            // Fallback: reload iframe to stop video
+            const src = iframe.src;
+            iframe.src = '';
+            setTimeout(() => iframe.src = src, 100);
+          }
+        }
+      });
+    }
+
+    handleVideoSlide(slide) {
+      const deferredMedia = slide.querySelector('deferred-media');
+      if (deferredMedia && !deferredMedia.hasAttribute('loaded')) {
+        deferredMedia.loadContent();
+      }
+    }
+
+    handleModelSlide(slide) {
+      const deferredMedia = slide.querySelector('deferred-media');
+      if (deferredMedia && !deferredMedia.hasAttribute('loaded')) {
+        deferredMedia.loadContent();
+      }
+    }
+
+    handleVariantChange(variant) {
+      if (!variant || !variant.featured_media || !this.swiper) return;
+
+      // Find slide with variant's featured media
+      const targetSlideIndex = Array.from(this.swiper.slides).findIndex(slide => {
+        const mediaId = slide.dataset.mediaId;
+        return mediaId && mediaId.includes(variant.featured_media.id.toString());
+      });
+
+      if (targetSlideIndex !== -1) {
+        this.swiper.slideTo(targetSlideIndex);
+      }
+    }
+
+    // Public method to go to specific media
+    goToMedia(mediaId) {
+      if (!this.swiper) return;
+
+      const targetSlideIndex = Array.from(this.swiper.slides).findIndex(slide => {
+        const slideMediaId = slide.dataset.mediaId;
+        return slideMediaId && slideMediaId.includes(mediaId.toString());
+      });
+
+      if (targetSlideIndex !== -1) {
+        this.swiper.slideTo(targetSlideIndex);
+      }
+    }
+
+    // Public method to destroy swiper
+    destroy() {
+      if (this.swiper) {
+        this.swiper.destroy(true, true);
+        this.swiper = null;
+      }
+    }
+  }
+
+  // Initialize when DOM is ready
+  function initGallery() {
+    console.log('🚀 DOM ready, checking for gallery...');
+    // Only initialize if we have a product gallery (not the swiper_thumbnails layout)
+    const galleryContainer = document.querySelector('.product-gallery-swiper');
+    console.log('🔍 Gallery container found:', galleryContainer);
+    
+    if (galleryContainer) {
+      console.log('✅ Initializing enhanced product gallery...');
+      window.enhancedProductGallery = new EnhancedProductGallery();
+    } else {
+      console.log('❌ No .product-gallery-swiper found in DOM');
+      console.log('Available gallery elements:', document.querySelectorAll('[class*="gallery"], [class*="swiper"]'));
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initGallery);
+  } else {
+    // DOM is already ready
+    setTimeout(initGallery, 100);
+  }
+
+  // Handle dynamic content updates
+  document.addEventListener('gallery:reinit', () => {
+    if (window.enhancedProductGallery) {
+      window.enhancedProductGallery.destroy();
+    }
+    window.enhancedProductGallery = new EnhancedProductGallery();
+  });
+
+  // Export for external use
+  window.EnhancedProductGallery = EnhancedProductGallery;
+})();

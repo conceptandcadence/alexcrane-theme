@@ -102,11 +102,7 @@
       <div class='grid__item product__media-wrapper'>
         <!-- Default media gallery for main product page -->
         <div class='quick-add-hidden'>
-          {%- if section.settings.gallery_layout == 'swiper_thumbnails' -%}
-            {% render 'product-swiper-gallery', variant_images: variant_images %}
-          {%- else -%}
-            {% render 'product-media-gallery', variant_images: variant_images %}
-          {%- endif -%}
+          {% render 'product-media-gallery', variant_images: variant_images %}
         </div>
 
         <!-- Modal carousel for quick-add modal only -->
@@ -758,34 +754,6 @@
     {%- if product.media.size > 0 -%}
       <script src='{{ 'product-modal.js' | asset_url }}' defer='defer'></script>
       <script src='{{ 'media-gallery.js' | asset_url }}' defer='defer'></script>
-
-      {%- comment -%} Enhanced gallery with Swiper for all layouts except swiper_thumbnails {%- endcomment -%}
-      {%- unless section.settings.gallery_layout == 'swiper_thumbnails' -%}
-        <!-- Swiper CSS and JS for Enhanced Gallery -->
-        <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.0.5/swiper-bundle.min.css'>
-        <script src='https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.0.5/swiper-bundle.min.js' defer='defer'></script>
-        <style>
-          {% render 'enhanced-gallery-styles' %}
-        </style>
-        <script>
-          {% render 'enhanced-gallery-script' %}
-        </script>
-
-        {%- comment -%} Temporary debugging {%- endcomment -%}
-        {% render 'gallery-debug' %}
-      {%- endunless -%}
-
-      {%- if section.settings.gallery_layout == 'swiper_thumbnails' -%}
-        <!-- Swiper CSS and JS for Product Gallery -->
-        <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.0.5/swiper-bundle.min.css'>
-        <script src='https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.0.5/swiper-bundle.min.js' defer='defer'></script>
-        <style>
-          {% render 'product-swiper-gallery-styles' %}
-        </style>
-        <script>
-          {% render 'product-swiper-gallery-script' %}
-        </script>
-      {%- endif -%}
     {%- endif -%}
 
     {%- if first_3d_model -%}
@@ -2246,10 +2214,6 @@
         {
           "value": "thumbnail_slider",
           "label": "t:sections.main-product.settings.gallery_layout.options__4.label"
-        },
-        {
-          "value": "swiper_thumbnails",
-          "label": "Swiper with Left Thumbnails"
         }
       ],
       "default": "stacked",

@@ -643,6 +643,10 @@ video {
   right: 0px;
 }
 
+.tw-z-50 {
+  z-index: 50;
+}
+
 .tw-mb-4 {
   margin-bottom: 1rem;
 }
