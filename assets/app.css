@@ -908,6 +908,18 @@ video {
     width: calc(100% - 10vw);
   }
 
+  .lg\:tw-w-\[calc\(100\%-var\(--thumbnail-width\)\)\] {
+    width: calc(100% - var(--thumbnail-width));
+  }
+
+  .lg\:tw-w-\[calc\(100\%-120px\)\] {
+    width: calc(100% - 120px);
+  }
+
+  .lg\:tw-w-\[calc\(100\%-150px\)\] {
+    width: calc(100% - 150px);
+  }
+
   .lg\:tw-text-\[12px\] {
     font-size: 12px;
   }

@@ -9,6 +9,7 @@
   class EnhancedProductGallery {
     constructor() {
       this.swiper = null;
+      this.thumbnailSwiper = null;
       this.init();
     }
 
@@ -16,6 +17,7 @@
       // Wait for Swiper to load
       this.waitForSwiper(() => {
         this.initializeSwiper();
+        this.initializeThumbnailSwiper();
         this.setupEventListeners();
       });
     }
@@ -53,6 +55,11 @@
         return;
       }
 
+      // Make container focusable for keyboard navigation
+      swiperContainer.setAttribute('tabindex', '0');
+      swiperContainer.setAttribute('role', 'region');
+      swiperContainer.setAttribute('aria-label', 'Product image gallery. Use arrow keys to navigate.');
+
       // Initialize Swiper
       try {
         this.swiper = new Swiper(swiperContainer, {
@@ -79,6 +86,7 @@
         keyboard: {
           enabled: true,
           onlyInViewport: true,
+          pageUpDown: true,
         },
         
         // Mouse wheel support
@@ -155,6 +163,164 @@
       } catch (error) {
         console.error('❌ Failed to initialize Swiper:', error);
       }
+    }
+
+    initializeThumbnailSwiper() {
+      const thumbnailContainer = document.querySelector('.thumbnail-swiper');
+      
+      if (!thumbnailContainer) {
+        return; // No thumbnails for this layout
+      }
+      
+      // Check if thumbnail Swiper is already initialized and destroy it
+      if (thumbnailContainer.swiper) {
+        thumbnailContainer.swiper.destroy(true, true);
+      }
+
+      const thumbnailList = thumbnailContainer.querySelector('.thumbnail-list');
+      const thumbnailCount = thumbnailList ? thumbnailList.children.length : 0;
+
+      if (thumbnailCount <= 1) {
+        return;
+      }
+
+      // Make thumbnail container focusable for keyboard navigation
+      thumbnailContainer.setAttribute('tabindex', '0');
+      thumbnailContainer.setAttribute('role', 'region');
+      thumbnailContainer.setAttribute('aria-label', 'Product thumbnail gallery. Use arrow keys to navigate.');
+
+      // Initialize thumbnail Swiper
+      try {
+        this.thumbnailSwiper = new Swiper(thumbnailContainer, {
+          // Basic settings for vertical thumbnails
+          direction: 'vertical',
+          slidesPerView: 'auto',
+          spaceBetween: 16,
+          freeMode: true,
+          watchSlidesProgress: true,
+          
+          // Navigation for thumbnails
+          navigation: {
+            nextEl: thumbnailContainer.querySelector('.thumbnail-nav--next'),
+            prevEl: thumbnailContainer.querySelector('.thumbnail-nav--prev'),
+          },
+          
+          // Keyboard navigation for thumbnails
+          keyboard: {
+            enabled: true,
+            onlyInViewport: true,
+          },
+          
+          // Responsive breakpoints for vertical thumbnails
+          breakpoints: {
+            0: {
+              slidesPerView: 3,
+              spaceBetween: 8,
+              direction: 'vertical',
+            },
+            750: {
+              slidesPerView: 4,
+              spaceBetween: 12,
+              direction: 'vertical',
+            },
+            990: {
+              slidesPerView: 'auto',
+              spaceBetween: 16,
+              direction: 'vertical',
+            }
+          }
+        });
+
+        // Force enable thumbnail navigation
+        if (this.thumbnailSwiper.navigation && !this.thumbnailSwiper.navigation.enabled) {
+          this.thumbnailSwiper.navigation.enable();
+          this.thumbnailSwiper.navigation.update();
+        }
+
+        // Remove lock classes from thumbnail navigation
+        const prevBtn = thumbnailContainer.querySelector('.thumbnail-nav--prev');
+        const nextBtn = thumbnailContainer.querySelector('.thumbnail-nav--next');
+        
+        if (prevBtn) {
+          prevBtn.classList.remove('swiper-button-lock', 'swiper-button-disabled');
+        }
+        
+        if (nextBtn) {
+          nextBtn.classList.remove('swiper-button-lock', 'swiper-button-disabled');
+        }
+
+        // Add compatibility methods for original media-gallery.js
+        this.addThumbnailCompatibility(thumbnailContainer);
+
+        // Sync with main gallery if it exists
+        if (this.swiper && this.thumbnailSwiper) {
+          this.syncGalleries();
+        }
+        
+      } catch (error) {
+        console.error('❌ Failed to initialize thumbnail Swiper:', error);
+      }
+    }
+
+    addThumbnailCompatibility(thumbnailContainer) {
+      // Add compatibility methods for original media-gallery.js
+      const parentElement = thumbnailContainer.parentElement;
+      
+      // Add isSlideVisible method to prevent media-gallery.js errors
+      parentElement.isSlideVisible = (element, threshold = 10) => {
+        if (!this.thumbnailSwiper || !element) return true;
+        
+        // Get the element's position in the Swiper
+        const slideIndex = Array.from(this.thumbnailSwiper.slides).indexOf(element);
+        if (slideIndex === -1) return false;
+        
+        // Check if slide is in view (simplified check)
+        const swiperContainer = this.thumbnailSwiper.el;
+        const containerRect = swiperContainer.getBoundingClientRect();
+        const elementRect = element.getBoundingClientRect();
+        
+        // Check if element is within container bounds (with threshold)
+        return (
+          elementRect.top >= (containerRect.top - threshold) &&
+          elementRect.bottom <= (containerRect.bottom + threshold)
+        );
+      };
+      
+      // Add slider property for scrollTo compatibility
+      parentElement.slider = {
+        scrollTo: (options) => {
+          if (!this.thumbnailSwiper) return;
+          
+          // Find the target slide and scroll to it
+          const slides = this.thumbnailSwiper.slides;
+          for (let i = 0; i < slides.length; i++) {
+            if (slides[i].offsetLeft <= options.left && 
+                slides[i].offsetLeft + slides[i].offsetWidth > options.left) {
+              this.thumbnailSwiper.slideTo(i);
+              break;
+            }
+          }
+        }
+      };
+    }
+
+    syncGalleries() {
+      if (!this.swiper || !this.thumbnailSwiper) return;
+
+      // When main gallery changes, update thumbnail
+      this.swiper.on('slideChange', () => {
+        const activeIndex = this.swiper.realIndex;
+        this.thumbnailSwiper.slideTo(activeIndex);
+      });
+
+      // When thumbnail is clicked, update main gallery
+      this.thumbnailSwiper.on('click', (swiper, event) => {
+        const clickedSlide = event.target.closest('.swiper-slide');
+        if (clickedSlide) {
+          const slideIndex = Array.from(swiper.slides).indexOf(clickedSlide);
+          this.swiper.slideTo(slideIndex);
+        }
+      });
     }
 
     setupEventListeners() {
@@ -315,6 +481,11 @@
       if (this.swiper) {
         this.swiper.destroy(true, true);
         this.swiper = null;
+      }
+      
+      if (this.thumbnailSwiper) {
+        this.thumbnailSwiper.destroy(true, true);
+        this.thumbnailSwiper = null;
       }
     }
   }
