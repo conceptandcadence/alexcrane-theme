@@ -52,7 +52,7 @@
   data-desktop-layout='{{ section.settings.gallery_layout }}'
 >
   <div id='GalleryStatus-{{ section.id }}' class='visually-hidden' role='status'></div>
-  <div id='GalleryViewer-{{ section.id }}' class='product-gallery-swiper-container tw-w-full'>
+  <div id='GalleryViewer-{{ section.id }}' class='product-gallery-swiper-container tw-w-full lg:tw-w-[calc(100%-10vw)]'>
     <a class='skip-to-content-link button visually-hidden quick-add-hidden' href='#ProductInfo-{{ section.id }}'>
       {{ 'accessibility.skip_to_product_info' | t }}
     </a>
@@ -130,9 +130,6 @@
       {%- comment -%} Swiper Navigation {%- endcomment -%}
       <div class='swiper-button-prev product-gallery-nav tw-z-50 product-gallery-nav--prev'></div>
       <div class='swiper-button-next product-gallery-nav tw-z-50 product-gallery-nav--next'></div>
-
-      {%- comment -%} Swiper Pagination {%- endcomment -%}
-      <div class='swiper-pagination product-gallery-pagination'></div>
     </div>
 
     {%- comment -%} Gallery Counter {%- endcomment -%}

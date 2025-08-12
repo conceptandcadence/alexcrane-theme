@@ -904,6 +904,10 @@ video {
     height: 28px;
   }
 
+  .lg\:tw-w-\[calc\(100\%-10vw\)\] {
+    width: calc(100% - 10vw);
+  }
+
   .lg\:tw-text-\[12px\] {
     font-size: 12px;
   }

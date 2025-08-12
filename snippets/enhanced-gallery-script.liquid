@@ -22,7 +22,6 @@
 
     waitForSwiper(callback, attempts = 0, maxAttempts = 50) {
       if (window.Swiper) {
-        console.log('✅ Swiper loaded for enhanced gallery');
         callback();
         return;
       }
@@ -39,49 +38,23 @@
       const swiperContainer = document.querySelector('.product-gallery-swiper');
       
       if (!swiperContainer) {
-        console.log('❌ No enhanced gallery container found');
-        console.log('Available elements:', document.querySelectorAll('[class*="gallery"]'));
         return;
       }
-
-      console.log('✅ Found swiper container:', swiperContainer);
       
       // Check if Swiper is already initialized and destroy it
       if (swiperContainer.swiper) {
-        console.log('🔄 Destroying existing Swiper instance');
         swiperContainer.swiper.destroy(true, true);
       }
 
       const mediaList = swiperContainer.querySelector('.product__media-list');
       const mediaCount = mediaList ? mediaList.children.length : 0;
-      
-      // Count only gallery slides, not modal slides
-      const gallerySlides = swiperContainer.querySelectorAll('.swiper-slide');
-      console.log('📊 Gallery-only slides:', gallerySlides.length);
-
-      console.log('📊 Media list:', mediaList);
-      console.log('📊 Media count:', mediaCount);
 
       if (mediaCount <= 1) {
-        console.log('⚠️ Single or no media items, skipping Swiper initialization');
         return;
       }
 
-      console.log(`🎠 Initializing enhanced gallery with ${mediaCount} media items`);
-      
-      // Check for navigation elements
-      const prevBtn = document.querySelector('.product-gallery-nav--prev');
-      const nextBtn = document.querySelector('.product-gallery-nav--next');
-      const pagination = document.querySelector('.product-gallery-pagination');
-      
-      console.log('🔍 Navigation elements:');
-      console.log('  - Prev button:', prevBtn);
-      console.log('  - Next button:', nextBtn);
-      console.log('  - Pagination:', pagination);
-
       // Initialize Swiper
       try {
-        console.log('🎯 Creating Swiper instance...');
         this.swiper = new Swiper(swiperContainer, {
         // Basic settings
         slidesPerView: 1,
@@ -95,14 +68,6 @@
         navigation: {
           nextEl: swiperContainer.querySelector('.product-gallery-nav--next'),
           prevEl: swiperContainer.querySelector('.product-gallery-nav--prev'),
-        },
-        
-        // Pagination dots
-        pagination: {
-          el: '.product-gallery-pagination',
-          clickable: true,
-          dynamicBullets: true,
-          dynamicMainBullets: 5,
         },
         
         // Touch/swipe settings
@@ -139,7 +104,6 @@
         // Event callbacks
         on: {
           init: () => {
-            console.log('✅ Enhanced gallery Swiper initialized');
             this.updateCounter();
             this.handleSlideChange();
           },
@@ -155,16 +119,8 @@
         }
       });
       
-      console.log('✅ Swiper instance created successfully:', this.swiper);
-      console.log('🔍 Swiper properties:');
-      console.log('  - Slides:', this.swiper.slides.length);
-      console.log('  - Active index:', this.swiper.activeIndex);
-      console.log('  - Loop enabled:', this.swiper.params.loop);
-      console.log('  - Navigation enabled:', this.swiper.navigation.enabled);
-      
       // Force enable navigation if it's disabled
       if (this.swiper.navigation && !this.swiper.navigation.enabled) {
-        console.log('🔧 Force enabling navigation...');
         this.swiper.navigation.enable();
         this.swiper.navigation.update();
       }
@@ -172,52 +128,32 @@
       // Remove lock classes manually if they exist
       const prevBtn = swiperContainer.querySelector('.product-gallery-nav--prev');
       const nextBtn = swiperContainer.querySelector('.product-gallery-nav--next');
-      const pagination = swiperContainer.querySelector('.product-gallery-pagination');
       
       if (prevBtn) {
         prevBtn.classList.remove('swiper-button-lock', 'swiper-button-disabled');
         prevBtn.setAttribute('tabindex', '0');
-        console.log('🔧 Removed lock from prev button');
       }
       
       if (nextBtn) {
         nextBtn.classList.remove('swiper-button-lock', 'swiper-button-disabled');
         nextBtn.setAttribute('tabindex', '0');
-        console.log('🔧 Removed lock from next button');
-      }
-      
-      if (pagination) {
-        pagination.classList.remove('swiper-pagination-lock');
-        console.log('🔧 Removed lock from pagination');
       }
       
       // Add manual click handlers as backup
       if (prevBtn && this.swiper) {
         prevBtn.addEventListener('click', () => {
-          console.log('🔧 Manual prev click triggered - Current index:', this.swiper.activeIndex);
           this.swiper.slidePrev();
-          setTimeout(() => {
-            console.log('🔧 After prev - New index:', this.swiper.activeIndex);
-          }, 100);
         });
       }
       
       if (nextBtn && this.swiper) {
         nextBtn.addEventListener('click', () => {
-          console.log('🔧 Manual next click triggered - Current index:', this.swiper.activeIndex);
           this.swiper.slideNext();
-          setTimeout(() => {
-            console.log('🔧 After next - New index:', this.swiper.activeIndex);
-          }, 100);
         });
       }
       
       } catch (error) {
         console.error('❌ Failed to initialize Swiper:', error);
-        console.log('Swiper container:', swiperContainer);
-        console.log('Container classes:', swiperContainer.className);
-        console.log('Wrapper element:', swiperContainer.querySelector('.swiper-wrapper'));
-        console.log('Slides:', swiperContainer.querySelectorAll('.swiper-slide'));
       }
     }
 
@@ -385,17 +321,11 @@
 
   // Initialize when DOM is ready
   function initGallery() {
-    console.log('🚀 DOM ready, checking for gallery...');
     // Only initialize if we have a product gallery (not the swiper_thumbnails layout)
     const galleryContainer = document.querySelector('.product-gallery-swiper');
-    console.log('🔍 Gallery container found:', galleryContainer);
     
     if (galleryContainer) {
-      console.log('✅ Initializing enhanced product gallery...');
       window.enhancedProductGallery = new EnhancedProductGallery();
-    } else {
-      console.log('❌ No .product-gallery-swiper found in DOM');
-      console.log('Available gallery elements:', document.querySelectorAll('[class*="gallery"], [class*="swiper"]'));
     }
   }
 
