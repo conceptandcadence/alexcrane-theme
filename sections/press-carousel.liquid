@@ -1,0 +1,550 @@
+<style>
+/* Swiper Carousel Styles */
+.press-carousel-swiper {
+  overflow: hidden;
+  position: relative;
+}
+
+/* Gradient overlays - base styles */
+.press-carousel-swiper::before,
+.press-carousel-swiper::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100px;
+  z-index: 2;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+
+
+.press-carousel-swiper .swiper-slide {
+  width: 50%;
+  min-height: 50vw;
+}
+
+@media (min-width: 700px) {
+  .press-carousel-swiper .swiper-slide {
+    width: 33.33%;
+    min-height: 20vw;
+  }
+}
+
+/* Navigation buttons */
+.press-carousel-next {
+  background-image: url("https://cdn.shopify.com/s/files/1/1892/3609/files/carousel-arrow-thick.svg?v=1683734748");
+  background-size: 24px;
+	right: 36px !important;
+	top: 50%;
+	transform: translateY(-50%);
+	margin-top: 0 !important;
+}
+
+.press-carousel-prev {
+  background-image: url("https://cdn.shopify.com/s/files/1/1892/3609/files/carousel-arrow-thick.svg?v=1683734748");
+  background-size: 24px;
+	left: 36px !important;
+	top: 50%;
+	transform: translateY(-50%) rotate(180deg);
+	margin-top: 0 !important;
+}
+
+.press-carousel-swiper.disabled-on-desktop .press-carousel-next,
+.press-carousel-swiper.disabled-on-desktop .press-carousel-prev {
+  display: none;
+}
+
+/* Content styles */
+.press-carousel__headline p {
+  display: contents;
+  font-size: 18px !important;
+}
+
+.detail-product .detail-label {
+  margin-left: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.detail-product .detail-product-image {
+  width: 24px;
+  height: 24px;
+  border-radius: 24px;
+  overflow: hidden;
+}
+
+.press-carousel-prev.swiper-button-prev:after, .press-carousel-next.swiper-button-next:after {
+  content: none !important;
+}
+
+.press-carousel-prev, .press-carousel-next {
+  border: solid 1px var(--color-grey);
+	border-radius: 48px;
+	width: 48px !important;
+	height: 48px !important;
+}
+
+@media screen and (max-width: 749px) {
+	.press-carousel-prev, .press-carousel-next {
+		display: none !important;
+	}
+}
+
+</style>
+{% capture press_blocks %}
+  {% for block in section.blocks %}
+			{% if block.settings.quote != blank %}
+				<div class="swiper-slide press-carousel__quote !tw-flex tw-flex-col tw-relative tw-items-center tw-justify-between tw-p-12 tw-border tw-border-[#ececec] tw-rounded-[5px]">
+
+					<div class="press-carousel__quote-wrapper tw-flex tw-flex-col-reverse tw-text-left tw-justify-between tw-relative tw-h-full tw-flex-grow tw-w-full">
+
+						<{% if block.settings.url != blank %}a href="{{ block.settings.url }}" {% else %}div{% endif %}
+							class="press-carousel__logo tw-relative tw-mt-5">
+							<div class="press-carousel__logo-wrapper tw-max-w-sm tw-m-0 md:tw-max-w-full">
+								{% if block.settings.logo %}
+										{%- assign logo_url  = block.settings.logo | img_url: '400x200' -%}
+										<img class="press-carousel__logo-image lazyload-img tw-w-auto tw-h-10" loading="lazy" src="{{ logo_url }}" data-src="{{ logo_url }}"
+												width="{{ block.settings.logo.width }}" height="{{ block.settings.logo.height }}" alt="{{ block.settings.title | escape }}">
+										<noscript>
+												<img class="press-carousel__logo-image tw-w-auto tw-h-10" src="{{ block.settings.logo | img_url: '200x' }}"
+												alt="{{ block.settings.title | escape }}">
+										</noscript>
+								{% endif %}
+							</div>
+						</{% if block.settings.url != blank %}a{% else %}div{% endif %}>
+						<div class="hp-press-quote__info">
+							<h3 class="press-carousel__headline tw-text-left tw-max-w-sm tw-font-normal tw-text-[18px] tw-leading-[24px] tw-m-0 md:tw-max-w-full tw-flex-grow">
+								&ldquo;{{ block.settings.quote }}&rdquo;
+							</h3>
+						</div>
+						<a href="{{ block.settings.url }}" class="press-carousel__link tw-block tw-absolute tw-inset-0"></a>
+					</div>
+
+				</div>
+    	{% endif %}
+  {% endfor %}
+{% endcapture %}
+
+<section id="section-{{ section.id }}" class="hp-section-variant" data-section-id="{{ section.id }}" data-variation="{{ section.settings.variation }}">
+  <div class="press-carousel tw-flex tw-flex-col tw-justify-center tw-items-center" style="background-color: {{ section.settings.background }};"> 
+    {% if section.settings.subtitle != blank %}
+      <h4 class="press-carousel__section-subtitle">{{ section.settings.subtitle }}</h2>
+    {% endif %}
+    {% if section.settings.title != blank %}
+      <h2 class="press-carousel__section-title">{{ section.settings.title }}</h2>
+    {% endif %}
+    
+    <!-- Swiper -->
+    <div class="swiper press-carousel-swiper tw-relative tw-w-full{% if section.blocks.size <= section.settings.cell_count %} disabled-on-desktop{% endif %}" data-cell-count="{{ section.settings.cell_count }}">
+      <div class="swiper-wrapper">
+        {{ press_blocks }}
+				{{ press_blocks }}
+      </div>
+      
+      <!-- Navigation buttons -->
+      <div class="swiper-button-next press-carousel-next tw-absolute tw-right-4 tw-top-1/2 tw-transform tw--translate-y-1/2 tw-w-12 tw-h-5 tw-bg-center tw-bg-no-repeat tw-bg-transparent tw-border-0 tw-p-0 tw-transition-opacity tw-duration-300 tw-ease-in-out tw-z-10 tw-cursor-pointer">
+				<span class="tw-sr-only">Next</span>
+			</div>
+      <div class="swiper-button-prev press-carousel-prev tw-absolute tw-left-4 tw-top-1/2 tw-transform tw--translate-y-1/2 tw-w-12 tw-h-5 tw-bg-center tw-bg-no-repeat tw-bg-transparent tw-border-0 tw-p-0 tw-transition-opacity tw-duration-300 tw-ease-in-out tw-z-10 tw-cursor-pointer tw-hidden">
+				<span class="tw-sr-only">Previous</span>
+			</div>
+  </div>
+  <style>
+    #shopify-section-{{ section.id }} .press-carousel__title, #shopify-section-{{ section.id }} .press-carousel__price, #shopify-section-{{ section.id }} .press-carousel__variant-title {
+        color: {{ section.settings.text_color }} !important;
+    }
+    #shopify-section-{{ section.id }} .press-carousel__press {
+        color: {{ section.settings.background }} !important;
+    }
+    @media (max-width: 699px) {
+        #shopify-section-{{ section.id }} {
+            padding: {{ section.settings.padding_top_m }}px {{ section.settings.padding_right_m }}px {{ section.settings.padding_bottom_m }}px {{ section.settings.padding_left_m }}px;
+        }
+        #shopify-section-{{ section.id }} .press-carousel__press {
+            padding: {{ section.settings.inner_padding_top_m }}px {{ section.settings.inner_padding_right_m }}px {{ section.settings.inner_padding_bottom_m }}px {{ section.settings.inner_padding_left_m }}px;
+        }
+    }
+    @media (min-width: 700px) {
+        #shopify-section-{{ section.id }} {
+            padding: {{ section.settings.padding_top_d }}px {{ section.settings.padding_right_d }}px {{ section.settings.padding_bottom_d }}px {{ section.settings.padding_left_d }}px;
+        }
+        #shopify-section-{{ section.id }} .press-carousel__press {
+            padding: {{ section.settings.inner_padding_top_d }}px {{ section.settings.inner_padding_right_d }}px {{ section.settings.inner_padding_bottom_d }}px {{ section.settings.inner_padding_left_d }}px;
+        }
+    }
+    {% if section.settings.background_image != blank %}
+        #shopify-section-{{ section.id }} {
+            background-image: url({{ section.settings.background_image | img_url }});
+        }
+    {% endif %}
+    
+
+
+    /* Gradient overlays for carousel edges */
+		@media screen and (min-width: 990px) {
+			#shopify-section-{{ section.id }} .press-carousel-swiper::before {
+				left: 0;
+				background: linear-gradient(90deg,rgba(255, 255, 255, 1) 80%, rgba(255, 255, 255, 0) 100%);
+			}
+			#shopify-section-{{ section.id }} .press-carousel-swiper::after {
+				right: 0;
+				background: linear-gradient(90deg,rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 20%);
+			}
+		}
+		/*
+    #shopify-section-{{ section.id }} .press-carousel-swiper::before {
+        left: 0;
+        background: linear-gradient(to right, {{ section.settings.background | default: '#ffffff' }}, transparent);
+    }
+    
+    #shopify-section-{{ section.id }} .press-carousel-swiper::after {
+        right: 0;
+        background: linear-gradient(to left, {{ section.settings.background | default: '#ffffff' }}, transparent);
+    }
+		*/
+  </style>
+</section> 
+
+<!-- Swiper CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+<!-- Swiper JS -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const swiperElement = document.querySelector('#section-{{ section.id }} .press-carousel-swiper');
+    
+    if (swiperElement && !swiperElement.classList.contains('disabled-on-desktop')) {
+      const cellCount = parseInt(swiperElement.dataset.cellCount) || 3;
+      
+      const swiper = new Swiper(swiperElement, {
+        slidesPerView: 1.5,
+        spaceBetween: 32,
+				centeredSlides: true,
+				autoplay: {
+					delay: 4000,
+					disableOnInteraction: false,
+				},
+				slidePrevClass: 'press-carousel-prevup',
+				slideNextClass: 'press-carousel-nextup',
+				slideActiveClass: 'press-carousel-active',
+				loop: true,
+
+        navigation: {
+          nextEl: '.press-carousel-next',
+          prevEl: '.press-carousel-prev',
+        },
+        breakpoints: {
+          750: {
+            slidesPerView: 2,
+          },
+          990: {
+            slidesPerView: 3.5,
+          }
+        }
+      });
+    }
+  });
+</script>
+
+
+
+{% schema %}
+{
+  "name": "HP Press",
+  "class": "c-press-carousel hp-section",      
+  "max_blocks": 12,
+  "settings": [
+    {
+        "type": "select",
+        "id": "variation",
+        "options": [
+            {
+                "value": "all",
+                "label": "Universal"
+            },
+            {
+                "value": "0",
+                "label": "Control"
+            },
+            {
+                "value": "1",
+                "label": "Variation 1"
+            },
+            {
+                "value": "2",
+                "label": "Variation 2"
+            },
+            {
+                "value": "3",
+                "label": "Variation 3"
+            },
+            {
+                "value": "4",
+                "label": "Variation 4"
+            },
+            {
+                "value": "5",
+                "label": "Variation 5"
+            }
+        ],
+        "default": "all",
+        "label": "Variation"
+    },
+    {
+        "type": "text",
+        "id": "title",
+        "label": "Title",
+        "info": "The message that will be dispayed above the press."
+    },
+    {
+        "type": "text",
+        "id": "subtitle",
+        "label": "Subtitle",
+        "info": "The message that will be dispayed above the press."
+    },
+    {
+        "type": "range",
+        "id": "cell_count",
+        "label": "Cell Count",
+        "min": 2,
+        "max": 5,
+        "step": 1,
+        "unit": "cel",
+        "default": 3,
+        "info": "The number of cells that will be displayed on desktop."
+
+    },
+    {
+        "type": "color",
+        "id": "background",
+        "label": "Background Color",
+        "default": "#ffffff"
+    },
+    {
+        "type": "image_picker",
+        "id": "background_image",
+        "label": "Background Image"
+    },    
+    {
+        "type": "color",
+        "id": "text_color",
+        "label": "Text Color",
+        "default": "#000000" 
+    },
+    {
+        "type": "header",
+        "content": "Outer Spacing Mobile"
+    },
+    {
+        "type": "range",
+        "id": "padding_top_m",
+        "min": 0,
+        "max": 200,
+        "step": 4,
+        "unit": "px",
+        "label": "Padding Top",
+        "default": 0
+    },
+    {
+        "type": "range",
+        "id": "padding_bottom_m",
+        "min": 0,
+        "max": 200,
+        "step": 4,
+        "unit": "px",
+        "label": "Padding Bottom",
+        "default": 0
+    },
+    {
+        "type": "range",
+        "id": "padding_left_m",
+        "min": 0,
+        "max": 200,
+        "step": 4,
+        "unit": "px",
+        "label": "Padding Left",
+        "default": 0
+    },
+    {
+        "type": "range",
+        "id": "padding_right_m",
+        "min": 0,
+        "max": 200,
+        "step": 4,
+        "unit": "px",
+        "label": "Padding Right",
+        "default": 0
+    },
+    {
+        "type": "header",
+        "content": "Inner Spacing Mobile"
+    },
+    {
+        "type": "range",
+        "id": "inner_padding_top_m",
+        "min": 0,
+        "max": 200,
+        "step": 4,
+        "unit": "px",
+        "label": "Padding Top",
+        "default": 0
+    },
+    {
+        "type": "range",
+        "id": "inner_padding_bottom_m",
+        "min": 0,
+        "max": 200,
+        "step": 4,
+        "unit": "px",
+        "label": "Padding Bottom",
+        "default": 0
+    },
+    {
+        "type": "range",
+        "id": "inner_padding_left_m",
+        "min": 0,
+        "max": 200,
+        "step": 4,
+        "unit": "px",
+        "label": "Padding Left",
+        "default": 0
+    },
+    {
+        "type": "range",
+        "id": "inner_padding_right_m",
+        "min": 0,
+        "max": 200,
+        "step": 4,
+        "unit": "px",
+        "label": "Padding Right",
+        "default": 0
+    },
+    {
+        "type": "header",
+        "content": "Outer Spacing Desktop"
+    },
+    {
+        "type": "range",
+        "id": "padding_top_d",
+        "min": 0,
+        "max": 200,
+        "step": 4,
+        "unit": "px",
+        "label": "Padding Top",
+        "default": 0
+    },
+    {
+        "type": "range",
+        "id": "padding_bottom_d",
+        "min": 0,
+        "max": 200,
+        "step": 4,
+        "unit": "px",
+        "label": "Padding Bottom",
+        "default": 0
+    },
+    {
+        "type": "range",
+        "id": "padding_left_d",
+        "min": 0,
+        "max": 200,
+        "step": 4,
+        "unit": "px",
+        "label": "Padding Left",
+        "default": 0
+    },
+    {
+        "type": "range",
+        "id": "padding_right_d",
+        "min": 0,
+        "max": 200,
+        "step": 4,
+        "unit": "px",
+        "label": "Padding Right",
+        "default": 0
+    },
+    {
+        "type": "header",
+        "content": "Inner Spacing Desktop"
+    },
+    {
+        "type": "range",
+        "id": "inner_padding_top_d",
+        "min": 0,
+        "max": 200,
+        "step": 4,
+        "unit": "px",
+        "label": "Padding Top",
+        "default": 0
+    },
+    {
+        "type": "range",
+        "id": "inner_padding_bottom_d",
+        "min": 0,
+        "max": 200,
+        "step": 4,
+        "unit": "px",
+        "label": "Padding Bottom",
+        "default": 0
+    },
+    {
+        "type": "range",
+        "id": "inner_padding_left_d",
+        "min": 0,
+        "max": 200,
+        "step": 4,
+        "unit": "px",
+        "label": "Padding Left",
+        "default": 0
+    },
+    {
+        "type": "range",
+        "id": "inner_padding_right_d",
+        "min": 0,
+        "max": 200,
+        "step": 4,
+        "unit": "px",
+        "label": "Padding Right",
+        "default": 0
+    }
+  ],
+  "blocks": [
+  {
+      "type": "quote",
+      "name": "Press",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "quote",
+          "label": "Quote"
+        },
+        {
+          "type": "image_picker",
+          "id": "logo",
+          "label": "Logo"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Publication"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+  {
+    "name": "Press Carousel"
+  }
+]
+}
+{% endschema %}

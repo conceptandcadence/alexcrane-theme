@@ -70,11 +70,20 @@
       padding-top: 0.5rem;
     }
   }
+
+  [data-template='index'] .header-wrapper {
+		position: absolute;
+    width: 100%;
+		transition: all 0.3s ease-in-out;
+	}
+	[data-template='index'] .header-wrapper:not(:hover) {
+    background-color: transparent !important;
+	}
 </style>
 
 {%- style -%}
   .header {
-    padding: {{ section.settings.padding_top | times: 0.5 | round: 0 }}px 3rem {{ section.settings.padding_bottom | times: 0.5 | round: 0 }}px 3rem;
+    padding: {{ section.settings.padding_top | times: 0.5 | round: 0 }}px 1.5rem {{ section.settings.padding_bottom | times: 0.5 | round: 0 }}px 1.5rem;
   }
 
   .section-header {

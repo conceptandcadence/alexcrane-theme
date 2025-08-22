@@ -74,6 +74,7 @@
 }
 
 /* Display crossed out line over swatch when input is disabled */
+
 .swatch-input__input:disabled + .swatch-input__label > .swatch::after,
 .swatch-input__input.visually-disabled + .swatch-input__label > .swatch::after {
   /* Diagonal of a square = length of the side * sqrt(2)  */
@@ -88,4 +89,26 @@
   background-color: rgb(var(--color-foreground));
   transform: rotate(-45deg);
   transform-origin: left;
+}
+
+.disabled-swatch {
+  position: relative;
+  opacity: 0.3;
+  overflow: visible;
+}
+.disabled-swatch:before {
+  position: absolute;
+  content: '';
+  left: -8px;
+  top: 50%;
+  width: calc(100% + 16px);
+  right: 0;
+  border-top: 1px solid;
+  border-color: rgb(var(--color-foreground));
+
+  -webkit-transform: rotate(-45deg);
+  -moz-transform: rotate(-45deg);
+  -ms-transform: rotate(-45deg);
+  -o-transform: rotate(-45deg);
+  transform: rotate(-45deg);
 }

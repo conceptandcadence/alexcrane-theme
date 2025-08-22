@@ -77,7 +77,7 @@
 .card-media-container {
   position: relative;
   height: 0;
-  padding-bottom: var(--ratio-percent);
+  padding-bottom: 125%; /*var(--ratio-percent);*/
   overflow: hidden;
 }
 

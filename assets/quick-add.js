@@ -47,6 +47,9 @@ if (!customElements.get('quick-add-modal')) {
             }
             if (window.ProductModel) window.ProductModel.loadShopifyXR();
 
+            // Add Rebuy widget to the modal
+            this.addRebuyWidget(responseHTML);
+
             super.show(opener);
           })
           .finally(() => {
@@ -138,6 +141,143 @@ if (!customElements.get('quick-add-modal')) {
         mediaImages.forEach((img) =>
           img.setAttribute('sizes', mediaImageSizes),
         );
+      }
+
+      addRebuyWidget(responseHTML) {
+        // Extract product ID from the fetched product page
+        const productElement = responseHTML.querySelector('product-info');
+        const productId = productElement
+          ? productElement.dataset.productId
+          : null;
+
+        if (!productId) return;
+
+        // Find the View full details link in the modal
+        const viewDetailsLink = this.modalContent.querySelector(
+          '.product__view-details',
+        );
+        if (!viewDetailsLink) return;
+
+        // Create Rebuy widget container
+        const rebuyContainer = document.createElement('div');
+        rebuyContainer.className = 'quick-add-modal__rebuy-widget';
+        rebuyContainer.innerHTML = `
+          <div class="rebuy-widget-section">
+            <h3 class="rebuy-section-title h4">You might also like</h3>
+            <div data-rebuy-id='232526' data-rebuy-shopify-product-ids='${productId}'></div>
+          </div>
+        `;
+
+        // Insert after the View full details link
+        viewDetailsLink.parentNode.insertBefore(
+          rebuyContainer,
+          viewDetailsLink.nextSibling,
+        );
+
+        // Add the Rebuy script template to the page if it doesn't exist
+        this.addRebuyScript(productId);
+
+        // Initialize Rebuy widget if available
+        if (window.rebuy && window.rebuy.render) {
+          setTimeout(() => {
+            window.rebuy.render();
+          }, 100);
+        }
+      }
+
+      addRebuyScript(productId) {
+        // Check if script already exists
+        const existingScript = document.querySelector(
+          '#rebuy-widget-modal-232526',
+        );
+        if (existingScript) return;
+
+        // Create script template for the modal
+        const script = document.createElement('script');
+        script.id = 'rebuy-widget-modal-232526';
+        script.setAttribute('data-rebuy-shopify-product-ids', productId);
+        script.type = 'text/template';
+        script.innerHTML = this.getRebuyScriptTemplate();
+
+        document.head.appendChild(script);
+      }
+
+      getRebuyScriptTemplate() {
+        return `
+          <div class="rebuy-widget rebuy-widget-modal" v-cloak v-on:click="stopPropagation($event)" v-bind:id="'rebuy-widget-modal-' + id"
+            v-bind:class="['widget-type-' + config.type.replace('_','-'), 'widget-display-' + config.display_type, products.length > 0 ? 'is-visible' : 'is-hidden']">
+            <div class="rebuy-widget-container" v-cloak
+              v-bind:class="['widget-display-' + config.display_type, visible ? 'is-visible' : 'is-hidden' ]">
+              <div class="rebuy-widget-content">
+                <div class="recommended-product-grid grid--2-col-mobile grid--3-col-tablet-up">
+                  <li class="grid__item" v-for="(product, product_index) in products.slice(0, 4)">
+                    <div class="card-wrapper product-card-wrapper"
+                      v-bind:class="[product.handle, 'product-id-' + product.id, cartHasProduct(product) ? 'cart-has-item' : '', productTagClasses(product)]">
+                      <div class="card card--card card--media gradient"
+                        v-bind:style="{ '--ratio-percent': '125%' }">
+                        <div class="card__inner ratio"
+                          v-bind:style="{ '--ratio-percent': '125%' }">
+                          <div class="card__media">
+                            <div class="card-media-carousel">
+                              <div class="card-media-container" v-bind:style="{ '--ratio-percent': '100%' }">
+                                <a class="rebuy-product-image" 
+                                  v-bind:href="learnMoreURL(product)"
+                                  v-on:click="learnMore(product);"
+                                  v-bind:class="[hasLearnMore() ? 'clickable' : '']">
+                                  <img v-bind:src="itemImage(product, product.selected_variant, '400x')"
+                                    v-bind:alt="'View ' + product.title"
+                                    class="card-media-image motion-reduce"
+                                    loading="lazy"> 
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="card__content">
+                            <div class="card__information">
+                              <h3 class="card__heading">
+                                <a class="full-unstyled-link" 
+                                  v-bind:href="learnMoreURL(product)"
+                                  v-on:click="learnMore(product);" 
+                                  v-html="product.title"
+                                  v-bind:class="[hasLearnMore() ? 'clickable' : '']"></a>
+                              </h3>
+                              <div class="price">
+                                <div class="price__container">
+                                  <div class="price__sale" v-if="variantOnSale(product, product.selected_variant)">
+                                    <span class="visually-hidden visually-hidden--inline">Regular price</span>
+                                    <span>
+                                      <s class="price-item price-item--regular" v-html="formatMoney(variantCompareAtPrice(product, product.selected_variant))"></s>
+                                    </span>
+                                    <span class="visually-hidden visually-hidden--inline">Sale price</span>
+                                    <span class="price-item price-item--sale price-item--last" v-html="formatMoney(variantPrice(product, product.selected_variant))"></span>
+                                  </div>
+                                  <div class="price__regular" v-else>
+                                    <span class="visually-hidden visually-hidden--inline">Regular price</span>
+                                    <span class="price-item price-item--regular" v-html="formatMoney(variantPrice(product, product.selected_variant))"></span>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="card__badge">
+                              <span v-if="!variantAvailable(product.selected_variant)"
+                                class="badge badge--bottom-left color-accent-1">
+                                Sold out
+                              </span>
+                              <span v-else-if="variantOnSale(product, product.selected_variant)"
+                                class="badge badge--bottom-left color-accent-2">
+                                Sale
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
       }
     },
   );

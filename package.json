@@ -9,7 +9,10 @@
     "test:ui": "playwright test --ui",
     "test:debug": "playwright test --debug",
     "test:report": "playwright show-report",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "image-sizes:audit": "node ./scripts/image-sizes-audit.mjs",
+    "image-sizes:sitemap": "node ./scripts/sitemap-to-urls.mjs",
+    "image-sizes:ci": "node ./scripts/image-sizes-audit.mjs --ci"
   },
   "repository": {
     "type": "git",
@@ -24,9 +27,11 @@
   "devDependencies": {
     "@playwright/test": "^1.40.1",
     "autoprefixer": "^10.4.4",
+    "csv-stringify": "^6.5.0",
     "dotenv": "^17.2.1",
     "husky": "^7.0.4",
     "lint-staged": "^12.3.3",
+    "p-limit": "^5.0.0",
     "postcss": "^8.4.12",
     "prettier": "^2.5.1",
     "tailwindcss": "^3.4.1"

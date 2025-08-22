@@ -31,7 +31,7 @@
           {% if section.settings.image != blank %}
 						<div class='image-with-text__media-item image-with-text__media-item--{{ section.settings.desktop_image_width }} image-with-text__media-item--{{ section.settings.desktop_content_position }} grid__item'>
             <div
-              class='image-with-text__media image-with-text__media--{{ section.settings.height }} global-media-settings{% unless remove_color_classes %} gradient color-{{ section.settings.color_scheme }}{% else %} background-transparent{% endunless %}{% if section.settings.image != blank %} media{% else %} image-with-text__media--placeholder placeholder{% endif %}{% if section.settings.image_behavior != 'none' %} animate--{{ section.settings.image_behavior }}{% endif %}'
+              class='image-with-text__media image-with-text__media--{{ section.settings.height }} global-media-settings{% unless remove_color_classes %} gradient color-{{ section.settings.color_scheme }}{% else %} background-transparent{% endunless %}{% if section.settings.image != blank %} media{% else %} image-with-text__media--placeholder placeholder{% endif %}{% if section.settings.image_behavior != 'none' %} animate--{{ section.settings.image_behavior }}{% endif %} tw-rounded-[2px]'
               {% if section.settings.height == 'adapt' and section.settings.image != blank %}
                 style='padding-bottom: {{ 1 | divided_by: section.settings.image.aspect_ratio | times: 100 }}%;'
               {% endif %}
@@ -104,42 +104,46 @@
 							id='ImageWithText--{{ section.id }}'
 							class='image-with-text__content image-with-text__content--{{ section.settings.desktop_content_position }} image-with-text__content--desktop-{{ section.settings.desktop_content_alignment }} image-with-text__content--mobile-{{ section.settings.mobile_content_alignment }} image-with-text__content--{{ section.settings.height }} content-container{% unless remove_color_classes %} gradient color-{{ section.settings.color_scheme }}{% else %} background-transparent{% endunless %}'
 						>
-							{%- for block in section.blocks -%}
-								{% case block.type %}
-									{%- when 'heading' -%}
-										<h2
-											class='image-with-text__heading inline-richtext {{ block.settings.heading_size }}'
-											{{ block.shopify_attributes }}
-										>
-											{{ block.settings.heading }}
-										</h2>
-									{%- when 'caption' -%}
-										<p
-											class='image-with-text__text image-with-text__text--caption {{ block.settings.text_style }} {{ block.settings.text_style }}--{{ block.settings.text_size }} {{ block.settings.text_style }}'
-											{{ block.shopify_attributes }}
-										>
-											{{ block.settings.caption | escape }}
-										</p>
-									{%- when 'text' -%}
-										<div class='image-with-text__text rte {{ block.settings.text_style }}' {{ block.shopify_attributes }}>
-											{{ block.settings.text }}
-										</div>
-									{%- when 'button' -%}
-										{%- if block.settings.button_label != blank -%}
-											<a
-												{% if block.settings.button_link == blank %}
-													role='link' aria-disabled='true'
-												{% else %}
-													href='{{ block.settings.button_link }}'
-												{% endif %}
-												class='button{% if block.settings.button_style_secondary %} button--secondary{% else %} button--primary{% endif %}'
+							<div class='image-with-text__content-inner {% if section.settings.image_2 == blank %}md:tw-max-w-[320px] tw-mx-auto{% endif %} tw-flex tw-flex-col tw-gap-4'>
+								{%- for block in section.blocks -%}
+									{% case block.type %}
+										{%- when 'heading' -%}
+											<div>
+												<h2
+												class='image-with-text__heading inline-richtext {{ block.settings.heading_size }} {}tw-border-b tw-border-b-black border-b-solid tw-inline-flex tw-items-center'
 												{{ block.shopify_attributes }}
 											>
-												{{ block.settings.button_label | escape }}
-											</a>
-										{%- endif -%}
-								{%- endcase -%}
-							{%- endfor -%}
+												{{ block.settings.heading }}
+											</h2>
+											</div>
+										{%- when 'caption' -%}
+											<p
+												class='image-with-text__text image-with-text__text--caption tw-text-[14px] tw-leading-[20px]'
+												{{ block.shopify_attributes }}
+											>
+												{{ block.settings.caption | escape }}
+											</p>
+										{%- when 'text' -%}
+											<div class='image-with-text__text rte image-with-text__text--caption tw-text-[14px] tw-leading-[20px]'>
+												{{ block.settings.text }}
+											</div>
+										{%- when 'button' -%}
+											{%- if block.settings.button_label != blank -%}
+												<a
+													{% if block.settings.button_link == blank %}
+														role='link' aria-disabled='true'
+													{% else %}
+														href='{{ block.settings.button_link }}'
+													{% endif %}
+													class='button{% if block.settings.button_style_secondary %} button--secondary{% else %} button--primary{% endif %}'
+													{{ block.shopify_attributes }}
+												>
+													{{ block.settings.button_label | escape }}
+												</a>
+											{%- endif -%}
+									{%- endcase -%}
+								{%- endfor -%}
+							</div>
 						</div>
 					</div>
         </div>
@@ -386,27 +390,19 @@
           "id": "heading_size",
           "options": [
             {
-              "value": "h2",
+              "value": "tw-text-[14px] tw-leading-[18px]",
               "label": "t:sections.all.heading_size.options__1.label"
             },
             {
-              "value": "h1",
+              "value": "tw-text-[18px] tw-leading-[28px]",
               "label": "t:sections.all.heading_size.options__2.label"
             },
-            {
-              "value": "h0",
+						{
+              "value": "tw-text-[24px] tw-leading-[32px]",
               "label": "t:sections.all.heading_size.options__3.label"
             },
-            {
-              "value": "hxl",
-              "label": "t:sections.all.heading_size.options__4.label"
-            },
-            {
-              "value": "hxxl",
-              "label": "t:sections.all.heading_size.options__5.label"
-            }
           ],
-          "default": "h1",
+          "default": "tw-text-[14px] tw-leading-[18px]",
           "label": "t:sections.all.heading_size.label"
         }
       ]

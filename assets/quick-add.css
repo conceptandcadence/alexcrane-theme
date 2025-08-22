@@ -6,7 +6,13 @@
 }
 
 .card--card .quick-add {
-  margin: 0 1.3rem 1rem;
+  margin: 0;
+}
+
+@media screen and (min-width: 990px) {
+  .card--card .quick-add {
+    margin: 0 1.3rem 1rem;
+  }
 }
 
 .quick-add-modal {
@@ -79,7 +85,7 @@ quick-add-modal .quick-add-modal__toggle {
 
 @media screen and (min-width: 990px) {
   .quick-add-modal__content {
-    width: 360px;
+    width: 400px;
   }
 }
 
@@ -240,8 +246,25 @@ quick-add-modal .quick-add-modal__toggle {
     margin-right: 1.5rem;
   }
 
+  .quick-add-modal__header {
+    margin-bottom: 24px;
+    margin-top: 36px;
+  }
+
   .quick-add-modal__content {
-    bottom: var(--modal-height-offset);
+    bottom: 24px;
+    right: 24px;
+    left: 24px;
+    top: 24px;
+    width: 100%;
+    margin: 0;
+    max-width: calc(100% - 48px);
+  }
+
+  .quick-add-modal__toggle {
+    top: 48px !important;
+    right: 48px !important;
+    transform: translateX(-100%) !important;
   }
 
   .quick-add-modal__content-info > * {
@@ -324,8 +347,9 @@ quick-add-modal .product__column-sticky {
   }
 
   quick-add-modal .product:not(.product--no-media) .product__info-wrapper {
-    padding-top: 16px;
+    padding-top: 0;
     padding-left: 0;
+    padding-right: 0;
     max-width: 100%;
     width: 100%;
   }
@@ -344,24 +368,21 @@ quick-add-modal .product__column-sticky {
     font-weight: 500;
   }
 
-  quick-add-modal .price .price-item {
-    font-size: 12px;
-    line-height: 15px;
-    letter-spacing: 0;
-    font-weight: 400;
+  quick-add-modal .quick-add-modal__header {
+    margin-bottom: 24px;
+    margin-top: 36px;
   }
 
   @media screen and (min-width: 990px) {
+    quick-add-modal .quick-add-modal__header {
+      margin-bottom: 24px;
+      margin-top: 36px;
+    }
     quick-add-modal .price .price-item {
       flex-direction: column;
       font-size: 17px;
       line-height: 17px;
     }
-  }
-
-  quick-add-modal .quick-add-modal__header {
-    margin-bottom: 24px;
-    margin-top: 36px;
   }
 
   quick-add-modal
@@ -383,8 +404,17 @@ quick-add-modal .product__column-sticky {
   }
 }
 
+@media screen and (max-width: 749px) {
+  quick-add-modal .price .price-item {
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: 0;
+    font-weight: 500;
+  }
+}
+
 quick-add-modal .page-width {
-  padding: 0 0 64px;
+  padding: 0 0 40px;
 }
 
 quick-add-modal .product__title > h1 {
@@ -395,6 +425,53 @@ quick-add-modal .product__title > a {
   display: block;
   text-decoration: none;
 }
+
+/* Rebuy Widget Styles in Quick Add Modal */
+.quick-add-modal__rebuy-widget {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(var(--color-foreground), 0.08);
+}
+
+.quick-add-modal__rebuy-widget .rebuy-section-title {
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.quick-add-modal__rebuy-widget .rebuy-widget {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.quick-add-modal__rebuy-widget .rebuy-widget .recommended-product-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  padding: 0;
+}
+
+@media screen and (min-width: 750px) {
+  .quick-add-modal__rebuy-widget .rebuy-widget .recommended-product-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.quick-add-modal__rebuy-widget .rebuy-widget .card {
+  margin: 0;
+}
+
+.quick-add-modal__rebuy-widget .rebuy-widget .card__content {
+  padding: 0.5rem;
+}
+
+.quick-add-modal__rebuy-widget .rebuy-widget .card__heading {
+  font-size: 0.75rem;
+  line-height: 1.2;
+}
+
+.quick-add-modal__rebuy-widget .rebuy-widget .price {
+  font-size: 0.75rem;
+}
 /*
 quick-add-modal .product__title > a:hover {
   color: rgb(var(--color-foreground));
@@ -403,6 +480,10 @@ quick-add-modal .product__title > a:hover {
   text-decoration-thickness: 0.3rem;
 }
 */
+
+quick-add-modal .product__info-container .product-form {
+  margin: 24px 0 8px;
+}
 
 quick-add-modal .product-form__buttons {
   max-width: initial;
@@ -419,10 +500,17 @@ quick-add-modal .product-form__buttons {
   align-items: center;
   justify-content: center;
   line-height: 1;
-  min-height: 40px;
+  min-height: 30px;
   transition: box-shadow 0.5s ease, opacity 0.5s ease,
     background-color 0.5s ease, width 0.5s ease;
   background-color: rgba(var(--color-button), 0.9);
+}
+
+@media screen and (min-width: 990px) {
+  .quick-add__submit {
+    height: 36px;
+    min-height: 40px;
+  }
 }
 
 .quick-add__submit:hover {
@@ -500,4 +588,10 @@ quick-add-modal .badge {
   position: absolute;
   top: 24px;
   left: 40px;
+}
+
+quick-add-modal .product-gallery-swiper-container {
+  max-width: 100%;
+  width: 100%;
+  height: auto;
 }

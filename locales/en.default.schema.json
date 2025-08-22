@@ -810,6 +810,9 @@
 											"label": "Solid button"
 									}
 							},
+							"use_advanced_commerce": {
+								"label": "Use Advanced Commerce"
+							},
 							"enable_desktop_slider": {
 									"label": "Enable carousel on desktop"
 							},
@@ -3218,6 +3221,34 @@
 							},
 							"enable_video_looping": {
 									"label": "Play video on loop"
+							},
+							"enable_autoplay": {
+									"label": "Autoplay video on load"
+							},
+							"description_text": {
+									"label": "Description",
+									"default": "Add a description for your video"
+							},
+							"content_width": {
+									"label": "Content width",
+									"options__1": {
+											"label": "25%"
+									},
+									"options__2": {
+											"label": "33%"
+									},
+									"options__3": {
+											"label": "50%"
+									},
+									"options__4": {
+											"label": "66%"
+									},
+									"options__5": {
+											"label": "75%"
+									},
+									"options__6": {
+											"label": "100%"
+									}
 							},
 							"header__1": {
 									"content": "Shopify-hosted video"

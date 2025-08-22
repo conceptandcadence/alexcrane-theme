@@ -1,0 +1,168 @@
+<div class='search-form'>
+  <form
+    action='{{ routes.search_url }}'
+    method='get'
+    role='search'
+    class='search'
+    onsubmit='return searchSubmit(event)'
+  >
+    <div class='field'>
+      <svg
+        class='Icon Icon--search'
+        xmlns='http://www.w3.org/2000/svg'
+        xmlns:xlink='http://www.w3.org/1999/xlink'
+        width='17px'
+        height='17px'
+        viewBox='0 0 17 17'
+        version='1.1'
+      >
+        <g id="Prestige" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+          <g id="Home-M-—-04" transform="translate(-256.000000, -16.000000)">
+            <g id="Group-6" transform="translate(257.000000, 17.000000)" stroke="#000000" stroke-width="1.5">
+              <circle id="Oval" cx="6" cy="6" r="6"></circle>
+              <path d="M10.4166667,10.4166667 L14.6677284,14.6677284" id="Line-3" stroke-linecap="square"></path>
+            </g>
+          </g>
+        </g>
+      </svg>
+      <label class='field__label visually-hidden' for='Search'>{{ 'general.search.title' | t }}</label>
+      <input
+        class='search__input field__input'
+        id='Search'
+        aria-label='Search'
+        type='search'
+        value='{{ search.terms | escape }}'
+        placeholder='{{ 'general.search.submit' | t }}'
+        {%- if settings.predictive_search_enabled -%}
+          role='combobox' aria-expanded='false' aria-owns='predictive-search-results-list'
+          aria-controls='predictive-search-results-list' aria-haspopup='listbox' aria-autocomplete='list'
+          autocorrect='off' autocomplete='off' autocapitalize='off' spellcheck='false'
+        {%- endif -%}
+      >
+      <button type='submit' class='search__button field__button' aria-label='Search'>
+        <svg class='Icon Icon--submit' viewBox='0 0 7 12'>
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M5.0658 5.99996L0.646409 10.4194L1.35352 11.1265L6.48002 5.99996L1.12647 0.646409L0.419358 1.35352L5.0658 5.99996Z"
+            fill="black" />
+        </svg>
+      </button>
+    </div>
+  </form>
+  <div id='Autocomplete' style='display:none'></div>
+  <script>
+    $g.autocomplete({
+      page_context: {
+        currency_id: window.theme.country_code,
+      },
+      input_selector: '#Search',
+      dropdown_selector: '#Autocomplete',
+    });
+  </script>
+  <script>
+    console.log('marketDirectory', window.theme.marketDirectory);
+    function searchSubmit(e) {
+      e.preventDefault();
+      try {
+        if (e.target[0].value) {
+          window.location.href = `${window.theme.marketDirectory}/pages/search?q=${e.target[0].value}`;
+        }
+      } catch (e) {
+        throw new Error(e.message);
+      }
+      return false;
+    }
+    if (document.querySelector(`form[action="${window.theme.marketDirectory}/pages/search"]`)) {
+      document.querySelector(`form[action="${window.theme.marketDirectory}/pages/search"]`).on('submit', function (e) {
+        e.preventDefault();
+      });
+    }
+  </script>
+  <style>
+    .instant-search-menu {
+      display: none !important;
+    }
+    #Autocomplete {
+      display: block;
+      position: fixed;
+      left: unset;
+      top: 58px;
+      right: -97px;
+      background-color: #fff;
+      width: 100vw;
+      max-width: 100%;
+    }
+    @media (min-width: 750px) {
+      #Autocomplete {
+        max-width: 66.66vw;
+        left: unset !important;
+        top: 41px !important;
+      }
+    }
+    @media (min-width: 1185px) {
+      #Autocomplete {
+        top: 63px !important;
+      }
+    }
+    @media (min-width: 1400px) {
+      #Autocomplete {
+        max-width: 50vw;
+      }
+    }
+    .search-form #Autocomplete:before {
+      content: '';
+      display: block;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      pointer-events: none;
+      transform: translateX(-100%);
+      box-shadow: 0px 6px 5px 1px #00000033;
+      z-index: -1;
+      border-top: solid 1px rgba(255, 255, 255, 0.5);
+    }
+    .search-form::focus-within #Autocomplete:before {
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+    .acs_auto_prods {
+      max-height: calc(100vh - 105px - 60px);
+      overflow: auto;
+    }
+    .nav-scrolled body.site-banner--active #Autocomplete {
+      top: 46px !important;
+    }
+    .nav-scrolled body:not(.site-banner--active) #Autocomplete {
+      top: 46px !important;
+    }
+    html:not(.nav-scrolled) body.site-banner--active #Autocomplete {
+    }
+    @media (max-width: 749px) {
+      #shopify-section-header header .site-logo {
+        z-index: 0 !important;
+      }
+      #Autocomplete {
+        right: -52px !important;
+      }
+      html:not(.nav-scrolled) body.site-banner--active #Autocomplete {
+        top: 43px !important;
+      }
+      html:not(.nav-scrolled) body:not(.site-banner--active) #Autocomplete {
+        top: 43px !important;
+      }
+      .nav-scrolled body.site-banner--active #Autocomplete {
+        top: 25px !important;
+      }
+      .nav-scrolled body:not(.site-banner--active) #Autocomplete {
+        top: 42px !important;
+      }
+    }
+    #shopify-section-header header nav ul li:hover #Autocomplete a:after {
+      content: none !important;
+    }
+    .cloud-search-mobile {
+      display: none !important;
+    }
+  </style>
+</div>

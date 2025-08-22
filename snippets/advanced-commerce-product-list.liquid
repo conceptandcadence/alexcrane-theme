@@ -1,0 +1,752 @@
+{{ 'template-collection.css' | asset_url | stylesheet_tag }}
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+
+{% if section.settings.image_shape == 'blob' %}
+  {{ 'mask-blobs.css' | asset_url | stylesheet_tag }}
+{%- endif -%}
+
+{%- unless section.settings.quick_add == 'none' -%}
+  {{ 'quick-add.css' | asset_url | stylesheet_tag }}
+{%- endunless -%}
+
+{%- if section.settings.quick_add == 'standard' -%}
+  <script src='{{ 'quick-add.js' | asset_url }}' defer='defer'></script>
+  <script src='{{ 'product-form.js' | asset_url }}' defer='defer'></script>
+{%- endif -%}
+
+{%- if section.settings.quick_add == 'bulk' -%}
+  <script src='{{ 'quick-add-bulk.js' | asset_url }}' defer='defer'></script>
+  <script src='{{ 'quantity-popover.js' | asset_url }}' defer='defer'></script>
+  <script src='{{ 'price-per-item.js' | asset_url }}' defer='defer'></script>
+  <script src='{{ 'quick-order-list.js' | asset_url }}' defer='defer'></script>
+{%- endif -%}
+
+{%- style -%}
+      .section-{{ section.id }}-padding {
+        padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+        padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+      }
+
+      @media screen and (min-width: 750px) {
+        .section-{{ section.id }}-padding {
+          padding-top: {{ section.settings.padding_top }}px;
+          padding-bottom: {{ section.settings.padding_bottom }}px;
+        }
+      }
+     .plp-actions {
+      	display: none !important;
+      }
+
+    {% if products_to_show %}
+    	#shopify-section-{{ section.id }} .grid__item:nth-child(n+{{products_to_show | plus: 1}}) {
+    		display: none !important;
+    	}
+    {% endif %}
+
+    {% if columns_mobile %}
+    	{% assign columns_mobile_int = columns_mobile | plus: 0 %}
+    	{% assign columns_mobile_width = 1.00 | divided_by: columns_mobile_int %}
+    	{% assign columns_mobile_width = columns_mobile_width | times: 100 %}
+   #shopify-section-{{ section.id }} .product-grid {
+   	column-gap: var(--grid-mobile-horizontal-spacing);
+   	row-gap: var(--grid-mobile-vertical-spacing);
+   }
+   #shopify-section-{{ section.id }} .grid__item {
+   	width: calc({{ columns_mobile_width }}% - var(--grid-mobile-horizontal-spacing) * {{ columns_mobile_int | minus: 1 }} / {{ columns_mobile_int }});
+   	max-width: calc({{ columns_mobile_width }}% - var(--grid-mobile-horizontal-spacing) * {{ columns_mobile_int | minus: 1 }} / {{ columns_mobile_int }});
+   }
+    {% endif %}
+
+    {% if columns_desktop %}
+    	{% assign columns_desktop_int = columns_desktop | plus: 0 %}
+    	{% assign columns_desktop_width = 1.00 | divided_by: columns_desktop_int %}
+    	{% assign columns_desktop_width = columns_desktop_width | times: 100 %}
+    	@media screen and (min-width: 990px) {
+   	#shopify-section-{{ section.id }} .product-grid {
+   		column-gap: var(--grid-desktop-horizontal-spacing);
+   		row-gap: var(--grid-desktop-vertical-spacing);
+   	}
+    		#shopify-section-{{ section.id }} .grid__item {
+    			width: calc({{ columns_desktop_width }}% - var(--grid-desktop-horizontal-spacing) * {{ columns_desktop_int | minus: 1 }} / {{ columns_desktop_int }});
+         max-width: calc({{ columns_desktop_width }}% - var(--grid-desktop-horizontal-spacing) * {{ columns_desktop_int | minus: 1 }} / {{ columns_desktop_int }});
+   	}
+    	}
+    {% endif %}
+   @media screen and (max-width: 749px) {
+  .primary {
+   		flex-direction: row;
+   		width: 100%;
+   		justify-content: space-between;
+   	}
+   	.secondary {
+   		flex-direction: row;
+   		width: 100%;
+   		justify-content: space-between;
+  	margin-top: 8px !important;
+   	}
+   .card__information {
+   	flex-direction: column !important;
+   }
+  .card-information {
+  	display: none !important;
+  }
+   }
+{%- endstyle -%}
+
+<!-- Card Media Carousel CSS -->
+<style>
+  /* Card Media Carousel Styles */
+  .card-media-carousel {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .card-media-carousel.has-multiple-media .card-media-static {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    transition: opacity 0.3s ease;
+  }
+
+  .card:hover .card-media-carousel.has-multiple-media .card-media-static {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .card-slider.swiper {
+    width: 100%;
+    height: 100%;
+    position: relative;
+  }
+
+  .card-media-list.swiper-wrapper {
+    display: flex;
+    align-items: flex-start;
+  }
+
+  .card-media-item.swiper-slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    flex-shrink: 0;
+  }
+
+  .card-media-container {
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%; /* 1:1 aspect ratio */
+    overflow: hidden;
+  }
+
+  .card-media-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  /* Navigation Buttons */
+  .card-slider-buttons {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 10;
+  }
+
+  .card:hover .card-slider-buttons,
+  .tw-group:hover .card-slider-buttons {
+    opacity: 1;
+  }
+
+  .card-slider-button {
+    background: transparent;
+    border: none;
+    border-radius: 50%;
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    pointer-events: auto;
+    transition: all 0.3s ease;
+    margin: 0 1rem;
+    z-index: 2;
+    color: rgb(var(--color-foreground));
+  }
+
+  .card-slider-button:hover {
+    background: rgba(255, 255, 255, 0.5);
+    transform: scale(1.1);
+  }
+
+  /* Dots Navigation */
+  .card-slider-dots {
+    position: absolute;
+    bottom: 0.75rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 0.375rem;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 3;
+  }
+
+  .card:hover .card-slider-dots,
+  .tw-group:hover .card-slider-dots {
+    opacity: 1;
+  }
+
+  .card-slider-dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    padding: 0;
+  }
+
+  .card-slider-dot--active {
+    background: rgba(255, 255, 255, 1);
+    border-color: rgba(255, 255, 255, 1);
+    transform: scale(1.2);
+  }
+
+  /* Responsive carousel control visibility */
+  @media screen and (max-width: 749px) {
+    .card-slider-buttons,
+    .card-slider-dots {
+      display: var(--mobile-carousel-controls, none);
+    }
+  }
+
+  @media screen and (min-width: 750px) {
+    .card-slider-buttons,
+    .card-slider-dots {
+      display: var(--desktop-carousel-controls, none);
+    }
+  }
+
+  /* Dawn Theme Card Classes */
+  .card--standard {
+    background: transparent;
+  }
+
+  .card--media {
+    text-align: center;
+  }
+
+  .card--extend-height {
+    height: 100%;
+  }
+
+  .tw-group {
+    position: relative;
+  }
+
+  /* Product Swatch Styles */
+  .product-swatch-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: transparent;
+    padding: 2px;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    width: 18px;
+    height: 12px;
+    overflow: hidden;
+  }
+
+  .product-swatch-button:hover {
+    transform: scale(1.1);
+  }
+
+  .product-swatch-item img {
+    border-radius: 1px;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+</style>
+
+<div class='section-{{ section.id }}-padding gradient color-{{ section.settings.color_scheme }}'>
+  {%- paginate collection.products by section.settings.products_per_page -%}
+    <div class='{% if section.settings.filter_type == 'vertical' %} facets-vertical page-width{% endif %}'>
+      <div
+        class='product-grid-container{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}'
+        id='ProductGridContainer'
+        {% if settings.animations_reveal_on_scroll %}
+          data-cascade
+        {% endif %}
+      >
+        {%- if collection.products.size == 0 -%}
+          <div
+            class='collection collection--empty page-width'
+            id='product-grid-{{ section.id }}'
+            data-id='{{ section.id }}'
+          >
+            <div class='loading-overlay gradient'></div>
+            <div class='title-wrapper center'>
+              <h2 class='title title--primary'>
+                {{ 'sections.collection_template.empty' | t -}}
+                <br>
+                {{
+                  'sections.collection_template.use_fewer_filters_html'
+                  | t: link: collection.url, class: 'underlined-link link'
+                }}
+              </h2>
+            </div>
+          </div>
+        {%- else -%}
+          <div
+            class='collection'
+          >
+            <div class='loading-overlay gradient'></div>
+            <div id='Results-{{ section.id }}'></div>
+            <script>
+              // Enhanced GrapheneHC configuration with carousel settings
+              const grapheneConfig = {
+                page_context: {
+                  currency_id: window.theme.country_code,
+                  category_id: {{ collection.id | json }},
+                  page: { size: {{ products_to_show | default: 4 }} }
+                },
+                template: {
+                  id: 'category',
+                  target: '#Results-{{ section_id | default: section.id }}',
+                  params: {
+                    page_size: {{ products_to_show | default: 4 }},
+                    carousel_settings: {
+                      swipe_on_mobile: {{ swipe_on_mobile | default: false }},
+                      enable_desktop_slider: {{ enable_desktop_slider | default: false }},
+                      columns_mobile: {{ columns_mobile | default: 2 }},
+                      columns_desktop: {{ columns_desktop | default: 4 }}
+                    }
+                  }
+                }
+              };
+
+              // Store carousel settings globally for GrapheneHC carousel manager
+              window.grapheneCarouselSettings = window.grapheneCarouselSettings || {};
+              window.grapheneCarouselSettings['{{ section_id | default: section.id }}'] = {
+                swipe_on_mobile: {{ swipe_on_mobile | default: false }},
+                enable_desktop_slider: {{ enable_desktop_slider | default: false }},
+                columns_mobile: {{ columns_mobile | default: 2 }},
+                columns_desktop: {{ columns_desktop | default: 4 }}
+              };
+
+              $g.load(grapheneConfig);
+            </script>
+
+            <!-- Swiper CSS and JS for GrapheneHC Carousels -->
+            <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css'>
+            <script src='https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js' defer></script>
+            {{ 'component-card-media-carousel.css' | asset_url | stylesheet_tag }}
+            {{ 'quick-add.css' | asset_url | stylesheet_tag }}
+            <script src='{{ 'swatch-quick-add.js' | asset_url }}' defer='defer'></script>
+
+            <!-- GrapheneHC Carousel Manager -->
+            <script>
+              (function () {
+                'use strict';
+
+                console.log('🎠 GrapheneHC Carousel Manager Loading...');
+
+                // Wait for Swiper to load with multiple fallback strategies
+                function waitForSwiper(callback, attempts = 0, maxAttempts = 20) {
+                  if (window.Swiper && typeof window.Swiper === 'function') {
+                    console.log('✅ Swiper loaded successfully');
+                    callback();
+                    return;
+                  }
+
+                  if (attempts >= maxAttempts) {
+                    console.error('❌ Failed to load Swiper after max attempts');
+                    return;
+                  }
+
+                  console.log(`🔍 Swiper check attempt ${attempts + 1}: ${typeof window.Swiper}`);
+
+                  // Try alternative CDN at attempt 10
+                  if (attempts === 10) {
+                    console.log('🔄 Trying alternative Swiper CDN...');
+                    const script = document.createElement('script');
+                    script.src = 'https://unpkg.com/swiper@11/swiper-bundle.min.js';
+                    script.onload = () => {
+                      console.log('✅ Alternative Swiper CDN loaded');
+                    };
+                    document.head.appendChild(script);
+                  }
+
+                  setTimeout(() => waitForSwiper(callback, attempts + 1, maxAttempts), 300);
+                }
+
+                // Card Media Carousel Manager
+                class GrapheneCarouselManager {
+                  constructor() {
+                    this.carousels = new Map();
+                    this.observer = null;
+                    console.log('📝 GrapheneCarouselManager instance created');
+                  }
+
+                  init() {
+                    // Wait for Swiper, then start watching for content
+                    waitForSwiper(() => {
+                      console.log('🚀 Starting GrapheneHC content monitoring...');
+                      this.startContentMonitoring();
+                      this.setupExistingCarousels();
+                    });
+                  }
+
+                  startContentMonitoring() {
+                    // Watch for changes in the #Results div
+                    const resultsDiv = document.getElementById('Results');
+                    if (!resultsDiv) {
+                      console.log('⚠️ #Results div not found, retrying...');
+                      setTimeout(() => this.startContentMonitoring(), 1000);
+                      return;
+                    }
+
+                    console.log('👀 Monitoring #Results for GrapheneHC content...');
+
+                    // Create mutation observer to watch for new content
+                    this.observer = new MutationObserver((mutations) => {
+                      let shouldReinitialize = false;
+
+                      mutations.forEach((mutation) => {
+                        if (mutation.type === 'childList') {
+                          // Check for any added nodes (including complete content replacement)
+                          if (mutation.addedNodes.length > 0) {
+                            mutation.addedNodes.forEach((node) => {
+                              if (node.nodeType === 1) {
+                                // Element node - check if it contains carousel elements
+                                if (
+                                  node.classList?.contains('card-media-carousel') ||
+                                  node.querySelector?.('.card-media-carousel') ||
+                                  node.classList?.contains('product-card-wrapper') ||
+                                  node.querySelector?.('.product-card-wrapper') ||
+                                  // Check for GrapheneHC product listings
+                                  node.tagName === 'UL' ||
+                                  node.querySelector?.('ul') ||
+                                  node.querySelector?.('li')
+                                ) {
+                                  shouldReinitialize = true;
+                                  console.log('🔄 Content change detected:', node.tagName, node.classList);
+                                }
+                              }
+                            });
+                          }
+
+                          // Also check for removed nodes (content replacement)
+                          if (mutation.removedNodes.length > 0) {
+                            mutation.removedNodes.forEach((node) => {
+                              if (
+                                node.nodeType === 1 &&
+                                (node.classList?.contains('card-media-carousel') ||
+                                  node.querySelector?.('.card-media-carousel') ||
+                                  node.tagName === 'UL' ||
+                                  node.querySelector?.('ul'))
+                              ) {
+                                shouldReinitialize = true;
+                                console.log('🗑️ Content removal detected:', node.tagName, node.classList);
+                              }
+                            });
+                          }
+                        }
+                      });
+
+                      if (shouldReinitialize) {
+                        console.log('🎠 Content change detected - reinitializing carousels!');
+                        // Clear existing carousels first
+                        this.destroyAllCarousels();
+                        // Reinitialize after a short delay to ensure DOM is ready
+                        setTimeout(() => this.setupExistingCarousels(), 200);
+                      }
+                    });
+
+                    this.observer.observe(resultsDiv, {
+                      childList: true,
+                      subtree: true,
+                    });
+                  }
+
+                  setupExistingCarousels() {
+                    const carouselElements = document.querySelectorAll('.card-media-carousel.has-multiple-media');
+                    console.log(`🔍 Found ${carouselElements.length} carousel elements to set up`);
+
+                    carouselElements.forEach((carouselElement, index) => {
+                      console.log(`🎠 Setting up carousel ${index + 1}/${carouselElements.length}`);
+                      this.setupCarousel(carouselElement);
+                    });
+
+                    console.log(`✅ Carousel setup complete: ${this.carousels.size} carousels initialized`);
+                  }
+
+                  setupCarousel(carouselElement) {
+                    const productId = carouselElement.getAttribute('data-product-id');
+                    const cardId = carouselElement.getAttribute('data-card-id');
+                    const carouselId = `${cardId}-${productId}`;
+
+                    // Check if already initialized
+                    if (this.carousels.has(carouselId)) {
+                      return;
+                    }
+
+                    const swiperElement = carouselElement.querySelector('.card-slider.swiper');
+                    const hasMultipleMedia = carouselElement.classList.contains('has-multiple-media');
+
+                    if (!swiperElement) {
+                      return;
+                    }
+
+                    // Get carousel settings for this section
+                    const sectionId = this.getCurrentSectionId(carouselElement);
+                    const settings = window.grapheneCarouselSettings?.[sectionId] || {};
+
+                    // Determine if carousel should be enabled based on settings
+                    const isDesktop = window.matchMedia('(min-width: 750px)').matches;
+                    const shouldEnableCarousel =
+                      hasMultipleMedia &&
+                      ((!isDesktop && settings.swipe_on_mobile) || (isDesktop && settings.enable_desktop_slider));
+
+                    // Get navigation elements
+                    const prevButton = carouselElement.querySelector('.card-slider-button--prev');
+                    const nextButton = carouselElement.querySelector('.card-slider-button--next');
+                    const dots = carouselElement.querySelectorAll('.card-slider-dot');
+
+                    // Capture manager reference for callbacks
+                    const manager = this;
+
+                    // Initialize Swiper with debugging
+                    console.log(`🎯 Initializing Swiper for carousel: ${carouselId}`, {
+                      shouldEnableCarousel,
+                      settings,
+                      isDesktop,
+                    });
+
+                    let swiper;
+                    try {
+                      swiper = new window.Swiper(swiperElement, {
+                        slidesPerView: 1,
+                        spaceBetween: 0,
+                        loop: shouldEnableCarousel && carouselElement.querySelectorAll('.swiper-slide').length > 1,
+                        touchRatio: shouldEnableCarousel ? 1 : 0,
+                        allowTouchMove: shouldEnableCarousel,
+                        grabCursor: shouldEnableCarousel,
+                        resistance: true,
+                        resistanceRatio: 0.85,
+                        initialSlide: shouldEnableCarousel ? 1 : 0,
+                        navigation: shouldEnableCarousel
+                          ? {
+                              nextEl: nextButton,
+                              prevEl: prevButton,
+                            }
+                          : false,
+                        pagination:
+                          shouldEnableCarousel && dots.length > 0
+                            ? {
+                                el: carouselElement.querySelector('.card-slider-dots'),
+                                clickable: true,
+                                bulletClass: 'card-slider-dot',
+                                bulletActiveClass: 'card-slider-dot--active',
+                                renderBullet: function (index, className) {
+                                  return `<button type="button" class="${className}" aria-label="Go to slide ${
+                                    index + 1
+                                  }"></button>`;
+                                },
+                              }
+                            : false,
+                        on: {
+                          slideChange: function () {
+                            manager.updateButtonStates(carouselId, this);
+                          },
+                        },
+                      });
+                      console.log(`✅ Swiper initialized successfully for ${carouselId}`);
+                    } catch (error) {
+                      console.error(`❌ Failed to initialize Swiper for ${carouselId}:`, error);
+                      return;
+                    }
+
+                    // Store carousel state
+                    const state = {
+                      element: carouselElement,
+                      swiper: swiper,
+                      prevButton: prevButton,
+                      nextButton: nextButton,
+                      dots: dots,
+                    };
+
+                    this.carousels.set(carouselId, state);
+
+                    // Set CSS custom properties for responsive control visibility
+                    const mobileDisplay = settings.swipe_on_mobile ? 'flex' : 'none';
+                    const desktopDisplay = settings.enable_desktop_slider ? 'flex' : 'none';
+                    carouselElement.style.setProperty('--mobile-carousel-controls', mobileDisplay);
+                    carouselElement.style.setProperty('--desktop-carousel-controls', desktopDisplay);
+
+                    // Create swipe zones for better UX
+                    this.createSwipeZones(carouselElement, swiper);
+                  }
+
+                  createSwipeZones(carouselElement, swiper) {
+                    // Create left and right swipe zones
+                    const leftZone = document.createElement('div');
+                    const rightZone = document.createElement('div');
+
+                    Object.assign(leftZone.style, {
+                      position: 'absolute',
+                      top: '0',
+                      left: '0',
+                      width: '30%',
+                      height: '100%',
+                      zIndex: '5',
+                      cursor: 'grab',
+                      pointerEvents: 'none',
+                    });
+
+                    Object.assign(rightZone.style, {
+                      position: 'absolute',
+                      top: '0',
+                      right: '0',
+                      width: '30%',
+                      height: '100%',
+                      zIndex: '5',
+                      cursor: 'grab',
+                      pointerEvents: 'none',
+                    });
+
+                    // Create center product link zone
+                    const productLinkArea = document.createElement('div');
+                    Object.assign(productLinkArea.style, {
+                      position: 'absolute',
+                      top: '0',
+                      left: '30%',
+                      width: '40%',
+                      height: '100%',
+                      zIndex: '4',
+                      cursor: 'pointer',
+                      pointerEvents: 'auto',
+                      background: 'transparent',
+                    });
+
+                    // Handle click on product link area
+                    productLinkArea.addEventListener('click', function (e) {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      const productLink = carouselElement.closest('.card').querySelector('.card__heading a');
+                      if (productLink) {
+                        window.location.href = productLink.href;
+                      }
+                    });
+
+                    carouselElement.appendChild(leftZone);
+                    carouselElement.appendChild(rightZone);
+                    carouselElement.appendChild(productLinkArea);
+                  }
+
+                  updateButtonStates(carouselId, swiper) {
+                    const state = this.carousels.get(carouselId);
+                    if (!state) return;
+
+                    const { prevButton, nextButton, dots } = state;
+
+                    // Update button states
+                    if (prevButton) {
+                      prevButton.disabled = swiper.isBeginning && !swiper.params.loop;
+                    }
+                    if (nextButton) {
+                      nextButton.disabled = swiper.isEnd && !swiper.params.loop;
+                    }
+
+                    // Update dot states
+                    if (dots.length > 0) {
+                      dots.forEach((dot, index) => {
+                        if (index === swiper.realIndex) {
+                          dot.classList.add('card-slider-dot--active');
+                        } else {
+                          dot.classList.remove('card-slider-dot--active');
+                        }
+                      });
+                    }
+                  }
+
+                  getCurrentSectionId(carouselElement) {
+                    // Try to find the section ID from the closest Results div
+                    let element = carouselElement;
+                    while (element && element !== document.body) {
+                      if (element.id && element.id.startsWith('Results-')) {
+                        return element.id.replace('Results-', '');
+                      }
+                      element = element.parentElement;
+                    }
+
+                    // Fallback to the first available section settings
+                    return Object.keys(window.grapheneCarouselSettings || {})[0] || '';
+                  }
+
+                  destroyAllCarousels() {
+                    console.log(`🧹 Destroying ${this.carousels.size} existing carousels...`);
+
+                    // Destroy all existing Swiper instances
+                    this.carousels.forEach((state, carouselId) => {
+                      if (state.swiper) {
+                        try {
+                          state.swiper.destroy(true, true);
+                          console.log(`✅ Destroyed carousel: ${carouselId}`);
+                        } catch (error) {
+                          console.warn(`⚠️ Error destroying carousel ${carouselId}:`, error);
+                        }
+                      }
+                    });
+
+                    // Clear the carousels map
+                    this.carousels.clear();
+                    console.log('🧹 All carousels destroyed and cleared');
+                  }
+                }
+
+                // Initialize the carousel manager
+                window.GrapheneCarouselManager = new GrapheneCarouselManager();
+
+                // Start initialization when DOM is ready
+                if (document.readyState === 'loading') {
+                  document.addEventListener('DOMContentLoaded', () => {
+                    window.GrapheneCarouselManager.init();
+                  });
+                } else {
+                  window.GrapheneCarouselManager.init();
+                }
+              })();
+            </script>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  {%- endpaginate -%}
+</div>

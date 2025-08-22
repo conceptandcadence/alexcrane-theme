@@ -71,7 +71,7 @@ product-info {
   }
 
   .product--large:not(.product--no-media) .product__info-wrapper {
-    padding: 0 0 0 4rem;
+    padding: 0 4rem 0 0;
     max-width: 35%;
     width: calc(35% - var(--grid-desktop-horizontal-spacing) / 2);
   }
@@ -238,6 +238,10 @@ product-info {
   margin: 12px 0;
 }
 
+.product__info-container .product-form {
+  margin: 32px 0 24px;
+}
+
 .product__text {
   margin-bottom: 0;
 }
@@ -299,7 +303,7 @@ a.product__text {
   }
 
   .product__info-container .price--on-sale .price-item--regular {
-    font-size: 1.6rem;
+    font-size: 1.4rem;
   }
 
   .product__info-container > *:first-child {
@@ -370,7 +374,7 @@ a.product__text {
 }
 
 .product-form__buttons {
-  max-width: 44rem;
+  max-width: 50rem;
 }
 
 .product--no-media .product__info-container > modal-opener {
@@ -393,9 +397,12 @@ a.product__text {
 
 @media screen and (max-width: 749px) {
   .product__media-list {
-    margin-left: -2.5rem;
-    margin-bottom: 3rem;
-    width: calc(100% + 4rem);
+    margin-left: 0;
+    margin-bottom: 12px;
+    width: 100%;
+  }
+  product-info {
+    padding-top: 0 !important;
   }
 
   .product__media-wrapper slider-component:not(.thumbnail-slider--no-slide) {
@@ -583,7 +590,7 @@ a.product__text {
 }
 
 .product__media-toggle {
-  display: none !important;
+  position: relative;
   display: flex;
   border: none;
   background-color: transparent;
@@ -888,7 +895,7 @@ a.product__text {
 }
 
 .product-popup-modal__button {
-  font-size: 1.6rem;
+  font-size: 1.4rem;
   padding-right: 1.3rem;
   padding-left: 0;
   min-height: 4.4rem;
@@ -952,6 +959,15 @@ a.product__text {
 .thumbnail-list {
   flex-wrap: wrap;
   grid-gap: 16px;
+}
+@media screen and (max-width: 749px) {
+  .thumbnail-list {
+    flex-wrap: wrap;
+    grid-gap: 0;
+  }
+  .product__media-wrapper {
+    margin-bottom: 16px;
+  }
 }
 
 /* Fix to show some space at the end of our sliders in all browsers to be applied on thumbnails */
@@ -1017,7 +1033,7 @@ a.product__text {
 
 @media screen and (min-width: 750px) {
   .product--thumbnail_slider .thumbnail-slider {
-    --thumbnail-width: 120px; /*7.5vw;*/
+    --thumbnail-width: 8.275vw;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1080,8 +1096,7 @@ a.product__text {
 }
 
 .thumbnail[aria-current] {
-  box-shadow: 0 0 0rem 0.1rem rgb(var(--color-foreground));
-  border-color: rgb(var(--color-foreground));
+  border: 1px solid rgb(var(--color-foreground));
 }
 
 .image-magnify-full-size {
@@ -1446,7 +1461,7 @@ a.product__text {
 
 .recipient-checkbox {
   flex-grow: 1;
-  font-size: 1.6rem;
+  font-size: 1.4rem;
   display: flex;
   word-break: break-word;
   align-items: flex-start;
@@ -1565,15 +1580,67 @@ a.product__text {
   letter-spacing: 0;
   font-weight: 500;
 }
-
+/*
+@media screen and (min-width: 990px) {
+	.product__description * {
+		font-size: 14px;
+		line-height: 17px;
+	}
+}
+*/
 .product-header .price .price-item {
   font-size: 18px;
   line-height: 24px;
+  font-weight: 500;
 }
 
 @media screen and (min-width: 990px) {
   .product-header .price .price-item {
-    font-size: 20px;
-    line-height: 32px;
+    font-size: 18px;
+    line-height: 24px;
   }
+}
+
+.product-breadcrumbs ol li:not(:last-child):after {
+  content: '›';
+  padding: 0 2px;
+  color: var(--color-grey-medium);
+}
+
+.yotpo.bottomLine .yotpo-bottomline .yotpo-icon-star {
+  color: rgba(var(--color-button), var(--alpha-button-background));
+}
+
+.yotpo .yotpo-icon-default-star:before,
+.yotpo .yotpo-icon-star:before {
+  font-size: 14px !important;
+  color: rgb(var(--color-blue)) !important;
+}
+
+.reviews-overview__star-icon {
+  color: rgb(var(--color-blue)) !important;
+}
+
+.product .rating-star {
+  --letter-spacing: 0.25 !important;
+}
+.yotpo.bottomLine {
+  position: relative;
+}
+.yotpo.bottomLine a {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  opacity: 0;
+}
+.yotpo.bottomLine:before {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-40%) translateX(-120%);
+  content: attr(data-count, 0);
+  font-size: 10px;
+  color: #767676;
 }

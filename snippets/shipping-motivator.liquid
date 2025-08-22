@@ -1,0 +1,54 @@
+<div
+  class='shipping-motivator tw-absolute tw-top-0 tw-left-0 tw-right-0 tw-bottom-0'
+  role='region'
+  aria-label='{{ 'sections.header.announcement' | t }}'
+  data-progress-message='{{ section.settings.progress_message_template }}'
+  data-complete-message='{{ section.settings.complete_message_template }}'
+>
+  <div class='shipping-motivator__progress tw-absolute tw-top-0 tw-left-0 tw-right-0 tw-bottom-0'>
+    <div class='shipping-motivator__bar tw-h-full tw-w-full tw-bg-blue-500'>
+      <div class='shipping-motivator__bar-inner tw-h-full tw-w-1/2 tw-bg-red-500'>
+        <span class='tw-sr-only'> Progress </span>
+      </div>
+    </div>
+  </div>
+</div>
+<div class='goals'>
+  {% for block in section.blocks %}
+    {% if block.type == 'goal_discount' %}
+      <div
+        class='goal-discount'
+        aria-label='{{ goal_title }}'
+        data-goal-value='{{ block.settings.goal_value }}'
+        data-goal-title='{{ block.settings.goal_title }}'
+        data-goal-message='{{ block.settings.goal_complete_msg }}'
+        data-goal-countries='{{ block.settings.goal_countries }}'
+        {{ block.shopify_attributes }}
+      ></div>
+    {% endif %}
+    {% if block.type == 'goal_gwp_product' %}
+      <div
+        class='goal-discount'
+        aria-label='{{ goal_title }}'
+        data-goal-value='{{ block.settings.goal_value }}'
+        data-goal-title='{{ block.settings.goal_title }}'
+        data-goal-message='{{ block.settings.goal_complete_msg }}'
+        data-goal-product='{{ block.settings.goal_product }}'
+        data-goal-countries='{{ block.settings.goal_countries }}'
+        {{ block.shopify_attributes }}
+      ></div>
+    {% endif %}
+    {% if block.type == 'goal_gwp_product' %}
+      <div
+        class='goal-discount'
+        aria-label='{{ goal_title }}'
+        data-goal-value='{{ block.settings.goal_value }}'
+        data-goal-title='{{ block.settings.goal_title }}'
+        data-goal-message='{{ block.settings.goal_complete_msg }}'
+        data-goal-collection='{{ block.settings.goal_collection }}'
+        data-goal-countries='{{ block.settings.goal_countries }}'
+        {{ block.shopify_attributes }}
+      ></div>
+    {% endif %}
+  {% endfor %}
+</div>

@@ -96,7 +96,7 @@
            --color-badge-background: var(--color-blue);
            --color-badge-border: {{ scheme.settings.text.red }},{{ scheme.settings.text.green }},{{ scheme.settings.text.blue }};
            --payment-terms-background-color: rgb({{ scheme.settings.background.rgb }});
-      --color-grey: #CCCCCC;
+      --color-grey: #ececec;
          }
          {% endfor %}
 
@@ -187,7 +187,7 @@
            --grid-desktop-vertical-spacing: {{ settings.spacing_grid_vertical }}px;
            --grid-desktop-horizontal-spacing: {{ settings.spacing_grid_horizontal }}px;
            --grid-mobile-vertical-spacing: {{ settings.spacing_grid_vertical | divided_by: 2 }}px;
-           --grid-mobile-horizontal-spacing: {{ settings.spacing_grid_horizontal | divided_by: 2 }}px;
+           --grid-mobile-horizontal-spacing: {{ settings.spacing_grid_horizontal | divided_by: 3 }}px;
 
            --text-boxes-border-opacity: {{ settings.text_boxes_border_opacity | divided_by: 100.0 }};
            --text-boxes-border-width: {{ settings.text_boxes_border_thickness }}px;
@@ -258,7 +258,7 @@
 
          @media screen and (min-width: 750px) {
            body {
-             font-size: 1.6rem;
+             font-size: 1.4rem;
            }
          }
     {% endstyle %}
@@ -339,9 +339,114 @@
       })(window, document, 'script', 'dataLayer', 'GTM-WGZP6CR');
     </script>
     <!-- End Google Tag Manager -->
+    <script>
+      (function () {
+        if (window.jQuery) return; // don't override if jQuery exists
+
+        function $(selector) {
+          // very small selector resolver
+          const elements =
+            typeof selector === 'string'
+              ? document.querySelectorAll(selector)
+              : selector instanceof Node
+              ? [selector]
+              : selector instanceof Window
+              ? [selector]
+              : selector && selector.length
+              ? selector
+              : [document]; // default to document if odd usage
+
+          // helper
+          const isFn = (f) => typeof f === 'function';
+
+          // normalize .one(...) like jQuery
+          function addOne(el, type, selector, handler) {
+            if (!isFn(handler)) return; // no-op if no handler found
+            // jQuery 'ready' → DOMContentLoaded on document
+            const t = type === 'ready' && (el === document || el === window) ? 'DOMContentLoaded' : type;
+            const wrapped = function (e) {
+              if (selector) {
+                // simple delegated check
+                if (!e.target || !e.target.closest || !e.target.closest(selector)) return;
+              }
+              handler.call(el, e);
+            };
+            try {
+              el.addEventListener(t, wrapped, { once: true });
+            } catch (err) {
+              // event namespace like "click.ns" → strip namespace
+              el.addEventListener(t.split('.')[0], wrapped, { once: true });
+            }
+          }
+
+          function parseAndAttachOnce(args) {
+            // Signatures we’ll support:
+            // .one(events [, selector] [, data], handler)
+            // .one(events [, data], handler)
+            // .one({ event: handler, ... })
+            // events can be space-separated and namespaced
+            if (typeof args[0] === 'object' && !Array.isArray(args[0])) {
+              // event map: .one({ click: fn, mouseenter: fn })
+              const map = args[0];
+              elements.forEach((el) => {
+                for (const key in map) {
+                  const handler = map[key];
+                  key
+                    .trim()
+                    .split(/\s+/)
+                    .forEach((evt) => addOne(el, evt.split('.')[0], null, handler));
+                }
+              });
+              return;
+            }
+
+            const events = String(args[0] || '');
+            // find selector (string) and handler (function) among remaining args
+            let selectorStr = null,
+              handler = null;
+            for (let i = 1; i < args.length; i++) {
+              if (typeof args[i] === 'string' && selectorStr == null) selectorStr = args[i];
+              if (isFn(args[i])) handler = args[i];
+            }
+
+            if (!isFn(handler)) {
+              // Prevent the "handler.call is not a function" crash; jQuery would error silently
+              if (window.console && console.warn) {
+                console.warn('[mini-$] $.one called without a function handler. No-op.');
+              }
+              return;
+            }
+
+            const evts = events.trim().split(/\s+/).filter(Boolean);
+            elements.forEach((el) => {
+              evts.forEach((evt) => addOne(el, evt.split('.')[0], selectorStr, handler));
+            });
+          }
+
+          return {
+            one: function () {
+              parseAndAttachOnce(arguments);
+              return this;
+            },
+          };
+        }
+
+        window.jQuery = window.$ = $;
+      })();
+    </script>
+    <script
+      src='https://navidium-static-assets.s3.amazonaws.com/navidium-widgets/extension/navidium-extension-checker.js'
+      defer
+    ></script>
   </head>
 
-  <body class='gradient{% if settings.animations_hover_elements != 'none' %} animate--hover-{{ settings.animations_hover_elements }}{% endif %}'>
+  <body
+    class='gradient{% if settings.animations_hover_elements != 'none' %} animate--hover-{{ settings.animations_hover_elements }}{% endif %}'
+    data-template='{{ template.name }}'
+    {% if template.suffix != blank %}
+      data-suffix='{{ template.suffix }}'
+    {% endif %}
+  >
     <a class='skip-to-content-link button visually-hidden' href='#MainContent'>
       {{ 'accessibility.skip_to_text' | t }}
     </a>
@@ -409,7 +514,7 @@
     </script>
 
     {%- render 'graphenehc-autocomplete' -%}
-
+    {% render 'navidium-scripts' %}
     {%- if settings.predictive_search_enabled -%}
       <script src='{{ 'predictive-search.js' | asset_url }}' defer='defer'></script>
     {%- endif -%}

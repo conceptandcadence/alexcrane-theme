@@ -102,12 +102,15 @@
 }
 
 .collapsible-content summary:hover {
-  background: rgba(var(--color-foreground), 0.04);
+  /* background: rgba(var(--color-foreground), 0.04); */
+}
+
+.collapsible-content summary .accordion__title {
+  transition: all 0.3s ease-in-out;
 }
 
 .collapsible-content summary:hover .accordion__title {
-  text-decoration: underline;
-  text-underline-offset: 0.3rem;
+  transform: translateX(4px);
 }
 
 /* check for flexbox gap in older Safari versions */

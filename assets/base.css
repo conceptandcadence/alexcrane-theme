@@ -83,6 +83,12 @@
   padding: 0 1.5rem;
 }
 
+.page-width-inset {
+  max-width: calc(var(--page-width) - 7.5%);
+  margin: 0 auto;
+  padding: 0 7.5%;
+}
+
 .page-width--nomax {
   max-width: 100%;
 }
@@ -136,7 +142,7 @@ body:has(.section-header .drawer-menu) .announcement-bar-section .page-width {
   }
 
   .page-width--narrow {
-    max-width: 72.6rem;
+    max-width: 85rem;
     padding: 0;
   }
 
@@ -492,7 +498,7 @@ h6:empty {
   background-color: transparent;
   font-size: 12px;
   font-family: inherit;
-  font-weight: 500;
+  font-weight: 400;
   letter-spacing: 0;
 }
 
@@ -883,7 +889,7 @@ summary::-webkit-details-marker {
 }
 
 .subtitle--medium {
-  font-size: 1.6rem;
+  font-size: 1.4rem;
   letter-spacing: 0;
 }
 
@@ -893,6 +899,22 @@ summary::-webkit-details-marker {
   flex-wrap: wrap;
   margin-bottom: 2rem;
   padding: 0;
+  list-style: none;
+  column-gap: var(--grid-mobile-horizontal-spacing);
+  row-gap: var(--grid-mobile-vertical-spacing);
+}
+
+@media screen and (min-width: 750px) {
+  .grid-4-up {
+    column-gap: calc(var(--grid-desktop-horizontal-spacing) * 0.5);
+    row-gap: var(--grid-desktop-vertical-spacing);
+  }
+}
+
+.grid--p {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
   list-style: none;
   column-gap: var(--grid-mobile-horizontal-spacing);
   row-gap: var(--grid-mobile-vertical-spacing);
@@ -1606,7 +1628,7 @@ details[open] > .share-button__fallback {
   font-family: var(--font-body-family);
   font-style: var(--font-body-style);
   font-weight: var(--font-body-weight);
-  font-size: 1.6rem;
+  font-size: 1.4rem;
   width: 100%;
   box-sizing: border-box;
   transition: box-shadow var(--duration-short) ease;
@@ -1760,7 +1782,7 @@ details[open] > .share-button__fallback {
 
 .field__label,
 .customer .field label {
-  font-size: 1.6rem;
+  font-size: 1.4rem;
   left: calc(var(--inputs-border-width) + 2rem);
   top: calc(1rem + var(--inputs-border-width));
   margin-bottom: 0;
@@ -1865,7 +1887,7 @@ input[type='checkbox'] {
 }
 
 .form__message--large {
-  font-size: 1.6rem;
+  font-size: 1.4rem;
 }
 
 .customer .field .form__message {
@@ -1894,7 +1916,7 @@ input[type='checkbox'] {
 
 .form-status {
   margin: 0;
-  font-size: 1.6rem;
+  font-size: 1.4rem;
 }
 
 .form-status-list {
@@ -1957,8 +1979,8 @@ input[type='checkbox'] {
   font-family: var(--font-body-family);
   font-style: var(--font-body-style);
   font-weight: var(--font-body-weight);
-  font-size: 1.6rem;
-  font-weight: 500;
+  font-size: 14px;
+  font-weight: 400;
   opacity: 0.85;
   text-align: center;
   background-color: transparent;
@@ -2285,10 +2307,11 @@ input[type='checkbox'] {
 
 .announcement-bar__message {
   text-align: center;
-  padding: 1rem 0;
+  padding: 7px 0 5px;
   margin: 0;
   letter-spacing: 0;
-  min-height: 3.8rem;
+  min-height: 30px;
+  font-size: 12px;
 }
 
 .announcement-bar-slider--fade-in-next .announcement-bar__message,
@@ -3233,7 +3256,7 @@ details-disclosure > details {
 }
 
 .rte a {
-  color: rgba(var(--color-link), var(--alpha-link));
+  color: rgba(var(--color-blue), var(--alpha-link));
   text-underline-offset: 0.3rem;
   text-decoration-thickness: 0.1rem;
   transition: text-decoration-thickness var(--duration-short) ease;

@@ -44,7 +44,7 @@
   -%}
   {%- if card_product.media.size > 0 -%}
     <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css'>
-    <script src='https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js'></script>
+    <script src='https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js' defer></script>
     <script src='{{ 'card-media-carousel.js' | asset_url }}?v={{ 'now' | date: '%s' }}&t=2' defer='defer'></script>
     <script src='{{ 'swatch-quick-add.js' | asset_url }}?v={{ 'now' | date: '%s' }}&fix=1' defer='defer'></script>
   {%- endif -%}
@@ -748,7 +748,7 @@
                       aria-labelledby='{{ product_form_id }}-submit title-{{ section_id }}-{{ card_product.id }}'
                       data-product-url='{{ card_product.url }}'
                     >
-                      {{ 'products.product.choose_options' | t }}
+                      Choose Options
                       {%- render 'loading-spinner' -%}
                     </button>
                   </modal-opener>

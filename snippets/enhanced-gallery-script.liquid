@@ -1,520 +1,520 @@
-/**
- * Enhanced Product Gallery with Swiper
- * Adds navigation arrows, swipe functionality, and looping to existing .product__media-list
- */
+<script>
+  /**
+   * Enhanced Product Gallery with Swiper
+   * Adds navigation arrows, swipe functionality, and looping to existing .product__media-list
+   */
 
-(function() {
-  'use strict';
+  (function () {
+    'use strict';
 
-  class EnhancedProductGallery {
-    constructor() {
-      this.swiper = null;
-      this.thumbnailSwiper = null;
-      this.init();
-    }
-
-    init() {
-      // Wait for Swiper to load
-      this.waitForSwiper(() => {
-        this.initializeSwiper();
-        this.initializeThumbnailSwiper();
-        this.setupEventListeners();
-      });
-    }
-
-    waitForSwiper(callback, attempts = 0, maxAttempts = 50) {
-      if (window.Swiper) {
-        callback();
-        return;
-      }
-
-      if (attempts >= maxAttempts) {
-        console.error('❌ Swiper library failed to load for enhanced gallery');
-        return;
-      }
-
-      setTimeout(() => this.waitForSwiper(callback, attempts + 1, maxAttempts), 100);
-    }
-
-    initializeSwiper() {
-      const swiperContainer = document.querySelector('.product-gallery-swiper');
-      
-      if (!swiperContainer) {
-        return;
-      }
-      
-      // Check if Swiper is already initialized and destroy it
-      if (swiperContainer.swiper) {
-        swiperContainer.swiper.destroy(true, true);
-      }
-
-      const mediaList = swiperContainer.querySelector('.product__media-list');
-      const mediaCount = mediaList ? mediaList.children.length : 0;
-
-      if (mediaCount <= 1) {
-        return;
-      }
-
-      // Make container focusable for keyboard navigation
-      swiperContainer.setAttribute('tabindex', '0');
-      swiperContainer.setAttribute('role', 'region');
-      swiperContainer.setAttribute('aria-label', 'Product image gallery. Use arrow keys to navigate.');
-
-      // Initialize Swiper
-      try {
-        this.swiper = new Swiper(swiperContainer, {
-        // Basic settings
-        slidesPerView: 1,
-        spaceBetween: 0,
-        loop: mediaCount > 1, // Enable loop only if we have multiple slides
-        speed: 400,
-        allowTouchMove: true,
-        watchSlidesProgress: true,
-        
-        // Navigation arrows
-        navigation: {
-          nextEl: swiperContainer.querySelector('.product-gallery-nav--next'),
-          prevEl: swiperContainer.querySelector('.product-gallery-nav--prev'),
-        },
-        
-        // Touch/swipe settings
-        touchRatio: 1,
-        touchAngle: 45,
-        grabCursor: true,
-        
-        // Keyboard navigation
-        keyboard: {
-          enabled: true,
-          onlyInViewport: true,
-          pageUpDown: true,
-        },
-        
-        // Mouse wheel support
-        mousewheel: {
-          forceToAxis: true,
-          sensitivity: 1,
-          releaseOnEdges: true,
-        },
-        
-        // Auto height for different media sizes
-        autoHeight: false,
-        
-        // Responsive breakpoints
-        breakpoints: {
-          750: {
-            touchRatio: 1,
-          },
-          0: {
-            touchRatio: 1,
-          }
-        },
-
-        // Event callbacks
-        on: {
-          init: () => {
-            this.updateCounter();
-            this.handleSlideChange();
-          },
-          
-          slideChange: () => {
-            this.updateCounter();
-            this.handleSlideChange();
-          },
-          
-          slideChangeTransitionEnd: () => {
-            this.handleMediaLoad();
-          }
-        }
-      });
-      
-      // Force enable navigation if it's disabled
-      if (this.swiper.navigation && !this.swiper.navigation.enabled) {
-        this.swiper.navigation.enable();
-        this.swiper.navigation.update();
-      }
-      
-      // Remove lock classes manually if they exist
-      const prevBtn = swiperContainer.querySelector('.product-gallery-nav--prev');
-      const nextBtn = swiperContainer.querySelector('.product-gallery-nav--next');
-      
-      if (prevBtn) {
-        prevBtn.classList.remove('swiper-button-lock', 'swiper-button-disabled');
-        prevBtn.setAttribute('tabindex', '0');
-      }
-      
-      if (nextBtn) {
-        nextBtn.classList.remove('swiper-button-lock', 'swiper-button-disabled');
-        nextBtn.setAttribute('tabindex', '0');
-      }
-      
-      // Add manual click handlers as backup
-      if (prevBtn && this.swiper) {
-        prevBtn.addEventListener('click', () => {
-          this.swiper.slidePrev();
-        });
-      }
-      
-      if (nextBtn && this.swiper) {
-        nextBtn.addEventListener('click', () => {
-          this.swiper.slideNext();
-        });
-      }
-      
-      } catch (error) {
-        console.error('❌ Failed to initialize Swiper:', error);
-      }
-    }
-
-    initializeThumbnailSwiper() {
-      const thumbnailContainer = document.querySelector('.thumbnail-swiper');
-      
-      if (!thumbnailContainer) {
-        return; // No thumbnails for this layout
-      }
-      
-      // Check if thumbnail Swiper is already initialized and destroy it
-      if (thumbnailContainer.swiper) {
-        thumbnailContainer.swiper.destroy(true, true);
-      }
-
-      const thumbnailList = thumbnailContainer.querySelector('.thumbnail-list');
-      const thumbnailCount = thumbnailList ? thumbnailList.children.length : 0;
-
-      if (thumbnailCount <= 1) {
-        return;
-      }
-
-      // Make thumbnail container focusable for keyboard navigation
-      thumbnailContainer.setAttribute('tabindex', '0');
-      thumbnailContainer.setAttribute('role', 'region');
-      thumbnailContainer.setAttribute('aria-label', 'Product thumbnail gallery. Use arrow keys to navigate.');
-
-      // Initialize thumbnail Swiper
-      try {
-        this.thumbnailSwiper = new Swiper(thumbnailContainer, {
-          // Basic settings for vertical thumbnails
-          direction: 'vertical',
-          slidesPerView: 'auto',
-          spaceBetween: 16,
-          freeMode: true,
-          watchSlidesProgress: true,
-          
-          // Navigation for thumbnails
-          navigation: {
-            nextEl: thumbnailContainer.querySelector('.thumbnail-nav--next'),
-            prevEl: thumbnailContainer.querySelector('.thumbnail-nav--prev'),
-          },
-          
-          // Keyboard navigation for thumbnails
-          keyboard: {
-            enabled: true,
-            onlyInViewport: true,
-          },
-          
-          // Responsive breakpoints for vertical thumbnails
-          breakpoints: {
-            0: {
-              slidesPerView: 3,
-              spaceBetween: 8,
-              direction: 'vertical',
-            },
-            750: {
-              slidesPerView: 4,
-              spaceBetween: 12,
-              direction: 'vertical',
-            },
-            990: {
-              slidesPerView: 'auto',
-              spaceBetween: 16,
-              direction: 'vertical',
-            }
-          }
-        });
-
-        // Force enable thumbnail navigation
-        if (this.thumbnailSwiper.navigation && !this.thumbnailSwiper.navigation.enabled) {
-          this.thumbnailSwiper.navigation.enable();
-          this.thumbnailSwiper.navigation.update();
-        }
-
-        // Remove lock classes from thumbnail navigation
-        const prevBtn = thumbnailContainer.querySelector('.thumbnail-nav--prev');
-        const nextBtn = thumbnailContainer.querySelector('.thumbnail-nav--next');
-        
-        if (prevBtn) {
-          prevBtn.classList.remove('swiper-button-lock', 'swiper-button-disabled');
-        }
-        
-        if (nextBtn) {
-          nextBtn.classList.remove('swiper-button-lock', 'swiper-button-disabled');
-        }
-
-        // Add compatibility methods for original media-gallery.js
-        this.addThumbnailCompatibility(thumbnailContainer);
-
-        // Sync with main gallery if it exists
-        if (this.swiper && this.thumbnailSwiper) {
-          this.syncGalleries();
-        }
-        
-      } catch (error) {
-        console.error('❌ Failed to initialize thumbnail Swiper:', error);
-      }
-    }
-
-    addThumbnailCompatibility(thumbnailContainer) {
-      // Add compatibility methods for original media-gallery.js
-      const parentElement = thumbnailContainer.parentElement;
-      
-      // Add isSlideVisible method to prevent media-gallery.js errors
-      parentElement.isSlideVisible = (element, threshold = 10) => {
-        if (!this.thumbnailSwiper || !element) return true;
-        
-        // Get the element's position in the Swiper
-        const slideIndex = Array.from(this.thumbnailSwiper.slides).indexOf(element);
-        if (slideIndex === -1) return false;
-        
-        // Check if slide is in view (simplified check)
-        const swiperContainer = this.thumbnailSwiper.el;
-        const containerRect = swiperContainer.getBoundingClientRect();
-        const elementRect = element.getBoundingClientRect();
-        
-        // Check if element is within container bounds (with threshold)
-        return (
-          elementRect.top >= (containerRect.top - threshold) &&
-          elementRect.bottom <= (containerRect.bottom + threshold)
-        );
-      };
-      
-      // Add slider property for scrollTo compatibility
-      parentElement.slider = {
-        scrollTo: (options) => {
-          if (!this.thumbnailSwiper) return;
-          
-          // Find the target slide and scroll to it
-          const slides = this.thumbnailSwiper.slides;
-          for (let i = 0; i < slides.length; i++) {
-            if (slides[i].offsetLeft <= options.left && 
-                slides[i].offsetLeft + slides[i].offsetWidth > options.left) {
-              this.thumbnailSwiper.slideTo(i);
-              break;
-            }
-          }
-        }
-      };
-    }
-
-    syncGalleries() {
-      if (!this.swiper || !this.thumbnailSwiper) return;
-
-      // When main gallery changes, update thumbnail
-      this.swiper.on('slideChange', () => {
-        const activeIndex = this.swiper.realIndex;
-        this.thumbnailSwiper.slideTo(activeIndex);
-      });
-
-      // When thumbnail is clicked, update main gallery
-      this.thumbnailSwiper.on('click', (swiper, event) => {
-        const clickedSlide = event.target.closest('.swiper-slide');
-        if (clickedSlide) {
-          const slideIndex = Array.from(swiper.slides).indexOf(clickedSlide);
-          this.swiper.slideTo(slideIndex);
-        }
-      });
-    }
-
-    setupEventListeners() {
-      // Handle variant changes
-      document.addEventListener('variant:change', (event) => {
-        this.handleVariantChange(event.detail);
-      });
-
-      // Handle window resize
-      window.addEventListener('resize', () => {
-        if (this.swiper) {
-          this.swiper.update();
-        }
-      });
-
-      // Integration with existing media gallery events
-      document.addEventListener('media:change', (event) => {
-        this.goToMedia(event.detail.mediaId);
-      });
-    }
-
-    updateCounter() {
-      const counterCurrent = document.querySelector('.product-gallery-counter-current');
-      const counterTotal = document.querySelector('.product-gallery-counter-total');
-      
-      if (counterCurrent && this.swiper) {
-        counterCurrent.textContent = this.swiper.realIndex + 1;
-      }
-      
-      if (counterTotal && this.swiper) {
-        counterTotal.textContent = this.swiper.slides.length;
-      }
-    }
-
-    handleSlideChange() {
-      if (!this.swiper) return;
-
-      const activeSlide = this.swiper.slides[this.swiper.activeIndex];
-      if (!activeSlide) return;
-
-      // Update active states
-      this.swiper.slides.forEach(slide => {
-        slide.classList.remove('is-active');
-      });
-      activeSlide.classList.add('is-active');
-
-      // Pause all media first
-      this.pauseAllMedia();
-
-      // Handle current media
-      const mediaType = activeSlide.dataset.mediaType;
-      if (mediaType === 'video' || mediaType === 'external_video') {
-        this.handleVideoSlide(activeSlide);
-      } else if (mediaType === 'model') {
-        this.handleModelSlide(activeSlide);
-      }
-
-      // Update URL hash for deep linking
-      const mediaId = activeSlide.dataset.mediaId;
-      if (mediaId && history.replaceState) {
-        const newUrl = window.location.pathname + window.location.search + '#' + mediaId.split('-').pop();
-        history.replaceState(null, '', newUrl);
-      }
-
-      // Trigger custom event for other components
-      document.dispatchEvent(new CustomEvent('gallery:slideChange', {
-        detail: {
-          activeSlide: activeSlide,
-          slideIndex: this.swiper.realIndex,
-          mediaId: mediaId
-        }
-      }));
-    }
-
-    handleMediaLoad() {
-      if (!this.swiper) return;
-
-      const activeSlide = this.swiper.slides[this.swiper.activeIndex];
-      if (!activeSlide) return;
-
-      // Load deferred media
-      const deferredMedia = activeSlide.querySelector('deferred-media');
-      if (deferredMedia && !deferredMedia.hasAttribute('loaded')) {
-        deferredMedia.loadContent();
-      }
-    }
-
-    pauseAllMedia() {
-      // Pause all videos
-      const videos = document.querySelectorAll('.product-gallery-swiper video');
-      videos.forEach(video => {
-        if (!video.paused) {
-          video.pause();
-        }
-      });
-
-      // Stop external videos
-      const iframes = document.querySelectorAll('.product-gallery-swiper iframe');
-      iframes.forEach(iframe => {
-        if (iframe.src && (iframe.src.includes('youtube.com') || iframe.src.includes('vimeo.com'))) {
-          // Pause by sending postMessage (for YouTube/Vimeo API)
-          try {
-            iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
-          } catch (e) {
-            // Fallback: reload iframe to stop video
-            const src = iframe.src;
-            iframe.src = '';
-            setTimeout(() => iframe.src = src, 100);
-          }
-        }
-      });
-    }
-
-    handleVideoSlide(slide) {
-      const deferredMedia = slide.querySelector('deferred-media');
-      if (deferredMedia && !deferredMedia.hasAttribute('loaded')) {
-        deferredMedia.loadContent();
-      }
-    }
-
-    handleModelSlide(slide) {
-      const deferredMedia = slide.querySelector('deferred-media');
-      if (deferredMedia && !deferredMedia.hasAttribute('loaded')) {
-        deferredMedia.loadContent();
-      }
-    }
-
-    handleVariantChange(variant) {
-      if (!variant || !variant.featured_media || !this.swiper) return;
-
-      // Find slide with variant's featured media
-      const targetSlideIndex = Array.from(this.swiper.slides).findIndex(slide => {
-        const mediaId = slide.dataset.mediaId;
-        return mediaId && mediaId.includes(variant.featured_media.id.toString());
-      });
-
-      if (targetSlideIndex !== -1) {
-        this.swiper.slideTo(targetSlideIndex);
-      }
-    }
-
-    // Public method to go to specific media
-    goToMedia(mediaId) {
-      if (!this.swiper) return;
-
-      const targetSlideIndex = Array.from(this.swiper.slides).findIndex(slide => {
-        const slideMediaId = slide.dataset.mediaId;
-        return slideMediaId && slideMediaId.includes(mediaId.toString());
-      });
-
-      if (targetSlideIndex !== -1) {
-        this.swiper.slideTo(targetSlideIndex);
-      }
-    }
-
-    // Public method to destroy swiper
-    destroy() {
-      if (this.swiper) {
-        this.swiper.destroy(true, true);
+    class EnhancedProductGallery {
+      constructor() {
         this.swiper = null;
-      }
-      
-      if (this.thumbnailSwiper) {
-        this.thumbnailSwiper.destroy(true, true);
         this.thumbnailSwiper = null;
+        this.init();
+      }
+
+      init() {
+        // Wait for Swiper to load
+        this.waitForSwiper(() => {
+          this.initializeSwiper();
+          this.initializeThumbnailSwiper();
+          this.setupEventListeners();
+        });
+      }
+
+      waitForSwiper(callback, attempts = 0, maxAttempts = 50) {
+        if (window.Swiper) {
+          callback();
+          return;
+        }
+
+        if (attempts >= maxAttempts) {
+          console.error('❌ Swiper library failed to load for enhanced gallery');
+          return;
+        }
+
+        setTimeout(() => this.waitForSwiper(callback, attempts + 1, maxAttempts), 100);
+      }
+
+      initializeSwiper() {
+        const swiperContainer = document.querySelector('.product-gallery-swiper');
+
+        if (!swiperContainer) {
+          return;
+        }
+
+        // Check if Swiper is already initialized and destroy it
+        if (swiperContainer.swiper) {
+          swiperContainer.swiper.destroy(true, true);
+        }
+
+        const mediaList = swiperContainer.querySelector('.product__media-list');
+        const mediaCount = mediaList ? mediaList.children.length : 0;
+
+        if (mediaCount <= 1) {
+          return;
+        }
+
+        // Make container focusable for keyboard navigation
+        swiperContainer.setAttribute('tabindex', '0');
+        swiperContainer.setAttribute('role', 'region');
+        swiperContainer.setAttribute('aria-label', 'Product image gallery. Use arrow keys to navigate.');
+
+        // Initialize Swiper
+        try {
+          this.swiper = new Swiper(swiperContainer, {
+            // Basic settings
+            slidesPerView: 1,
+            spaceBetween: 0,
+            loop: mediaCount > 1, // Enable loop only if we have multiple slides
+            speed: 400,
+            allowTouchMove: true,
+            watchSlidesProgress: true,
+
+            // Navigation arrows
+            navigation: {
+              nextEl: swiperContainer.querySelector('.product-gallery-nav--next'),
+              prevEl: swiperContainer.querySelector('.product-gallery-nav--prev'),
+            },
+
+            // Touch/swipe settings
+            touchRatio: 1,
+            touchAngle: 45,
+            grabCursor: true,
+
+            // Keyboard navigation
+            keyboard: {
+              enabled: true,
+              onlyInViewport: true,
+              pageUpDown: true,
+            },
+
+            // Mouse wheel support
+            mousewheel: {
+              forceToAxis: true,
+              sensitivity: 1,
+              releaseOnEdges: true,
+            },
+
+            // Auto height for different media sizes
+            autoHeight: false,
+
+            // Responsive breakpoints
+            breakpoints: {
+              750: {
+                touchRatio: 1,
+              },
+              0: {
+                touchRatio: 1,
+              },
+            },
+
+            // Event callbacks
+            on: {
+              init: () => {
+                this.updateCounter();
+                this.handleSlideChange();
+              },
+
+              slideChange: () => {
+                this.updateCounter();
+                this.handleSlideChange();
+              },
+
+              slideChangeTransitionEnd: () => {
+                this.handleMediaLoad();
+              },
+            },
+          });
+
+          // Force enable navigation if it's disabled
+          if (this.swiper.navigation && !this.swiper.navigation.enabled) {
+            this.swiper.navigation.enable();
+            this.swiper.navigation.update();
+          }
+
+          // Remove lock classes manually if they exist
+          const prevBtn = swiperContainer.querySelector('.product-gallery-nav--prev');
+          const nextBtn = swiperContainer.querySelector('.product-gallery-nav--next');
+
+          if (prevBtn) {
+            prevBtn.classList.remove('swiper-button-lock', 'swiper-button-disabled');
+            prevBtn.setAttribute('tabindex', '0');
+          }
+
+          if (nextBtn) {
+            nextBtn.classList.remove('swiper-button-lock', 'swiper-button-disabled');
+            nextBtn.setAttribute('tabindex', '0');
+          }
+
+          // Add manual click handlers as backup
+          if (prevBtn && this.swiper) {
+            prevBtn.addEventListener('click', () => {
+              this.swiper.slidePrev();
+            });
+          }
+
+          if (nextBtn && this.swiper) {
+            nextBtn.addEventListener('click', () => {
+              this.swiper.slideNext();
+            });
+          }
+        } catch (error) {
+          console.error('❌ Failed to initialize Swiper:', error);
+        }
+      }
+
+      initializeThumbnailSwiper() {
+        const thumbnailContainer = document.querySelector('.thumbnail-swiper');
+
+        if (!thumbnailContainer) {
+          return; // No thumbnails for this layout
+        }
+
+        // Check if thumbnail Swiper is already initialized and destroy it
+        if (thumbnailContainer.swiper) {
+          thumbnailContainer.swiper.destroy(true, true);
+        }
+
+        const thumbnailList = thumbnailContainer.querySelector('.thumbnail-list');
+        const thumbnailCount = thumbnailList ? thumbnailList.children.length : 0;
+
+        if (thumbnailCount <= 1) {
+          return;
+        }
+
+        // Make thumbnail container focusable for keyboard navigation
+        thumbnailContainer.setAttribute('tabindex', '0');
+        thumbnailContainer.setAttribute('role', 'region');
+        thumbnailContainer.setAttribute('aria-label', 'Product thumbnail gallery. Use arrow keys to navigate.');
+
+        // Initialize thumbnail Swiper
+        try {
+          this.thumbnailSwiper = new Swiper(thumbnailContainer, {
+            // Basic settings for vertical thumbnails
+            direction: 'vertical',
+            slidesPerView: 'auto',
+            spaceBetween: 16,
+            freeMode: true,
+            watchSlidesProgress: true,
+
+            // Navigation for thumbnails
+            navigation: {
+              nextEl: thumbnailContainer.querySelector('.thumbnail-nav--next'),
+              prevEl: thumbnailContainer.querySelector('.thumbnail-nav--prev'),
+            },
+
+            // Keyboard navigation for thumbnails
+            keyboard: {
+              enabled: true,
+              onlyInViewport: true,
+            },
+
+            // Responsive breakpoints - horizontal on mobile, vertical on desktop
+            breakpoints: {
+              0: {
+                slidesPerView: 6,
+                spaceBetween: 12,
+                direction: 'horizontal',
+              },
+              750: {
+                slidesPerView: 'auto',
+                spaceBetween: 12,
+                direction: 'vertical',
+              },
+              990: {
+                slidesPerView: 'auto',
+                spaceBetween: 16,
+                direction: 'vertical',
+              },
+            },
+          });
+
+          // Force enable thumbnail navigation
+          if (this.thumbnailSwiper.navigation && !this.thumbnailSwiper.navigation.enabled) {
+            this.thumbnailSwiper.navigation.enable();
+            this.thumbnailSwiper.navigation.update();
+          }
+
+          // Remove lock classes from thumbnail navigation
+          const prevBtn = thumbnailContainer.querySelector('.thumbnail-nav--prev');
+          const nextBtn = thumbnailContainer.querySelector('.thumbnail-nav--next');
+
+          if (prevBtn) {
+            prevBtn.classList.remove('swiper-button-lock', 'swiper-button-disabled');
+          }
+
+          if (nextBtn) {
+            nextBtn.classList.remove('swiper-button-lock', 'swiper-button-disabled');
+          }
+
+          // Add compatibility methods for original media-gallery.js
+          this.addThumbnailCompatibility(thumbnailContainer);
+
+          // Sync with main gallery if it exists
+          if (this.swiper && this.thumbnailSwiper) {
+            this.syncGalleries();
+          }
+        } catch (error) {
+          console.error('❌ Failed to initialize thumbnail Swiper:', error);
+        }
+      }
+
+      addThumbnailCompatibility(thumbnailContainer) {
+        // Add compatibility methods for original media-gallery.js
+        const parentElement = thumbnailContainer.parentElement;
+
+        // Add isSlideVisible method to prevent media-gallery.js errors
+        parentElement.isSlideVisible = (element, threshold = 10) => {
+          if (!this.thumbnailSwiper || !element) return true;
+
+          // Get the element's position in the Swiper
+          const slideIndex = Array.from(this.thumbnailSwiper.slides).indexOf(element);
+          if (slideIndex === -1) return false;
+
+          // Check if slide is in view (simplified check)
+          const swiperContainer = this.thumbnailSwiper.el;
+          const containerRect = swiperContainer.getBoundingClientRect();
+          const elementRect = element.getBoundingClientRect();
+
+          // Check if element is within container bounds (with threshold)
+          return (
+            elementRect.top >= containerRect.top - threshold && elementRect.bottom <= containerRect.bottom + threshold
+          );
+        };
+
+        // Add slider property for scrollTo compatibility
+        parentElement.slider = {
+          scrollTo: (options) => {
+            if (!this.thumbnailSwiper) return;
+
+            // Find the target slide and scroll to it
+            const slides = this.thumbnailSwiper.slides;
+            for (let i = 0; i < slides.length; i++) {
+              if (slides[i].offsetLeft <= options.left && slides[i].offsetLeft + slides[i].offsetWidth > options.left) {
+                this.thumbnailSwiper.slideTo(i);
+                break;
+              }
+            }
+          },
+        };
+      }
+
+      syncGalleries() {
+        if (!this.swiper || !this.thumbnailSwiper) return;
+
+        // When main gallery changes, update thumbnail
+        this.swiper.on('slideChange', () => {
+          const activeIndex = this.swiper.realIndex;
+          this.thumbnailSwiper.slideTo(activeIndex);
+        });
+
+        // When thumbnail is clicked, update main gallery
+        this.thumbnailSwiper.on('click', (swiper, event) => {
+          const clickedSlide = event.target.closest('.swiper-slide');
+          if (clickedSlide) {
+            const slideIndex = Array.from(swiper.slides).indexOf(clickedSlide);
+            this.swiper.slideTo(slideIndex);
+          }
+        });
+      }
+
+      setupEventListeners() {
+        // Handle variant changes
+        document.addEventListener('variant:change', (event) => {
+          this.handleVariantChange(event.detail);
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+          if (this.swiper) {
+            this.swiper.update();
+          }
+        });
+
+        // Integration with existing media gallery events
+        document.addEventListener('media:change', (event) => {
+          this.goToMedia(event.detail.mediaId);
+        });
+      }
+
+      updateCounter() {
+        const counterCurrent = document.querySelector('.product-gallery-counter-current');
+        const counterTotal = document.querySelector('.product-gallery-counter-total');
+
+        if (counterCurrent && this.swiper) {
+          counterCurrent.textContent = this.swiper.realIndex + 1;
+        }
+
+        if (counterTotal && this.swiper) {
+          counterTotal.textContent = this.swiper.slides.length;
+        }
+      }
+
+      handleSlideChange() {
+        if (!this.swiper) return;
+
+        const activeSlide = this.swiper.slides[this.swiper.activeIndex];
+        if (!activeSlide) return;
+
+        // Update active states
+        this.swiper.slides.forEach((slide) => {
+          slide.classList.remove('is-active');
+        });
+        activeSlide.classList.add('is-active');
+
+        // Pause all media first
+        this.pauseAllMedia();
+
+        // Handle current media
+        const mediaType = activeSlide.dataset.mediaType;
+        if (mediaType === 'video' || mediaType === 'external_video') {
+          this.handleVideoSlide(activeSlide);
+        } else if (mediaType === 'model') {
+          this.handleModelSlide(activeSlide);
+        }
+
+        // Update URL hash for deep linking
+        const mediaId = activeSlide.dataset.mediaId;
+        if (mediaId && history.replaceState) {
+          const newUrl = window.location.pathname + window.location.search + '#' + mediaId.split('-').pop();
+          history.replaceState(null, '', newUrl);
+        }
+
+        // Trigger custom event for other components
+        document.dispatchEvent(
+          new CustomEvent('gallery:slideChange', {
+            detail: {
+              activeSlide: activeSlide,
+              slideIndex: this.swiper.realIndex,
+              mediaId: mediaId,
+            },
+          }),
+        );
+      }
+
+      handleMediaLoad() {
+        if (!this.swiper) return;
+
+        const activeSlide = this.swiper.slides[this.swiper.activeIndex];
+        if (!activeSlide) return;
+
+        // Load deferred media
+        const deferredMedia = activeSlide.querySelector('deferred-media');
+        if (deferredMedia && !deferredMedia.hasAttribute('loaded')) {
+          deferredMedia.loadContent();
+        }
+      }
+
+      pauseAllMedia() {
+        // Pause all videos
+        const videos = document.querySelectorAll('.product-gallery-swiper video');
+        videos.forEach((video) => {
+          if (!video.paused) {
+            video.pause();
+          }
+        });
+
+        // Stop external videos
+        const iframes = document.querySelectorAll('.product-gallery-swiper iframe');
+        iframes.forEach((iframe) => {
+          if (iframe.src && (iframe.src.includes('youtube.com') || iframe.src.includes('vimeo.com'))) {
+            // Pause by sending postMessage (for YouTube/Vimeo API)
+            try {
+              iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+            } catch (e) {
+              // Fallback: reload iframe to stop video
+              const src = iframe.src;
+              iframe.src = '';
+              setTimeout(() => (iframe.src = src), 100);
+            }
+          }
+        });
+      }
+
+      handleVideoSlide(slide) {
+        const deferredMedia = slide.querySelector('deferred-media');
+        if (deferredMedia && !deferredMedia.hasAttribute('loaded')) {
+          deferredMedia.loadContent();
+        }
+      }
+
+      handleModelSlide(slide) {
+        const deferredMedia = slide.querySelector('deferred-media');
+        if (deferredMedia && !deferredMedia.hasAttribute('loaded')) {
+          deferredMedia.loadContent();
+        }
+      }
+
+      handleVariantChange(variant) {
+        if (!variant || !variant.featured_media || !this.swiper) return;
+
+        // Find slide with variant's featured media
+        const targetSlideIndex = Array.from(this.swiper.slides).findIndex((slide) => {
+          const mediaId = slide.dataset.mediaId;
+          return mediaId && mediaId.includes(variant.featured_media.id.toString());
+        });
+
+        if (targetSlideIndex !== -1) {
+          this.swiper.slideTo(targetSlideIndex);
+        }
+      }
+
+      // Public method to go to specific media
+      goToMedia(mediaId) {
+        if (!this.swiper) return;
+
+        const targetSlideIndex = Array.from(this.swiper.slides).findIndex((slide) => {
+          const slideMediaId = slide.dataset.mediaId;
+          return slideMediaId && slideMediaId.includes(mediaId.toString());
+        });
+
+        if (targetSlideIndex !== -1) {
+          this.swiper.slideTo(targetSlideIndex);
+        }
+      }
+
+      // Public method to destroy swiper
+      destroy() {
+        if (this.swiper) {
+          this.swiper.destroy(true, true);
+          this.swiper = null;
+        }
+
+        if (this.thumbnailSwiper) {
+          this.thumbnailSwiper.destroy(true, true);
+          this.thumbnailSwiper = null;
+        }
       }
     }
-  }
 
-  // Initialize when DOM is ready
-  function initGallery() {
-    // Only initialize if we have a product gallery (not the swiper_thumbnails layout)
-    const galleryContainer = document.querySelector('.product-gallery-swiper');
-    
-    if (galleryContainer) {
+    // Initialize when DOM is ready
+    function initGallery() {
+      // Only initialize if we have a product gallery (not the swiper_thumbnails layout)
+      const galleryContainer = document.querySelector('.product-gallery-swiper');
+
+      if (galleryContainer) {
+        window.enhancedProductGallery = new EnhancedProductGallery();
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initGallery);
+    } else {
+      // DOM is already ready
+      setTimeout(initGallery, 100);
+    }
+
+    // Handle dynamic content updates
+    document.addEventListener('gallery:reinit', () => {
+      if (window.enhancedProductGallery) {
+        window.enhancedProductGallery.destroy();
+      }
       window.enhancedProductGallery = new EnhancedProductGallery();
-    }
-  }
+    });
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initGallery);
-  } else {
-    // DOM is already ready
-    setTimeout(initGallery, 100);
-  }
-
-  // Handle dynamic content updates
-  document.addEventListener('gallery:reinit', () => {
-    if (window.enhancedProductGallery) {
-      window.enhancedProductGallery.destroy();
-    }
-    window.enhancedProductGallery = new EnhancedProductGallery();
-  });
-
-  // Export for external use
-  window.EnhancedProductGallery = EnhancedProductGallery;
-})();
+    // Export for external use
+    window.EnhancedProductGallery = EnhancedProductGallery;
+  })();
+</script>

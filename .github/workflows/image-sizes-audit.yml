@@ -1,0 +1,58 @@
+name: Image Sizes Audit
+
+on:
+  workflow_dispatch: {}
+  schedule:
+    - cron: "0 3 * * 1" # Mondays 03:00 UTC
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+      
+      - name: (Optional) Pull sitemap to URL list
+        run: npm run image-sizes:sitemap || true
+        continue-on-error: true
+      
+      - name: Run image sizes audit
+        run: npm run image-sizes:ci
+      
+      - name: Upload reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: image-sizes-reports-${{ github.run_number }}
+          path: reports/**
+          retention-days: 30
+      
+      - name: Check for overserving issues
+        if: always()
+        run: |
+          if [ -f "reports/log.txt" ]; then
+            echo "=== Audit Log ==="
+            cat reports/log.txt
+            
+            # Check for overserving warnings
+            if grep -q "Overserve?" reports/log.txt; then
+              echo "⚠️ Found potential overserving issues. Check the reports artifact."
+              # Uncomment the next line to fail the job on overserving
+              # exit 1
+            else
+              echo "✅ No overserving issues detected."
+            fi
+          else
+            echo "❌ No log file found - audit may have failed"
+            exit 1
+          fi

@@ -364,16 +364,19 @@
 @media screen and (min-width: 990px) {
   .image-with-text__content {
     padding: 0 7rem 0 0;
-    justify-content: space-between;
+    justify-content: flex-start;
+  }
+  .image-with-text__content--middle {
+    justify-content: center;
   }
 }
 
 .image-with-text__content > * + * {
-  margin-top: 2rem;
+  margin-top: 16px;
   font-size: 14px;
   line-height: 20px;
   letter-spacing: 0;
-  font-weight: 500;
+  font-weight: 400;
 }
 
 .image-with-text__content > .image-with-text__text:empty ~ a {

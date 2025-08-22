@@ -1,46 +1,207 @@
+{% comment %}
+  {% for block in section.blocks %}
+    {% if block.type == 'campaign' and block.settings.countries contains localization.country.iso_code %}
+      {% assign color_bg = block.settings.color_background %}
+      {%- capture campaign_json -%}
+        "settings": {
+          "template": "{{ block.settings.progress_message_template | remove: '"' }}",
+          "complete": "{{ block.settings.complete_message_template | remove: '"' }}",
+          "countries": "{{ block.settings.countries | remove: '"' }}",
+          "use_banner": {{ block.settings.use_banner }},
+          "color_text": "{{ block.settings.color_text | remove: '"' }}",
+          "color_background": "{{ block.settings.color_background | remove: '"' }}",
+          "color_progress": "{{ block.settings.color_progress | remove: '"' }}"
+        }
+        {%- if block.settings.goal1_active -%}
+          ,"goal1": {
+            "value": {{ block.settings.goal1_value | times: 100 }},
+            "title": "{{ block.settings.goal1_title | remove: '"' }}",
+            "message": "{{ block.settings.goal1_message | remove: '"' }}"
+          }
+        {%- endif -%}
+        {%- if block.settings.goal2_active -%}
+          ,"goal2": {
+            "value": {{ block.settings.goal2_value | times: 100 }},
+            "title": "{{ block.settings.goal2_title | remove: '"' }}",
+            "message": "{{ block.settings.goal2_message | remove: '"' }}"
+          }
+        {%- endif -%}
+        {%- if block.settings.goal3_active -%}
+          ,"goal3": {
+            "value": {{ block.settings.goal3_value | times: 100 }},
+            "title": "{{ block.settings.goal3_title | remove: '"' }}",
+            "message": "{{ block.settings.goal3_message | remove: '"' }}"
+          }
+        {%- endif -%}
+      {%- endcapture -%}
+
+      {% assign goals_active = 0 %}
+      {%- if block.settings.goal1_active -%}
+        {% assign goals_active = goals_active | plus: 1 %}
+      {%- endif -%}
+      {%- if block.settings.goal2_active -%}
+        {% assign goals_active = goals_active | plus: 1 %}
+      {%- endif -%}
+      {%- if block.settings.goal3_active -%}
+        {% assign goals_active = goals_active | plus: 1 %}
+      {%- endif -%}
+
+      {%- capture campaign_html -%}
+        <div class="cart-motivator">
+          <div class="cart-motivator__progress-wrapper">
+            <div class="cart-motivator__progress-message"></div>
+            <div class="cart-motivator__progress-meter has-progress">
+              <div class="cart-motivator__progress-meter-fill">
+                <span class="cart-motivator__progress-meter-fill-text visually-hidden"></span>
+              </div>
+            </div>
+            {%- if block.settings.goal1_active -%}
+              <div class="cart-motivator__progress-marker marker--goal1" style="width: 33.33%;{% unless goals_active > 1 %}display:none;{% endunless %}">
+                <div class="cart-motivator__progress-marker-label">
+                  <span class="cart-motivator__progress-marker-text">{{ block.settings.goal1_title }}</span>
+                  <span class="cart-motivator__progress-marker-completed">✓</span>
+                </div>
+              </div>
+            {%- endif -%}
+            {%- if block.settings.goal2_active -%}
+              <div class="cart-motivator__progress-marker marker--goal2" style="width: 33.33%;{% unless goals_active > 1 %}display:none;{% endunless %}">
+                <div class="cart-motivator__progress-marker-label">
+                  <span class="cart-motivator__progress-marker-text">{{ block.settings.goal2_title }}</span>
+                  <span class="cart-motivator__progress-marker-completed">✓</span>
+                </div>
+              </div>
+            {%- endif -%}
+            {%- if block.settings.goal3_active -%}
+              <div class="cart-motivator__progress-marker marker--goal3" style="width: 33.33%;{% unless goals_active > 1 %}display:none;{% endunless %}">
+                <div class="cart-motivator__progress-marker-label">
+                  <span class="cart-motivator__progress-marker-text">{{ block.settings.goal3_title }}</span>
+                  <span class="cart-motivator__progress-marker-completed">✓</span>
+                </div>
+              </div>
+            {%- endif -%}
+          </div>
+          <div class="cart-motivator__goal-message"></div>
+        </div>
+      {%- endcapture -%}
+    {% endif %}
+  {% endfor %}
+
+  {% for block in section.blocks %}
+    {% if block.type == 'banner' and block.settings.countries == blank %}
+      {%- capture banner_html -%}
+  			<div class="site-banner" role="complementary" data-localization="default">
+  				{{ block.settings.title }}
+  			</div>
+  		{%- endcapture -%}
+      {% break %}
+    {% endif %}
+  {% endfor %}
+
+  {% for block in section.blocks %}
+    {% if block.type == 'banner' and block.settings.countries contains localization.country.iso_code %}
+      {%- capture banner_html -%}
+  			<div class="site-banner" role="complementary" data-localization="{{ localization.country.iso_code }}">
+  				{{ block.settings.title }}
+  			</div>
+  		{%- endcapture -%}
+      {% break %}
+    {% endif %}
+  {% endfor %}
+
+  {% if campaign_json %}
+    <script type='application/ld+json' data-motivator-campaign>
+      {
+        {{ campaign_json | strip | strip_newlines }}
+      }
+    </script>
+  {% endif %}
+
+  {% if campaign_html %}
+    <div class='motivator-templates' style='display: none;'>
+      {{ campaign_html }}
+      {{ banner_html }}
+    </div>
+  {% endif %}
+
+  {% if banner_html %}
+    <style>
+      :root {
+        --announcement-color: {{ settings.banner_color }};
+        --announcement-background: {{ settings.banner_background }};
+        --announcement-color-highlight: {{ settings.banner_color_highlight }};
+        --announcement-background-highlight: {{ settings.banner_background_highlight }};
+      }
+      .site-banner {
+      {% if settings.banner_color %}
+          color: var(--announcement-color) !important;
+      {% endif %}
+      {% if settings.banner_background %}
+          background-color: var(--announcement-background);
+      {% endif %}
+      }
+      {% if settings.banner_color %}
+      .site-banner p, .site-banner a {
+        color: var(--announcement-color) !important;
+      }
+      {% endif %}
+    </style>
+  {% endif %}
+
+  <link rel='stylesheet' href='{{ 'motivator.min.css' | asset_url }}' media='print' onload="this.media='all'">
+  <noscript>{{ 'motivator.min.css' | asset_url | stylesheet_tag }}</noscript>
+  <script src='{{ 'motivator.js' | asset_url }}' defer='defer'></script>
+{% endcomment %}
+
 {{ 'component-slideshow.css' | asset_url | stylesheet_tag }}
 {{ 'component-slider.css' | asset_url | stylesheet_tag }}
 
+<style>
+  {% if section.settings.banner_fixed %}
+  	.shopify-section-group-header-group {
+  		position: fixed;
+  		width: 100%;
+  	}
+  	sticky-header {
+  		padding-top: 31px !important;
+  	}
+  {% endif %}
+</style>
+
 {%- liquid
-  assign social_icons = true
-  if settings.social_facebook_link == blank and settings.social_instagram_link == blank and settings.social_youtube_link == blank and settings.social_tiktok_link == blank and settings.social_twitter_link == blank and settings.social_pinterest_link == blank and settings.social_snapchat_link == blank and settings.social_tumblr_link == blank and settings.social_vimeo_link == blank
-    assign social_icons = false
-  endif
   if section.settings.enable_country_selector or section.settings.enable_language_selector
     assign language_country_selector = true
   endif
-  if section.blocks.size > 0
+  assign announcement_count = 0
+  for block in section.blocks
+    if block.type == 'announcement'
+      assign announcement_count = announcement_count | plus: 1
+    endif
+  endfor
+  if announcement_count > 0
     assign announcement_bar = true
   endif
 -%}
 
-{% if social_icons %}
-  {{ 'component-list-social.css' | asset_url | stylesheet_tag }}
-{% endif %}
-
 <div
-  class="utility-bar color-{{ section.settings.color_scheme }} gradient{% if section.settings.show_line_separator and section.blocks.size > 0 %} utility-bar--bottom-border{% elsif section.settings.show_line_separator and section.settings.show_social and social_icons%} utility-bar--bottom-border-social-only{% endif %}{% if section.settings.enable_country_selector or section.settings.enable_language_selector %} header-localization{% endif %}"
+  class='utility-bar tw-relative color-{{ section.settings.color_scheme }} gradient{% if section.settings.show_line_separator and section.blocks.size > 0 %} utility-bar--bottom-border{% endif %}{% if section.settings.enable_country_selector or section.settings.enable_language_selector %} header-localization{% endif %}'
   {{ block.shopify_attributes }}
 >
-  <div class="page-width utility-bar__grid{% if announcement_bar and language_country_selector or section.settings.show_social and social_icons %} utility-bar__grid--3-col{% elsif language_country_selector or section.settings.show_social and social_icons %} utility-bar__grid--2-col{% endif %}">
-    {%- if section.settings.show_social and social_icons -%}
-      {%- render 'social-icons' -%}
-    {%- endif -%}
-    {%- if section.blocks.size == 1 -%}
+  <div class='page-width utility-bar__grid{% if announcement_bar and language_country_selector %} utility-bar__grid--3-col{% elsif language_country_selector %} utility-bar__grid--2-col{% endif %}'>
+    {%- if announcement_count == 1 -%}
       <div
-        class="announcement-bar{% if section.settings.show_social %} announcement-bar--one-announcement{% endif %}"
-        role="region"
-        aria-label="{{ 'sections.header.announcement' | t }}"
+        class='announcement-bar'
+        role='region'
+        aria-label='{{ 'sections.header.announcement' | t }}'
         {{ block.shopify_attributes }}
       >
         {%- if section.blocks.first.settings.text != blank -%}
           {%- if section.blocks.first.settings.link != blank -%}
             <a
-              href="{{ section.blocks.first.settings.link }}"
-              class="announcement-bar__link link link--text focus-inset animate-arrow"
+              href='{{ section.blocks.first.settings.link }}'
+              class='announcement-bar__link link link--text focus-inset animate-arrow'
             >
           {%- endif -%}
-          <p class="announcement-bar__message h5">
+          <p class='announcement-bar__message h5'>
             <span>{{ section.blocks.first.settings.text | escape }}</span>
             {%- if section.blocks.first.settings.link != blank -%}
               {{- 'icon-arrow.svg' | inline_asset_content -}}
@@ -51,85 +212,87 @@
           {%- endif -%}
         {%- endif -%}
       </div>
-    {%- elsif section.blocks.size > 1 -%}
+    {%- elsif announcement_count > 1 -%}
       <slideshow-component
-        class="announcement-bar"
-        role="region"
-        aria-roledescription="{{ 'sections.announcements.carousel' | t }}"
-        aria-label="{{ 'sections.announcements.announcement_bar' | t }}"
+        class='announcement-bar'
+        role='region'
+        aria-roledescription='{{ 'sections.announcements.carousel' | t }}'
+        aria-label='{{ 'sections.announcements.announcement_bar' | t }}'
       >
-        <div class="announcement-bar-slider slider-buttons">
+        <div class='announcement-bar-slider slider-buttons'>
           <button
-            type="button"
-            class="slider-button slider-button--prev"
-            name="previous"
-            aria-label="{{ 'sections.announcements.previous_announcement' | t }}"
-            aria-controls="Slider-{{ section.id }}"
+            type='button'
+            class='slider-button slider-button--prev'
+            name='previous'
+            aria-label='{{ 'sections.announcements.previous_announcement' | t }}'
+            aria-controls='Slider-{{ section.id }}'
           >
-            <span class="svg-wrapper">
+            <span class='svg-wrapper'>
               {{- 'icon-caret.svg' | inline_asset_content -}}
             </span>
           </button>
           <div
-            class="grid grid--1-col slider slider--everywhere"
-            id="Slider-{{ section.id }}"
-            aria-live="polite"
-            aria-atomic="true"
-            data-autoplay="{{ section.settings.auto_rotate }}"
-            data-speed="{{ section.settings.change_slides_speed }}"
+            class='grid grid--1-col slider slider--everywhere'
+            id='Slider-{{ section.id }}'
+            aria-live='polite'
+            aria-atomic='true'
+            data-autoplay='{{ section.settings.auto_rotate }}'
+            data-speed='{{ section.settings.change_slides_speed }}'
           >
             {%- for block in section.blocks -%}
-              <div
-                class="slideshow__slide slider__slide grid__item grid--1-col"
-                id="Slide-{{ section.id }}-{{ forloop.index }}"
-                {{ block.shopify_attributes }}
-                role="group"
-                aria-roledescription="{{ 'sections.announcements.announcement' | t }}"
-                aria-label="{{ forloop.index }} {{ 'general.slider.of' | t }} {{ forloop.length }}"
-                tabindex="-1"
-              >
+              {%- if block.type == 'announcement' -%}
                 <div
-                  class="announcement-bar__announcement"
-                  role="region"
-                  aria-label="{{ 'sections.header.announcement' | t }}"
+                  class='slideshow__slide slider__slide grid__item grid--1-col'
+                  id='Slide-{{ section.id }}-{{ forloop.index }}'
                   {{ block.shopify_attributes }}
+                  role='group'
+                  aria-roledescription='{{ 'sections.announcements.announcement' | t }}'
+                  aria-label='{{ forloop.index }} {{ 'general.slider.of' | t }} {{ forloop.length }}'
+                  tabindex='-1'
                 >
-                  {%- if block.settings.text != blank -%}
-                    {%- if block.settings.link != blank -%}
-                      <a
-                        href="{{ block.settings.link }}"
-                        class="announcement-bar__link link link--text focus-inset animate-arrow"
-                      >
-                    {%- endif -%}
-                    <p class="announcement-bar__message h5">
-                      <span>{{ block.settings.text | escape }}</span>
+                  <div
+                    class='announcement-bar__announcement'
+                    role='region'
+                    aria-label='{{ 'sections.header.announcement' | t }}'
+                    {{ block.shopify_attributes }}
+                  >
+                    {%- if block.settings.text != blank -%}
                       {%- if block.settings.link != blank -%}
-                        {{- 'icon-arrow.svg' | inline_asset_content -}}
+                        <a
+                          href='{{ block.settings.link }}'
+                          class='announcement-bar__link link link--text focus-inset animate-arrow'
+                        >
                       {%- endif -%}
-                    </p>
-                    {%- if block.settings.link != blank -%}
-                      </a>
+                      <p class='announcement-bar__message h5'>
+                        <span>{{ block.settings.text | escape }}</span>
+                        {%- if block.settings.link != blank -%}
+                          {{- 'icon-arrow.svg' | inline_asset_content -}}
+                        {%- endif -%}
+                      </p>
+                      {%- if block.settings.link != blank -%}
+                        </a>
+                      {%- endif -%}
                     {%- endif -%}
-                  {%- endif -%}
+                  </div>
                 </div>
-              </div>
+              {%- endif -%}
             {%- endfor -%}
           </div>
           <button
-            type="button"
-            class="slider-button slider-button--next"
-            name="next"
-            aria-label="{{ 'sections.announcements.next_announcement' | t }}"
-            aria-controls="Slider-{{ section.id }}"
+            type='button'
+            class='slider-button slider-button--next'
+            name='next'
+            aria-label='{{ 'sections.announcements.next_announcement' | t }}'
+            aria-controls='Slider-{{ section.id }}'
           >
-            <span class="svg-wrapper">
+            <span class='svg-wrapper'>
               {{- 'icon-caret.svg' | inline_asset_content -}}
             </span>
           </button>
         </div>
       </slideshow-component>
       {%- if request.design_mode -%}
-        <script src="{{ 'theme-editor.js' | asset_url }}" defer="defer"></script>
+        <script src='{{ 'theme-editor.js' | asset_url }}' defer='defer'></script>
         <style>
           /* theme editor power preview fix */
           .announcement-bar-slider .slider__slide[aria-hidden='true'] {
@@ -138,12 +301,12 @@
         </style>
       {%- endif -%}
     {%- endif -%}
-    <div class="localization-wrapper">
+    <div class='localization-wrapper'>
       {%- if section.settings.enable_country_selector and localization.available_countries.size > 1 -%}
-        <localization-form class="small-hide medium-hide">
+        <localization-form class='small-hide medium-hide'>
           {%- form 'localization', id: 'AnnouncementCountryForm', class: 'localization-form' -%}
             <div>
-              <h2 class="visually-hidden" id="AnnouncementCountryLabel">{{ 'localization.country_label' | t }}</h2>
+              <h2 class='visually-hidden' id='AnnouncementCountryLabel'>{{ 'localization.country_label' | t }}</h2>
               {%- render 'country-localization', localPosition: 'AnnouncementCountry' -%}
             </div>
           {%- endform -%}
@@ -151,10 +314,10 @@
       {% endif %}
 
       {%- if section.settings.enable_language_selector and localization.available_languages.size > 1 -%}
-        <localization-form class="small-hide medium-hide">
+        <localization-form class='small-hide medium-hide'>
           {%- form 'localization', id: 'AnnouncementLanguageForm', class: 'localization-form' -%}
             <div>
-              <h2 class="visually-hidden" id="AnnouncementLanguageLabel">{{ 'localization.language_label' | t }}</h2>
+              <h2 class='visually-hidden' id='AnnouncementLanguageLabel'>{{ 'localization.language_label' | t }}</h2>
               {%- render 'language-localization', localPosition: 'AnnouncementLanguage' -%}
             </div>
           {%- endform -%}
@@ -162,6 +325,9 @@
       {%- endif -%}
     </div>
   </div>
+  {% if section.settings.motivator_display == 'both' or section.settings.motivator_display == 'banner' %}
+    {% render 'shipping-motivator' %}
+  {% endif %}
 </div>
 
 {% schema %}
@@ -186,15 +352,9 @@
       "label": "t:sections.header.settings.show_line_separator.label"
     },
     {
-      "type": "header",
-      "content": "t:sections.announcement-bar.settings.header__1.content",
-      "info": "t:sections.announcement-bar.settings.header__1.info"
-    },
-    {
       "type": "checkbox",
-      "id": "show_social",
-      "default": false,
-      "label": "t:sections.announcement-bar.settings.show_social.label"
+      "id": "banner_fixed",
+      "label": "Banner stays visibile when scrolling"
     },
     {
       "type": "header",
@@ -215,6 +375,44 @@
       "unit": "s",
       "label": "t:sections.announcement-bar.settings.change_slides_speed.label",
       "default": 5
+    },
+    {
+      "type": "header",
+      "content": "Shipping Motivator"
+    },
+    {
+      "type": "text",
+      "id": "progress_message_template",
+      "label": "Progress Message",
+      "default": "You're [MONEY] away from unlocking your [GOAL]",
+      "info": "The template to be used for the progress message. Must contain [MONEY] and [GOAL], which will be replaced dynamically."
+    },
+    {
+      "type": "text",
+      "id": "complete_message_template",
+      "label": "Complete Message",
+      "default": "Nice Job! You've unlocked all the offers!",
+      "info": "This message will be displayed when all offers are complete"
+    },
+    {
+      "type": "select",
+      "id": "motivator_display",
+      "options": [
+        {
+          "value": "banner",
+          "label": "Banner"
+        },
+        {
+          "value": "cart",
+          "label": "Cart"
+        },
+        {
+          "value": "both",
+          "label": "Both"
+        }
+      ],
+      "default": "both",
+      "label": "Display in"
     },
     {
       "type": "header",
@@ -241,6 +439,123 @@
   ],
   "blocks": [
     {
+      "type": "goal_discount",
+      "name": "Goal: Discount",
+      "settings": [
+        {
+          "type": "number",
+          "id": "goal_value",
+          "label": "Minimum Cart Value",
+          "default": 200
+        },
+        {
+          "type": "text",
+          "id": "goal_title",
+          "label": "Title",
+          "default": "Free Shipping"
+        },
+        {
+          "type": "text",
+          "id": "goal_complete_msg",
+          "label": "Goal Completed message",
+          "default": "You got free shipping!"
+        },
+        {
+          "type": "header",
+          "content": "Reward",
+          "info": "Note: Any discounts to apply to the cart will still need to be created in Discounts or Shopify Scripts"
+        },
+        {
+          "type": "text",
+          "id": "goal_countries",
+          "label": "Eligible Countries",
+          "info": "A comma seperated list of country codes that this goal is eligible to display in. \n https:\/\/www.nationsonline.org\/oneworld\/country_code_list.htm"
+        }
+      ]
+    },
+    {
+      "type": "goal_gwp_product",
+      "name": "Goal: GWP Product",
+      "settings": [
+        {
+          "type": "number",
+          "id": "goal_value",
+          "label": "Minimum Cart Value",
+          "default": 200
+        },
+        {
+          "type": "text",
+          "id": "goal_title",
+          "label": "Title",
+          "default": "Free Tote"
+        },
+        {
+          "type": "text",
+          "id": "goal_complete_msg",
+          "label": "Goal Completed message",
+          "default": "You get a free tote!"
+        },
+        {
+          "type": "header",
+          "content": "Reward",
+          "info": "Note: The discounts for this product will still need to be created in Discounts or Shopify Scripts"
+        },
+        {
+          "type": "product",
+          "id": "goal_product",
+          "label": "Product",
+          "info": "This product will be automatically added to the cart when the goal is completed."
+        },
+        {
+          "type": "text",
+          "id": "goal_countries",
+          "label": "Eligible Countries",
+          "info": "A comma seperated list of country codes that this goal is eligible to display in. \n https:\/\/www.nationsonline.org\/oneworld\/country_code_list.htm"
+        }
+      ]
+    },
+    {
+      "type": "goal_gwp_collection",
+      "name": "Goal: GWP Collection",
+      "settings": [
+        {
+          "type": "number",
+          "id": "goal_value",
+          "label": "Minimum Cart Value",
+          "default": 200
+        },
+        {
+          "type": "text",
+          "id": "goal_title",
+          "label": "Title",
+          "default": "Free Gift"
+        },
+        {
+          "type": "text",
+          "id": "goal_complete_msg",
+          "label": "Goal Completed message",
+          "default": "Select your free gift!"
+        },
+        {
+          "type": "header",
+          "content": "Reward",
+          "info": "Note: The discounts for these products will still need to be created in Discounts or Shopify Scripts"
+        },
+        {
+          "type": "collection",
+          "id": "goal_collection",
+          "label": "Collection",
+          "info": "This collection will be displayed to the user to select a product from to add to the cart when the goal is completed."
+        },
+        {
+          "type": "text",
+          "id": "goal_countries",
+          "label": "Eligible Countries",
+          "info": "A comma seperated list of country codes that this goal is eligible to display in. \n https:\/\/www.nationsonline.org\/oneworld\/country_code_list.htm"
+        }
+      ]
+    },
+    {
       "type": "announcement",
       "name": "t:sections.announcement-bar.blocks.announcement.name",
       "settings": [
@@ -254,6 +569,12 @@
           "type": "url",
           "id": "link",
           "label": "t:sections.announcement-bar.blocks.announcement.settings.link.label"
+        },
+        {
+          "type": "text",
+          "id": "countries",
+          "label": "Eligible Countries",
+          "info": "A comma seperated list of country codes that this mesage will display in. Leave blank to cover all that are not specified elsewhere. https:\/\/www.nationsonline.org\/oneworld\/country_code_list.htm"
         }
       ]
     }

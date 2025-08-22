@@ -54,7 +54,7 @@
   <div id='GalleryStatus-{{ section.id }}' class='visually-hidden' role='status'></div>
   <div
     id='GalleryViewer-{{ section.id }}'
-    class='product-gallery-swiper-container tw-w-full lg:tw-w-[calc(100%-150px)]'
+    class='product-gallery-swiper-container tw-w-full lg:tw-w-[45vw] lg:tw-h-[56vw]'
   >
     <a class='skip-to-content-link button visually-hidden quick-add-hidden' href='#ProductInfo-{{ section.id }}'>
       {{ 'accessibility.skip_to_product_info' | t }}
@@ -131,17 +131,23 @@
       </ul>
 
       {%- comment -%} Swiper Navigation {%- endcomment -%}
-      <div class='swiper-button-prev product-gallery-nav tw-z-50 product-gallery-nav--prev'></div>
-      <div class='swiper-button-next product-gallery-nav tw-z-50 product-gallery-nav--next'></div>
+      <div class='swiper-button-prev product-gallery-nav tw-z-50 product-gallery-nav--prev'>
+        <span class='tw-sr-only'>Previous</span>
+      </div>
+      <div class='swiper-button-next product-gallery-nav tw-z-50 product-gallery-nav--next'>
+        <span class='tw-sr-only'>Next</span>
+      </div>
     </div>
 
-    {%- comment -%} Gallery Counter {%- endcomment -%}
-    <div class='product-gallery-counter quick-add-hidden{% if hide_mobile_slider %} small-hide{% endif %}'>
-      <span class='product-gallery-counter-current'>1</span>
-      <span aria-hidden='true'> / </span>
-      <span class='visually-hidden'>{{ 'general.slider.of' | t }}</span>
-      <span class='product-gallery-counter-total'>{{ media_count }}</span>
-    </div>
+    {%- comment -%}
+      Gallery Counter
+      <div class='product-gallery-counter quick-add-hidden{% if hide_mobile_slider %} small-hide{% endif %}'>
+        <span class='product-gallery-counter-current'>1</span>
+        <span aria-hidden='true'> / </span>
+        <span class='visually-hidden'>{{ 'general.slider.of' | t }}</span>
+        <span class='product-gallery-counter-total'>{{ media_count }}</span>
+      </div>
+    {%- endcomment -%}
   </div>
   {%- if first_3d_model -%}
     <button

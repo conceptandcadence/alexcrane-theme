@@ -1,0 +1,443 @@
+{% if section.blocks.size > 0 %}
+  {%- comment -%} Swiper dependencies for mobile carousel {%- endcomment -%}
+  <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css'>
+  <script src='https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js' defer></script>
+
+  <section class='page-width sustainable-features !tw-my-[64px] lg:!tw-my-[96px]'>
+    {%- comment -%} Mobile Swiper Layout (visible only on mobile) {%- endcomment -%}
+    <div class='sustainable-features-mobile lg:tw-hidden max-md:tw-w-[calc(100%+15px)]'>
+      <div class='sustainable-feature md:tw-border md:tw-border-[#ececec] md:tw-p-16 tw-rounded-[2px] md:tw-mb-8 max-md:tw-pb-[24px] max-md:tw-pr-[15px]'>
+        <div class='sustainable-features__content'>
+          <div class='sustainable-features__text'>
+            <h3 class='sustainable-features__title tw-text-[24px] tw-leading-[32px] tw-mb-6 md:tw-mb-12'>
+              {{ section.settings.title }}
+            </h3>
+            <div class='sustainable-features__description rte tw-text-[14px] tw-leading-[18px]'>
+              {{ section.settings.description }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class='swiper sustainable-features-swiper'>
+        <div class='swiper-wrapper'>
+          {% for block in section.blocks %}
+            <div class='swiper-slide'>
+              <div class='sustainable-feature tw-rounded-[2px] tw-h-full'>
+                {% assign current_image = block.settings.image %}
+                {% if current_image != blank %}
+                  <div class='sustainable-features__media'>
+                    {% if current_image != blank %}
+                      <img
+                        class='tw-image-cover tw-w-full tw-h-auto tw-overflow-hidden tw-pointer-events-none'
+                        src='{{ current_image | image_url: width: 400 }}'
+                        alt='{{ block.settings.title }}'
+                        width='400'
+                        height='400'
+                      >
+                    {% endif %}
+                    {% if block.settings.video != blank %}
+                      <div class='sustainable-features__video-container'>
+                        <video
+                          autoplay=''
+                          muted=''
+                          loop=''
+                          playsinline=''
+                          {% if section.settings.title != blank %}
+                            title='block.settings.title'
+                          {% endif -%}
+                          {% if block.settings.image != blank %}
+                            poster='{{ block.settings.image | image_url: width: 800 }}'
+                          {% endif %}
+                          class='sustainable-features__video'
+                        >
+                          <source type='video/mp4' src='{{ block.settings.video }}'>
+                        </video>
+                      </div>
+                    {% endif %}
+                  </div>
+                  <div class='sustainable-features__text tw-mt-12'>
+                    <h3 class='sustainable-features__title tw-text-[18px] tw-leading-[28px] tw-mb-4'>
+                      {{ block.settings.title }}
+                    </h3>
+                    <div class='sustainable-features__description rte tw-text-[14px] tw-leading-[18px] tw-mt-4'>
+                      {{ block.settings.description }}
+                    </div>
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+
+        {%- comment -%} Swiper Navigation - Previous Arrow (left side) {%- endcomment -%}
+        <div class='swiper-button-prev sustainable-nav sustainable-nav--prev'></div>
+
+        {%- comment -%} Swiper Counter and Next Arrow (bottom right) {%- endcomment -%}
+        <div class='sustainable-controls'>
+          <div class='sustainable-counter'>
+            <span class='sustainable-counter__current'>1</span>
+            <span class='sustainable-counter__separator'>/</span>
+            <span class='sustainable-counter__total'>{{ section.blocks.size }}</span>
+          </div>
+          <div class='swiper-button-next sustainable-nav sustainable-nav--next sustainable-nav--bottom'></div>
+        </div>
+      </div>
+    </div>
+
+    {%- comment -%} Desktop Grid Layout (visible only on desktop) {%- endcomment -%}
+    <div class='sustainable-features-desktop tw-hidden lg:tw-block'>
+      <div class='image-with-text__grid grid grid--1-col grid--4-col-tablet image-with-text__grid lg:!tw-gap-x-[48px]'>
+        <div class='sustainable-feature grid__item tw-border tw-border-[#ececec] tw-p-16 tw-rounded-[2px]'>
+          <div class='sustainable-features__content'>
+            <div class='sustainable-features__text'>
+              <h3 class='sustainable-features__title tw-text-[24px] tw-leading-[32px] tw-mb-12'>
+                {{ section.settings.title }}
+              </h3>
+              <div class='sustainable-features__description rte tw-text-[14px] tw-leading-[18px]'>
+                {{ section.settings.description }}
+              </div>
+            </div>
+          </div>
+        </div>
+        {% for block in section.blocks %}
+          <div class='sustainable-feature grid__item'>
+            {% assign current_image = block.settings.image %}
+            {% if current_image != blank %}
+              <div class='sustainable-features__media'>
+                {% if current_image != blank %}
+                  <img
+                    class='tw-image-cover tw-w-full tw-h-auto tw-overflow-hidden tw-pointer-events-none'
+                    src='{{ current_image | image_url: width: 400 }}'
+                    alt='{{ block.settings.title }}'
+                    width='400'
+                    height='400'
+                  >
+                {% endif %}
+                {% if block.settings.video != blank %}
+                  <div class='sustainable-features__video-container'>
+                    <video
+                      autoplay=''
+                      muted=''
+                      loop=''
+                      playsinline=''
+                      {% if section.settings.title != blank %}
+                        title='block.settings.title'
+                      {% endif -%}
+                      {% if block.settings.image != blank %}
+                        poster='{{ block.settings.image | image_url: width: 800 }}'
+                      {% endif %}
+                      class='sustainable-features__video'
+                    >
+                      <source type='video/mp4' src='{{ block.settings.video }}'>
+                    </video>
+                  </div>
+                {% endif %}
+              </div>
+              <div class='sustainable-features__text tw-mt-12'>
+                <h3 class='sustainable-features__title tw-text-[18px] tw-leading-[28px] tw-mb-4'>
+                  {{ block.settings.title }}
+                </h3>
+                <div class='sustainable-features__description rte tw-text-[14px] tw-leading-[18px] tw-mt-4'>
+                  {{ block.settings.description }}
+                </div>
+              </div>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+{% endif %}
+
+<style>
+  /* Sustainable Features Swiper Styles */
+  .sustainable-features-swiper {
+    overflow: hidden;
+    position: relative;
+    padding-bottom: 3.5rem; /* Space for counter and navigation */
+  }
+
+  .sustainable-features-swiper .swiper-slide {
+    height: auto;
+    padding: 0; /* Spacing between slides */
+  }
+
+  /* Navigation Arrows */
+  .sustainable-nav {
+    position: absolute;
+    z-index: 10;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #000;
+    font-size: 1rem;
+    opacity: 0.8;
+  }
+
+  .sustainable-nav:hover {
+    background: rgba(255, 255, 255, 1);
+    border-color: #000;
+    opacity: 1;
+    transform: scale(1.1);
+  }
+
+  /* Previous arrow - left side, vertically centered */
+  .sustainable-nav--prev {
+    left: 0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .sustainable-nav--prev:hover {
+    transform: translateY(-50%) scale(1.1);
+  }
+
+  /* Next arrow - bottom right corner */
+  .sustainable-nav--bottom {
+    position: static !important;
+    transform: none !important;
+  }
+
+  .sustainable-nav--bottom:hover {
+    transform: scale(1.1) !important;
+  }
+
+  .sustainable-nav:after {
+    font-family: 'swiper-icons';
+    font-size: 0.875rem;
+    font-weight: 900;
+    text-transform: none !important;
+    letter-spacing: 0;
+    font-variant: initial;
+    line-height: 1;
+  }
+
+  .sustainable-nav--prev:after {
+    content: 'prev';
+  }
+
+  .sustainable-nav--next:after {
+    content: 'next';
+  }
+
+  /* Counter and Controls Container */
+  .sustainable-controls {
+    position: absolute;
+    bottom: 0;
+    right: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    z-index: 10;
+  }
+
+  /* Counter Styles */
+  .sustainable-counter {
+    display: flex;
+    align-items: center;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #000;
+    opacity: 0.8;
+  }
+
+  .sustainable-counter__current {
+    min-width: 1.5rem;
+    text-align: center;
+  }
+
+  .sustainable-counter__separator {
+    margin: 0 0.25rem;
+  }
+
+  .sustainable-counter__total {
+    min-width: 1.5rem;
+    text-align: center;
+  }
+
+  /* Ensure slides have equal height */
+  .sustainable-features-swiper .swiper-slide .sustainable-feature {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .sustainable-features-swiper .sustainable-features__text {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sustainable-features-swiper .sustainable-features__description {
+    flex-grow: 1;
+  }
+  @media screen and (max-width: 749px) {
+    .sustainable-features__title br {
+      display: none;
+    }
+  }
+  @media screen and (min-width: 990px) {
+    .sustainable-feature:first-child {
+      width: 25% !important;
+      padding: 0 84px 0 0;
+      border: 0;
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // Only initialize swiper if we're on mobile and Swiper is available
+    function initSustainableSwiper() {
+      if (typeof Swiper === 'undefined') {
+        setTimeout(initSustainableSwiper, 100);
+        return;
+      }
+
+      const swiperContainer = document.querySelector('.sustainable-features-swiper');
+      if (!swiperContainer) return;
+
+      // Only initialize on mobile screens (below 1024px based on lg: breakpoint)
+      function shouldInitSwiper() {
+        return window.innerWidth < 1024;
+      }
+
+      let swiper = null;
+
+      // Function to update the counter display
+      function updateCounter(currentSlide) {
+        const counterElement = document.querySelector('.sustainable-counter__current');
+        if (counterElement) {
+          counterElement.textContent = currentSlide;
+        }
+      }
+
+      function initSwiper() {
+        if (shouldInitSwiper() && !swiper) {
+          swiper = new Swiper('.sustainable-features-swiper', {
+            slidesPerView: 1,
+            spaceBetween: 16,
+            centeredSlides: false,
+            loop: false,
+            autoHeight: false,
+            grabCursor: true,
+
+            // Navigation arrows
+            navigation: {
+              nextEl: '.sustainable-nav--next',
+              prevEl: '.sustainable-nav--prev',
+            },
+
+            // Custom events for counter update
+            on: {
+              slideChange: function () {
+                updateCounter(this.activeIndex + 1);
+              },
+              init: function () {
+                updateCounter(1);
+              },
+            },
+
+            // Responsive breakpoints for different mobile sizes
+            breakpoints: {
+              480: {
+                slidesPerView: 1.2,
+                spaceBetween: 20,
+              },
+              640: {
+                slidesPerView: 1.5,
+                spaceBetween: 24,
+              },
+            },
+
+            // Touch settings
+            touchRatio: 1,
+            touchAngle: 45,
+            simulateTouch: true,
+            allowTouchMove: true,
+            touchStartPreventDefault: false,
+          });
+        } else if (!shouldInitSwiper() && swiper) {
+          swiper.destroy(true, true);
+          swiper = null;
+        }
+      }
+
+      // Initialize on load
+      initSwiper();
+
+      // Re-initialize on window resize
+      let resizeTimeout;
+      window.addEventListener('resize', function () {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(initSwiper, 250);
+      });
+    }
+
+    initSustainableSwiper();
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Sustainability Feature",
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "title",
+      "label": "Title",
+      "default": "<p>Section Title</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description"
+    }
+  ],
+  "max_blocks": 3,
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "label": "Description"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "url",
+          "id": "video",
+          "label": "Video",
+          "info": "When using a video, you must also add an image for when the video is loading."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Sustainability Feature",
+      "blocks": []
+    }
+  ]
+}
+{% endschema %}

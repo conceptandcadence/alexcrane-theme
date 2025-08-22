@@ -38,8 +38,32 @@
         padding-bottom: {{ section.settings.padding_bottom }}px;
       }
     }
+		.product__tab-content[aria-expanded="false"] {
+				display: none !important;
+		}
+		.product__tab-content .card__heading a, .product__tab-content .price span {
+				color: #000 !important;
+				font-weight: 400 !important;
+				font-size: 12px !important;
+				line-height: 15px !important;
+		}
+		.product__tab-content .primary {
+			gap: 2px !important;
+		}
+		.product__tab-content .secondary {
+			display: none !important;
+		}
+
+		.product__tab-content .quick-add__submit {
+			min-height: 24px !important;
+			height: 24px !important;
+		}
   {%- endstyle -%}
 
+	
+<script type="text/javascript">
+(function e(){var e=document.createElement("script");e.type="text/javascript",e.async=true,e.src="//staticw2.yotpo.com/8Jh6NwDddZhTIEl7eOeXLckQbUYrE0f7qK78qcuA/widget.js";var t=document.getElementsByTagName("script")[0];t.parentNode.insertBefore(e,t)})();
+</script>
   <script src='{{ 'product-info.js' | asset_url }}' defer='defer'></script>
   <script src='{{ 'product-form.js' | asset_url }}' defer='defer'></script>
   {%- if product.quantity_price_breaks_configured? -%}
@@ -80,7 +104,7 @@
   <div class='page-width'>
     <div class='product product--{{ section.settings.media_size }} product--{{ section.settings.media_position }} product--{{ section.settings.gallery_layout }} product--mobile-{{ section.settings.mobile_thumbnails }} grid grid--1-col {% if product.media.size > 0 %}grid--2-col-tablet{% else %}product--no-media{% endif %}'>
       <div class='quick-add-modal__header quick-add-only'>
-        <div class='tw-flex tw-justify-between tw-items-center tw-gap-4 tw-w-full tw-mb-4'>
+        <div class='tw-flex tw-justify-between tw-items-start tw-gap-4 tw-w-full tw-mb-4'>
           <div class='product__title' {{ block.shopify_attributes }}>
             <h1 class='tw-text-[18px] tw-leading-[24px]'>{{ product.title | escape }}</h1>
             <a href='{{ product.url }}' class='product__title'>
@@ -99,9 +123,9 @@
           </div>
         {%- endif -%}
       </div>
-      <div class='grid__item product__media-wrapper'>
+      <div class='grid__item product__media-wrapper tw-flex tw-justify-start tw-h-auto'>
         <!-- Default media gallery for main product page -->
-        <div class='quick-add-hidden'>
+        <div class='quick-add-hidden tw-max-w-full max-md:tw-w-full'>
           {%- if section.settings.gallery_layout == 'swiper_thumbnails' -%}
             {% render 'product-swiper-gallery', variant_images: variant_images %}
           {%- else -%}
@@ -110,13 +134,15 @@
         </div>
 
         <!-- Modal carousel for quick-add modal only -->
-        <div class='quick-add-only'>
-          {% render 'modal-media-carousel',
-            product: product,
-            modal_id: section.id,
-            media_aspect_ratio: product.featured_media.aspect_ratio,
-            lazy_load: true
-          %}
+        <div class='quick-add-only tw-w-full tw-h-auto'>
+          <div>
+            {% render 'modal-media-carousel',
+              product: product,
+              modal_id: section.id,
+              media_aspect_ratio: product.featured_media.aspect_ratio,
+              lazy_load: true
+            %}
+          </div>
         </div>
       </div>
       <div class='product__info-wrapper grid__item{% if settings.page_width > 1400 and section.settings.media_size == "small" %} product__info-wrapper--extra-padding{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}'>
@@ -507,6 +533,7 @@
                     {{ block.settings.text | default: block.settings.page.title | escape }}
                   </button>
                 </modal-opener>
+
               {%- when 'share' -%}
                 {% liquid
                   assign share_url = product.selected_variant.url | default: product.url | prepend: request.origin
@@ -525,44 +552,196 @@
                   section_id: section.id,
                   show_pickup_availability: true
                 -%}
-              {%- when 'rating' -%}
-                {%- if product.metafields.reviews.rating.value != blank -%}
-                  <div class='rating-wrapper'>
-                    {% liquid
-                      assign rating_decimal = 0
-                      assign decimal = product.metafields.reviews.rating.value.rating | modulo: 1
-                      if decimal >= 0.3 and decimal <= 0.7
-                        assign rating_decimal = 0.5
-                      elsif decimal > 0.7
-                        assign rating_decimal = 1
-                      endif
-                    %}
-                    <div
-                      class='rating'
-                      role='img'
-                      aria-label='{{ 'accessibility.star_reviews_info' | t: rating_value: product.metafields.reviews.rating.value, rating_max: product.metafields.reviews.rating.value.scale_max }}'
+
+              {%- when 'tabbed_list' -%}
+                <div class='product__tabbed-list quick-add-hidden !tw-mt-0'>
+                  <ul class='tw-flex tw-relative tw-mb-8'>
+                    <li class='product__tab tw-mr-4'>
+                      <button
+                        class='product__tab tw-text-[12px] tw-leading-[15px] tw-font-medium tw-border-b tw-border-black hover:tw-border-black'
+                        data-panel='materials'
+                      >
+                        Materials
+                      </button>
+                    </li>
+                    <li class='product__tab tw-mr-6'>
+                      <button
+                        class='product__tab tw-text-[12px] tw-leading-[15px] tw-font-medium tw-border-b tw-border-[#ececec] hover:tw-border-black'
+                        data-panel='fit'
+                      >
+                        Fit
+                      </button>
+                    </li>
+                    <li class='product__tab tw-mr-6'>
+                      <button
+                        class='product__tab tw-text-[12px] tw-leading-[15px] tw-font-medium tw-border-b tw-border-[#ececec] hover:tw-border-black'
+                        data-panel='details'
+                      >
+                        Details
+                      </button>
+                    </li>
+                    <li class='product__tab tw-mr-6'>
+                      <button
+                        class='product__tab tw-text-[12px] tw-leading-[15px] tw-font-medium tw-border-b tw-border-[#ececec] hover:tw-border-black'
+                        data-panel='returns'
+                      >
+                        Returns
+                      </button>
+                    </li>
+                    <li class='product__tab tw-mr-6'>
+                      <button
+                        class='product__tab tw-text-[12px] tw-leading-[15px] tw-font-medium tw-border-b tw-border-[#ececec] hover:tw-border-black'
+                        data-panel='shop-the-look'
+                      >
+                        Shop the Look
+                      </button>
+                    </li>
+                  </ul>
+                  <ul class='product__text-body tw-flex quick-add-hidden tw-flex-col' {{ block.shopify_attributes }}>
+                    <li
+                      class='product__tab-content rte tw-text-[12px] tw-leading-[15px] tw-flex tw-justify-between tw-gap-4'
+                      data-panel='materials'
+                      aria-expanded='true'
                     >
-                      <span
-                        aria-hidden='true'
-                        class='rating-star'
-                        style='--rating: {{ product.metafields.reviews.rating.value.rating | floor }}; --rating-max: {{ product.metafields.reviews.rating.value.scale_max }}; --rating-decimal: {{ rating_decimal }};'
-                      ></span>
-                    </div>
-                    <p class='rating-text caption'>
-                      <span aria-hidden='true'>
-                        {{- product.metafields.reviews.rating.value }} /
-                        {{ product.metafields.reviews.rating.value.scale_max -}}
-                      </span>
-                    </p>
-                    <p class='rating-count caption'>
-                      <span aria-hidden='true'>({{ product.metafields.reviews.rating_count }})</span>
-                      <span class='visually-hidden'>
-                        {{- product.metafields.reviews.rating_count }}
-                        {{ 'accessibility.total_reviews' | t -}}
-                      </span>
-                    </p>
-                  </div>
-                {%- endif -%}
+											{% if product.metafields.options.materials.value != blank %}
+												{% for material in product.metafields.options.materials.value %}
+													{% if material.benefit != blank %}
+														<div class='image-with-text__text rte tw-text-[12px] tw-leading-[15px]'>
+															<div class='tw-flex tw-items-center tw-pb-3 tw-gap-2'>
+																<{% if material.collection != blank %}a{% else %}span{% endif %} {% if material.collection != blank %}href='{{ material.collection.value.url }}'{% endif %} class='!tw-text-black tw-text-[12px] tw-leading-[15px] tw-font-medium'>
+																	{{- material.title -}}
+																</{% if material.collection != blank %}a{% else %}span{% endif %}>
+																{% if material.icon != blank %}
+																	<img
+																		class='tw-image-cover tw-w-[12px] tw-h-[12px] tw-overflow-hidden tw-pointer-events-none !tw-mb-0'
+																		src='{{ material.icon.value | image_url: width: 24 }}'
+																		alt='{{ material.title }}'
+																		width='12'
+																		height='12'
+																	>
+																{% endif %}
+															</div>
+															{{ material.benefit | metafield_text }}
+														</div>
+													{% endif %}
+												{% endfor %}
+											{% endif %}
+                    </li>
+									<li
+										class='product__tab-content rte tw-text-[12px] tw-leading-[15px]'
+										data-panel='fit'
+										aria-expanded='false'
+									>
+									{% if product.metafields.custom_fields["details_fit"] != blank %}
+										<div class="product-detail fit tw-mb-4">
+											<h3 class="product-detail-label"><span class='!tw-text-black tw-text-[12px] tw-leading-[15px] tw-font-medium tw-mb-3'>Fit</span></h3>
+											<div class="product-detail-content !tw-text-black tw-text-[12px] tw-leading-[15px]">
+												{{ product.metafields.custom_fields["details_fit"] }}
+											</div>
+										</div>
+									{% endif %}
+									{% if product.metafields.custom_fields["details_model"] != blank %}
+										<div class="product-detail model tw-mb-4">
+											<h3 class="product-detail-label"><span class='!tw-text-black tw-text-[12px] tw-leading-[15px] tw-font-medium tw-mb-3'>Model</span></h3> 
+											<div class="product-detail-content !tw-text-black tw-text-[12px] tw-leading-[15px]">
+												{{ product.metafields.custom_fields["details_model"] }}
+											</div>
+										</div>
+									{% endif %}
+									</li>
+									<li
+										class='product__tab-content rte tw-text-[12px] tw-leading-[15px]'
+										data-panel='details'
+										aria-expanded='false'
+									>
+									{% if product.metafields.custom_fields["details_care"] != blank %}
+										<div class="product-detail care tw-mb-4">
+											<h3 class="product-detail-label"><span class='!tw-text-black tw-text-[12px] tw-leading-[15px] tw-font-medium tw-mb-3'>Care</span></h3> 
+											<div class="product-detail-content *:tw-mb-4 !tw-text-black tw-text-[12px] tw-leading-[15px]">
+												{{ product.metafields.custom_fields["details_care"] }}
+											</div>
+										</div>
+									{% endif %}
+									{% if product.metafields.custom_fields["details_origin"] != blank %}
+										<div class="product-detail origin tw-mb-4">
+											<h3 class="product-detail-label"><span class='!tw-text-black tw-text-[12px] tw-leading-[15px] tw-font-medium tw-mb-3'>Origin</span></h3> 
+											<div class="product-detail-content !tw-text-black tw-text-[12px] tw-leading-[15px]">
+												{{ product.metafields.custom_fields["details_origin"] }}
+											</div>
+										</div>
+									{% endif %}
+									</li>
+									<li
+										class='product__tab-content rte tw-text-[12px] tw-leading-[15px]'
+										data-panel='returns'
+										aria-expanded='false'
+									>
+										<span class="hidden stock-ship__shipping available tw-mb-4">{{ product.metafields.custom_fields["shipping_time"] | default: 'Ships in 1-2 business days' }}</span>
+										<div class="!tw-text-black tw-text-[12px] tw-leading-[15px] tw-mb-4">
+											We offer returns and exchanges on all domestic (US) orders. For returns, you have 30 days from the date of shipping to return for a refund. For exchanges, you have up to 40 days to exchange for something else or store credit. 
+										</div>
+										<div class="!tw-text-black tw-text-[12px] tw-leading-[15px]">
+											Worn, used, or damaged returns and exchange will not be accepted. If outside the return window, we can exchange or offer you store credit. We charge a $7 restocking fee on returns.
+										</div>
+									</li>
+									<li
+										class='product__tab-content tw-mt-4 rte tw-text-[12px] tw-leading-[15px]'
+										data-panel='shop-the-look'
+										aria-expanded='false'
+									>
+								<div
+							class='product-grid-container'
+						>
+							<ul
+								data-id='{{ section.id }}'
+								class='
+									grid product-grid grid--3-col-tablet-down
+									grid--3-col-desktop lg:!tw-gap-x-[12px] !tw-px-0
+								'
+							>
+								{% assign skip_card_product_styles = false %}
+								{%- for product in product.metafields.shopthelook.products.value limit: 2 -%}
+									{% assign lazy_load = false %}
+									{%- if forloop.index > 2 -%}
+										{%- assign lazy_load = true -%}
+									{%- endif -%}
+									<li class='grid__item'>
+										{% render 'card-product',
+											card_product: product,
+											media_aspect_ratio: 'adapt',
+											show_secondary_image: true,
+											show_vendor: false,
+											show_rating: false,
+											show_swatches: true,
+											lazy_load: true,
+											quick_add: 'standard'
+										%}
+									</li>
+									{%- assign skip_card_product_styles = true -%}
+								{%- endfor -%}
+							</ul>
+						</div>
+								</li>
+                  </ul>
+                </div>
+
+              {%- when 'rating' -%}
+								<div class="quick-add-hidden tw-flex tw-justify-between tw-items-center tw-mb-4 lg:tw-mb-8">
+									<nav class="product-breadcrumbs" role="navigation" aria-label="breadcrumbs">
+										<ol class="tw-flex tw-items-center">
+											<li class="breadcrumb__root tw-inline-block">
+												<a class='tw-text-[#767676] tw-text-[12px] tw-leading-[15px] tw-decoration-none transition-colors duration-300' href="/collections/shop/">Shop</a>    
+											</li>
+											{% if collection.url != blank and collection.url != '/collections/shop' %}
+													<li class="breadcrumb__collection">
+														<a class='tw-text-[#767676] tw-text-[12px] tw-leading-[15px] tw-decoration-none transition-colors duration-300' href="{{ collection.url }}">{{ collection.title }}</a>    
+													</li>
+											{% endif %}
+										</ol>
+									</nav>
+									<div class="product-rating yotpo bottomLine" data-product-id="{{ product.id }}" data-count="({{ product.metafields.yotpo.reviews_count  }})"></div>
+								</div>
+               
               {%- when 'complementary' -%}
                 <product-recommendations
                   class='complementary-products {% if block.settings.make_collapsible_row %} is-accordion{% endif %}{% if block.settings.enable_quick_add %} complementary-products-contains-quick-add{% endif %}'
@@ -719,7 +898,7 @@
 
           <a
             href='{{ product.url }}'
-            class='button button--full-width button--secondary'
+            class='button button--full-width button--secondary quick-add-only'
           >
             {{ 'products.product.view_full_details' | t }}
           </a>
@@ -764,12 +943,8 @@
         <!-- Swiper CSS and JS for Enhanced Gallery -->
         <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.0.5/swiper-bundle.min.css'>
         <script src='https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.0.5/swiper-bundle.min.js' defer='defer'></script>
-        <style>
-          {% render 'enhanced-gallery-styles' %}
-        </style>
-        <script>
-          {% render 'enhanced-gallery-script' %}
-        </script>
+				{% render 'enhanced-gallery-styles' %}
+				{% render 'enhanced-gallery-script' %}
       {%- endunless -%}
 
       {%- if section.settings.gallery_layout == 'swiper_thumbnails' -%}
@@ -804,6 +979,24 @@
       {{ product | structured_data }}
     </script>
   </div>
+  {%- if section.settings.show_sticky_cart_button -%}
+    {% render 'product-sticky-form', product: product %}
+  {%- endif -%}
+	
+	<script>
+		document.querySelectorAll('.product__tab').forEach((button) => {
+			button.addEventListener('click', (e) => {
+				console.log(e.target.dataset.panel);
+				document.querySelector('.product__tab.tw-border-black').classList.remove('tw-border-black');
+				document.querySelector('.product__tab-content[aria-expanded="true"]').setAttribute('aria-expanded', false);
+				document
+					.querySelector(`.product__tabbed-list .product__tab-content[data-panel="${e.target.dataset.panel}"]`)
+					.setAttribute('aria-expanded', true);
+				e.target.classList.add('tw-border-black');
+			});
+		});
+	</script>
+
 </product-info>
 
 {% schema %}
@@ -930,6 +1123,11 @@
     {
       "type": "quantity_selector",
       "name": "t:sections.main-product.blocks.quantity_selector.name",
+      "limit": 1
+    },
+    {
+      "type": "tabbed_list",
+      "name": "Tabbed List",
       "limit": 1
     },
     {
@@ -2309,6 +2507,12 @@
       ],
       "default": "hide",
       "label": "t:sections.main-product.settings.mobile_thumbnails.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_sticky_cart_button",
+      "label": "Show sticky add to cart button to the bottom of the page",
+      "default": true
     },
     {
       "type": "checkbox",

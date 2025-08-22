@@ -43,7 +43,6 @@ variant-selects {
 
 .product-form__input--dropdown {
   --swatch-input--size: 2rem;
-  margin-bottom: 1.6rem;
 }
 
 .product-form__input--dropdown .dropdown-swatch + select {
@@ -128,7 +127,8 @@ variant-selects {
 
 .product-form__input--pill input[type='radio'].disabled:checked + label,
 .product-form__input--pill input[type='radio']:disabled:checked + label {
-  color: rgba(var(--color-background), 0.6);
+  color: rgba(var(--color-foreground), 0.6);
+  border-color: rgba(var(--color-foreground), 1);
 }
 .product-form__input--pill input[type='radio']:focus-visible + label {
   box-shadow: 0 0 0 0.3rem rgb(var(--color-background)),
