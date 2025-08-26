@@ -18,19 +18,57 @@
           "type": "announcement",
           "settings": {
             "text": "We're a B-Corp! Shop sustainable clothing",
-            "link": "https://alexcrane.co/collections/springsummer2025"
+            "link": "https://alexcrane.co/collections/springsummer2025",
+            "countries": ""
+          }
+        },
+        "goal_discount_ewcjXm": {
+          "type": "goal_discount",
+          "settings": {
+            "goal_value": 200,
+            "goal_title": "Free Shipping",
+            "goal_complete_msg": "You got free shipping!",
+            "goal_countries": ""
+          }
+        },
+        "goal_gwp_product_qdBz4X": {
+          "type": "goal_gwp_product",
+          "settings": {
+            "goal_value": 250,
+            "goal_title": "Tote",
+            "goal_complete_msg": "You get a free tote!",
+            "goal_product": "heavyweight-tote",
+            "goal_product_removable": true,
+            "goal_countries": ""
+          }
+        },
+        "goal_gwp_collection_D6WjwL": {
+          "type": "goal_gwp_collection",
+          "settings": {
+            "goal_value": 350,
+            "goal_title": "Free Gift",
+            "goal_complete_msg": "Select your free gift!",
+            "goal_collection": "gwp-350-tier",
+            "goal_product_removable": true,
+            "goal_countries": ""
           }
         }
       },
       "block_order": [
-        "announcement-bar-0"
+        "announcement-bar-0",
+        "goal_discount_ewcjXm",
+        "goal_gwp_product_qdBz4X",
+        "goal_gwp_collection_D6WjwL"
       ],
       "settings": {
         "color_scheme": "scheme-5",
         "show_line_separator": true,
-        "show_social": false,
+        "banner_fixed": false,
         "auto_rotate": false,
         "change_slides_speed": 5,
+        "progress_message_template": "You're [MONEY] away from unlocking your [GOAL]",
+        "complete_message_template": "Nice Job! You've unlocked all the offers!",
+        "motivator_display": "both",
         "enable_country_selector": false,
         "enable_language_selector": false
       }
@@ -45,7 +83,7 @@
         "show_line_separator": false,
         "color_scheme": "scheme-1",
         "menu_color_scheme": "",
-        "enable_country_selector": true,
+        "enable_country_selector": false,
         "enable_language_selector": false,
         "enable_customer_avatar": true,
         "mobile_logo_position": "center",

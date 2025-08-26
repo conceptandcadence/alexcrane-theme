@@ -507,6 +507,12 @@
           "info": "This product will be automatically added to the cart when the goal is completed."
         },
         {
+          "type": "checkbox",
+          "id": "goal_product_removable",
+          "label": "Remove product from cart if the cart value is less than the goal value",
+          "default": false
+        },
+        {
           "type": "text",
           "id": "goal_countries",
           "label": "Eligible Countries",
@@ -546,6 +552,13 @@
           "id": "goal_collection",
           "label": "Collection",
           "info": "This collection will be displayed to the user to select a product from to add to the cart when the goal is completed."
+        },
+        {
+          "type": "checkbox",
+          "id": "goal_product_removable",
+          "label": "Remove when ineligible",
+          "info": "Remove product from cart if the cart value is less than the goal value",
+          "default": false
         },
         {
           "type": "text",

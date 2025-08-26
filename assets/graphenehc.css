@@ -843,10 +843,6 @@ html body #collection-nav {
   line-height: 1;
 }
 
-.plp-products-sort,
-.plp-products-filter {
-  min-width: 136px;
-}
 body.template-collection #collection-nav ul.primary > li:last-child {
   margin-right: 5px !important;
 }

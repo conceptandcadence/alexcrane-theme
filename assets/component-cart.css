@@ -218,7 +218,7 @@ cart-items {
   .cart__ctas {
     display: flex;
     flex-direction: column-reverse;
-    gap: 1rem;
+    gap: 0;
   }
 }
 

@@ -15,8 +15,8 @@
         "heading": {
           "type": "heading",
           "settings": {
-            "heading": "Golden Hour",
-            "heading_size": "h0"
+            "heading": "New for August",
+            "heading_size": "h1"
           }
         },
         "text": {
@@ -30,9 +30,9 @@
         "button": {
           "type": "buttons",
           "settings": {
-            "button_label_1": "Shop Now",
-            "button_link_1": "shopify://collections/all",
-            "button_style_secondary_1": true,
+            "button_label_1": "Shop New",
+            "button_link_1": "shopify://collections/new",
+            "button_style_secondary_1": false,
             "button_label_2": "",
             "button_link_2": "",
             "button_style_secondary_2": false
@@ -45,10 +45,10 @@
         "button"
       ],
       "settings": {
-        "image": "shopify://shop_images/Headerweb3.jpg",
+        "image": "shopify://shop_images/webhomepageaugust.jpg",
         "image_overlay_opacity": 0,
         "image_height": "large",
-        "desktop_content_position": "middle-center",
+        "desktop_content_position": "middle-right",
         "show_text_box": false,
         "desktop_content_alignment": "center",
         "color_scheme": "scheme-3",
@@ -70,9 +70,11 @@
         "collection": "new",
         "products_to_show": 12,
         "columns_desktop": 4,
+        "use_advanced_commerce": false,
         "full_width": false,
         "show_view_all": true,
         "view_all_style": "link",
+        "enable_pagination": false,
         "enable_desktop_slider": true,
         "color_scheme": "",
         "image_ratio": "adapt",
@@ -87,44 +89,101 @@
         "padding_bottom": 36
       }
     },
-    "c_editorial_feature_xiEN7b": {
-      "type": "c-editorial-feature",
+    "image_with_text_Xbphkx": {
+      "type": "image-with-text",
       "blocks": {
-        "heading_EjXtDp": {
+        "heading_HY97cm": {
           "type": "heading",
           "settings": {
             "heading": "Summer Favorite",
-            "heading_size": "h1"
+            "heading_size": "tw-text-[18px] tw-leading-[28px]"
           }
         },
-        "text_6GJzAV": {
+        "text_PVLAL8": {
           "type": "text",
           "settings": {
             "text": "<p>Nico is wearing the Alta Blazer and Alta Trousers in Bone, topped with the striped Knit Polo—a clean-cut combo that doesn’t mind getting a little rumpled. The polo’s got that beach-club stripe that keeps things playful, while the linen suiting stays cool under pressure. </p>",
             "text_style": "body"
           }
         },
-        "button_MjkW8B": {
+        "button_bP3PpW": {
           "type": "button",
           "settings": {
-            "button_label": "Shop Now",
-            "button_link": "shopify://collections/alta-suit",
-            "button_style": "subtle"
+            "button_label": "Button label",
+            "button_link": "",
+            "button_style_secondary": false
           }
         }
       },
       "block_order": [
-        "heading_EjXtDp",
-        "text_6GJzAV",
-        "button_MjkW8B"
+        "heading_HY97cm",
+        "text_PVLAL8",
+        "button_bP3PpW"
+      ],
+      "disabled": true,
+      "name": "t:sections.image-with-text.presets.name",
+      "settings": {
+        "image": "shopify://shop_images/col-image1_98752456-43a0-4d0f-ac2a-16d05e60ec76.jpg",
+        "image_2": "shopify://shop_images/col-image2_dbb55eaa-0a85-4463-bd0a-6029bcb5958d.jpg",
+        "height": "adapt",
+        "desktop_image_width": "small",
+        "layout": "text_first",
+        "desktop_content_position": "top",
+        "desktop_content_alignment": "left",
+        "content_layout": "no-overlap",
+        "section_color_scheme": "",
+        "color_scheme": "",
+        "image_behavior": "none",
+        "mobile_content_alignment": "left",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "c_editorial_feature_eWP8kc": {
+      "type": "c-editorial-feature",
+      "blocks": {
+        "heading_Keg3Wf": {
+          "type": "heading",
+          "settings": {
+            "heading": "Summer Favorite",
+            "heading_size": "h2"
+          }
+        },
+        "text_rBTp3w": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Nico is wearing the Alta Blazer and Alta Trousers in Bone, topped with the striped Knit Polo—a clean-cut combo that doesn’t mind getting a little rumpled. The polo’s got that beach-club stripe that keeps things playful, while the linen suiting stays cool under pressure. </p>",
+            "text_style": "body"
+          }
+        },
+        "button_3heqb8": {
+          "type": "button",
+          "settings": {
+            "button_label": "Shop the look"
+          }
+        },
+        "products_n78t9f": {
+          "type": "products",
+          "settings": {
+            "product_1": "alta-blazer-bone",
+            "product_2": "alta-trousers-bone",
+            "product_3": "knit-polo-lines"
+          }
+        }
+      },
+      "block_order": [
+        "heading_Keg3Wf",
+        "text_rBTp3w",
+        "button_3heqb8",
+        "products_n78t9f"
       ],
       "name": "t:sections.editorial-feature.presets.name",
       "settings": {
-        "image_1": "shopify://shop_images/col-image1.jpg",
-        "image_2": "shopify://shop_images/col-image1.jpg",
+        "image": "shopify://shop_images/col-image2_dbb55eaa-0a85-4463-bd0a-6029bcb5958d.jpg",
+        "image_2": "shopify://shop_images/col-image1_98752456-43a0-4d0f-ac2a-16d05e60ec76.jpg",
         "height": "adapt",
-        "desktop_image_width": "medium",
-        "layout": "image_first",
+        "desktop_image_width": "small",
+        "layout": "text_first",
         "desktop_content_position": "top",
         "desktop_content_alignment": "left",
         "content_layout": "no-overlap",
@@ -139,104 +198,130 @@
     "video": {
       "type": "video",
       "settings": {
-        "heading": "",
-        "heading_size": "h1",
+        "heading": "Sustainability",
+        "description": "<p>This might come as a surprise, but most clothes are made from plastic. Our clothes are made from 100% natural, renewable materials—and that makes us pretty rare. Learn more about our sustainability efforts and what sets us apart.</p>",
+        "content_width": "third",
         "enable_video_looping": true,
+        "enable_autoplay": true,
         "video": "shopify://files/videos/June HP Desktop_03a25867-e0b9-4d1d-b0ac-753d380a1315.mov",
         "video_url": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
-        "description": "Our Sustainability",
         "full_width": false,
         "color_scheme": "scheme-1",
-        "padding_top": 0,
-        "padding_bottom": 0
+        "padding_top": 100,
+        "padding_bottom": 64
       }
     },
-    "slideshow_xFbfxg": {
-      "type": "slideshow",
+    "press_carousel_yNicMj": {
+      "type": "press-carousel",
       "blocks": {
-        "slide_BEhW8U": {
-          "type": "slide",
+        "badf849a-12aa-4d96-a73c-61f6b0d0554a": {
+          "type": "quote",
           "settings": {
-            "heading": "Image slide",
-            "heading_size": "h1",
-            "subheading": "Tell your brand's story through images",
-            "button_label": "Button label",
-            "link": "",
-            "button_style_secondary": false,
-            "box_align": "middle-center",
-            "show_text_box": true,
-            "text_alignment": "center",
-            "image_overlay_opacity": 0,
-            "color_scheme": "scheme-1",
-            "text_alignment_mobile": "center"
+            "quote": "<p>A Better Vacation Tee Might Not Exist</p>",
+            "logo": "shopify://shop_images/gq2_f9a8ae7c-d39c-46de-ba31-53bc84dd9b17.jpg",
+            "title": "GQ",
+            "url": "shopify://collections/tees"
           }
         },
-        "slide_DTGKcp": {
-          "type": "slide",
+        "03027eee-b1c4-4794-9042-609e909fc2c9": {
+          "type": "quote",
           "settings": {
-            "heading": "Image slide",
-            "heading_size": "h2",
-            "subheading": "Tell your brand's story through images",
-            "button_label": "Button label",
-            "link": "",
-            "button_style_secondary": false,
-            "box_align": "middle-center",
-            "show_text_box": true,
-            "text_alignment": "center",
-            "image_overlay_opacity": 0,
-            "color_scheme": "",
-            "text_alignment_mobile": "center"
+            "quote": "<p>Soft From The Start and Gets Better With Every Wear</p>",
+            "logo": "shopify://shop_images/press-gear-patrol.jpg",
+            "title": "Gear Patrol",
+            "url": "shopify://collections/tees"
           }
         },
-        "slide_e68LVd": {
-          "type": "slide",
+        "8da58914-07d4-4889-a45e-d59df31a52ef": {
+          "type": "quote",
           "settings": {
-            "heading": "Image slide",
-            "heading_size": "h1",
-            "subheading": "Tell your brand's story through images",
-            "button_label": "Button label",
-            "link": "",
-            "button_style_secondary": false,
-            "box_align": "middle-center",
-            "show_text_box": true,
-            "text_alignment": "center",
-            "image_overlay_opacity": 0,
-            "color_scheme": "",
-            "text_alignment_mobile": "center"
+            "quote": "<p>This Blazer is classic Alex Crane, breezy and comfortable while super sophisticated</p>",
+            "logo": "shopify://shop_images/Mens-Health-Logo-500x281_400x200_269db04e-28ba-44f5-bae1-eec00bbbb7d0.png",
+            "title": "Mens Health",
+            "url": "shopify://collections/wedding"
+          }
+        },
+        "badf849a-12aa-4d96-a73c-61f6b0d0554a1": {
+          "type": "quote",
+          "settings": {
+            "quote": "<p>A Better Vacation Tee Might Not Exist</p>",
+            "logo": "shopify://shop_images/gq2_f9a8ae7c-d39c-46de-ba31-53bc84dd9b17.jpg",
+            "title": "GQ",
+            "url": "shopify://collections/tees"
+          }
+        },
+        "03027eee-b1c4-4794-9042-609e909fc2c91": {
+          "type": "quote",
+          "settings": {
+            "quote": "<p>Soft From The Start and Gets Better With Every Wear</p>",
+            "logo": "shopify://shop_images/press-gear-patrol.jpg",
+            "title": "Gear Patrol",
+            "url": "shopify://collections/tees"
+          }
+        },
+        "8da58914-07d4-4889-a45e-d59df31a52ef1": {
+          "type": "quote",
+          "settings": {
+            "quote": "<p>This Blazer is classic Alex Crane, breezy and comfortable while super sophisticated</p>",
+            "logo": "shopify://shop_images/Mens-Health-Logo-500x281_400x200_269db04e-28ba-44f5-bae1-eec00bbbb7d0.png",
+            "title": "Mens Health",
+            "url": "shopify://collections/wedding"
           }
         }
       },
       "block_order": [
-        "slide_BEhW8U",
-        "slide_DTGKcp",
-        "slide_e68LVd"
+        "badf849a-12aa-4d96-a73c-61f6b0d0554a",
+        "03027eee-b1c4-4794-9042-609e909fc2c9",
+        "8da58914-07d4-4889-a45e-d59df31a52ef",
+        "badf849a-12aa-4d96-a73c-61f6b0d0554a1",
+        "03027eee-b1c4-4794-9042-609e909fc2c91",
+        "8da58914-07d4-4889-a45e-d59df31a52ef1"
       ],
-      "name": "t:sections.slideshow.presets.name",
+      "custom_css": [
+        ".hp-press-carousel__quote {border-bottom: solid 1px #1b3448;}"
+      ],
       "settings": {
-        "layout": "grid",
-        "slide_height": "adapt_image",
-        "slider_visual": "dots",
-        "auto_rotate": false,
-        "change_slides_speed": 5,
-        "image_behavior": "none",
-        "show_text_below": false,
-        "accessibility_info": "Slideshow about our brand"
+        "variation": "all",
+        "title": "",
+        "subtitle": "",
+        "cell_count": 3,
+        "background": "#ffffff",
+        "background_image": "shopify://shop_images/so-white.jpg",
+        "text_color": "#000000",
+        "padding_top_m": 0,
+        "padding_bottom_m": 0,
+        "padding_left_m": 0,
+        "padding_right_m": 0,
+        "inner_padding_top_m": 0,
+        "inner_padding_bottom_m": 0,
+        "inner_padding_left_m": 0,
+        "inner_padding_right_m": 0,
+        "padding_top_d": 48,
+        "padding_bottom_d": 48,
+        "padding_left_d": 0,
+        "padding_right_d": 0,
+        "inner_padding_top_d": 0,
+        "inner_padding_bottom_d": 0,
+        "inner_padding_left_d": 0,
+        "inner_padding_right_d": 0
       }
     },
     "featured_collection": {
       "type": "featured-collection",
       "settings": {
-        "title": "Featured products",
+        "title": "Shop Best Sellers",
         "heading_size": "h2",
         "description": "",
         "show_description": false,
         "description_style": "body",
-        "collection": "all",
+        "collection": "bestsellers",
         "products_to_show": 12,
         "columns_desktop": 4,
+        "use_advanced_commerce": true,
         "full_width": false,
-        "show_view_all": false,
-        "view_all_style": "solid",
+        "show_view_all": true,
+        "view_all_style": "link",
+        "enable_pagination": false,
         "enable_desktop_slider": false,
         "color_scheme": "scheme-1",
         "image_ratio": "adapt",
@@ -247,17 +332,18 @@
         "quick_add": "none",
         "columns_mobile": "2",
         "swipe_on_mobile": false,
-        "padding_top": 28,
-        "padding_bottom": 36
+        "padding_top": 0,
+        "padding_bottom": 0
       }
     }
   },
   "order": [
     "image_banner",
     "featured_collection_MLwbf6",
-    "c_editorial_feature_xiEN7b",
+    "image_with_text_Xbphkx",
+    "c_editorial_feature_eWP8kc",
     "video",
-    "slideshow_xFbfxg",
+    "press_carousel_yNicMj",
     "featured_collection"
   ]
 }

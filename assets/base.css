@@ -302,62 +302,65 @@ h5,
   font-size: calc(var(--font-heading-scale) * 4rem);
 }
 
-@media only screen and (min-width: 750px) {
+@media only screen and (min-width: 990px) {
   .h0 {
-    font-size: calc(var(--font-heading-scale) * 5.2rem);
+    font-size: calc(var(--font-heading-scale) * 4.8rem);
   }
 }
 
 .h1 {
-  font-size: calc(var(--font-heading-scale) * 3rem);
+  font-size: calc(var(--font-heading-scale) * 2.8rem);
 }
 
-@media only screen and (min-width: 750px) {
+@media only screen and (min-width: 990px) {
   .h1 {
-    font-size: calc(var(--font-heading-scale) * 4rem);
+    font-size: calc(var(--font-heading-scale) * 4.2rem);
   }
 }
 
 .h2 {
-  font-size: calc(var(--font-heading-scale) * 2rem);
+  font-size: calc(var(--font-heading-scale) * 1.8rem);
 }
 
-@media only screen and (min-width: 750px) {
+@media only screen and (min-width: 990px) {
   .h2 {
     font-size: calc(var(--font-heading-scale) * 2.4rem);
   }
 }
 
 .h3 {
-  font-size: calc(var(--font-heading-scale) * 1.7rem);
+  font-size: calc(var(--font-heading-scale) * 1.2rem);
+  text-decoration: underline;
+  text-underline-offset: 0.35rem;
+  text-decoration-thickness: 0.15rem;
+  transition: text-decoration-color ease 100ms;
 }
 
-@media only screen and (min-width: 750px) {
+@media only screen and (min-width: 990px) {
   .h3 {
-    font-size: calc(var(--font-heading-scale) * 1.8rem);
+    font-size: calc(var(--font-heading-scale) * 1.2rem);
   }
 }
 
 .h4 {
   font-family: var(--font-heading-family);
   font-style: var(--font-heading-style);
-  font-size: calc(var(--font-heading-scale) * 1.5rem);
+  font-size: calc(var(--font-heading-scale) * 1.2rem);
+  text-underline-offset: 0.35rem;
+  transition: text-decoration-color ease 100ms;
 }
 
 .h5 {
   font-size: calc(var(--font-heading-scale) * 1.2rem);
-}
-
-@media only screen and (min-width: 750px) {
-  .h5 {
-    font-size: calc(var(--font-heading-scale) * 1.3rem);
-  }
+  text-underline-offset: 0.35rem;
+  transition: text-decoration-color ease 100ms;
 }
 
 .h6 {
   color: rgba(var(--color-foreground), 0.75);
-  margin-block-start: 1.67em;
-  margin-block-end: 1.67em;
+  font-size: calc(var(--font-heading-scale) * 1rem);
+  text-underline-offset: 0.35rem;
+  transition: text-decoration-color ease 100ms;
 }
 
 blockquote {
@@ -493,7 +496,7 @@ h6:empty {
   border: none;
   box-shadow: none;
   text-decoration: underline;
-  text-underline-offset: 0.3rem;
+  text-underline-offset: 0.35rem;
   color: rgb(var(--color-link));
   background-color: transparent;
   font-size: 12px;
@@ -609,8 +612,8 @@ details > * {
 .underlined-link,
 .customer a,
 .inline-richtext a {
-  text-underline-offset: 0.3rem;
-  text-decoration-thickness: 0.1rem;
+  text-underline-offset: 0.35rem;
+  text-decoration-thickness: 0.15rem;
   transition: text-decoration-thickness ease 100ms;
 }
 
@@ -628,7 +631,7 @@ details > * {
 .customer a:hover,
 .inline-richtext a:hover {
   color: rgb(var(--color-link));
-  text-decoration-thickness: 0.2rem;
+  text-decoration-thickness: 0.15rem;
 }
 
 .icon-arrow {
@@ -1453,7 +1456,7 @@ details[open] > .share-button__fallback {
 
 .share-button__button:hover {
   text-decoration: underline;
-  text-underline-offset: 0.3rem;
+  text-underline-offset: 0.35rem;
 }
 
 .share-button__button,
@@ -1936,10 +1939,11 @@ input[type='checkbox'] {
 .quantity {
   color: rgba(var(--color-foreground));
   position: relative;
-  width: calc(14rem / var(--font-body-scale) + var(--inputs-border-width) * 2);
+  width: calc(9rem / var(--font-body-scale) + var(--inputs-border-width) * 2);
   display: flex;
   border-radius: var(--inputs-radius);
-  min-height: calc((var(--inputs-border-width) * 2) + 4.5rem);
+  min-height: calc((var(--inputs-border-width) * 2) + 3rem);
+  padding: 0 1rem;
 }
 
 .quantity:after {
@@ -1950,11 +1954,11 @@ input[type='checkbox'] {
   right: var(--inputs-border-width);
   bottom: var(--inputs-border-width);
   left: var(--inputs-border-width);
-  border: 0.1rem solid transparent;
   border-radius: var(--inputs-radius);
-  box-shadow: 0 0 0 var(--inputs-border-width)
-    rgba(var(--color-foreground), var(--inputs-border-opacity));
-  transition: box-shadow var(--duration-short) ease;
+  border: 1px solid transparent;
+  /* box-shadow: 0 0 0 var(--inputs-border-width)
+    rgba(var(--color-foreground), var(--inputs-border-opacity)); */
+  transition: border-color 0.3s ease;
   z-index: 1;
 }
 
@@ -1968,10 +1972,18 @@ input[type='checkbox'] {
   bottom: 0;
   left: 0;
   border-radius: var(--inputs-radius-outset);
-  box-shadow: var(--inputs-shadow-horizontal-offset)
+  border: 1px solid transparent;
+  transition: border-color 0.3s ease;
+  border-radius: 2px;
+  /* box-shadow: var(--inputs-shadow-horizontal-offset)
     var(--inputs-shadow-vertical-offset) var(--inputs-shadow-blur-radius)
-    rgba(var(--color-shadow), var(--inputs-shadow-opacity));
+    rgba(var(--color-shadow), var(--inputs-shadow-opacity)); */
   z-index: -1;
+}
+
+.quantity:hover:before,
+.quantity:hover:after {
+  border-color: var(--color-grey);
 }
 
 .quantity__input {
@@ -1979,7 +1991,7 @@ input[type='checkbox'] {
   font-family: var(--font-body-family);
   font-style: var(--font-body-style);
   font-weight: var(--font-body-weight);
-  font-size: 14px;
+  font-size: 1.2rem;
   font-weight: 400;
   opacity: 0.85;
   text-align: center;
@@ -1987,13 +1999,14 @@ input[type='checkbox'] {
   border: 0;
   padding: 0 0.5rem;
   width: 100%;
+  min-width: 2rem;
   flex-grow: 1;
   -webkit-appearance: none;
   appearance: none;
 }
 
 .quantity__button {
-  width: calc(4.5rem / var(--font-body-scale));
+  width: calc(2rem / var(--font-body-scale));
   flex-shrink: 0;
   font-size: 1.8rem;
   border: 0;
@@ -2015,7 +2028,7 @@ input[type='checkbox'] {
 }
 
 .quantity__button .svg-wrapper {
-  width: 1rem;
+  width: 0.875rem;
   pointer-events: none;
 }
 
@@ -2156,36 +2169,13 @@ input[type='checkbox'] {
 }
 
 .utility-bar--bottom-border {
-  border-bottom: 0.1rem solid rgba(var(--color-foreground), 0.08);
-}
-
-@media screen and (min-width: 990px) {
-  .utility-bar--bottom-border-social-only {
-    border-bottom: 0.1rem solid rgba(var(--color-foreground), 0.08);
-  }
+  border-bottom: 1px solid var(--color-grey);
 }
 
 .utility-bar__grid {
   display: grid;
   grid-template-columns: 1fr;
   grid-template-areas: 'announcements';
-}
-
-.utility-bar__grid .list-social {
-  justify-content: flex-start;
-  align-content: center;
-  margin-left: -1.2rem;
-  grid-area: social-icons;
-}
-
-@media screen and (max-width: 989px) {
-  .utility-bar .utility-bar__grid .list-social {
-    display: none;
-  }
-}
-
-.utility-bar .list-social__item .icon {
-  scale: 0.9;
 }
 
 @media screen and (min-width: 990px) {
@@ -2247,8 +2237,7 @@ input[type='checkbox'] {
 }
 
 .announcement-bar .slider-button--next:focus-visible,
-.announcement-bar .slider-button--prev:focus-visible,
-.utility-bar .list-social__link:focus-visible {
+.announcement-bar .slider-button--prev:focus-visible {
   outline-offset: -0.3rem;
   box-shadow: 0 0 0 -0.2rem rgb(var(--color-foreground));
 }
@@ -2874,7 +2863,7 @@ details[open] > .header__submenu {
 
 .header__menu-item:hover span {
   text-decoration: underline;
-  text-underline-offset: 0.3rem;
+  text-underline-offset: 0.35rem;
 }
 
 details[open] > .header__menu-item {
@@ -2882,7 +2871,7 @@ details[open] > .header__menu-item {
 }
 
 details[open]:hover > .header__menu-item {
-  text-decoration-thickness: 0.2rem;
+  text-decoration-thickness: 0.15rem;
 }
 
 details[open] > .header__menu-item .icon-caret {
@@ -2893,11 +2882,11 @@ details[open] > .header__menu-item .icon-caret {
   transition: text-decoration-thickness var(--duration-short) ease;
   color: rgb(var(--color-foreground));
   text-decoration: underline;
-  text-underline-offset: 0.3rem;
+  text-underline-offset: 0.35rem;
 }
 
 .header__menu-item:hover .header__active-menu-item {
-  text-decoration-thickness: 0.2rem;
+  text-decoration-thickness: 0.15rem;
 }
 
 .header__submenu {
@@ -3257,14 +3246,14 @@ details-disclosure > details {
 
 .rte a {
   color: rgba(var(--color-blue), var(--alpha-link));
-  text-underline-offset: 0.3rem;
-  text-decoration-thickness: 0.1rem;
+  text-underline-offset: 0.35rem;
+  text-decoration-thickness: 0.15rem;
   transition: text-decoration-thickness var(--duration-short) ease;
 }
 
 .rte a:hover {
   color: rgb(var(--color-link));
-  text-decoration-thickness: 0.2rem;
+  text-decoration-thickness: 0.15rem;
 }
 
 .rte blockquote {

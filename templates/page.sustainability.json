@@ -1,14 +1,138 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
+    "video_de7CDq": {
+      "type": "video",
+      "name": "t:sections.video.presets.name",
+      "settings": {
+        "heading": "Sustainability",
+        "description": "<p>This might come as a surprise, but most clothes are made from plastic. Our clothes are made from 100% natural, renewable materials—and that makes us pretty rare. Learn more about our sustainability efforts and what sets us apart.</p>",
+        "content_width": "half",
+        "enable_video_looping": true,
+        "enable_autoplay": true,
+        "video": "shopify://files/videos/June HP Desktop2\\.mov",
+        "video_url": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+        "full_width": false,
+        "color_scheme": "",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "sustainability_feature_HnQicn": {
+      "type": "sustainability-feature",
+      "blocks": {
+        "feature_xdUnCY": {
+          "type": "feature",
+          "settings": {
+            "title": "Most Clothes Are Made From Plastic",
+            "description": "<p>65% of clothes are made from plastic-based fibers. If your tag says polyester, nylon or acrylic...that means plastic. And that’s a problem for three reasons: 1) it keeps us dependent on fossil fuels (plastic is made from petroleum), 2) plastic doesn’t biodegrade and 3) plastic is toxic.</p>",
+            "image": "shopify://shop_images/image_2482.jpg",
+            "video": ""
+          }
+        },
+        "feature_D9jBqR": {
+          "type": "feature",
+          "settings": {
+            "title": "Plastic Doesn’t Biodegrade",
+            "description": "<p>Plastic is a synthetic material. It takes up to 500 years to break down and never actually biodegrades. In other words: all the plastic that has ever existed, still exists. Every plastic bottle, every polyester t-shirt, is still in a landfill or floating in the ocean.</p>",
+            "image": "shopify://shop_images/image_2483.jpg",
+            "video": ""
+          }
+        },
+        "feature_zybg4r": {
+          "type": "feature",
+          "settings": {
+            "title": "Plastic Is Toxic",
+            "description": "<p>During every wash, plastic-based fibers shed microplastics and leach toxins into the water (plastic is mixed with toxic chemicals). As a result, microplastics are everywhere. New studies show we eat a credit card’s worth of plastic every week.</p>",
+            "image": "shopify://shop_images/image_2484.jpg",
+            "video": ""
+          }
+        }
+      },
+      "block_order": [
+        "feature_xdUnCY",
+        "feature_D9jBqR",
+        "feature_zybg4r"
+      ],
+      "name": "Sustainability Feature",
+      "settings": {
+        "title": "<p>The Problem:<br/>Plastic</p>",
+        "description": "<p>This might come as a surprise: most clothes (65%) are made from plastic. Look at the tags in your closet. If they say polyester or nylon or acrylic that means plastic. </p>"
+      }
+    },
+    "sustainability_feature_QEqb3j": {
+      "type": "sustainability-feature",
+      "blocks": {
+        "feature_BpUiar": {
+          "type": "feature",
+          "settings": {
+            "title": "Natural Materials Make Better Clothes",
+            "description": "<p>Natural materials make better clothes. Unlike plastic, natural materials have evolved over thousands (or millions) of years and are very dynamic. Fibers made from plants and wool are more breathable, more antimicrobial, and more enduring.</p>",
+            "image": "shopify://shop_images/image_2485.jpg",
+            "video": ""
+          }
+        },
+        "feature_Lk7ryw": {
+          "type": "feature",
+          "settings": {
+            "title": "Natural Materials Biodegrade",
+            "description": "<p>Natural materials are inherently biodegradable. They come from the Earth, and return just as easily. Clothes made from natural fibers will turn to soil within a year (so long as they’re free of chemical softeners or dyes).</p>",
+            "image": "shopify://shop_images/image_2486.jpg",
+            "video": ""
+          }
+        },
+        "feature_krJB9P": {
+          "type": "feature",
+          "settings": {
+            "title": "Natural Materials Are Renewable",
+            "description": "<p>Unlike synthetics, natural materials have the capacity to regenerate. Seeds make new plants...which make new seeds. Wool grows back. All that’s required is sun and water (and food for the sheep).</p>",
+            "image": "shopify://shop_images/image_2487.jpg",
+            "video": ""
+          }
+        }
+      },
+      "block_order": [
+        "feature_BpUiar",
+        "feature_Lk7ryw",
+        "feature_krJB9P"
+      ],
+      "name": "Sustainability Feature",
+      "settings": {
+        "title": "<p>The Solution:<br/>Natural Materials</p>",
+        "description": "<p>Our clothes, on the other hand, are made from 100% natural, renewable materials. And that makes us pretty rare: currently, only 1% of clothes are made from natural materials.</p>"
+      }
+    },
     "main": {
       "type": "main-materials",
       "settings": {
-        "padding_top": 28,
+        "title": "100% Natural Materials",
+        "height": "adapt",
+        "desktop_image_width": "medium",
+        "layout": "image_first",
+        "desktop_content_position": "top",
+        "desktop_content_alignment": "left",
+        "content_layout": "no-overlap",
+        "section_color_scheme": "",
+        "color_scheme": "",
+        "image_behavior": "none",
+        "mobile_content_alignment": "left",
+        "padding_top": 84,
         "padding_bottom": 28
       }
     }
   },
   "order": [
+    "video_de7CDq",
+    "sustainability_feature_HnQicn",
+    "sustainability_feature_QEqb3j",
     "main"
   ]
 }

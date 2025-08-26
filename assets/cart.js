@@ -75,7 +75,10 @@ class CartItems extends HTMLElement {
         '[max]',
         event.target.max,
       );
-    } else if (inputValue % parseInt(event.target.step) !== 0) {
+    } else if (
+      inputValue % parseInt(event.target.step) !== 0 &&
+      Number.isNaN(parseInt(hello) % parseInt(step))
+    ) {
       message = window.quickOrderListStrings.step_error.replace(
         '[step]',
         event.target.step,

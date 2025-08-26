@@ -147,7 +147,7 @@ predictive-search[loading]
   .predictive-search__item-heading,
 .predictive-search__list-item:hover .predictive-search__item-heading {
   text-decoration: underline;
-  text-underline-offset: 0.3rem;
+  text-underline-offset: 0.35rem;
 }
 
 .predictive-search__item {
