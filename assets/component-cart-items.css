@@ -81,7 +81,7 @@ cart-items .title-wrapper-with-link {
 .cart-item__name {
   text-decoration: none;
   display: block;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   line-height: 1.2rem;
 }
 
@@ -132,6 +132,7 @@ cart-remove-button .button {
   min-height: 4.5rem;
   padding: 0;
   margin: 0 0.1rem 0.1rem 0;
+  justify-content: flex-end;
 }
 
 cart-remove-button .button:before,
@@ -209,7 +210,7 @@ cart-remove-button .icon-remove {
 .product-option * {
   display: inline;
   margin: 0;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
 }
 
 .cart-items thead th {
@@ -304,7 +305,7 @@ cart-remove-button .icon-remove {
   }
 
   .cart-item__media {
-    width: 10rem;
+    width: 12rem;
   }
 
   .cart-item__price-wrapper > *:only-child:not(.cart-item__discounted-prices) {

@@ -7,7 +7,7 @@
  * made to this file may be overwritten.
  * ------------------------------------------------------------
  */
-{
+ {
   "name": "t:sections.header.name",
   "type": "header",
   "sections": {
@@ -33,6 +33,7 @@
         },
         "goal_gwp_product_qdBz4X": {
           "type": "goal_gwp_product",
+          "disabled": true,
           "settings": {
             "goal_value": 250,
             "goal_title": "Tote",
@@ -44,6 +45,7 @@
         },
         "goal_gwp_collection_D6WjwL": {
           "type": "goal_gwp_collection",
+          "disabled": true,
           "settings": {
             "goal_value": 350,
             "goal_title": "Free Gift",
@@ -62,7 +64,7 @@
       ],
       "settings": {
         "color_scheme": "scheme-5",
-        "show_line_separator": true,
+        "show_line_separator": false,
         "banner_fixed": false,
         "auto_rotate": false,
         "change_slides_speed": 5,
@@ -75,6 +77,34 @@
     },
     "header": {
       "type": "header",
+      "blocks": {
+        "featured_product_RLGcqj": {
+          "type": "featured_product",
+          "settings": {
+            "menu_item": "shop",
+            "product": "alta-blazer-bone",
+            "custom_image": "shopify://shop_images/ECOM_NYC_2-30.jpg",
+            "heading": "",
+            "show_price": true,
+            "button_label": "Shop Now"
+          }
+        },
+        "featured_collection_N3zTHw": {
+          "type": "featured_collection",
+          "settings": {
+            "menu_item": "shop",
+            "collection": "new",
+            "custom_image": "shopify://shop_images/HQ_ECOM_FINAL_ALEXCRANE-48_1.jpg",
+            "hover_image": "shopify://shop_images/HQ_ECOM_FINAL_ALEXCRANE-50_1.jpg",
+            "heading": "",
+            "button_label": "View Collection"
+          }
+        }
+      },
+      "block_order": [
+        "featured_product_RLGcqj",
+        "featured_collection_N3zTHw"
+      ],
       "settings": {
         "logo_position": "middle-center",
         "menu": "navigation",

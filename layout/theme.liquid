@@ -107,7 +107,7 @@
             }
 
             :root {
-              --font-body-family: {{ settings.type_body_font.family }}, {{ settings.type_body_font.fallback_families }};
+              --font-body-family: 'Circular Std'; /*{{ settings.type_body_font.family }}, {{ settings.type_body_font.fallback_families }};*/
               --font-body-style: {{ settings.type_body_font.style }};
               --font-body-weight: {{ settings.type_body_font.weight }};
               --font-body-weight-bold: {{ settings.type_body_font.weight | plus: 300 | at_most: 1000 }};
@@ -276,6 +276,14 @@
       {{ 'component-discounts.css' | asset_url | stylesheet_tag }}
     {%- endif -%}
 
+    {{ 'component-vendor-overrides.css' | asset_url | stylesheet_tag }}
+
+    <!-- Swiper CSS for autocomplete carousels -->
+    <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css'>
+
+    <!-- Quick Add CSS and JS for autocomplete modals -->
+    {{ 'quick-add.css' | asset_url | stylesheet_tag }}
+
     {%- unless settings.type_body_font.system? -%}
       {% comment %}theme-check-disable AssetPreload{% endcomment %}
       <link rel='preload' as='font' href='{{ settings.type_body_font | font_url }}' type='font/woff2' crossorigin>
@@ -311,12 +319,13 @@
 
     <script> 
 			document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
+			
 			window.theme = {
 				strings: {
 						addToCart: {{ 'products.product.add_to_cart' | t | json }},
-						quickAddToCart: {{ 'products.product.quick_add_to_cart' | t | json }},
-						soldOut: {{ 'products.product.sold_out' | t | json }},
-						unavailable: {{ 'products.product.unavailable' | t | json }}
+						chooseOptions: {{ 'products.product.choose_options' | t | json }},
+						soldOut: {{ 'products.product.sold_out' | t | default: 'Sold out' | json }},
+						unavailable: {{ 'products.product.unavailable' | t | default: 'Unavailable' | json }}
 				},
 				moneyFormat: {{ shop.money_format | json }},
 				country_code: Shopify.currency.active.slice(0, -1),
@@ -324,6 +333,247 @@
 				currency_symbol: '{{ cart.currency.symbol }}'
 			};
 			window.theme.marketDirectory = window.theme.country_code === 'CA' || window.theme.country_code === 'GB' ? `/en-${window.theme.country_code?.toLowerCase()}` : '';
+
+			// Update localized text for quick add buttons
+			function updateLocalizedText() {
+				
+				if (window.theme && window.theme.strings) {
+					
+					// Try multiple selectors to find the buttons
+					const selectors = [
+						'.quick-add__submit[aria-haspopup="dialog"] .quick-add-text',
+						'.quick-add__submit[aria-haspopup="dialog"]',
+						'button[aria-haspopup="dialog"] .quick-add-text',
+						'button[aria-haspopup="dialog"]'
+					];
+					
+					selectors.forEach((selector, index) => {
+						const elements = document.querySelectorAll(selector);
+						
+						elements.forEach((element, elementIndex) => {
+							const currentText = element.textContent.trim();
+							
+							if (currentText === 'Choose Options') {
+								const newText = window.theme.strings.chooseOptions || 'Choose Options';
+								element.textContent = newText;
+							}
+						});
+					});
+
+					// Update "Add to cart" buttons
+					document.querySelectorAll('.quick-add__submit[type="submit"] .quick-add-text').forEach(button => {
+						if (button.textContent.trim() === 'Add to cart') {
+							button.textContent = window.theme.strings.addToCart || 'Add to cart';
+						}
+					});
+
+					// Update "Sold out" buttons
+					document.querySelectorAll('.quick-add__submit .quick-add-text').forEach(button => {
+						if (button.textContent.trim() === 'Sold out') {
+							button.textContent = window.theme.strings.soldOut || 'Sold out';
+						}
+					});
+
+					// Update "Sold out" hidden messages
+					document.querySelectorAll('.sold-out-message').forEach(message => {
+						if (message.textContent.trim() === 'Sold out') {
+							message.textContent = window.theme.strings.soldOut || 'Sold out';
+						}
+					});
+				}
+			}
+
+			// Retry mechanism for text updates
+			function retryTextUpdate(attempts = 0) {
+				const maxAttempts = 10;
+				const delay = 200;
+				
+				updateLocalizedText();
+				
+				// Check if we still have "Choose Options" text
+				const hasOldText = document.querySelector('.quick-add__submit')?.textContent?.includes('Choose Options');
+				
+				if (hasOldText && attempts < maxAttempts - 1) {
+					setTimeout(() => retryTextUpdate(attempts + 1), delay);
+				}
+			}
+
+			// Run immediately
+			retryTextUpdate();
+
+			// Also run on DOM ready
+			if (document.readyState === 'loading') {
+				document.addEventListener('DOMContentLoaded', () => {
+					retryTextUpdate();
+					setupMutationObserver();
+				});
+			} else {
+				// DOM already loaded, set up observer immediately
+				setupMutationObserver();
+			}
+
+			// Set up MutationObserver when DOM is ready
+			function setupMutationObserver() {
+				if (document.body) {
+					const observer = new MutationObserver((mutations) => {
+						let shouldUpdate = false;
+						mutations.forEach(mutation => {
+							if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+								// Check if any new quick-add buttons were added
+								Array.from(mutation.addedNodes).forEach(node => {
+									if (node.nodeType === 1 && (node.querySelector && node.querySelector('.quick-add__submit'))) {
+										shouldUpdate = true;
+									}
+								});
+							}
+						});
+						
+						if (shouldUpdate) {
+							setTimeout(retryTextUpdate, 100);
+						}
+					});
+					
+					observer.observe(document.body, {
+						childList: true,
+						subtree: true
+					});
+				} else {
+					setTimeout(setupMutationObserver, 100);
+				}
+			}
+    </script>
+
+    <!-- Swiper JS for autocomplete carousels -->
+    <script src='https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js' defer></script>
+
+    <!-- Quick Add JS for autocomplete modals -->
+    <script src='{{ 'quick-add.js' | asset_url }}' defer></script>
+    <script src='{{ 'product-form.js' | asset_url }}' defer></script>
+
+    <!-- Autocomplete Carousel Initialization -->
+    <script>
+      // ========================
+      // AUTOCOMPLETE CAROUSEL INITIALIZATION
+      // ========================
+
+      // Initialize autocomplete carousels when they appear
+      function initializeAutocompleteCarousels() {
+        // Wait for Swiper to be available
+        function waitForSwiper(callback, maxRetries = 50) {
+          if (typeof Swiper !== 'undefined') {
+            callback();
+          } else if (maxRetries > 0) {
+            setTimeout(() => waitForSwiper(callback, maxRetries - 1), 100);
+          } else {
+          }
+        }
+
+        waitForSwiper(() => {
+          // Find all autocomplete carousels that haven't been initialized
+          const carousels = document.querySelectorAll(
+            '.acs_auto_prods .card-media-carousel:not([data-carousel-initialized])',
+          );
+
+          carousels.forEach((carousel, index) => {
+            const productId = carousel.dataset.productId;
+            const sliderId = `CardSlider-${productId}`;
+            const slider = carousel.querySelector(`#${sliderId}`);
+
+            if (slider && !slider.swiper) {
+              try {
+                // Initialize Swiper
+                const swiper = new Swiper(carousel.querySelector('.card-slider'), {
+                  slidesPerView: 1,
+                  spaceBetween: 0,
+                  loop: true,
+                  autoplay: false,
+                  grabCursor: true,
+                  initialSlide: 1, // Start on the second slide (index 1)
+                  on: {
+                    init: function () {
+                      // Hide navigation if only one slide
+                      const slideCount = this.slides.length;
+                      if (slideCount <= 1) {
+                        const buttons = carousel.querySelector('.card-slider-buttons');
+                        if (buttons) buttons.style.display = 'none';
+                      }
+                    },
+                  },
+                });
+
+                // Set up custom navigation
+                const prevButton = carousel.querySelector('.card-slider-button--prev');
+                const nextButton = carousel.querySelector('.card-slider-button--next');
+
+                if (prevButton) {
+                  prevButton.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    swiper.slidePrev();
+                  });
+                }
+
+                if (nextButton) {
+                  nextButton.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    swiper.slideNext();
+                  });
+                }
+
+                // Mark as initialized
+                carousel.setAttribute('data-carousel-initialized', 'true');
+              } catch (error) {}
+            }
+          });
+        });
+      }
+
+      // Initialize carousels on DOM ready
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initializeAutocompleteCarousels);
+      } else {
+        initializeAutocompleteCarousels();
+      }
+
+      // Watch for autocomplete content changes
+      function setupAutocompleteObserver() {
+        const observer = new MutationObserver((mutations) => {
+          let shouldReinit = false;
+          mutations.forEach((mutation) => {
+            if (mutation.type === 'childList') {
+              mutation.addedNodes.forEach((node) => {
+                if (
+                  node.nodeType === 1 &&
+                  (node.classList?.contains('acs_auto_prods') ||
+                    node.querySelector?.('.acs_auto_prods .card-media-carousel'))
+                ) {
+                  shouldReinit = true;
+                }
+              });
+            }
+          });
+
+          if (shouldReinit) {
+            setTimeout(initializeAutocompleteCarousels, 100);
+          }
+        });
+
+        // Start observing the entire document for autocomplete changes
+        observer.observe(document.body, {
+          childList: true,
+          subtree: true,
+        });
+      }
+
+      // Set up autocomplete observer
+      if (document.body) {
+        setupAutocompleteObserver();
+      } else {
+        document.addEventListener('DOMContentLoaded', setupAutocompleteObserver);
+      }
     </script>
 
     <!-- Google Tag Manager -->
@@ -536,5 +786,6 @@
         display: none !important;
       }
     </style>
+    {% section 'size-charts' %}
   </body>
 </html>

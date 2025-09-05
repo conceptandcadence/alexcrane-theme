@@ -9,10 +9,13 @@
         $recs_heading =  $strategy.titles?.default
     end
 ~}}
-<div class="acs_auto">
-    <div class="acs_auto_col1">
+<div class="acs_auto page-width">
+    <!-- Search suggestions row -->
+    <div class="acs_auto_suggestions">
       <div class="acs_auto_group">
-        <h4>{{ label "autocomplete.headings.popular_searches" }}</h4>
+			<div class="tw-flex tw-items-center">
+        <h4 class="force-h3">{{ label "autocomplete.headings.popular_searches" }}</h4>
+				</div>
         <ul class="acs_auto_help">
         {{~ for $idx in 1..8 ~}}
             {{~ $label = $popular_search["text" + $idx] | string.downcase ~}}
@@ -22,7 +25,9 @@
       </div>
       <div class="acs_auto_group" style="display:none;">
         {{~ if (history?.previous_searches | object.size) > 0 ~}}
-            <h4>{{ label "autocomplete.headings.previous_searches" }}</h4>
+				<div class="tw-flex tw-items-center">
+            <h4 class="force-h3">{{ label "autocomplete.headings.previous_searches" }}</h4>
+						</div>
             <ul class="acs_auto_help">
             {{~ for $search in history?.previous_searches limit: $history_count ~}}
                 <li><a href="{{ $search_path }}/?q={{ $search | html.url_encode }}" title="Search for {{ $search | html.url_encode }}">{{ $search | html.escape }}</a></li>
@@ -32,7 +37,9 @@
       </div>
       
       <div class="acs_auto_group">
-        <h4>Popular Collections</h4>
+			<div class="tw-flex tw-items-center">
+        <h4 class="force-h3">Popular Collections</h4>
+				</div>
         <ul class="acs_auto_help">
           <li><a href="https://alexcrane.co/collections/bestsellers/men">Bestsellers</a></li>
           <li><a href="https://alexcrane.co/collections/new/men">New Arrivals</a></li>
@@ -40,7 +47,9 @@
       </div>
       
       <div class="acs_auto_group">
-        <h4>{{ label "autocomplete.headings.help" }}</h4>
+			<div class="tw-flex tw-items-center">
+        <h4 class="force-h3">{{ label "autocomplete.headings.help" }}</h4>
+				</div>
         <ul class="acs_auto_help">
         {{~ for $idx in 1..8 ~}}
             {{~ $text = settings.autocomplete.help["slot" + $idx + "_text"] ?? "" ~}}
@@ -50,9 +59,13 @@
         </ul>
       </div>
     </div>
-    <div class="acs_auto_col2">
-        <h4 class="acs_heading">{{ $recs_heading ?? elements.autocomplete_home_recs?.titles?.default ?? labels.autocomplete?.headings?.home_products }}</h4>
-        <ul class="acs_auto_prods xxx acs_auto_prods_size_{{ $grid_size }}">
+    
+    <!-- Products row - full width -->
+    <div class="acs_auto_products">
+		<div class="tw-flex tw-items-center">
+        <h4 class="acs_heading h3-force">{{ $recs_heading ?? elements.autocomplete_home_recs?.titles?.default ?? labels.autocomplete?.headings?.home_products }}</h4>
+				</div>
+        <ul class="acs_auto_prods acs_auto_prods_horizontal acs_auto_prods_size_{{ $grid_size }}">
         {{~ for $result in $recs ~}}
             {{ autocomplete_product_card $result }}
         {{~ end ~}}

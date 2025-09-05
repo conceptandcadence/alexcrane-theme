@@ -29,7 +29,7 @@
                       class='tw-flex tw-flex-col tw-items-center tw-justify-center'
                     >
                       <img
-                        class='tw-image-cover tw-w-[32px] tw-h-[24px] {% if colorway.product.value.id == product.id %}lg:tw-w-[33px] lg:tw-h-[20px]{% else %}lg:tw-w-[40px] lg:tw-h-[28px]{% endif %} tw-overflow-hidden'
+                        class='tw-image-cover tw-w-[32px] tw-h-[24px] {% if colorway.product.value.id == product.id %} lg:tw-w-[33px] lg:tw-h-[20px]{% else %} lg:tw-w-[40px] lg:tw-h-[28px]{% endif %} tw-overflow-hidden'
                         src='{{ swatch.image.value | image_url: width: 96 }}'
                         alt='{{ swatch.title }}'
                         width='48'

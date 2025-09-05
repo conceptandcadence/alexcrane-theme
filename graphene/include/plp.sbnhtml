@@ -1,4 +1,5 @@
 {{~
+    include "functions"
     $meta           = current_element.products.meta
     $results        = current_element.products.results
     $facets         = current_element.products.facets
@@ -17,43 +18,39 @@
 
       {{ if $is_search }}
         <div class="plp-products-count">
-          <button class="button newsearch" onclick="document.querySelector('.search__input').focus()"><span>Search</span></button>
-         {{ if $meta.query_tokens }}
-            <span class="search-text mobile">({{ $meta.count }})</span>
-            <span class="search-text desktop">{{ $meta.count }} results for "{{ search_summary $meta.query_tokens }}"</span>
-          {{ end }}
+          <form action="/pages/search/" method="get" role="search" class="search" onsubmit="return searchSubmit(event)">
+            <div class="field">
+              <svg class="Icon Icon--search" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="17px" height="17px" viewBox="0 0 17 17" version="1.1">
+                <g id="Prestige" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                  <g id="Home-M-—-04" transform="translate(-256.000000, -16.000000)">
+                    <g id="Group-6" transform="translate(257.000000, 17.000000)" stroke="#000000" stroke-width="1.5">
+                      <circle id="Oval" cx="6" cy="6" r="6"></circle>
+                      <path d="M10.4166667,10.4166667 L14.6677284,14.6677284" id="Line-3" stroke-linecap="square"></path>
+                    </g>
+                  </g>
+                </g>
+              </svg>
+              <label class="field__label visually-hidden" for="Search">Search</label>
+              <input class="search__input field__input force-h2" id="Search" aria-label="Search" type="search" value="{{ search_summary $meta.query_tokens }}" placeholder="Search" role="combobox" aria-expanded="false" aria-owns="predictive-search-results-list" aria-controls="predictive-search-results-list" aria-haspopup="listbox" aria-autocomplete="list" autocorrect="off" autocomplete="off" autocapitalize="off" spellcheck="false">
+              <button type="submit" class="search__button field__button" aria-label="Search">
+                <span class="visually-hidden">Submit</span>
+                <span class="tw-w-[20px] tw-h-auto">
+                  <svg width="14" height="8" viewBox="0 0 14 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M8.51053 6.97028L13.1523 3.97004L8.51053 0.970276" stroke="black" stroke-linejoin="round"></path>
+                    <line x1="13.1523" y1="4.13153" x2="0.152344" y2="4.13153" stroke="black" stroke-linejoin="round"></line>
+                  </svg>
+                </span>
+              </button>
+            </div>
+            <input name="_q" type="hidden"></form>
+           {{ if $meta.query_tokens }}
+           	<span class="search-text">{{ $meta.count }} results for "{{ search_summary $meta.query_tokens }}"</span>
+           {{ end }}
         </div>
       {{ end }}
 
-      {{ if $is_search }}<div class="search-filters">{{ end }}
-
-      {{ include "plp_sorting" }}
-      {{~ if $filters.all | object.size > 0 ~}}
-        {{ $active_filters = 0 }}
-        {{~ for $filter in $filters.all ~}}
-            {{~ for $item in $filter.items ~}}
-                {{ $active_filters = $active_filters | math.plus 1 }}
-            {{~ end ~}}
-        {{~ end ~}}
-      {{~ end ~}}
-      <div class="plp-products-filter filter-trigger">
-        <button class="plp-products-filter--trigger{{ if $active_filters > 0 }} open{{ end }}" name="filter" onclick="this.classList.toggle('open');">
-          <span>Filter</span>
-
-            {{ if $active_filters > 0 }}
-              <span class="active-filters-count">{{ $active_filters }}</span>
-            {{ else }}
-              <svg width="8px" height="5px" viewBox="0 0 8 5" enable-background="new 0 0 8 5" xml:space="preserve"><path fill="#000" d="M0,0c0,0,3.4,4.4,3.5,4.4C3.7,4.4,7.1,0,7.1,0H0z"/></svg>
-            {{ end }}
-        </button>
-        {{ if $active_filters > 0 }}
-          <a class="clear-filters" href="{{ $filters.clear_all_url }}" aria-label='{{ label "plp.filters.clear_all" }}'>
-            <span class="filter-toggle-icon icon-closez">&times;</span>
-          </a>
-        {{ end }}
-      </div>
-      {{ if $is_search }}</div>{{ end }}
    {{ end }}
+
     <section class="plp-actions">
       <!-- facets -->
       {{ include "plp_facets" }}

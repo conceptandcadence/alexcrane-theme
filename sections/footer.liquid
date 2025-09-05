@@ -77,7 +77,7 @@
                 </div>
                 <div class='footer-block__newsletter'>
                   {%- if section.settings.newsletter_heading != blank -%}
-                    <h2 class='footer-block__heading inline-richtext'>{{ section.settings.newsletter_heading }}</h2>
+                    <h2 class='footer-block__heading inline-richtext h3'>{{ section.settings.newsletter_heading }}</h2>
                   {%- endif -%}
                   {%- form 'customer', id: 'ContactFooter', class: 'footer__newsletter newsletter-form' -%}
                     <input type='hidden' name='contact[tags]' value='newsletter'>
@@ -156,7 +156,7 @@
                 {% endif %}
               >
                 {%- if block.settings.heading != blank -%}
-                  <h2 class='footer-block__heading inline-richtext'>{{- block.settings.heading -}}</h2>
+                  <h2 class='footer-block__heading inline-richtext h3'>{{- block.settings.heading -}}</h2>
                 {%- endif -%}
 
                 {%- case block.type -%}
@@ -234,7 +234,7 @@
                       {%- endif -%}
                     </div>
                   {%- when 'support' -%}
-                    <h2 class='footer-block__heading inline-richtext'>Support</h2>
+                    <h2 class='footer-block__heading inline-richtext h3'>Support</h2>
                     <ul class='footer-block__details-content list-unstyled'>
                       {%- if block.settings.availability -%}
                         <li class='tw-flex tw-items-center tw-gap-2'>
@@ -274,7 +274,7 @@
                           {% render 'icon-faqs', class: 'tw-size-[16px]' %}
                           <a
                             class='link link--text list-menu__item list-menu__item--link'
-                            href='tel:+1{{ section.settings.call | replace: " ", "" | replace: "(", "" | replace: ")", "" }}'
+                            href='/pages/faqs'
                           >
                             {{- block.settings.faqs -}}
                           </a>
@@ -294,7 +294,7 @@
               {%- if section.settings.newsletter_enable -%}
                 <div class='footer-block__newsletter !tw-hidden md:!tw-block'>
                   {%- if section.settings.newsletter_heading != blank -%}
-                    <h2 class='footer-block__heading inline-richtext'>{{ section.settings.newsletter_heading }}</h2>
+                    <h2 class='footer-block__heading inline-richtext h3'>{{ section.settings.newsletter_heading }}</h2>
                   {%- endif -%}
                   {%- form 'customer', id: 'ContactFooter', class: 'footer__newsletter newsletter-form' -%}
                     <input type='hidden' name='contact[tags]' value='newsletter'>

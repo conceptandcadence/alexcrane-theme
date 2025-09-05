@@ -22,13 +22,13 @@
 
 .press-carousel-swiper .swiper-slide {
   width: 50%;
-  min-height: 50vw;
+  min-height: 40vw;
 }
 
 @media (min-width: 700px) {
   .press-carousel-swiper .swiper-slide {
     width: 33.33%;
-    min-height: 20vw;
+    min-height: 15vw;
   }
 }
 
@@ -59,7 +59,7 @@
 /* Content styles */
 .press-carousel__headline p {
   display: contents;
-  font-size: 18px !important;
+  font-size: 14px !important;
 }
 
 .detail-product .detail-label {
@@ -99,10 +99,10 @@
 			{% if block.settings.quote != blank %}
 				<div class="swiper-slide press-carousel__quote !tw-flex tw-flex-col tw-relative tw-items-center tw-justify-between tw-p-12 tw-border tw-border-[#ececec] tw-rounded-[5px]">
 
-					<div class="press-carousel__quote-wrapper tw-flex tw-flex-col-reverse tw-text-left tw-justify-between tw-relative tw-h-full tw-flex-grow tw-w-full">
+					<div class="press-carousel__quote-wrapper tw-flex tw-flex-col-reverse tw-gap-8 tw-text-left tw-justify-center tw-relative tw-h-full tw-flex-grow tw-w-full">
 
 						<{% if block.settings.url != blank %}a href="{{ block.settings.url }}" {% else %}div{% endif %}
-							class="press-carousel__logo tw-relative tw-mt-5">
+							class='press-carousel__logo tw-relative tw-mt-8'>
 							<div class="press-carousel__logo-wrapper tw-max-w-sm tw-m-0 md:tw-max-w-full">
 								{% if block.settings.logo %}
 										{%- assign logo_url  = block.settings.logo | img_url: '400x200' -%}
@@ -116,7 +116,7 @@
 							</div>
 						</{% if block.settings.url != blank %}a{% else %}div{% endif %}>
 						<div class="hp-press-quote__info">
-							<h3 class="press-carousel__headline tw-text-left tw-max-w-sm tw-font-normal tw-text-[18px] tw-leading-[24px] tw-m-0 md:tw-max-w-full tw-flex-grow">
+							<h3 class="press-carousel__headline tw-text-left tw-max-w-sm tw-font-normal tw-text-[14px] tw-leading-[17px] tw-m-0 md:tw-max-w-full tw-flex-grow">
 								&ldquo;{{ block.settings.quote }}&rdquo;
 							</h3>
 						</div>

@@ -1,14 +1,130 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "main": {
       "type": "main-page",
+      "disabled": true,
       "settings": {
         "padding_top": 28,
         "padding_bottom": 28
       }
+    },
+    "faq_section_zkYDCX": {
+      "type": "faq-section",
+      "blocks": {
+        "collapsible_row_H33nRA": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "How quickly will my order ship out?",
+            "icon": "none",
+            "row_content": "<p>We fulfill orders everyday. Your order will be shipped within a couple days. </p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_XGVgQy": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "I'd like to cancel my order OR adjust the style/color/size",
+            "icon": "none",
+            "row_content": "<p>Easy! Please reach out to <a href=\"mailto:hey@alexcrane.co\" title=\"mailto:hey@alexcrane.co\">hey@alexcrane.co</a> and we'll sort ya out.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_WeXb6q": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "I need my order rushed or by a specific date",
+            "icon": "none",
+            "row_content": "<p>We recommend selecting Overnight or 2 Day Air at checkout. If the order has already shipped reach out and we'll see what we can do.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_4nGxAy": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Do you offer returns and exchanges?",
+            "icon": "none",
+            "row_content": "<p>Yep and it's super easy. Check out our return portal: <a href=\"https://alex-crane-store.happyreturns.com/\">HERE</a></p>",
+            "page": ""
+          }
+        }
+      },
+      "block_order": [
+        "collapsible_row_H33nRA",
+        "collapsible_row_XGVgQy",
+        "collapsible_row_WeXb6q",
+        "collapsible_row_4nGxAy"
+      ],
+      "name": "FAQ Section",
+      "settings": {
+        "caption": "",
+        "heading": "Orders",
+        "heading_size": "h2",
+        "heading_alignment": "center",
+        "layout": "section",
+        "color_scheme": "",
+        "container_color_scheme": "",
+        "open_first_collapsible_row": false,
+        "image_ratio": "adapt",
+        "desktop_layout": "image_second",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "faq_section_4GRdi7": {
+      "type": "faq-section",
+      "blocks": {
+        "collapsible_row_eaUQYn": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Domestic Returns / Exchanges",
+            "icon": "none",
+            "row_content": "<p>We offer returns and exchanges on all domestic (US) orders. For returns, you have 30 days from the date of shipping to return for a refund. For exchanges, you have up to 40 days to exchange for something else or store credit. </p><p>To make a return, click here.To exchange for a different size or color, click here. If you have any issues exchanging or returning please reach out to hey@alexcrane.co</p><p>Worn, used, or damaged returns and exchange will not be accepted. If outside the return window, we can exchange or offer you store credit.</p><p>We charge a $7 restocking fee on returns.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_HWBrag": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "International Returns / Exchanges",
+            "icon": "none",
+            "row_content": "<p>We accept returns and exchanges on all international orders within 30 days of the original date of delivery. Here's how it works:</p><ol><li><a href=\"https://alexcrane.co/pages/contact\">Write us</a> with your order number and a sentence or two explaining the reason for your return/exchange (your feedback will help us serve you better in the future).</li><li>Depending on your location, we'll tell you where to send your return. Unfortunately, we can not cover return shipping costs. </li><li>We'll refund or exchange the item (minus original shipping cost) 5-7 days after we receive the return.</li></ol>",
+            "page": ""
+          }
+        }
+      },
+      "block_order": [
+        "collapsible_row_eaUQYn",
+        "collapsible_row_HWBrag"
+      ],
+      "name": "FAQ Section",
+      "settings": {
+        "caption": "",
+        "heading": "Returns & Exchanges",
+        "heading_size": "h2",
+        "heading_alignment": "center",
+        "layout": "section",
+        "color_scheme": "",
+        "container_color_scheme": "",
+        "open_first_collapsible_row": false,
+        "image_ratio": "adapt",
+        "desktop_layout": "image_second",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "faq_section_zkYDCX",
+    "faq_section_4GRdi7"
   ]
 }

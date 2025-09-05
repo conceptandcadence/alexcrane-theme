@@ -12,11 +12,12 @@
     $original_term  = $element.products?.meta?.raw_query
 	$matched_term   = $element.products?.meta?.final_query
 ~}}
-<div class="acs_auto">
-    <div class="acs_auto_col1">
+<div class="acs_auto page-width">
+    <!-- Search suggestions row -->
+    <div class="acs_auto_suggestions">
         {{~ if $element.popular_searches?.meta?.count > 0 ~}}
           <div class="acs_auto_group">
-            <h4>{{ label "autocomplete.headings.suggested_searches" }}</h4>
+            <h4 class="force-h3">{{ label "autocomplete.headings.suggested_searches" }}</h4>
             <ul class="acs_auto_help">
             {{~ for $result in $searches ~}}
                 {{ $search_term = $result.item?.search_term }}
@@ -26,7 +27,7 @@
           </div>
         {{~ else if (history?.previous_searches | object.size) > 0 ~}}
           <div class="acs_auto_group">
-            <h4>{{ label "autocomplete.headings.previous_searches" }} </h4>
+            <h4 class="force-h3">{{ label "autocomplete.headings.previous_searches" }} </h4>
             <ul class="acs_auto_help">
             {{~ for $search in history?.previous_searches limit: $history_count ~}}
                 <li><a href="{{ $search_path }}?q={{ $search | html.url_encode }}" title="Search for {{ $search | html.url_encode }}">{{ $search | html.escape }}</a></li>
@@ -35,7 +36,7 @@
           </div>
         {{~ else ~}}
           <div class="acs_auto_group">
-            <h4>{{ label "autocomplete.headings.popular_searches" }}</h4>
+            <h4 class="force-h3">{{ label "autocomplete.headings.popular_searches" }}</h4>
             <ul class="acs_auto_help">
             {{~ for $idx in 1..8 ~}}
                 {{~ $label = $popular_search["text" + $idx] | string.downcase ~}}
@@ -44,9 +45,10 @@
             </ul>
           </div>
         {{~ end ~}}
+        
         {{~ if $element.categories?.meta?.count > 0 ~}}
             <div class="acs_auto_group">
-              <h4>{{ label "autocomplete.headings.category_searches" }}</h4>
+              <h4 class="force-h3">{{ label "autocomplete.headings.category_searches" }}</h4>
               <ul class="acs_auto_help">
               {{~ for $result in $categories ~}}
                   {{~ $title = $result.item?.titles?.default ?? $result.item.id ~}}
@@ -55,9 +57,10 @@
               </ul>
             </div>
         {{~ end ~}}
+        
         {{~ if $element.pages?.meta?.count > 0 ~}}
             <div class="acs_auto_group">
-              <h4>{{ label "autocomplete.headings.page_searches" }}</h4>
+              <h4 class="force-h3">{{ label "autocomplete.headings.page_searches" }}</h4>
               <ul class="acs_auto_help">
               {{~ for $result in $pages ~}}
                   {{~ $title = $result.item?.titles?.default ?? $result.item.id ~}}
@@ -66,8 +69,9 @@
               </ul>
             </div>
         {{~ end ~}}
+        
         <div class="acs_auto_group">
-          <h4>{{ label "autocomplete.headings.help" }}</h4>
+          <h4 class="force-h3">{{ label "autocomplete.headings.help" }}</h4>
           <ul class="acs_auto_help">
           {{~ for $idx in 1..8 ~}}
               {{~ $text = settings.autocomplete.help["slot" + $idx + "_text"] ?? "" ~}}
@@ -77,19 +81,25 @@
           </ul>
         </div>
     </div>
-    <div class="acs_auto_col2">
+    
+    <!-- Products row - full width -->
+    <div class="acs_auto_products">
         {{~ if $element.products?.meta?.count > 0 ~}}
-            <h4 class="acs_heading">{{ $element.products?.meta?.count }} {{ label "autocomplete.headings.products" }}<a href="{{ $search_path }}?q={{ $matched_term | html.url_encode }}">{{ label "autocomplete.headings.view_all" }}</a></h4>
-            <ul class="acs_auto_prods zzz acs_auto_prods_size_{{ $grid_size }}">
+						<div class="tw-flex tw-items-center">
+            	<h4 class="acs_heading h3-force tw-flex tw-justify-between tw-w-full">{{ $element.products?.meta?.count }} {{ label "autocomplete.headings.products" }}<a href="{{ $search_path }}?q={{ $matched_term | html.url_encode }}">{{ label "autocomplete.headings.view_all" }}</a></h4>
+            </div>
+						<ul class="acs_auto_prods acs_auto_prods_horizontal acs_auto_prods_size_{{ $grid_size }}">
             {{~ for $result in $products ~}}
                 {{ autocomplete_product_card $result }}
             {{~ end ~}}
             </ul>
         {{~ else ~}}
-            <h4 class="acs_heading">{{ label "autocomplete.no_results.title" }}</h4>
-      		<p>{{ label "autocomplete.no_results.text" }}</p>
+					<div class="tw-flex tw-items-center">
+					  <h4 class="acs_heading h3-force">{{ label "autocomplete.no_results.title" }}</h4>
+      			<p class='tw-pl-4'>{{ label "autocomplete.no_results.text" }}</p>
+					</div>
       		{{~ $products = elements.autocomplete_no_results.products?.results ~}}
-            <ul class="acs_auto_prods yyy acs_auto_prods_size_{{ $grid_size }}">
+            <ul class="acs_auto_prods acs_auto_prods_horizontal acs_auto_prods_size_{{ $grid_size }}">
             {{~ for $result in $products ~}}
                 {{ autocomplete_product_card $result }}
             {{~ end ~}}

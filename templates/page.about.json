@@ -1,14 +1,205 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "main": {
       "type": "main-page",
+      "disabled": true,
       "settings": {
         "padding_top": 28,
         "padding_bottom": 28
       }
+    },
+    "image_with_text_bKRXEa": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_8PRdXC": {
+          "type": "heading",
+          "settings": {
+            "heading": "Our Story",
+            "heading_size": "tw-text-[18px] tw-leading-[28px]"
+          }
+        },
+        "text_gzAydm": {
+          "type": "text",
+          "settings": {
+            "text": "<p>According to the State of New York, Alex Crane started on Feb 6th, 2016.</p><p>But we’d say Alex Crane started on a sand dune. Alex was listening to the waves, drawing, and sketched a diamond around his name. We call that the beginning. Or maybe it started much earlier, like when he inherited a sewing machine from his grandma. Or maybe in Bolinas. Or at the Rhode Island School of Design. Or maybe at Jack Spade. </p><p>Here’s what’s certain: In 2016, Alex made samples and went to a trade show in Manhattan. And then, thanks to the internet and some truly amazing folks, we started to grow.</p>",
+            "text_style": "body"
+          }
+        },
+        "button_zNMtbR": {
+          "type": "button",
+          "disabled": true,
+          "settings": {
+            "button_label": "Button label",
+            "button_link": "",
+            "button_style_secondary": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_8PRdXC",
+        "text_gzAydm",
+        "button_zNMtbR"
+      ],
+      "custom_css": [
+        ".image-with-text__content-inner {max-width: 400px;}"
+      ],
+      "name": "t:sections.image-with-text.presets.name",
+      "settings": {
+        "image": "shopify://shop_images/image_2446_958bf8e5-c8b9-4dc6-9825-ae25dac8fa67.jpg",
+        "height": "adapt",
+        "desktop_image_width": "medium",
+        "layout": "text_first",
+        "desktop_content_position": "middle",
+        "desktop_content_alignment": "left",
+        "content_layout": "no-overlap",
+        "section_color_scheme": "",
+        "color_scheme": "",
+        "image_behavior": "none",
+        "mobile_content_alignment": "left",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "image_with_text_Ytp3AC": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_WczbJb": {
+          "type": "heading",
+          "settings": {
+            "heading": "Design Philosophy",
+            "heading_size": "tw-text-[18px] tw-leading-[28px]"
+          }
+        },
+        "text_UiFVin": {
+          "type": "text",
+          "settings": {
+            "text": "<p>We make clothes to last—through trends, through seasons, maybe even through lifetimes. Our approach is simple: take the classics, strip them down to what matters, and build them back up with better fabric, better fits, and a little fresh air. The result? Timeless pieces you’ll keep coming back to.</p>",
+            "text_style": "body"
+          }
+        },
+        "button_nRWbbb": {
+          "type": "button",
+          "disabled": true,
+          "settings": {
+            "button_label": "Button label",
+            "button_link": "",
+            "button_style_secondary": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_WczbJb",
+        "text_UiFVin",
+        "button_nRWbbb"
+      ],
+      "custom_css": [
+        ".image-with-text__content-inner {max-width: 400px;}"
+      ],
+      "name": "t:sections.image-with-text.presets.name",
+      "settings": {
+        "image": "shopify://shop_images/WEB_ECOM__AlexCrane.1-4_21a18e0f-116b-4773-933a-b9fbc79d2642.jpg",
+        "height": "adapt",
+        "desktop_image_width": "medium",
+        "layout": "image_first",
+        "desktop_content_position": "middle",
+        "desktop_content_alignment": "left",
+        "content_layout": "no-overlap",
+        "section_color_scheme": "",
+        "color_scheme": "",
+        "image_behavior": "none",
+        "mobile_content_alignment": "left",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "image_with_text_aMEp9c": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_UBj9JR": {
+          "type": "heading",
+          "settings": {
+            "heading": "Sustainability",
+            "heading_size": "tw-text-[18px] tw-leading-[28px]"
+          }
+        },
+        "text_4xnKrW": {
+          "type": "text",
+          "settings": {
+            "text": "<p>This might come as a surprise, but most clothes are made from plastic. Our clothes are made from 100% natural, renewable materials—and that makes us pretty rare. Learn more about our sustainability efforts and what sets us apart.</p>",
+            "text_style": "body"
+          }
+        },
+        "button_GED3fE": {
+          "type": "button",
+          "disabled": true,
+          "settings": {
+            "button_label": "Button label",
+            "button_link": "",
+            "button_style_secondary": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_UBj9JR",
+        "text_4xnKrW",
+        "button_GED3fE"
+      ],
+      "custom_css": [
+        ".image-with-text__content-inner {max-width: 400px;}"
+      ],
+      "name": "t:sections.image-with-text.presets.name",
+      "settings": {
+        "image": "shopify://shop_images/Group_3759_92eac33a-c9f2-4bce-9110-d3b1546e91d2.jpg",
+        "height": "adapt",
+        "desktop_image_width": "medium",
+        "layout": "text_first",
+        "desktop_content_position": "middle",
+        "desktop_content_alignment": "left",
+        "content_layout": "no-overlap",
+        "section_color_scheme": "",
+        "color_scheme": "",
+        "image_behavior": "none",
+        "mobile_content_alignment": "left",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "video_bVJXaT": {
+      "type": "video",
+      "custom_css": [
+        "@media (min-width: 990px) {.video-section {padding: 7.5% 10% 5%; }}"
+      ],
+      "name": "t:sections.video.presets.name",
+      "settings": {
+        "overlay_title": "",
+        "heading": "",
+        "description": "",
+        "content_width": "half",
+        "enable_video_looping": false,
+        "enable_autoplay": false,
+        "video": "shopify://files/videos/March Desktop Bigger Dimensions_5a87bf81-3552-4c5a-8df9-4ef3a8f91f48.mp4",
+        "video_url": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+        "full_width": false,
+        "color_scheme": "",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "image_with_text_bKRXEa",
+    "image_with_text_Ytp3AC",
+    "image_with_text_aMEp9c",
+    "video_bVJXaT"
   ]
 }

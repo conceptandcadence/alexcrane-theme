@@ -203,11 +203,11 @@
                 {% if material.collection != blank %}
                   <div class='tw-h-full tw-flex tw-flex-grow tw-items-end image-with-text__text rte tw-text-[14px] tw-leading-[17px] tw-mt-4'>
                     <a
-                      href='{{ section.settings.collection.url }}'
-                      class='tw-border-b tw-border-black tw-text-[14px] tw-leading-[17px]'
+                      href='{{ material.collection.value.url }}'
+                      class='tw-text-[14px] tw-leading-[17px] tw-inline-block !tw-text-black !tw-border-b !tw-border-black'
                       aria-label='{{ 'sections.featured_collection.view_all_label' | t: collection_name: section.settings.collection.title | escape }}'
                     >
-                      <div class='tw-flex tw-items-center tw-gap-2 {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %} tw-text-[14px] tw-leading-[20px]'>
+                      <div class='tw-flex tw-items-center tw-gap-2 {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %} tw-text-[14px] tw-leading-[20px] !tw-text-black'>
                         Shop {{ material.collection.value.title }}
                       </div>
                     </a>

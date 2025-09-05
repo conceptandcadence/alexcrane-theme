@@ -1325,7 +1325,7 @@ input.mobile-facets__checkbox {
 }
 
 .plp-actions {
-  padding: 0;
+  padding: 0 0 24px;
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
@@ -1337,12 +1337,41 @@ input.mobile-facets__checkbox {
 }
 @media screen and (max-width: 699px) {
   .shop-filters__wrapper {
-    border-color: var(--color-grey-soft) !important;
+    border: solid 1px var(--color-grey) !important;
+    display: flex;
+    padding: 24px;
+    margin-top: 12px;
+    border-radius: 5px;
+  }
+  .h2.filter-label,
+  .shop-filter-group,
+  .shop-filter-group.sizes {
+    width: 50% !important;
+  }
+  .h2.filter-label {
+    margin: 0 !important;
+  }
+  .shop-filter-group.sizes .shop-filter {
+    width: 100% !important;
+  }
+  #shopify-section-plp-navigation {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}
+
+@media only screen and (min-width: 990px) {
+  .h2.filter-label {
+    font-size: calc(var(--font-heading-scale) * 1.4rem);
+    text-decoration: underline;
+    text-underline-offset: 0.35rem;
+    text-decoration-thickness: 0.15rem;
+    transition: text-decoration-color ease 100ms;
   }
 }
 @media screen and (min-width: 700px) {
   .shop-filters__wrapper {
-    border-top: 0 !important;
+    border: 0 !important;
   }
 }
 
@@ -1632,5 +1661,78 @@ body .shop-filters__container:not(.plp-nav-expanded) {
 
   .filter-container select {
     font-weight: 400;
+  }
+}
+.plp-products-filter {
+  height: 100%;
+  display: flex;
+  width: 100%;
+}
+
+/* PLP Actions Reveal Effect */
+.plp-actions {
+  opacity: 0;
+  visibility: hidden;
+  height: 0;
+  overflow: hidden;
+  transform: translateY(-10px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* When product-grid-container has .revealed class, show the plp-actions */
+.product-grid-container.revealed .plp-actions {
+  opacity: 1 !important;
+  visibility: visible !important;
+  height: auto !important;
+  transform: translateY(0) !important;
+  display: block !important;
+}
+
+/* Staggered animation for child elements */
+.product-grid-container.revealed .plp-actions > * {
+  opacity: 0;
+  transform: translateY(10px);
+  animation: fadeInUp 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.product-grid-container.revealed .plp-actions > *:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.product-grid-container.revealed .plp-actions > *:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.product-grid-container.revealed .plp-actions > *:nth-child(3) {
+  animation-delay: 0.3s;
+}
+.product-grid-container.revealed .plp-actions > *:nth-child(4) {
+  animation-delay: 0.4s;
+}
+.product-grid-container.revealed .plp-actions > *:nth-child(5) {
+  animation-delay: 0.5s;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Filter trigger button caret flip animation */
+.plp-products-filter--trigger span:first-child,
+.collection-nav select {
+  font-size: 12px !important;
+}
+.plp-products-filter--trigger .icon-caret {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.plp-products-filter--trigger.filters-active .icon-caret {
+  transform: rotate3d(1, 0, 0, 180deg);
+}
+@media screen and (min-width: 990px) {
+  .plp-products-filter--trigger span:first-child,
+  .collection-nav select {
+    font-size: 14px !important;
   }
 }

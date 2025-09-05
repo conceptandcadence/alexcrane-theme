@@ -140,7 +140,7 @@
 
 .card__information {
   grid-row-start: 2;
-  padding: 1.3rem 1rem;
+  padding: 1.3rem 1rem 0.4rem 1rem;
 }
 
 .card:not(.ratio) > .card__content {

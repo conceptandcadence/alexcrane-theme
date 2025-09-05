@@ -37,7 +37,7 @@
 .mega-menu__list {
   display: grid;
   gap: 1.8rem 4rem;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   list-style: none;
 }
 
@@ -53,7 +53,10 @@
 }
 
 .mega-menu__link--level-2 {
-  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 0.35rem;
+  text-decoration-thickness: 0.15rem;
+  margin-bottom: 1.2rem;
 }
 
 .header--top-center .mega-menu__list {
@@ -84,4 +87,206 @@
 
 .mega-menu__list--condensed .mega-menu__link {
   font-weight: normal;
+}
+
+/* Featured content in megamenu - Sidebar layout */
+.mega-menu__container {
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
+}
+
+.mega-menu__navigation {
+  flex: 1;
+  min-width: 0;
+}
+
+.mega-menu__container--with-featured .mega-menu__navigation {
+  flex: 0 0 50%;
+}
+
+.mega-menu__featured {
+  flex: 0 0 50%;
+  display: flex;
+  gap: 1.6rem;
+}
+
+.mega-menu__featured-item {
+  overflow: hidden;
+  transition: transform var(--duration-short) ease,
+    box-shadow var(--duration-short) ease;
+  background-color: rgb(var(--color-background));
+}
+
+.mega-menu__featured-tile {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.mega-menu__featured-image {
+  position: relative;
+  background-color: rgb(var(--color-foreground) / 0.04);
+  aspect-ratio: 1 / 1.2;
+  overflow: hidden;
+}
+
+.mega-menu__featured-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity var(--duration-short) ease;
+}
+
+/* Hover image setup */
+.mega-menu__featured-image--with-hover {
+  position: relative;
+}
+
+.mega-menu__featured-image-main {
+  opacity: 1;
+  transition: opacity var(--duration-short) ease;
+}
+
+.mega-menu__featured-image-hover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  transition: opacity var(--duration-short) ease;
+}
+
+/* Hover effects */
+.mega-menu__featured-item:hover .mega-menu__featured-image-main {
+  opacity: 0;
+}
+
+.mega-menu__featured-item:hover .mega-menu__featured-image-hover {
+  opacity: 1;
+}
+
+.mega-menu__featured-content {
+  padding: 1.5rem 0 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.mega-menu__featured-title {
+  margin: 0 0 0.75rem 0;
+  font-size: 1.4rem;
+  line-height: 1.3;
+  color: rgb(var(--color-foreground));
+}
+
+.mega-menu__featured-price {
+  margin-bottom: 1rem;
+}
+
+.mega-menu__featured-button {
+  /* Quick-add button styling */
+  font-size: 12px;
+  padding: 0;
+  box-sizing: border-box;
+  border-radius: 2px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  min-height: 30px;
+  transition: box-shadow 0.5s ease, opacity 0.5s ease,
+    background-color 0.5s ease, width 0.5s ease;
+  background-color: rgba(255, 255, 255, 0.9);
+  color: #000;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+
+  /* Position over image */
+  position: absolute;
+  bottom: 1rem;
+  left: 1rem;
+  right: 1rem;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(10px);
+  transition: opacity 0.3s ease, transform 0.3s ease, background-color 0.5s ease;
+}
+
+.mega-menu__featured-button:hover {
+  background-color: rgba(255, 255, 255, 1);
+}
+
+.mega-menu__featured-item:hover .mega-menu__featured-button {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+@media screen and (min-width: 990px) {
+  .mega-menu__featured-button {
+    height: 36px;
+    min-height: 40px;
+  }
+}
+
+/* Mobile optimization */
+@media screen and (max-width: 989px) {
+  .mega-menu__container {
+    flex-direction: column;
+    gap: 2rem;
+    padding: 0 1.5rem;
+  }
+
+  .mega-menu__navigation,
+  .mega-menu__container--with-featured .mega-menu__navigation {
+    flex: none;
+  }
+
+  .mega-menu__featured {
+    flex: none;
+    border-left: none;
+    border-top: 1px solid rgb(var(--color-foreground) / 0.1);
+    padding-left: 0;
+    padding-top: 2rem;
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .mega-menu__container {
+    padding: 0 1rem;
+    gap: 1.5rem;
+  }
+
+  .mega-menu__featured {
+    padding-top: 1.5rem;
+    gap: 1.5rem;
+  }
+
+  .mega-menu__featured-content {
+    padding: 1rem 0 0;
+  }
+
+  .mega-menu__featured-title {
+    font-size: 1.2rem;
+  }
+
+  .mega-menu__featured-button {
+    font-size: 11px;
+    height: 32px;
+    min-height: 28px;
+  }
+}
+
+.mega-menu__featured-price .price {
+  color: #767676;
+}
+
+/* Mobile drawer featured content - using desktop styles */
+.menu-drawer__featured {
+  padding: 2rem 3rem 6rem;
+  border-top: 1px solid rgb(var(--color-foreground) / 0.1);
+  display: flex;
+  gap: 1.2rem;
 }

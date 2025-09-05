@@ -1,4 +1,7 @@
 function getFocusableElements(container) {
+  if (!container) {
+    return [];
+  }
   return Array.from(
     container.querySelectorAll(
       "summary, a[href], button:enabled, [tabindex]:not([tabindex^='-']), [draggable], area, input:not([type=hidden]):enabled, select:enabled, textarea:enabled, object, iframe",
@@ -102,6 +105,11 @@ document.querySelectorAll('[id^="Details-"] summary').forEach((summary) => {
 const trapFocusHandlers = {};
 
 function trapFocus(container, elementToFocus = container) {
+  // Safety check for null container
+  if (!container) {
+    return;
+  }
+
   var elements = getFocusableElements(container);
   var first = elements[0];
   var last = elements[elements.length - 1];
@@ -128,7 +136,7 @@ function trapFocus(container, elementToFocus = container) {
     // On the last focusable element and tab forward, focus the first element.
     if (event.target === last && !event.shiftKey) {
       event.preventDefault();
-      first.focus();
+      first && first.focus();
     }
 
     //  On the first focusable element and tab backward, focus the last element.
@@ -137,16 +145,20 @@ function trapFocus(container, elementToFocus = container) {
       event.shiftKey
     ) {
       event.preventDefault();
-      last.focus();
+      last && last.focus();
     }
   };
 
   document.addEventListener('focusout', trapFocusHandlers.focusout);
   document.addEventListener('focusin', trapFocusHandlers.focusin);
 
-  elementToFocus.focus();
+  // Safety check for null elementToFocus
+  if (elementToFocus && typeof elementToFocus.focus === 'function') {
+    elementToFocus.focus();
+  }
 
   if (
+    elementToFocus &&
     elementToFocus.tagName === 'INPUT' &&
     ['search', 'text', 'email', 'url'].includes(elementToFocus.type) &&
     elementToFocus.value
@@ -723,10 +735,10 @@ class ModalDialog extends HTMLElement {
   connectedCallback() {
     if (this.moved) return;
     this.moved = true;
-    this.dataset.section = this.closest('.shopify-section').id.replace(
-      'shopify-section-',
-      '',
-    );
+    const sectionElement = this.closest('.shopify-section');
+    if (sectionElement && sectionElement.id) {
+      this.dataset.section = sectionElement.id.replace('shopify-section-', '');
+    }
     document.body.appendChild(this);
   }
 
@@ -1488,3 +1500,37 @@ class BulkAdd extends HTMLElement {
 if (!customElements.get('bulk-add')) {
   customElements.define('bulk-add', BulkAdd);
 }
+
+// Enhanced search modal focus handler
+document.addEventListener('DOMContentLoaded', function () {
+  // Add focus event listener to all header search buttons
+  const headerSearchButtons = document.querySelectorAll(
+    '.header__search summary, .header__search .header__icon--search',
+  );
+
+  headerSearchButtons.forEach((button) => {
+    button.addEventListener('click', function () {
+      // Wait for modal to open and then focus search input
+      setTimeout(() => {
+        const searchInput =
+          document.querySelector(
+            '.header__search.details-modal[open] #Search',
+          ) ||
+          document.querySelector(
+            '.header__search.details-modal[open] .search__input',
+          ) ||
+          document.querySelector(
+            '.header__search.details-modal[open] input[type="search"]',
+          );
+
+        if (searchInput) {
+          searchInput.focus();
+          // Optional: select all text for better UX when search has existing value
+          if (searchInput.value) {
+            searchInput.select();
+          }
+        }
+      }, 100);
+    });
+  });
+});

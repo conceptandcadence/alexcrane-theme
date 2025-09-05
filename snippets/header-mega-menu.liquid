@@ -30,43 +30,74 @@
                 class='mega-menu__content color-{{ section.settings.menu_color_scheme }} gradient motion-reduce global-settings-popup'
                 tabindex='-1'
               >
-                <ul
-                  class='mega-menu__list page-width page-width--nomax{% if link.levels == 1 %} mega-menu__list--condensed{% endif %}'
-                  role='list'
-                >
-                  {%- for childlink in link.links -%}
-                    <li>
-                      <a
-                        id='HeaderMenu-{{ link.handle }}-{{ childlink.handle }}'
-                        href='{{ childlink.url }}'
-                        class='mega-menu__link mega-menu__link--level-2 link{% if childlink.current %} mega-menu__link--active{% endif %}'
-                        {% if childlink.current %}
-                          aria-current='page'
-                        {% endif %}
-                      >
-                        {{ childlink.title | escape }}
-                      </a>
-                      {%- if childlink.links != blank -%}
-                        <ul class='list-unstyled' role='list'>
-                          {%- for grandchildlink in childlink.links -%}
-                            <li>
-                              <a
-                                id='HeaderMenu-{{ link.handle }}-{{ childlink.handle }}-{{ grandchildlink.handle }}'
-                                href='{{ grandchildlink.url }}'
-                                class='mega-menu__link link{% if grandchildlink.current %} mega-menu__link--active{% endif %}'
-                                {% if grandchildlink.current %}
-                                  aria-current='page'
-                                {% endif %}
-                              >
-                                {{ grandchildlink.title | escape }}
-                              </a>
-                            </li>
-                          {%- endfor -%}
-                        </ul>
-                      {%- endif -%}
-                    </li>
-                  {%- endfor -%}
-                </ul>
+                {%- liquid
+                  # Check if there are featured blocks for this menu item
+                  assign current_menu_handle = link.handle
+                  assign has_featured_content = false
+                  for block in section.blocks
+                    if block.settings.menu_item == current_menu_handle and block.type != '@app'
+                      assign has_featured_content = true
+                      break
+                    endif
+                  endfor
+                -%}
+
+                <div class='mega-menu__container page-width page-width--nomax{% if has_featured_content %} mega-menu__container--with-featured{% endif %}'>
+                  <div class='mega-menu__navigation'>
+                    <ul
+                      class='mega-menu__list{% if link.levels == 1 %} mega-menu__list--condensed{% endif %}'
+                      role='list'
+                    >
+                      {%- for childlink in link.links -%}
+                        <li>
+                          <a
+                            id='HeaderMenu-{{ link.handle }}-{{ childlink.handle }}'
+                            href='{{ childlink.url }}'
+                            class='mega-menu__link mega-menu__link--level-2 link{% if childlink.current %} mega-menu__link--active{% endif %}'
+                            {% if childlink.current %}
+                              aria-current='page'
+                            {% endif %}
+                          >
+                            {{ childlink.title | escape }}
+                          </a>
+                          {%- if childlink.links != blank -%}
+                            <ul class='list-unstyled' role='list'>
+                              {%- for grandchildlink in childlink.links -%}
+                                <li>
+                                  <a
+                                    id='HeaderMenu-{{ link.handle }}-{{ childlink.handle }}-{{ grandchildlink.handle }}'
+                                    href='{{ grandchildlink.url }}'
+                                    class='mega-menu__link link{% if grandchildlink.current %} mega-menu__link--active{% endif %}'
+                                    {% if grandchildlink.current %}
+                                      aria-current='page'
+                                    {% endif %}
+                                  >
+                                    {{ grandchildlink.title | escape }}
+                                  </a>
+                                </li>
+                              {%- endfor -%}
+                            </ul>
+                          {%- endif -%}
+                        </li>
+                      {%- endfor -%}
+                    </ul>
+                  </div>
+
+                  {%- if has_featured_content -%}
+                    <div class='mega-menu__featured'>
+                      {%- for block in section.blocks -%}
+                        {%- if block.settings.menu_item == current_menu_handle -%}
+                          {%- case block.type -%}
+                            {%- when 'featured_product' -%}
+                              {%- render 'mega-menu-featured-product', block: block -%}
+                            {%- when 'featured_collection' -%}
+                              {%- render 'mega-menu-featured-collection', block: block -%}
+                          {%- endcase -%}
+                        {%- endif -%}
+                      {%- endfor -%}
+                    </div>
+                  {%- endif -%}
+                </div>
               </div>
             </details>
           </header-menu>

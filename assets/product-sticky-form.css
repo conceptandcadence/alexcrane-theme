@@ -3,76 +3,237 @@
   bottom: 0;
   left: 0;
   width: 100vw;
-  z-index: 2;
-  padding: 8px 0;
+  z-index: 1000;
+  padding: 0.5rem 0;
   background-color: rgba(255, 255, 255, 0.95);
-}
+  backdrop-filter: blur(10px);
+  border-top: 1px solid rgb(var(--color-foreground) / 0.08);
+  box-shadow: 0 0 16px rgba(0, 0, 0, 0.1);
 
-.product--sticky-form__inactive {
+  /* Default state - hidden */
   visibility: hidden;
   opacity: 0;
-  transition: visibility 0.5s ease-out, opacity 0.5s ease-out;
+  transform: translateY(100%);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.product--sticky-form__active {
+.product--sticky-form.show {
   visibility: visible;
   opacity: 1;
-  transition: opacity 0.5s ease-out;
+  transform: translateY(0);
 }
 
-.product--sticky-form form {
+.product--sticky-form .sticky-form-content {
   display: flex;
-  flex-direction: column;
   align-items: center;
+  justify-content: space-between;
+  margin: 0 auto;
+  gap: 1rem;
+}
+
+.product--sticky-form .product-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.product--sticky-form .product-image {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  object-fit: cover;
+  background-color: rgb(var(--color-foreground) / 0.04);
+}
+
+.product--sticky-form .product-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.product--sticky-form .product-title {
+  font-size: 1.2rem;
+  color: rgb(var(--color-foreground));
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.product--sticky-form .product-price {
+  font-size: 0.75rem;
+  color: rgb(var(--color-foreground) / 0.7);
+  margin: 0;
+}
+
+.product--sticky-form .product-form {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+  flex-grow: 1;
   justify-content: flex-end;
-  column-gap: 36px;
 }
 
-.product--sticky-form .price {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.product--sticky-form .product-form__input {
+  min-width: 0;
 }
 
-.product--sticky-form-info {
-  font-size: clamp(0.75rem, 2vw, calc(var(--font-heading-scale) * 4rem));
-  line-height: 1;
-  text-align: right;
-  margin-bottom: 8px;
-}
-
-.product--sticky-form__buttons {
-  width: 100%;
-  height: auto;
-  padding-left: 0;
-}
-
-.product--sticky-form__variants,
-.product--sticky-form__quantity {
-  display: none;
-}
-
-@media screen and (min-width: 990px) {
-  .product--sticky-form__variants,
-  .product--sticky-form__quantity {
-    height: auto;
-    display: block;
-  }
-  .product--sticky-form form {
-    flex-direction: row;
-    justify-content: flex-end;
-  }
-}
-
-.product--sticky-form__buttons {
-  max-width: 400px;
+.product--sticky-form .select {
+  min-width: 80px;
 }
 
 .product--sticky-form .select__select {
-  height: 32px;
-  min-height: 32px;
+  font-size: 1rem;
+  padding: 0.5rem 2rem 0.5rem 0.75rem;
+  border: 1px solid rgb(var(--color-foreground) / 0.2);
+  border-radius: 4px;
+  background-color: rgb(var(--color-background));
+  font-family: var(--font-heading-family);
 }
 
-.quick-add-modal .product--sticky-form {
-  display: none;
+.product--sticky-form .select__select option:disabled {
+  color: rgb(var(--color-foreground) / 0.4);
+  font-style: italic;
+}
+
+.product--sticky-form .product-form__submit {
+  padding: 0.75rem 1.5rem;
+  min-width: 200px;
+  white-space: nowrap;
+  max-width: 60rem;
+}
+
+.product-form__submit,
+.quick-add-modal__fixed-submit {
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.075em;
+}
+
+.quick-add-modal__fixed-submit {
+  border: solid 0 transparent !important;
+  transition: border 0.3s ease-in-out;
+}
+.quick-add-modal__fixed-submit:hover {
+  border: solid 4px #fff !important;
+}
+
+/* Mobile optimization */
+@media screen and (max-width: 749px) {
+  .product--sticky-form {
+    padding: 0.75rem 1rem;
+  }
+
+  .product--sticky-form .sticky-form-content {
+    gap: 0.75rem;
+  }
+
+  .product--sticky-form .product-info {
+    gap: 0.5rem;
+  }
+
+  .product--sticky-form .product-image {
+    width: 40px;
+    height: 40px;
+  }
+
+  .product--sticky-form .product-title {
+    font-size: 1.2rem;
+  }
+
+  .product--sticky-form .product-form {
+    gap: 0.5rem;
+  }
+
+  .product--sticky-form .select {
+    min-width: 70px;
+  }
+
+  .product--sticky-form .product-form__submit {
+    min-width: 120px;
+  }
+
+  .product--sticky-form .select__select {
+    font-size: 1.2rem;
+    padding: 0.5rem 2.5rem;
+  }
+
+  .product--sticky-form .product-form__submit {
+    font-size: 0.8125rem;
+    padding: 0.625rem 1rem;
+    min-width: 100px;
+  }
+}
+
+/* Loading state */
+.product--sticky-form .product-form__submit.loading {
+  position: relative;
+  color: transparent;
+}
+
+.product--sticky-form .loading__spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 1rem;
+  height: 1rem;
+}
+
+.product--sticky-form variant-selects {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+.product--sticky-form form {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  max-width: 50rem;
+}
+.product--sticky-form .product-form__input.product-form__input--dropdown {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+}
+.product--sticky-form
+  .product-form__input.product-form__input--dropdown
+  .select {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0;
+}
+.product--sticky-form
+  .product-form__input.product-form__input--dropdown
+  .select::after {
+  box-shadow: 0 0 0 var(--inputs-border-width) var(--color-grey);
+}
+.product--sticky-form
+  .product-form__input.product-form__input--dropdown
+  .select__select:focus {
+  box-shadow: 0 0 0 calc(0.1rem + var(--inputs-border-width)) var(--color-grey);
+}
+.product--sticky-form .select__select {
+  height: 3.2rem;
+}
+
+.product--sticky-form .price .price-item {
+  font-size: 1.2rem;
+}
+.product--sticky-form .price .price-item.price-item--sale {
+  color: var(--color-grey);
+}
+
+.product-form__error-message-wrapper:not([hidden]) {
+  margin: 0;
+}
+
+.span.product-form__error-message {
+  letter-spacing: 0;
 }

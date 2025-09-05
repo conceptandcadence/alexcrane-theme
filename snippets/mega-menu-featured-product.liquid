@@ -1,0 +1,90 @@
+{% comment %}
+  Renders a featured product in the megamenu
+
+  Accepts:
+  - block: {Object} Block object containing the featured product settings
+
+  Usage:
+  {% render 'mega-menu-featured-product', block: block %}
+{% endcomment %}
+
+{%- liquid
+  assign product = block.settings.product
+  assign custom_image = block.settings.custom_image
+  assign heading = block.settings.heading
+  assign show_price = block.settings.show_price
+  assign button_label = block.settings.button_label
+
+  if heading == blank
+    assign heading = product.title
+  endif
+
+  if button_label == blank
+    assign button_label = 'Shop Now'
+  endif
+-%}
+
+{%- if product != blank -%}
+  <div class='mega-menu__featured-item mega-menu__featured-product' {{ block.shopify_attributes }}>
+    <div class='mega-menu__featured-tile'>
+      {%- liquid
+        # Determine main and hover images
+        if custom_image != blank
+          assign main_image = custom_image
+          assign main_image_alt = custom_image.alt | default: heading
+        elsif product.featured_media
+          assign main_image = product.featured_media
+          assign main_image_alt = product.featured_media.alt
+        else
+          assign main_image = null
+        endif
+
+        # Get hover image (second product image)
+        if product.media.size > 1 and product.media[1].media_type == 'image'
+          assign hover_image = product.media[1]
+        else
+          assign hover_image = null
+        endif
+      -%}
+
+      {%- if main_image -%}
+        <div class='mega-menu__featured-image{% if hover_image %} mega-menu__featured-image--with-hover{% endif %}'>
+          <img
+            class='mega-menu__featured-image-main'
+            src='{{ main_image | image_url: width: 300 }}'
+            alt='{{ main_image_alt | escape }}'
+            width='200'
+            height='240'
+            loading='lazy'
+          >
+          {%- if hover_image -%}
+            <img
+              class='mega-menu__featured-image-hover'
+              src='{{ hover_image | image_url: width: 300 }}'
+              alt='{{ hover_image.alt | escape }}'
+              width='200'
+              height='240'
+              loading='lazy'
+            >
+          {%- endif -%}
+
+          <a href='{{ product.url }}' class='mega-menu__featured-button'>
+            {{ button_label | escape }}
+          </a>
+        </div>
+      {%- endif -%}
+
+      <div class='mega-menu__featured-content'>
+        <h3 class='mega-menu__featured-title'>
+          <a href='{{ product.url }}'>{{ heading | escape }}</a>
+        </h3>
+
+        {%- if show_price and product.price -%}
+          <div class='mega-menu__featured-price '>
+            {%- render 'price', product: product, price_class: 'price--small', show_badges: false -%}
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+{%- endif -%}

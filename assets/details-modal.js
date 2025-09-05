@@ -46,10 +46,27 @@ class DetailsModal extends HTMLElement {
     document.body.addEventListener('click', this.onBodyClickEvent);
     document.body.classList.add('overflow-hidden');
 
-    trapFocus(
-      this.detailsContainer.querySelector('[tabindex="-1"]'),
-      this.detailsContainer.querySelector('input:not([type="hidden"])'),
-    );
+    // Enhanced search input focus handling
+    const searchInput =
+      this.detailsContainer.querySelector('input:not([type="hidden"])') ||
+      this.detailsContainer.querySelector('#Search') ||
+      this.detailsContainer.querySelector('.search__input');
+
+    // Find focus container - fallback to detailsContainer if no tabindex element exists
+    const focusContainer =
+      this.detailsContainer.querySelector('[tabindex="-1"]') ||
+      this.detailsContainer;
+
+    trapFocus(focusContainer, searchInput);
+
+    // Additional focus insurance for search modals
+    if (this.classList.contains('header__search') && searchInput) {
+      // Small delay to ensure modal is fully rendered
+      setTimeout(() => {
+        searchInput.focus();
+        searchInput.select(); // Optional: select all text for better UX
+      }, 50);
+    }
   }
 
   close(focusToggle = true) {

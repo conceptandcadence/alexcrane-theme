@@ -18,6 +18,9 @@ if (!customElements.get('quick-add-modal')) {
         if (cartNotification) cartNotification.setActiveElement(this.openedBy);
         this.modalContent.innerHTML = '';
 
+        // Remove the fixed bottom button
+        this.removeFixedBottomButton();
+
         if (preventFocus) this.openedBy = null;
         super.hide();
       }
@@ -50,7 +53,17 @@ if (!customElements.get('quick-add-modal')) {
             // Add Rebuy widget to the modal
             this.addRebuyWidget(responseHTML);
 
+            // Create and setup the fixed bottom button
+            this.setupFixedBottomButton();
+
             super.show(opener);
+
+            // Trigger custom event for Rebuy initialization
+            document.dispatchEvent(
+              new CustomEvent('quick-add-modal:opened', {
+                detail: { modal: this },
+              }),
+            );
           })
           .finally(() => {
             opener.removeAttribute('aria-disabled');
@@ -152,30 +165,8 @@ if (!customElements.get('quick-add-modal')) {
 
         if (!productId) return;
 
-        // Find the View full details link in the modal
-        const viewDetailsLink = this.modalContent.querySelector(
-          '.product__view-details',
-        );
-        if (!viewDetailsLink) return;
-
-        // Create Rebuy widget container
-        const rebuyContainer = document.createElement('div');
-        rebuyContainer.className = 'quick-add-modal__rebuy-widget';
-        rebuyContainer.innerHTML = `
-          <div class="rebuy-widget-section">
-            <h3 class="rebuy-section-title h4">You might also like</h3>
-            <div data-rebuy-id='232526' data-rebuy-shopify-product-ids='${productId}'></div>
-          </div>
-        `;
-
-        // Insert after the View full details link
-        viewDetailsLink.parentNode.insertBefore(
-          rebuyContainer,
-          viewDetailsLink.nextSibling,
-        );
-
-        // Add the Rebuy script template to the page if it doesn't exist
-        this.addRebuyScript(productId);
+        // Rebuy widgets are now handled by the existing template system
+        // No need to manually insert widgets as they're already present in the modal content
 
         // Initialize Rebuy widget if available
         if (window.rebuy && window.rebuy.render) {
@@ -183,6 +174,19 @@ if (!customElements.get('quick-add-modal')) {
             window.rebuy.render();
           }, 100);
         }
+
+        // Initialize specific Rebuy widget (ID 234056) after modal opens
+        setTimeout(() => {
+          const rebuyWidget234056 = document.querySelector(
+            '[data-rebuy-id="234056"]',
+          );
+          if (rebuyWidget234056 && window.Rebuy && window.Rebuy.init) {
+            window.Rebuy.init({
+              id: 234056,
+              node: rebuyWidget234056,
+            });
+          }
+        }, 200);
       }
 
       addRebuyScript(productId) {
@@ -279,6 +283,126 @@ if (!customElements.get('quick-add-modal')) {
           </div>
         `;
       }
+
+      setupFixedBottomButton() {
+        // Find the original submit button
+        const originalButton = this.modalContent.querySelector(
+          '.product-form__submit',
+        );
+        if (!originalButton) return;
+
+        // Hide the original button
+        originalButton.style.display = 'none';
+
+        // Create the fixed button container
+        const fixedContainer = document.createElement('div');
+        fixedContainer.className = 'quick-add-modal__fixed-button-container';
+        fixedContainer.innerHTML = `
+          <div class="quick-add-modal__fixed-button-wrapper">
+            <button type="button" class="quick-add-modal__fixed-submit button button--full-width button--primary">
+              ${originalButton.textContent}
+            </button>
+          </div>
+        `;
+
+        // Add to the modal content
+        this.modalContent.appendChild(fixedContainer);
+
+        // Setup click sync
+        const fixedButton = fixedContainer.querySelector(
+          '.quick-add-modal__fixed-submit',
+        );
+        fixedButton.addEventListener('click', () => {
+          originalButton.click();
+        });
+
+        // Sync button states (disabled, loading, etc.)
+        this.syncButtonStates(originalButton, fixedButton);
+
+        // Store reference for cleanup
+        this.fixedButtonContainer = fixedContainer;
+        this.originalButton = originalButton;
+        this.fixedButton = fixedButton;
+      }
+
+      syncButtonStates(originalButton, fixedButton) {
+        // Initial sync
+        this.updateFixedButtonState(originalButton, fixedButton);
+
+        // Create observer for attribute changes
+        const observer = new MutationObserver(() => {
+          this.updateFixedButtonState(originalButton, fixedButton);
+        });
+
+        observer.observe(originalButton, {
+          attributes: true,
+          attributeFilter: ['aria-disabled', 'disabled', 'class'],
+        });
+
+        // Store observer for cleanup
+        this.buttonObserver = observer;
+      }
+
+      updateFixedButtonState(originalButton, fixedButton) {
+        // Sync disabled state
+        if (
+          originalButton.hasAttribute('disabled') ||
+          originalButton.getAttribute('aria-disabled') === 'true'
+        ) {
+          fixedButton.setAttribute('disabled', 'true');
+          fixedButton.setAttribute('aria-disabled', 'true');
+        } else {
+          fixedButton.removeAttribute('disabled');
+          fixedButton.removeAttribute('aria-disabled');
+        }
+
+        // Sync loading state
+        if (originalButton.classList.contains('loading')) {
+          fixedButton.classList.add('loading');
+        } else {
+          fixedButton.classList.remove('loading');
+        }
+
+        // Sync text content
+        if (originalButton.textContent !== fixedButton.textContent) {
+          fixedButton.textContent = originalButton.textContent;
+        }
+      }
+
+      removeFixedBottomButton() {
+        if (this.fixedButtonContainer) {
+          this.fixedButtonContainer.remove();
+          this.fixedButtonContainer = null;
+        }
+
+        if (this.originalButton) {
+          this.originalButton.style.display = '';
+          this.originalButton = null;
+        }
+
+        if (this.buttonObserver) {
+          this.buttonObserver.disconnect();
+          this.buttonObserver = null;
+        }
+
+        this.fixedButton = null;
+      }
     },
   );
 }
+
+// Global event listener for Rebuy widget initialization in quick-add modals
+document.addEventListener('quick-add-modal:opened', function (event) {
+  // Wait a bit for the modal content to be fully rendered
+  setTimeout(() => {
+    const rebuyWidget234056 = document.querySelector(
+      '[data-rebuy-id="234056"]',
+    );
+    if (rebuyWidget234056 && window.Rebuy && window.Rebuy.init) {
+      window.Rebuy.init({
+        id: 234056,
+        node: rebuyWidget234056,
+      });
+    }
+  }, 300);
+});

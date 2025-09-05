@@ -199,7 +199,7 @@
       "type": "video",
       "settings": {
         "heading": "Sustainability",
-        "description": "<p>This might come as a surprise, but most clothes are made from plastic. Our clothes are made from 100% natural, renewable materials—and that makes us pretty rare. Learn more about our sustainability efforts and what sets us apart.</p>",
+        "description": "<p>This might come as a surprise, but most clothes are made from plastic. Our clothes are made from 100% natural, renewable materials—and that makes us pretty rare. Learn more about our sustainability efforts and what sets us apart.</p><p><a href=\"/pages/sustainability\" title=\"Sustainability\">Learn More</a></p>",
         "content_width": "third",
         "enable_video_looping": true,
         "enable_autoplay": true,

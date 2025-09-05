@@ -2,10 +2,34 @@
 // Native Shopify Shipping Motivator
 // /////////////////////////////////////////////////////////////////////////////////////////
 
+// /////////////////////////////////////////////////////////////////////////////////////////
+
 class ShippingMotivator {
   constructor() {
     this.bannerMotivator = document.querySelector('[data-motivator]');
     this.cartMotivator = document.querySelector('[data-motivator-cart]');
+
+    console.log(
+      '🔍 Constructor - banner:',
+      !!this.bannerMotivator,
+      'cart:',
+      !!this.cartMotivator,
+    );
+    if (this.bannerMotivator) {
+      console.log(
+        '🔍 Banner motivator found:',
+        this.bannerMotivator.tagName,
+        this.bannerMotivator.className,
+      );
+    }
+    if (this.cartMotivator) {
+      console.log(
+        '🔍 Cart motivator found:',
+        this.cartMotivator.tagName,
+        this.cartMotivator.className,
+      );
+    }
+
     this.config = this.getConfig();
     this.cart = null;
     this.initialized = false;
@@ -43,25 +67,37 @@ class ShippingMotivator {
       const storedFulfilledGoals = sessionStorage.getItem(
         'shippingMotivatorFulfilledCollections',
       );
-      console.log('🔍 Raw fulfilled goals from storage:', storedFulfilledGoals);
+
       if (storedFulfilledGoals) {
         const parsedGoals = JSON.parse(storedFulfilledGoals);
         this.fulfilledCollectionGoals = new Set(parsedGoals);
-        console.log(
-          '🔄 Restored fulfilled collection goals:',
-          this.fulfilledCollectionGoals.size,
-          'Goals:',
-          [...this.fulfilledCollectionGoals],
-        );
-      } else {
-        console.log('🔄 No fulfilled collection goals found in storage');
       }
     } catch (e) {
       // Ignore storage errors
     }
 
-    if ((this.bannerMotivator || this.cartMotivator) && this.config) {
+    if (
+      (this.bannerMotivator || this.cartMotivator) &&
+      this.config &&
+      this.config.goals &&
+      this.config.goals.length > 0
+    ) {
       this.init();
+    } else if (
+      this.config &&
+      (!this.config.goals || this.config.goals.length === 0)
+    ) {
+      console.warn(
+        '⚠️ Shipping motivator: No goals configured, skipping initialization',
+      );
+      // Hide any visible motivator elements since they won't be functional
+      this.hideAllMotivators();
+    } else if (!this.config) {
+      console.warn(
+        '⚠️ Shipping motivator: No config found, hiding motivator elements',
+      );
+      // Hide any visible motivator elements since there's no config
+      this.hideAllMotivators();
     }
   }
 
@@ -99,9 +135,8 @@ class ShippingMotivator {
         this.internalFetch = true;
         const response = await fetch('/cart.js');
         this.cart = await response.json();
-        console.log('🛒 Cart fetched:', this.cart.total_price);
+        //console.log('🛒 Cart fetched:', this.cart.total_price);
       } catch (error) {
-        console.error('❌ Error fetching cart:', error);
         this.cart = { total_price: 0, items: [] };
       } finally {
         this.fetchingCart = null;
@@ -114,6 +149,8 @@ class ShippingMotivator {
 
   setupElements() {
     try {
+      console.log('🔧 Setting up motivator elements...');
+
       this.elements = {
         banner: this.bannerMotivator
           ? this.getElementsForMotivator(this.bannerMotivator)
@@ -122,6 +159,13 @@ class ShippingMotivator {
           ? this.getElementsForMotivator(this.cartMotivator)
           : null,
       };
+
+      console.log('🔧 Elements setup result:', {
+        banner: !!this.elements.banner,
+        bannerProgressFill: !!this.elements.banner?.progressFill,
+        cart: !!this.elements.cart,
+        cartProgressFill: !!this.elements.cart?.progressFill,
+      });
 
       // Apply proportional widths to all goal elements
       this.applyProportionalWidths();
@@ -207,7 +251,6 @@ class ShippingMotivator {
   setupRebuyCartListeners() {
     // Listen for Rebuy-specific cart events
     document.addEventListener('rebuy:cart.change', () => {
-      console.log('🛒 Rebuy cart change detected');
       setTimeout(() => {
         this.fetchCart()
           .then(() => {
@@ -222,7 +265,6 @@ class ShippingMotivator {
     document.addEventListener('click', (event) => {
       const rebuyButton = event.target.closest('.rebuy-button');
       if (rebuyButton) {
-        console.log('🛒 Rebuy add to cart button clicked');
         // Wait a bit for the cart to be updated, then refresh
         setTimeout(() => {
           this.fetchCart()
@@ -237,7 +279,6 @@ class ShippingMotivator {
 
     // Also listen for any Rebuy widget events
     document.addEventListener('rebuy:widget.cart-add', () => {
-      console.log('🛒 Rebuy widget cart add detected');
       setTimeout(() => {
         this.fetchCart()
           .then(() => {
@@ -250,7 +291,6 @@ class ShippingMotivator {
 
     // Listen for general Rebuy events that might indicate cart changes
     document.addEventListener('rebuy:cart.updated', () => {
-      console.log('🛒 Rebuy cart updated event detected');
       setTimeout(() => {
         this.fetchCart()
           .then(() => {
@@ -304,6 +344,36 @@ class ShippingMotivator {
     window.shippingMotivatorIntercepted = true;
   }
 
+  clearLoadingState(motivator) {
+    if (!motivator) return;
+
+    // Remove loading class and content
+    motivator.classList.remove('shipping-motivator--loading');
+
+    // Clear loading progress fill
+    const progressFill = motivator.querySelector(
+      '.shipping-motivator__progress-fill',
+    );
+    if (progressFill) {
+      progressFill.classList.remove(
+        'shipping-motivator__progress-fill--loading',
+      );
+      progressFill.style.width = '0%';
+    }
+
+    // Clear loading text
+    const textElement = motivator.querySelector('.shipping-motivator__text');
+    if (textElement) {
+      textElement.classList.remove('shipping-motivator__text--loading');
+      const loadingDots = textElement.querySelector(
+        '.shipping-motivator__loading-dots',
+      );
+      if (loadingDots) {
+        loadingDots.remove();
+      }
+    }
+  }
+
   show() {
     // Check display settings from configuration
     const displaySetting = this.getDisplaySetting();
@@ -312,8 +382,11 @@ class ShippingMotivator {
       this.bannerMotivator &&
       (displaySetting === 'banner' || displaySetting === 'both')
     ) {
+      this.clearLoadingState(this.bannerMotivator);
+      this.bannerMotivator.style.display = 'block';
       this.bannerMotivator.classList.remove('shipping-motivator--hidden');
       this.bannerMotivator.setAttribute('aria-hidden', 'false');
+      console.log('✅ Showing banner motivator');
     }
     if (
       this.cartMotivator &&
@@ -327,6 +400,8 @@ class ShippingMotivator {
         this.setupCartGoals();
       }
 
+      this.clearLoadingState(this.cartMotivator);
+      this.cartMotivator.style.display = 'block';
       this.cartMotivator.classList.remove('shipping-motivator--hidden');
       this.cartMotivator.setAttribute('aria-hidden', 'false');
     }
@@ -340,17 +415,22 @@ class ShippingMotivator {
     if (
       this.bannerMotivator &&
       (displaySetting === 'banner' || displaySetting === 'both') &&
-      this.bannerMotivator.classList.contains('shipping-motivator--hidden')
+      (this.bannerMotivator.classList.contains('shipping-motivator--hidden') ||
+        this.bannerMotivator.style.display === 'none')
     ) {
+      this.clearLoadingState(this.bannerMotivator);
+      this.bannerMotivator.style.display = 'block';
       this.bannerMotivator.classList.remove('shipping-motivator--hidden');
       this.bannerMotivator.setAttribute('aria-hidden', 'false');
+      console.log('✅ Showing banner motivator (showIfNeeded)');
     }
 
     // Only show cart if not already visible
     if (
       this.cartMotivator &&
       (displaySetting === 'cart' || displaySetting === 'both') &&
-      this.cartMotivator.classList.contains('shipping-motivator--hidden')
+      (this.cartMotivator.classList.contains('shipping-motivator--hidden') ||
+        this.cartMotivator.style.display === 'none')
     ) {
       // Only setup goals if they're missing
       const goalsContainer = this.cartMotivator.querySelector(
@@ -360,6 +440,8 @@ class ShippingMotivator {
         this.setupCartGoals();
       }
 
+      this.clearLoadingState(this.cartMotivator);
+      this.cartMotivator.style.display = 'block';
       this.cartMotivator.classList.remove('shipping-motivator--hidden');
       this.cartMotivator.setAttribute('aria-hidden', 'false');
     }
@@ -452,7 +534,7 @@ class ShippingMotivator {
           data-goal-message="${goal.message}"
           style="width: ${proportionalWidth}%;">
           <div class="shipping-motivator__goal-marker">
-            <div class="shipping-motivator__goal-label tw-flex tw-gap-1">
+            <div class="shipping-motivator__goal-label tw-flex tw-gap-2 tw-items-center">
 							<span class="shipping-motivator__goal-checkmark">✓</span>
               <span class="shipping-motivator__goal-title">${goal.title}</span>
             </div>
@@ -471,10 +553,37 @@ class ShippingMotivator {
 
   hide() {
     if (this.bannerMotivator) {
-      this.bannerMotivator.classList.add('shipping-motivator--hidden');
+      this.bannerMotivator.style.display = 'none';
+      console.log('🚫 Hidden banner motivator (cart empty or no goals)');
     }
     if (this.cartMotivator) {
-      this.cartMotivator.classList.add('shipping-motivator--hidden');
+      this.cartMotivator.style.display = 'none';
+      console.log('🚫 Hidden cart motivator (cart empty or no goals)');
+    }
+  }
+
+  hideAllMotivators() {
+    // Hide banner motivator
+    const bannerMotivator = document.querySelector('[data-motivator]');
+    if (bannerMotivator) {
+      bannerMotivator.style.display = 'none';
+      console.log('🚫 Hidden banner motivator (no goals configured)');
+    }
+
+    // Hide cart motivator
+    const cartMotivator = document.querySelector('[data-motivator-cart]');
+    if (cartMotivator) {
+      cartMotivator.style.display = 'none';
+      console.log('🚫 Hidden cart motivator (no goals configured)');
+    }
+
+    // Also hide the entire motivator container in cart drawer
+    const cartMotivatorContainer = document.querySelector(
+      '[data-cart-motivator-container]',
+    );
+    if (cartMotivatorContainer) {
+      cartMotivatorContainer.style.display = 'none';
+      console.log('🚫 Hidden cart motivator container (no goals configured)');
     }
   }
 
@@ -490,6 +599,10 @@ class ShippingMotivator {
   }
 
   getCurrentGoal() {
+    if (!this.cart || !this.config.goals || this.config.goals.length === 0) {
+      return null;
+    }
+
     const cartValue = this.cart.total_price;
     const sortedGoals = this.config.goals
       .filter((goal) => {
@@ -510,6 +623,10 @@ class ShippingMotivator {
   }
 
   getCompletedGoals() {
+    if (!this.cart || !this.config.goals || this.config.goals.length === 0) {
+      return [];
+    }
+
     const cartValue = this.cart.total_price;
     return this.config.goals.filter((goal) => {
       if (goal.value > cartValue) return false;
@@ -525,8 +642,8 @@ class ShippingMotivator {
 
   // Get goals that have reached threshold but aren't necessarily fulfilled
   getReachedGoals() {
-    if (!this.cart) {
-      console.warn('⚠️ Cart is null in getReachedGoals');
+    if (!this.cart || !this.config.goals || this.config.goals.length === 0) {
+      console.warn('⚠️ Cart is null or goals missing in getReachedGoals');
       return [];
     }
     const cartValue = this.cart.total_price;
@@ -540,29 +657,23 @@ class ShippingMotivator {
     const isMarkedAsFulfilled =
       this.fulfilledCollectionGoals.has(collectionIdStr);
 
-    console.log(`🔍 isCollectionGoalFulfilled check for ${goal.title}:`, {
-      collectionIdStr,
-      isMarkedAsFulfilled,
-      fulfilledGoalsSize: this.fulfilledCollectionGoals.size,
-      fulfilledGoals: [...this.fulfilledCollectionGoals],
-    });
-
     // Primary check: is this goal permanently marked as fulfilled?
     if (isMarkedAsFulfilled) {
-      console.log(`✅ Goal ${goal.title} is marked as fulfilled`);
       return true;
     }
 
     // If not permanently fulfilled, then it's not fulfilled
     // (We don't use active slider as a fallback for fulfillment)
-    console.log(`❌ Goal ${goal.title} is NOT fulfilled`);
     return false;
   }
 
   getHighestGoal() {
+    if (!this.config.goals || this.config.goals.length === 0) {
+      return { value: 0, title: 'No goals', type: 'goal_discount' };
+    }
     return this.config.goals.reduce(
       (highest, goal) => (goal.value > highest.value ? goal : highest),
-      this.config.goals[0] || { value: 0 },
+      this.config.goals[0],
     );
   }
   async update() {
@@ -580,6 +691,13 @@ class ShippingMotivator {
       return;
     }
 
+    // Defensive check - ensure we have goals configured
+    if (!this.config.goals || this.config.goals.length === 0) {
+      console.warn('⚠️ No goals configured, hiding motivator');
+      this.hide();
+      return;
+    }
+
     // CRITICAL FIX: Ensure fulfilled collection goals are restored from sessionStorage
     // This handles cases where the Set gets cleared during DOM updates/cart changes
     if (this.fulfilledCollectionGoals.size === 0) {
@@ -593,9 +711,6 @@ class ShippingMotivator {
             this.fulfilledCollectionGoals = new Set(
               storedGoals.map((id) => String(id)),
             );
-            console.log('🔄 AUTO-RESTORED fulfilled goals in update():', [
-              ...this.fulfilledCollectionGoals,
-            ]);
           }
         }
       } catch (error) {
@@ -603,24 +718,48 @@ class ShippingMotivator {
       }
     }
 
+    console.log(
+      '🔍 Update check - cart:',
+      !!this.cart,
+      'config:',
+      !!this.config,
+      'goals:',
+      this.config?.goals?.length || 0,
+    );
+    if (this.cart) {
+      console.log(
+        '🔍 Cart details - item_count:',
+        this.cart.item_count,
+        'total_price:',
+        this.cart.total_price,
+      );
+    }
+
     if (!this.cart || !this.config || this.config.goals.length === 0) {
+      console.log('🚫 Hiding motivator - missing cart/config/goals');
       this.hide();
       return;
     }
 
     // For cart drawer, check if cart is empty - only hide if truly empty
     if (this.cart.item_count === 0) {
+      console.log('🚫 Hiding motivator - cart is empty');
       this.hide();
       return;
     }
 
     const cartValue = this.cart.total_price;
 
-    // Re-find cart motivator if it was replaced by AJAX
+    // Re-find cart motivator if it was replaced by AJAX or not initially found
     if (!this.cartMotivator || !document.contains(this.cartMotivator)) {
       this.cartMotivator = document.querySelector('[data-motivator-cart]');
+      console.log('🔍 Re-searching for cart motivator:', !!this.cartMotivator);
       if (this.cartMotivator) {
-        this.setupElements();
+        console.log(
+          '🔍 Found cart motivator element:',
+          this.cartMotivator.tagName,
+          this.cartMotivator.className,
+        );
         this.setupCartGoals(); // Ensure goals are populated
         // Force cache reset to ensure update happens
         this.lastCartValue = -1;
@@ -702,14 +841,11 @@ class ShippingMotivator {
     // Check for previously completed but now uncompleted removable GWP goals
     // Use the stored previous goals for comparison
     if (currentPreviousGoals.length > 0) {
-      console.log('🔍 Checking for GWP removals');
       this.handleGiftWithPurchaseRemoval(reachedGoals, currentPreviousGoals);
     } else {
-      console.log('🔍 Skipping GWP removal check (no previous state)');
     }
 
     // Check for removed collection products (always run to handle threshold changes)
-    console.log('🔍 Running collection product check in update()...');
     await this.checkForRemovedCollectionProducts();
 
     // Handle collection product sliders for newly reached collection goals
@@ -821,23 +957,46 @@ class ShippingMotivator {
   }
 
   updateProgressBars(progressPercentage, allGoalsCompleted) {
+    console.log(
+      '🔄 Updating progress bars:',
+      progressPercentage + '%',
+      'completed:',
+      allGoalsCompleted,
+    );
+
     ['banner', 'cart'].forEach((type) => {
       const elements = this.elements[type];
+      console.log(
+        `🔄 ${type} elements:`,
+        !!elements,
+        'progressFill:',
+        !!elements?.progressFill,
+      );
+
       if (elements?.progressFill) {
         const currentWidth = parseInt(elements.progressFill.style.width) || 0;
         const newWidth = Math.round(progressPercentage);
 
+        console.log(`🔄 ${type} progress: ${currentWidth}% -> ${newWidth}%`);
+
         if (currentWidth !== newWidth) {
           elements.progressFill.style.width = `${progressPercentage}%`;
+          console.log(
+            `✅ Updated ${type} progress bar to ${progressPercentage}%`,
+          );
         }
+      } else {
+        console.log(`❌ No ${type} progress fill element found`);
+      }
 
-        // Add/remove completed class only if state changed
-        const hasCompleteClass = elements.progressContainer?.classList.contains(
+      // Add/remove completed class only if state changed (moved inside forEach but outside if block)
+      if (elements?.progressContainer) {
+        const hasCompleteClass = elements.progressContainer.classList.contains(
           'shipping-motivator__progress--complete',
         );
 
         if (allGoalsCompleted && !hasCompleteClass) {
-          elements.progressContainer?.classList.add(
+          elements.progressContainer.classList.add(
             'shipping-motivator__progress--complete',
           );
         } else if (!allGoalsCompleted && hasCompleteClass) {
@@ -881,9 +1040,6 @@ class ShippingMotivator {
 
     // Debug logging for message state
     if (allGoalsCompleted !== actuallyAllCompleted) {
-      console.log(
-        `🔍 MESSAGE DEBUG: allGoalsCompleted=${allGoalsCompleted} vs actuallyAllCompleted=${actuallyAllCompleted}, cartValue=${cartValue}`,
-      );
     }
 
     if (activeCollectionGoal) {
@@ -1014,10 +1170,6 @@ class ShippingMotivator {
         // Get first available variant from product handle
         const variantId = await this.getFirstAvailableVariant(goal.productId);
         if (!variantId) {
-          console.error(
-            '❌ No available variant found for GWP product:',
-            goal.productId,
-          );
           continue;
         }
 
@@ -1061,7 +1213,6 @@ class ShippingMotivator {
     const previousCompletedGoals =
       previousGoals || this.previouslyCompletedGoals;
 
-    console.log('🔍 Checking for GWP removals...');
     console.log(
       '🔍 Previously completed goals:',
       previousCompletedGoals.length,
@@ -1936,14 +2087,34 @@ function initShippingMotivator() {
   }
 }
 
+// Also check for shipping motivator after cart updates
+function checkShippingMotivatorAfterCartUpdate() {
+  // If there's no config script, hide any visible motivators
+  const configScript = document.querySelector('[data-motivator-config]');
+  if (!configScript) {
+    const cartMotivatorContainer = document.querySelector(
+      '[data-cart-motivator-container]',
+    );
+    if (cartMotivatorContainer) {
+      cartMotivatorContainer.style.display = 'none';
+      console.log(
+        '🚫 Hidden cart motivator container after cart update (no config)',
+      );
+    }
+  }
+}
+
 initShippingMotivator();
 
-// Expose global refresh function for external integrations
+// Expose global functions for external integrations
 window.refreshShippingMotivator = () => {
   if (window.shippingMotivator) {
     window.shippingMotivator.refresh();
   }
 };
+
+window.checkShippingMotivatorAfterCartUpdate =
+  checkShippingMotivatorAfterCartUpdate;
 
 // Expose cart refresh function specifically for Rebuy or other integrations
 window.refreshCartFromRebuy = () => {

@@ -180,7 +180,7 @@
       id='GalleryThumbnails-{{ section.id }}'
       class='thumbnail-slider slider-mobile-gutter quick-add-hidden{% unless section.settings.gallery_layout contains 'thumbnail' %} medium-hide large-up-hide{% endunless %}{% if section.settings.mobile_thumbnails != 'show' %} small-hide{% endif %}{% if media_count <= 3 %} thumbnail-slider--no-slide{% endif %}'
     >
-      <div class='swiper thumbnail-swiper' id='ThumbnailSwiper-{{ section.id }}'>
+      <div class='swiper thumbnail-swiper tw-opacity-0' id='ThumbnailSwiper-{{ section.id }}'>
         <ul
           id='Slider-Thumbnails-{{ section.id }}'
           class='thumbnail-list list-unstyled swiper-wrapper tw-gap-[16px]'
@@ -301,8 +301,12 @@
         </ul>
 
         {%- comment -%} Thumbnail Swiper Navigation {%- endcomment -%}
-        <div class='swiper-button-prev thumbnail-nav thumbnail-nav--prev'></div>
-        <div class='swiper-button-next thumbnail-nav thumbnail-nav--next'></div>
+        <div class='swiper-button-prev thumbnail-nav thumbnail-nav--prev'>
+          <span class='tw-sr-only'>Previous</span>
+        </div>
+        <div class='swiper-button-next thumbnail-nav thumbnail-nav--next'>
+          <span class='tw-sr-only'>Next</span>
+        </div>
       </div>
     </div>
   {%- endif -%}

@@ -27,43 +27,49 @@
   {%- endif -%}
 
   {%- style -%}
-    .section-{{ section.id }}-padding {
-      padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
-      padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
-    }
-
-    @media screen and (min-width: 750px) {
       .section-{{ section.id }}-padding {
-        padding-top: {{ section.settings.padding_top }}px;
-        padding-bottom: {{ section.settings.padding_bottom }}px;
+        padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+        padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
       }
-    }
-		.product__tab-content[aria-expanded="false"] {
-				display: none !important;
-		}
-		.product__tab-content .card__heading a, .product__tab-content .price span {
-				color: #000 !important;
-				font-weight: 400 !important;
-				font-size: 12px !important;
-				line-height: 15px !important;
-		}
-		.product__tab-content .primary {
-			gap: 2px !important;
-		}
-		.product__tab-content .secondary {
-			display: none !important;
-		}
 
-		.product__tab-content .quick-add__submit {
-			min-height: 24px !important;
-			height: 24px !important;
-		}
+      @media screen and (min-width: 750px) {
+        .section-{{ section.id }}-padding {
+          padding-top: {{ section.settings.padding_top }}px;
+          padding-bottom: {{ section.settings.padding_bottom }}px;
+        }
+      }
+    .product__tab-content[aria-expanded="false"] {
+    		display: none !important;
+    }
+    .product__tab-content .card__heading a, .product__tab-content .price span {
+    		color: #000 !important;
+    		font-weight: 400 !important;
+    		font-size: 12px !important;
+    		line-height: 15px !important;
+    }
+    .product__tab-content .primary {
+    	gap: 2px !important;
+    }
+    .product__tab-content .secondary {
+    	display: none !important;
+    }
+
+    .product__tab-content .quick-add__submit {
+    	min-height: 24px !important;
+    	height: 24px !important;
+    }
   {%- endstyle -%}
 
-	
-<script type="text/javascript">
-(function e(){var e=document.createElement("script");e.type="text/javascript",e.async=true,e.src="//staticw2.yotpo.com/8Jh6NwDddZhTIEl7eOeXLckQbUYrE0f7qK78qcuA/widget.js";var t=document.getElementsByTagName("script")[0];t.parentNode.insertBefore(e,t)})();
-</script>
+  <script type='text/javascript'>
+    (function e() {
+      var e = document.createElement('script');
+      (e.type = 'text/javascript'),
+        (e.async = true),
+        (e.src = '//staticw2.yotpo.com/8Jh6NwDddZhTIEl7eOeXLckQbUYrE0f7qK78qcuA/widget.js');
+      var t = document.getElementsByTagName('script')[0];
+      t.parentNode.insertBefore(e, t);
+    })();
+  </script>
   <script src='{{ 'product-info.js' | asset_url }}' defer='defer'></script>
   <script src='{{ 'product-form.js' | asset_url }}' defer='defer'></script>
   {%- if product.quantity_price_breaks_configured? -%}
@@ -188,35 +194,6 @@
                       price_class: 'price--large'
                     -%}
                   </div>
-                  {% comment %}
-                    {%- if product.quantity_price_breaks_configured? -%}
-                      <div class='volume-pricing-note' id='Volume-Note-{{ section.id }}'>
-                        <span>{{ 'products.product.volume_pricing.note' | t }}</span>
-                      </div>
-                    {%- endif -%}
-                    {%- if cart.taxes_included or cart.duties_included or shop.shipping_policy.body != blank -%}
-                      <div class='product__tax caption rte'>
-                        {%- if cart.duties_included and cart.taxes_included -%}
-                          {{ 'products.product.duties_and_taxes_included' | t }}
-                        {%- elsif cart.taxes_included -%}
-                          {{ 'products.product.taxes_included' | t }}
-                        {%- elsif cart.duties_included -%}
-                          {{ 'products.product.duties_included' | t }}
-                        {%- endif -%}
-                        {%- if shop.shipping_policy.body != blank -%}
-                          {{ 'products.product.shipping_policy_html' | t: link: shop.shipping_policy.url }}
-                        {%- endif -%}
-                      </div>
-                    {%- endif -%}
-
-                    <div {{ block.shopify_attributes }}>
-                      {%- assign product_form_installment_id = 'product-form-installment-' | append: section.id -%}
-                      {%- form 'product', product, id: product_form_installment_id, class: 'installment caption-large' -%}
-                        <input type='hidden' name='id' value='{{ product.selected_or_first_available_variant.id }}'>
-                        {{ form | payment_terms }}
-                      {%- endform -%}
-                    </div>
-                  {% endcomment %}
                 </div>
               {%- when 'inventory' -%}
                 <p
@@ -554,11 +531,19 @@
                 -%}
 
               {%- when 'tabbed_list' -%}
-                <div class='product__tabbed-list quick-add-hidden !tw-mt-0'>
+                <div class='product__tabbed-list !tw-mt-0'>
                   <ul class='tw-flex tw-relative tw-mb-8'>
+                    <li class='product__tab tw-mr-6'>
+                      <button
+                        class='product__tab tw-text-[12px] tw-leading-[15px] tw-border-b tw-border-black hover:tw-border-black'
+                        data-panel='details'
+                      >
+                        Details
+                      </button>
+                    </li>
                     <li class='product__tab tw-mr-4'>
                       <button
-                        class='product__tab tw-text-[12px] tw-leading-[15px] tw-font-medium tw-border-b tw-border-black hover:tw-border-black'
+                        class='product__tab tw-text-[12px] tw-leading-[15px] tw-border-b tw-border-[#ececec] hover:tw-border-black'
                         data-panel='materials'
                       >
                         Materials
@@ -566,23 +551,7 @@
                     </li>
                     <li class='product__tab tw-mr-6'>
                       <button
-                        class='product__tab tw-text-[12px] tw-leading-[15px] tw-font-medium tw-border-b tw-border-[#ececec] hover:tw-border-black'
-                        data-panel='fit'
-                      >
-                        Fit
-                      </button>
-                    </li>
-                    <li class='product__tab tw-mr-6'>
-                      <button
-                        class='product__tab tw-text-[12px] tw-leading-[15px] tw-font-medium tw-border-b tw-border-[#ececec] hover:tw-border-black'
-                        data-panel='details'
-                      >
-                        Details
-                      </button>
-                    </li>
-                    <li class='product__tab tw-mr-6'>
-                      <button
-                        class='product__tab tw-text-[12px] tw-leading-[15px] tw-font-medium tw-border-b tw-border-[#ececec] hover:tw-border-black'
+                        class='product__tab tw-text-[12px] tw-leading-[15px] tw-border-b tw-border-[#ececec] hover:tw-border-black'
                         data-panel='returns'
                       >
                         Returns
@@ -590,158 +559,183 @@
                     </li>
                     <li class='product__tab tw-mr-6'>
                       <button
-                        class='product__tab tw-text-[12px] tw-leading-[15px] tw-font-medium tw-border-b tw-border-[#ececec] hover:tw-border-black'
+                        class='product__tab tw-text-[12px] tw-leading-[15px] tw-border-b tw-border-[#ececec] hover:tw-border-black'
                         data-panel='shop-the-look'
                       >
                         Shop the Look
                       </button>
                     </li>
                   </ul>
-                  <ul class='product__text-body tw-flex quick-add-hidden tw-flex-col' {{ block.shopify_attributes }}>
+                  <ul class='product__text-body tw-flex tw-flex-col' {{ block.shopify_attributes }}>
                     <li
                       class='product__tab-content rte tw-text-[12px] tw-leading-[15px] tw-flex tw-justify-between tw-gap-4'
                       data-panel='materials'
+                      aria-expanded='false'
+                    >
+                      {% if product.metafields.options.materials.value != blank %}
+                        {% for material in product.metafields.options.materials.value %}
+                          {% if material.benefit != blank %}
+                            <div class='image-with-text__text rte tw-text-[12px] tw-leading-[15px]'>
+                              <div class='tw-flex tw-items-center tw-pb-3 tw-gap-2'>
+                                {%- if material.collection != blank -%}
+                                  <a
+                                    href='{{ material.collection.value.url }}'
+                                    class='!tw-text-black tw-text-[12px] tw-leading-[15px]'
+                                  >
+                                    {{- material.title -}}
+                                  </a>
+                                {%- else -%}
+                                  <span class='!tw-text-black tw-text-[12px] tw-leading-[15px]'>
+                                    {{- material.title -}}
+                                  </span>
+                                {%- endif -%}
+                                {% if material.icon != blank %}
+                                  <img
+                                    class='tw-image-cover tw-w-[12px] tw-h-[12px] tw-overflow-hidden tw-pointer-events-none !tw-mb-0'
+                                    src='{{ material.icon.value | image_url: width: 24 }}'
+                                    alt='{{ material.title }}'
+                                    width='12'
+                                    height='12'
+                                  >
+                                {% endif %}
+                              </div>
+                              {{ material.benefit | metafield_text }}
+                            </div>
+                          {% endif %}
+                        {% endfor %}
+                      {% endif %}
+                    </li>
+                    <li
+                      class='product__tab-content rte tw-text-[12px] tw-leading-[15px]'
+                      data-panel='details'
                       aria-expanded='true'
                     >
-											{% if product.metafields.options.materials.value != blank %}
-												{% for material in product.metafields.options.materials.value %}
-													{% if material.benefit != blank %}
-														<div class='image-with-text__text rte tw-text-[12px] tw-leading-[15px]'>
-															<div class='tw-flex tw-items-center tw-pb-3 tw-gap-2'>
-																<{% if material.collection != blank %}a{% else %}span{% endif %} {% if material.collection != blank %}href='{{ material.collection.value.url }}'{% endif %} class='!tw-text-black tw-text-[12px] tw-leading-[15px] tw-font-medium'>
-																	{{- material.title -}}
-																</{% if material.collection != blank %}a{% else %}span{% endif %}>
-																{% if material.icon != blank %}
-																	<img
-																		class='tw-image-cover tw-w-[12px] tw-h-[12px] tw-overflow-hidden tw-pointer-events-none !tw-mb-0'
-																		src='{{ material.icon.value | image_url: width: 24 }}'
-																		alt='{{ material.title }}'
-																		width='12'
-																		height='12'
-																	>
-																{% endif %}
-															</div>
-															{{ material.benefit | metafield_text }}
-														</div>
-													{% endif %}
-												{% endfor %}
-											{% endif %}
+                      {% if product.metafields.custom_fields.details_fit != blank %}
+                        <div class='product-detail fit tw-mb-4'>
+                          <h3 class='product-detail-label'>
+                            <span class='!tw-text-black tw-text-[12px] tw-leading-[15px] tw-mb-3'>Fit</span>
+                          </h3>
+                          <div class='product-detail-content !tw-text-black tw-text-[12px] tw-leading-[15px]'>
+                            {{ product.metafields.custom_fields.details_fit }}
+                          </div>
+                        </div>
+                      {% endif %}
+                      {% if product.metafields.custom_fields.details_model != blank %}
+                        <div class='product-detail model tw-mb-4'>
+                          <h3 class='product-detail-label'>
+                            <span class='!tw-text-black tw-text-[12px] tw-leading-[15px] tw-mb-3'>Model</span>
+                          </h3>
+                          <div class='product-detail-content !tw-text-black tw-text-[12px] tw-leading-[15px]'>
+                            {{ product.metafields.custom_fields.details_model }}
+                          </div>
+                        </div>
+                      {% endif %}
+                      {% if product.metafields.custom_fields.details_care != blank %}
+                        <div class='product-detail care tw-mb-4'>
+                          <h3 class='product-detail-label'>
+                            <span class='!tw-text-black tw-text-[12px] tw-leading-[15px] tw-mb-3'>Care</span>
+                          </h3>
+                          <div class='product-detail-content *:tw-mb-4 !tw-text-black tw-text-[12px] tw-leading-[15px]'>
+                            {{ product.metafields.custom_fields.details_care }}
+                          </div>
+                        </div>
+                      {% endif %}
+                      {% if product.metafields.custom_fields.details_origin != blank %}
+                        <div class='product-detail origin tw-mb-4'>
+                          <h3 class='product-detail-label'>
+                            <span class='!tw-text-black tw-text-[12px] tw-leading-[15px] tw-mb-3'>Origin</span>
+                          </h3>
+                          <div class='product-detail-content !tw-text-black tw-text-[12px] tw-leading-[15px]'>
+                            {{ product.metafields.custom_fields.details_origin }}
+                          </div>
+                        </div>
+                      {% endif %}
                     </li>
-									<li
-										class='product__tab-content rte tw-text-[12px] tw-leading-[15px]'
-										data-panel='fit'
-										aria-expanded='false'
-									>
-									{% if product.metafields.custom_fields["details_fit"] != blank %}
-										<div class="product-detail fit tw-mb-4">
-											<h3 class="product-detail-label"><span class='!tw-text-black tw-text-[12px] tw-leading-[15px] tw-font-medium tw-mb-3'>Fit</span></h3>
-											<div class="product-detail-content !tw-text-black tw-text-[12px] tw-leading-[15px]">
-												{{ product.metafields.custom_fields["details_fit"] }}
-											</div>
-										</div>
-									{% endif %}
-									{% if product.metafields.custom_fields["details_model"] != blank %}
-										<div class="product-detail model tw-mb-4">
-											<h3 class="product-detail-label"><span class='!tw-text-black tw-text-[12px] tw-leading-[15px] tw-font-medium tw-mb-3'>Model</span></h3> 
-											<div class="product-detail-content !tw-text-black tw-text-[12px] tw-leading-[15px]">
-												{{ product.metafields.custom_fields["details_model"] }}
-											</div>
-										</div>
-									{% endif %}
-									</li>
-									<li
-										class='product__tab-content rte tw-text-[12px] tw-leading-[15px]'
-										data-panel='details'
-										aria-expanded='false'
-									>
-									{% if product.metafields.custom_fields["details_care"] != blank %}
-										<div class="product-detail care tw-mb-4">
-											<h3 class="product-detail-label"><span class='!tw-text-black tw-text-[12px] tw-leading-[15px] tw-font-medium tw-mb-3'>Care</span></h3> 
-											<div class="product-detail-content *:tw-mb-4 !tw-text-black tw-text-[12px] tw-leading-[15px]">
-												{{ product.metafields.custom_fields["details_care"] }}
-											</div>
-										</div>
-									{% endif %}
-									{% if product.metafields.custom_fields["details_origin"] != blank %}
-										<div class="product-detail origin tw-mb-4">
-											<h3 class="product-detail-label"><span class='!tw-text-black tw-text-[12px] tw-leading-[15px] tw-font-medium tw-mb-3'>Origin</span></h3> 
-											<div class="product-detail-content !tw-text-black tw-text-[12px] tw-leading-[15px]">
-												{{ product.metafields.custom_fields["details_origin"] }}
-											</div>
-										</div>
-									{% endif %}
-									</li>
-									<li
-										class='product__tab-content rte tw-text-[12px] tw-leading-[15px]'
-										data-panel='returns'
-										aria-expanded='false'
-									>
-										<span class="hidden stock-ship__shipping available tw-mb-4">{{ product.metafields.custom_fields["shipping_time"] | default: 'Ships in 1-2 business days' }}</span>
-										<div class="!tw-text-black tw-text-[12px] tw-leading-[15px] tw-mb-4">
-											We offer returns and exchanges on all domestic (US) orders. For returns, you have 30 days from the date of shipping to return for a refund. For exchanges, you have up to 40 days to exchange for something else or store credit. 
-										</div>
-										<div class="!tw-text-black tw-text-[12px] tw-leading-[15px]">
-											Worn, used, or damaged returns and exchange will not be accepted. If outside the return window, we can exchange or offer you store credit. We charge a $7 restocking fee on returns.
-										</div>
-									</li>
-									<li
-										class='product__tab-content tw-mt-4 rte tw-text-[12px] tw-leading-[15px]'
-										data-panel='shop-the-look'
-										aria-expanded='false'
-									>
-								<div
-							class='product-grid-container'
-						>
-							<ul
-								data-id='{{ section.id }}'
-								class='
-									grid product-grid grid--3-col-tablet-down
-									grid--3-col-desktop lg:!tw-gap-x-[12px] !tw-px-0
-								'
-							>
-								{% assign skip_card_product_styles = false %}
-								{%- for product in product.metafields.shopthelook.products.value limit: 2 -%}
-									{% assign lazy_load = false %}
-									{%- if forloop.index > 2 -%}
-										{%- assign lazy_load = true -%}
-									{%- endif -%}
-									<li class='grid__item'>
-										{% render 'card-product',
-											card_product: product,
-											media_aspect_ratio: 'adapt',
-											show_secondary_image: true,
-											show_vendor: false,
-											show_rating: false,
-											show_swatches: true,
-											lazy_load: true,
-											quick_add: 'standard'
-										%}
-									</li>
-									{%- assign skip_card_product_styles = true -%}
-								{%- endfor -%}
-							</ul>
-						</div>
-								</li>
+                    <li
+                      class='product__tab-content rte tw-text-[12px] tw-leading-[15px]'
+                      data-panel='returns'
+                      aria-expanded='false'
+                    >
+                      <span class='hidden stock-ship__shipping available tw-mb-4'>
+                        {{- product.metafields.custom_fields.shipping_time | default: 'Ships in 1-2 business days' -}}
+                      </span>
+                      <div class='!tw-text-black tw-text-[12px] tw-leading-[15px] tw-mb-4'>
+                        We offer returns and exchanges on all domestic (US) orders. For returns, you have 30 days from
+                        the date of shipping to return for a refund. For exchanges, you have up to 40 days to exchange
+                        for something else or store credit.
+                      </div>
+                    </li>
+                    <li
+                      class='product__tab-content tw-mt-4 rte tw-text-[12px] tw-leading-[15px]'
+                      data-panel='shop-the-look'
+                      aria-expanded='false'
+                    >
+                      <div
+                        class='product-grid-container'
+                      >
+                        <ul
+                          data-id='{{ section.id }}'
+                          class='
+                            grid product-grid grid--3-col-tablet-down
+                            grid--3-col-desktop lg:!tw-gap-x-[12px] !tw-px-0
+                          '
+                        >
+                          {% assign skip_card_product_styles = false %}
+                          {%- for product in product.metafields.shopthelook.products.value limit: 2 -%}
+                            {% assign lazy_load = false %}
+                            {%- if forloop.index > 2 -%}
+                              {%- assign lazy_load = true -%}
+                            {%- endif -%}
+                            <li class='grid__item'>
+                              {% render 'card-product',
+                                card_product: product,
+                                media_aspect_ratio: 'adapt',
+                                show_secondary_image: true,
+                                show_vendor: false,
+                                show_rating: false,
+                                show_swatches: true,
+                                lazy_load: true,
+                                quick_add: 'standard'
+                              %}
+                            </li>
+                            {%- assign skip_card_product_styles = true -%}
+                          {%- endfor -%}
+                        </ul>
+                      </div>
+                    </li>
                   </ul>
                 </div>
 
               {%- when 'rating' -%}
-								<div class="quick-add-hidden tw-flex tw-justify-between tw-items-center tw-mb-4 lg:tw-mb-8">
-									<nav class="product-breadcrumbs" role="navigation" aria-label="breadcrumbs">
-										<ol class="tw-flex tw-items-center">
-											<li class="breadcrumb__root tw-inline-block">
-												<a class='tw-text-[#767676] tw-text-[12px] tw-leading-[15px] tw-decoration-none transition-colors duration-300' href="/collections/shop/">Shop</a>    
-											</li>
-											{% if collection.url != blank and collection.url != '/collections/shop' %}
-													<li class="breadcrumb__collection">
-														<a class='tw-text-[#767676] tw-text-[12px] tw-leading-[15px] tw-decoration-none transition-colors duration-300' href="{{ collection.url }}">{{ collection.title }}</a>    
-													</li>
-											{% endif %}
-										</ol>
-									</nav>
-									<div class="product-rating yotpo bottomLine" data-product-id="{{ product.id }}" data-count="({{ product.metafields.yotpo.reviews_count  }})"></div>
-								</div>
-               
+                <div class='quick-add-hidden tw-flex tw-justify-between tw-items-center tw-mb-4 lg:tw-mb-8'>
+                  <nav class='product-breadcrumbs' role='navigation' aria-label='breadcrumbs'>
+                    <ol class='tw-flex tw-items-center'>
+                      <li class='breadcrumb__root tw-inline-block'>
+                        <a
+                          class='tw-text-[#767676] tw-text-[12px] tw-leading-[15px] tw-decoration-none transition-colors duration-300'
+                          href='/collections/shop/'
+                          >Shop</a
+                        >
+                      </li>
+                      {% if collection.url != blank and collection.url != '/collections/shop' %}
+                        <li class='breadcrumb__collection'>
+                          <a
+                            class='tw-text-[#767676] tw-text-[12px] tw-leading-[15px] tw-decoration-none transition-colors duration-300'
+                            href='{{ collection.url }}'
+                          >
+                            {{- collection.title -}}
+                          </a>
+                        </li>
+                      {% endif %}
+                    </ol>
+                  </nav>
+                  <div
+                    class='product-rating yotpo bottomLine'
+                    data-product-id='{{ product.id }}'
+                    data-count='({{ product.metafields.yotpo.reviews_count  }})'
+                  ></div>
+                </div>
+
               {%- when 'complementary' -%}
                 <product-recommendations
                   class='complementary-products {% if block.settings.make_collapsible_row %} is-accordion{% endif %}{% if block.settings.enable_quick_add %} complementary-products-contains-quick-add{% endif %}'
@@ -898,10 +892,482 @@
 
           <a
             href='{{ product.url }}'
-            class='button button--full-width button--secondary quick-add-only'
+            class='button button--full-width button--secondary !tw-mt-12 quick-add-only'
           >
             {{ 'products.product.view_full_details' | t }}
           </a>
+          <!-- Widget : Quick View Recommendations -->
+          <div class='quick-add-only'>
+            <div
+              data-rebuy-id='234056'
+              data-rebuy-shopify-product-ids='{{ product.id }}'
+            ></div>
+
+            {% raw %} 
+							<script id='rebuy-widget-234056' data-rebuy-shopify-product-ids='{{ product.id }}' type="text/template">
+								<div class="rebuy-widget" v-cloak v-on:click="stopPropagation($event)" v-bind:id="'rebuy-widget-' + id"
+									v-bind:class="['widget-type-' + config.type.replace('_','-'), 'widget-display-' + config.display_type, products.length > 0 ? 'is-visible' : 'is-hidden']">
+									<div class="rebuy-widget-container" v-cloak
+										v-bind:class="['widget-display-' + config.display_type, visible ? 'is-visible' : 'is-hidden' ]"
+										v-on:click.self="hide()">
+										<div class="rebuy-widget-content">
+											<div class="rebuy-modal-close" v-on:click="hide()"> <i class="fas fa-times"></i> </div>
+											<h4 class="super-title" v-if="config.language.super_title != ''" v-html="config.language.super_title"></h4>
+											<h3 class="rebuy-primary-title tw-text-left !tw-py-8 page-width" v-if="config.language.title != ''" v-html="config.language.title"></h3>
+											<div class="description" v-if="config.language.description != ''" v-html="config.language.description"></div>
+											<div class="recommended-product-grid page-width grid--p product-grid grid--2-col-tablet-down grid--4-col-desktop">
+												<li class="grid__item scroll-trigger animate--slide-in" data-cascade v-bind:style="{ '--animation-order': product_index }" v-for="(product, product_index) in products">
+													<div class="card-wrapper product-card-wrapper"
+														v-bind:class="[product.handle, 'product-id-' + product.id, cartHasProduct(product) ? 'cart-has-item' : '', productTagClasses(product)]">
+														<div class="card card--card tw-group card--media gradient tw-rounded-[2px] tw-overflow-hidden"
+															v-bind:style="{ '--ratio-percent': '125%' }">
+															<div class="card__inner ratio tw-rounded-[2px] tw-overflow-hidden"
+																v-bind:style="{ '--ratio-percent': '125%' }">
+																<!-- Media Section -->
+																<div class="card__media tw-relative">
+																	<div class="card-media-carousel">
+																		<div class="card-media-container" v-bind:style="{ '--ratio-percent': '100%' }">
+																			<a class="rebuy-product-image" 
+																				v-if="Shopify.country === 'GB'"
+																				v-bind:href="learnMoreURL(product).replace(/^/,'/en-gb').replace('/en-gb/en-gb','/en-gb')"
+																				v-bind:class="[hasLearnMore() ? 'clickable' : '']"> 
+																				<img v-bind:src="itemImage(product, product.selected_variant, '900x')"
+																					v-bind:alt="'View ' + product.title"
+																					class="card-media-image motion-reduce"
+																					loading="lazy">
+																			</a>
+																			<a class="rebuy-product-image" 
+																				v-else-if="Shopify.country === 'CA'"
+																				v-bind:href="learnMoreURL(product).replace(/^/,'/en-ca').replace('/en-ca/en-ca','/en-ca')"
+																				v-bind:class="[hasLearnMore() ? 'clickable' : '']"> 
+																				<img v-bind:src="itemImage(product, product.selected_variant, '900x')"
+																					v-bind:alt="'View ' + product.title"
+																					class="card-media-image motion-reduce"
+																					loading="lazy">
+																			</a>
+																			<a class="rebuy-product-image" 
+																				v-else
+																				v-bind:href="learnMoreURL(product)" 
+																				v-on:click="learnMore(product);"
+																				v-bind:class="[hasLearnMore() ? 'clickable' : '']">
+																				<img v-bind:src="itemImage(product, product.selected_variant, '900x')"
+																					v-bind:alt="'View ' + product.title"
+																					class="card-media-image motion-reduce"
+																					loading="lazy"> 
+																			</a>
+																		</div>
+																	</div>
+																</div>
+
+
+															</div>
+
+															<!-- Product Information -->
+															<div class="card__content">
+																<div class="card__information tw-flex tw-flex-row tw-justify-between">
+																	<div class="primary tw-flex tw-flex-col tw-gap-2">
+																		<h3 class="card__heading">
+																			<a class="full-unstyled-link tw-text-[12px] tw-leading-[15px] lg:tw-text-[14px] lg:tw-leading-[17px]" 
+																				v-if="Shopify.country === 'GB'"
+																				v-bind:href="learnMoreURL(product).replace(/^/,'/en-gb').replace('/en-gb/en-gb','/en-gb')"
+																				v-html="product.title"
+																				v-bind:class="[hasLearnMore() ? 'clickable gb' : '']"></a>
+																			<a class="full-unstyled-link tw-text-[12px] tw-leading-[15px] lg:tw-text-[14px] lg:tw-leading-[17px]" 
+																				v-else-if="Shopify.country === 'CA'"
+																				v-bind:href="learnMoreURL(product).replace(/^/,'/en-ca').replace('/en-ca/en-ca','/en-ca')"
+																				v-html="product.title"
+																				v-bind:class="[hasLearnMore() ? 'clickable ca' : '']"></a>
+																			<a class="full-unstyled-link tw-text-[12px] tw-leading-[15px] lg:tw-text-[14px] lg:tw-leading-[17px]" 
+																				v-else
+																				v-bind:href="learnMoreURL(product)"
+																				v-on:click="learnMore(product);" 
+																				v-html="product.title"
+																				v-bind:class="[hasLearnMore() ? 'clickable us' : '']"></a>
+																		</h3>
+
+																		<div class="card-information">
+																			<!-- Variant Title -->
+																			<div class="rebuy-variant-title caption-large light" v-if="showVariantTitle(product)" v-html="product.selected_variant.title">
+																			</div>
+
+																			<!-- Reviews -->
+																			<div class="rating" v-if="hasProductReviews(product)"> 
+																				<span class="rebuy-star-rating"> 
+																					<span class="rebuy-star-rating-background"></span> 
+																					<span class="rebuy-star-rating-foreground" v-bind:style="{ width: productReviewRatingPercentage(product) }"></span> 
+																				</span> 
+																				<span class="rebuy-review-count" v-html="productReviewCount(product)"></span> 
+																			</div>
+
+																			<!-- Price -->
+																			<div class="price">
+																				<div class="price__container">
+																					<div class="price__sale" v-if="variantOnSale(product, product.selected_variant)">
+																						<span class="visually-hidden visually-hidden--inline">Regular price</span>
+																						<span>
+																							<s class="price-item price-item--regular" v-html="formatMoney(variantCompareAtPrice(product, product.selected_variant)).replace('.00', '')"></s>
+																						</span>
+																						<span class="visually-hidden visually-hidden--inline">Sale price</span>
+																						<span class="price-item price-item--sale price-item--last" v-html="formatMoney(variantPrice(product, product.selected_variant)).replace('.00', '')"></span>
+																					</div>
+																					<div class="price__regular" v-else>
+																						<span class="visually-hidden visually-hidden--inline">Regular price</span>
+																						<span class="price-item price-item--regular" v-html="formatMoney(variantPrice(product, product.selected_variant)).replace('.00', '')"></span>
+																					</div>
+																				</div>
+																			</div>
+
+																			<!-- Variant Selector -->
+																			<div class="rebuy-variant-selector tw-mt-3" v-if="product.variants && product.variants.length > 1">
+																				<select class="rebuy-select tw-w-full tw-text-[11px] tw-p-2 tw-border tw-rounded-[2px]" 
+																						v-on:change="selectVariant(product, $event.target.value)">
+																					<option v-for="variant in product.variants" 
+																							v-bind:value="variant.id"
+																							v-bind:selected="variant.id === product.selected_variant.id"
+																							v-bind:disabled="!variantAvailable(variant)">
+																						{{ variant.title }}
+																					</option>
+																				</select>
+																			</div>
+
+																			<!-- Add to Cart Button -->
+																			<div class="rebuy-add-to-cart tw-mt-3">
+																				<button class="rebuy-button tw-w-full tw-text-[10px] lg:tw-text-[12px] tw-rounded-[2px] tw-py-2 tw-px-4"
+																						v-bind:class="{ working: (product.status != 'ready' && product.status != 'selecting') }"
+																						v-bind:disabled="!(variantAvailable(product.selected_variant)) || (product.status != 'ready' && product.status != 'selecting')"
+																						v-bind:alt="'Add ' + product.title + ' to Cart'"
+																						v-on:click="handleAddToCart(product, $event)"
+																						type="button">
+																					<span class="rebuy-button-text">Add to Cart</span>
+																					<span class="rebuy-button-loading" style="display: none;">
+																						<svg class="rebuy-loading-spinner" width="16" height="16" viewBox="0 0 24 24" fill="none">
+																							<circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" opacity="0.3"/>
+																							<path d="M12 2a10 10 0 0 1 10 10" stroke="currentColor" stroke-width="2">
+																								<animateTransform attributeName="transform" type="rotate" dur="1s" repeatCount="indefinite" values="0 12 12;360 12 12"/>
+																							</path>
+																						</svg>
+																					</span>
+																				</button>
+																			</div>
+
+																			<!-- Product Description -->
+																			<div class="rebuy-product-description caption-large light" v-if="showProductDescription(product)"
+																				v-html="text(product.body_html)"></div>
+																		</div>
+																	</div>
+
+																	<!-- Swatches Section -->
+																	<div class="secondary tw-flex tw-flex-col tw-gap-3 tw-pt-[1px]">
+																		<!-- Color Swatches -->
+
+																		<!-- Debug: Only show for first product -->
+																		<div v-if="product_index === 10000" class="debug-info tw-text-[8px] tw-bg-yellow-100 tw-p-2 tw-mb-2 tw-border">
+																			<strong>🐛 Debug - Product {{ product.id }}:</strong><br/>
+																			<strong>Title:</strong> {{ product.title }}<br/>
+																			<strong>Standard Options:</strong> {{ (product.options || []).length }} options<br/>
+																			<div v-if="product.options && product.options.length > 0">
+																				<div v-for="(option, idx) in product.options">
+																					Option {{ idx }}: {{ option.name }} = {{ (option.values || []).join(', ') }}
+																				</div>
+																			</div>
+																			<strong>Product Keys:</strong> {{ Object.keys(product).join(', ') }}<br/>
+																			<strong>Colorsets JSON:</strong> {{ product?.metafields?.options?.colorsets }}<br/>
+
+																			<strong>Variants Count:</strong> {{ (product.variants || []).length }}<br/>
+																			<strong>Has Images:</strong> {{ (product.images || []).length }} images
+																		</div>
+
+																		<!-- Temporarily disabled colorsets until we understand the data structure -->
+																		<div v-if="false" class="rebuy-color-swatches">
+																			<!-- Will implement once we see the debug data -->
+																		</div>
+																	</div>
+																</div>
+
+																<!-- Badges -->
+																<div class="card__badge">
+																	<span v-if="!variantAvailable(product.selected_variant)"
+																		class="badge badge--bottom-left color-accent-1">
+																		Sold out
+																	</span>
+																	<span v-else-if="variantOnSale(product, product.selected_variant)"
+																		class="badge badge--bottom-left color-accent-2">
+																		Sale
+																	</span>
+																</div>
+															</div>
+
+															<!-- Additional Options (Subscription, Quantity) -->
+															<div class="rebuy-product-options tw-p-4" v-if="showSubscriptionOptions(product) || hasQuantityInputEnabled()">
+																<div class="subscription-checkbox tw-mb-2" v-if="showSubscriptionOptions(product)"> 
+																	<label class="rebuy-checkbox-label tw-flex tw-items-center tw-gap-2"> 
+																		<input class="checkbox-input rebuy-checkbox"
+																			v-model="product.subscription" 
+																			v-on:change="toggleSubscription(product)" 
+																			type="checkbox" /> 
+																		<span class="checkbox-label tw-text-[10px]" v-html="upgradeToSubscriptionLabel(product)"></span> 
+																	</label> 
+																</div>
+																<div class="subscription-frequency tw-mb-2" v-if="showSubscriptionFrequency(product)"> 
+																	<select class="rebuy-select tw-text-[10px]"
+																		v-model="product.subscription_frequency" 
+																		v-on:change="updateSubscriptionFrequency(product)">
+																		<option v-for="frequency in product.subscription_frequencies" v-bind:value="frequency">
+																			{{ frequencyLabel(frequency, product.subscription_interval) }}
+																		</option>
+																	</select> 
+																</div>
+																<div class="product-quantity" v-if="hasQuantityInputEnabled()">
+																	<div class="rebuy-select-wrapper tw-flex tw-items-center tw-gap-2"> 
+																		<label class="rebuy-label tw-text-[10px]">Quantity</label> 
+																		<select class="rebuy-select tw-text-[10px]" v-model="product.quantity">
+																			<option v-for="n in maxQuantityInputValue()" v-bind:value="n">{{ n }}</option>
+																		</select> 
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</li>
+											</div>
+											<div class="rebuy-modal-actions" v-if="showContinueButton()"> 
+												<button class="rebuy-button decline" v-on:click="hide()" type="button"> 
+													<span v-html="continueLabel()"></span> 
+												</button> 
+											</div>
+										</div>
+									</div>
+								</div>
+							</script>
+						{% endraw %}
+
+            <!-- Custom Add to Cart Handler with Loading/Success States -->
+            <script>
+              // Add custom handleAddToCart function to the global scope for Rebuy Vue templates
+              window.handleAddToCart = function (product, event) {
+                const button = event.target.closest('button');
+                const textSpan = button.querySelector('.rebuy-button-text');
+                const loadingSpan = button.querySelector('.rebuy-button-loading');
+
+                // Store original text
+                const originalText = textSpan.innerHTML;
+
+                console.log('Button clicked, showing loading state');
+
+                // Show loading state using CSS classes
+                textSpan.classList.add('hide');
+                loadingSpan.classList.add('show');
+                button.disabled = true;
+
+                // Get the selected variant ID
+                const variantId = product.selected_variant ? product.selected_variant.id : product.variants[0].id;
+
+                // Create form data for the cart API
+                const formData = {
+                  items: [
+                    {
+                      id: variantId,
+                      quantity: 1,
+                    },
+                  ],
+                };
+
+                // Add to cart using Shopify's Cart API
+                fetch(window.Shopify.routes.root + 'cart/add.js', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify(formData),
+                })
+                  .then((response) => response.json())
+                  .then((data) => {
+                    console.log('Product added to cart:', data);
+                    console.log('Showing success message');
+
+                    // Show success state with more aggressive approach
+                    loadingSpan.classList.remove('show');
+                    loadingSpan.style.display = 'none';
+
+                    // Force the success message using multiple approaches
+                    textSpan.innerHTML = 'Added to Cart';
+                    textSpan.textContent = 'Added to Cart';
+                    textSpan.innerText = 'Added to Cart';
+                    textSpan.classList.remove('hide');
+                    textSpan.style.display = 'inline-block';
+                    textSpan.style.visibility = 'visible';
+                    textSpan.style.opacity = '1';
+
+                    // Add a distinctive class for success state
+                    textSpan.classList.add('success-message');
+                    button.classList.add('success-message');
+
+                    // Mark as success mode to prevent overrides
+                    textSpan.dataset.successMode = 'true';
+
+                    console.log('Success message set:', textSpan.innerHTML);
+                    console.log('textContent:', textSpan.textContent);
+                    console.log('innerText:', textSpan.innerText);
+                    console.log('Text span element:', textSpan);
+
+                    // Use a MutationObserver to prevent other scripts from changing the text
+                    const observer = new MutationObserver(function (mutations) {
+                      mutations.forEach(function (mutation) {
+                        if (mutation.type === 'childList' || mutation.type === 'characterData') {
+                          if (textSpan.dataset.successMode === 'true' && textSpan.innerHTML !== 'Added to Cart') {
+                            console.log('Text was changed by another script, restoring success message');
+                            textSpan.innerHTML = 'Added to Cart';
+                          }
+                        }
+                      });
+                    });
+
+                    observer.observe(textSpan, {
+                      childList: true,
+                      subtree: true,
+                      characterData: true,
+                    });
+
+                    // Also use setInterval as backup to force the text
+                    const interval = setInterval(() => {
+                      if (textSpan.dataset.successMode === 'true') {
+                        if (textSpan.innerHTML !== 'Added to Cart') {
+                          console.log('Forcing success message via interval');
+                          textSpan.innerHTML = 'Added to Cart';
+                        }
+                      }
+                    }, 50); // Check every 50ms
+
+                    // Update cart count if available (but delay it to avoid conflicts)
+                    setTimeout(() => {
+                      document.dispatchEvent(new CustomEvent('cart:updated'));
+                    }, 100);
+
+                    // Reset to original state after 2 seconds
+                    setTimeout(() => {
+                      console.log('Resetting button to original state');
+
+                      // Clean up observer and interval
+                      observer.disconnect();
+                      clearInterval(interval);
+
+                      // Reset button state
+                      textSpan.classList.remove('success-message');
+                      button.classList.remove('success-message');
+                      textSpan.innerHTML = originalText;
+                      textSpan.dataset.successMode = 'false';
+                      button.disabled = false;
+                    }, 2000);
+                  })
+                  .catch((error) => {
+                    console.error('Error adding to cart:', error);
+                    // Reset button on error
+                    loadingSpan.classList.remove('show');
+                    textSpan.innerHTML = 'Error - Try again';
+                    textSpan.classList.remove('hide');
+
+                    // Reset to original state after 2 seconds
+                    setTimeout(() => {
+                      textSpan.innerHTML = originalText;
+                      button.disabled = false;
+                    }, 2000);
+                  });
+              };
+            </script>
+
+            <!-- Custom Styles for Loading/Success States -->
+            <style>
+              .rebuy-button {
+                position: relative;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                min-height: 36px; /* Ensure consistent button height */
+              }
+
+              .rebuy-button-text {
+                display: inline-block !important;
+                transition: opacity 0.2s ease;
+              }
+
+              .rebuy-button-loading {
+                display: none;
+                align-items: center;
+                justify-content: center;
+              }
+
+              .rebuy-button-loading.show {
+                display: inline-flex !important;
+              }
+
+              .rebuy-button-text.hide {
+                display: none !important;
+              }
+
+              /* Success state styling */
+              .rebuy-button-text {
+                color: inherit;
+                font-weight: inherit;
+                font-size: inherit;
+              }
+
+              .rebuy-loading-spinner {
+                width: 16px;
+                height: 16px;
+                animation: spin 1s linear infinite;
+              }
+
+              @keyframes spin {
+                from {
+                  transform: rotate(0deg);
+                }
+                to {
+                  transform: rotate(360deg);
+                }
+              }
+
+              .rebuy-button:disabled {
+                opacity: 0.7;
+                cursor: not-allowed;
+              }
+
+              /* Clean styling for button text */
+              .rebuy-button .rebuy-button-text {
+                display: inline-block !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+              }
+
+              /* Override the existing ::after pseudo-element that displays the button text */
+              .rebuy-widget .rebuy-button.success-message span::after,
+              .cart-drawer .rebuy-button.success-message span::after,
+              .rebuy-button.success-message span::after {
+                content: 'Added to Cart' !important;
+                font-size: 11px !important;
+              }
+
+              /* Hide the button-level ::after to prevent double text during success */
+              .rebuy-widget .rebuy-button.success-message::after,
+              .cart-drawer .rebuy-button.success-message::after,
+              .rebuy-button.success-message::after {
+                display: none !important;
+              }
+
+              /* Hide button text during loading state (disabled but not success) */
+              .rebuy-widget .rebuy-button:disabled:not(.success-message)::after,
+              .cart-drawer .rebuy-button:disabled:not(.success-message)::after,
+              .rebuy-button:disabled:not(.success-message)::after {
+                display: none !important;
+              }
+
+              .rebuy-widget .rebuy-button:disabled:not(.success-message) span::after,
+              .cart-drawer .rebuy-button:disabled:not(.success-message) span::after,
+              .rebuy-button:disabled:not(.success-message) span::after {
+                display: none !important;
+              }
+            </style>
+          </div>
+          <!-- End Widget : Product Recommendations -->
         </section>
       </div>
     </div>
@@ -943,16 +1409,16 @@
         <!-- Swiper CSS and JS for Enhanced Gallery -->
         <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.0.5/swiper-bundle.min.css'>
         <script src='https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.0.5/swiper-bundle.min.js' defer='defer'></script>
-				{% render 'enhanced-gallery-styles' %}
-				{% render 'enhanced-gallery-script' %}
+        {% render 'enhanced-gallery-styles' %}
+        {% render 'enhanced-gallery-script' %}
       {%- endunless -%}
 
       {%- if section.settings.gallery_layout == 'swiper_thumbnails' -%}
         <!-- Swiper CSS and JS for Product Gallery -->
         <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.0.5/swiper-bundle.min.css'>
         <script src='https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.0.5/swiper-bundle.min.js' defer='defer'></script>
-          {% render 'product-swiper-gallery-styles' %}
-          {% render 'product-swiper-gallery-script' %}
+        {% render 'product-swiper-gallery-styles' %}
+        {% render 'product-swiper-gallery-script' %}
       {%- endif -%}
     {%- endif -%}
 
@@ -978,21 +1444,74 @@
   {%- if section.settings.show_sticky_cart_button -%}
     {% render 'product-sticky-form', product: product %}
   {%- endif -%}
-	
-	<script>
-		document.querySelectorAll('.product__tab').forEach((button) => {
-			button.addEventListener('click', (e) => {
-				console.log(e.target.dataset.panel);
-				document.querySelector('.product__tab.tw-border-black').classList.remove('tw-border-black');
-				document.querySelector('.product__tab-content[aria-expanded="true"]').setAttribute('aria-expanded', false);
-				document
-					.querySelector(`.product__tabbed-list .product__tab-content[data-panel="${e.target.dataset.panel}"]`)
-					.setAttribute('aria-expanded', true);
-				e.target.classList.add('tw-border-black');
-			});
-		});
-	</script>
 
+  <script>
+    // Scoped tabbed list functionality that works in both main product and modal contexts
+    function initializeTabbedList(container = document) {
+      const tabbedListContainer = container.querySelector('.product__tabbed-list');
+      if (!tabbedListContainer) {
+        console.log('No tabbed list container found in:', container);
+        return;
+      }
+
+      console.log('Initializing tabbed list in:', container, tabbedListContainer);
+
+      const tabs = tabbedListContainer.querySelectorAll('.product__tab');
+      tabs.forEach((button) => {
+        // Remove existing listeners to prevent duplicates
+        button.removeEventListener('click', handleTabClick);
+        button.addEventListener('click', handleTabClick);
+      });
+
+      // Ensure initial state is correct
+      const initialActiveContent = tabbedListContainer.querySelector('.product__tab-content[aria-expanded="true"]');
+      const allContent = tabbedListContainer.querySelectorAll('.product__tab-content');
+      console.log('Initial state - active content:', initialActiveContent, 'all content:', allContent.length);
+
+      function handleTabClick(e) {
+        e.preventDefault();
+        const panel = e.target.dataset.panel;
+        if (!panel) return;
+
+        console.log('Tab clicked:', panel);
+
+        // Find all elements within the current tabbed list container
+        const currentActiveTab = tabbedListContainer.querySelector('.product__tab.tw-border-black');
+        const currentActiveContent = tabbedListContainer.querySelector('.product__tab-content[aria-expanded="true"]');
+        const targetContent = tabbedListContainer.querySelector(`.product__tab-content[data-panel="${panel}"]`);
+
+        console.log('Current active tab:', currentActiveTab);
+        console.log('Current active content:', currentActiveContent);
+        console.log('Target content:', targetContent);
+
+        // Deactivate current tab and content
+        if (currentActiveTab) {
+          currentActiveTab.classList.remove('tw-border-black');
+        }
+        if (currentActiveContent) {
+          currentActiveContent.setAttribute('aria-expanded', false);
+          console.log('Deactivated:', currentActiveContent);
+        }
+
+        // Activate new tab and content
+        if (targetContent) {
+          targetContent.setAttribute('aria-expanded', true);
+          console.log('Activated:', targetContent);
+        }
+        e.target.classList.add('tw-border-black');
+      }
+    }
+
+    // Initialize on page load
+    initializeTabbedList();
+
+    // Re-initialize when product info is loaded (for modals)
+    document.addEventListener('product-info:loaded', function (e) {
+      setTimeout(() => {
+        initializeTabbedList(e.target.closest('quick-add-modal') || document);
+      }, 100);
+    });
+  </script>
 </product-info>
 
 {% schema %}
@@ -2507,7 +3026,8 @@
     {
       "type": "checkbox",
       "id": "show_sticky_cart_button",
-      "label": "Show sticky add to cart button to the bottom of the page",
+      "label": "Show sticky add to cart button",
+      "info": "Displays a sticky add to cart bar at the bottom of the page when scrolling past the main product form",
       "default": true
     },
     {

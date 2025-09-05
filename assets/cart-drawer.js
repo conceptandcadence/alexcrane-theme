@@ -59,6 +59,13 @@ class CartDrawer extends HTMLElement {
   }
 
   close() {
+    // Only prevent closing during rebuy updates, not regular cart operations
+    if (this.hasAttribute('data-rebuy-updating')) {
+      console.log('🛒 Cart drawer close prevented during rebuy update');
+      return;
+    }
+
+    console.log('🛒 Cart drawer closing normally');
     this.classList.remove('active');
     removeTrapFocus(this.activeElement);
     document.body.classList.remove('overflow-hidden');

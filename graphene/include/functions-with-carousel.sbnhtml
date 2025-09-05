@@ -50,8 +50,9 @@ func get_image_srcs
     for $size in $desired_sizes
       $size_as_int = $size * 1
       $image_base_url 	= $image.src
-      $image_suffix 		= $image_base_url | regex.match `(\.jpg|.gif|.png|\.webp)` | regex.escape
-      $image_sized_url 	= string.replace_first $image_base_url $image_suffix $"_{$size}x{$image_suffix}" true
+      $image_suffix_match = $image_base_url | regex.match `(\.jpg|.gif|.png|\.webp)`
+      $image_suffix 		= $image_suffix_match ? ($image_suffix_match | regex.escape) : ""
+      $image_sized_url 	= $image_suffix ? (string.replace_first $image_base_url $image_suffix $"_{$size}x{$image_suffix}" true) : $image_base_url
 	  $srcset 			= $"{$srcset} {$image_sized_url} {$size}w,"
       $supported_sizes	= $"{$supported_sizes} {$size},"
 

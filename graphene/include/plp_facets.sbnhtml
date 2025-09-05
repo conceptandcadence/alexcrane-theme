@@ -42,7 +42,7 @@
                   </span>
               {{~ else if $facet.properties?.is_icon  ~}}
 
-                    {{ capture $css }}display: inline-block; width: 20px; height: 20px; margin-right: 8px; transition: transform .5s ease-in-out, background-color .5s ease-in-out; background-color: var(--color-blue-light); -webkit-mask: url({{ $media?.default?.src }}) no-repeat center; mask: url({{ $media?.default?.src }}) no-repeat center;  mask-size: contain; {{ end }}
+                    {{ capture $css }}display: inline-block; width: 20px; height: 20px; margin-right: 8px; transition: transform .5s ease-in-out, background-color .5s ease-in-out; background-color: #000; -webkit-mask: url({{ $media?.default?.src }}) no-repeat center; mask: url({{ $media?.default?.src }}) no-repeat center;  mask-size: contain; {{ end }}
                     <span class="shop-filter-label">
                       <span style="{{ $css }}" aria-hidden="true"{{ if $count == 0 }} class="shop-filter-icon disabled"{{ else }} class="shop-filter-icon"{{ end }}></span>
                       <span>{{ $label }}</span>
@@ -78,7 +78,7 @@
         $facet_index  = for.index
     ~}}
       <div id="Details-{{ $facet_index }}-template" class="shop-filters__wrapper" data-filterset="{{ $label }}"  data-index="{{ $facet_index }}">
-        <span class="filter-label">{{ $label }}</span>
+        <span class="h2 filter-label">{{ $label }}</span>
         <ul class="shop-filter-group {{ $label | string.downcase }}s{{ if $facet.properties?.is_icon }} icons{{ end }}" aria-label="{{ $label }} ({{ $count }} selected)" role="list">
           {{~ if $facet.data_type == "numeric" && $facet.ranges ~}}
             {{~ for $item in $facet.ranges ~}}

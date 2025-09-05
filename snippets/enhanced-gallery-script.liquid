@@ -252,9 +252,9 @@
           // Add compatibility methods for original media-gallery.js
           this.addThumbnailCompatibility(thumbnailContainer);
 
-          // Sync with main gallery if it exists
-          if (this.swiper && this.thumbnailSwiper) {
-            this.syncGalleries();
+          // Setup thumbnail click handlers only (no sync with main gallery)
+          if (this.thumbnailSwiper) {
+            this.setupThumbnailClickHandlers();
           }
         } catch (error) {
           console.error('❌ Failed to initialize thumbnail Swiper:', error);
@@ -301,19 +301,14 @@
         };
       }
 
-      syncGalleries() {
-        if (!this.swiper || !this.thumbnailSwiper) return;
+      setupThumbnailClickHandlers() {
+        if (!this.thumbnailSwiper) return;
 
-        // When main gallery changes, update thumbnail
-        this.swiper.on('slideChange', () => {
-          const activeIndex = this.swiper.realIndex;
-          this.thumbnailSwiper.slideTo(activeIndex);
-        });
-
-        // When thumbnail is clicked, update main gallery
+        // Only handle thumbnail clicks to update main gallery
+        // No automatic synchronization from main gallery to thumbnails
         this.thumbnailSwiper.on('click', (swiper, event) => {
           const clickedSlide = event.target.closest('.swiper-slide');
-          if (clickedSlide) {
+          if (clickedSlide && this.swiper) {
             const slideIndex = Array.from(swiper.slides).indexOf(clickedSlide);
             this.swiper.slideTo(slideIndex);
           }

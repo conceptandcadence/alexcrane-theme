@@ -42,9 +42,12 @@
                   {{- 'icon-close.svg' | inline_asset_content -}}
                 </span>
               </button>
-              <a href='{{ routes.all_products_collection_url }}' class='button'>
-                {{ 'general.continue_shopping' | t }}
-              </a>
+
+              {% comment %}
+                <a href='{{ routes.all_products_collection_url }}' class='button'>
+                	{{ 'general.continue_shopping' | t }}
+                </a>
+              {% endcomment %}
 
               {%- if shop.customer_accounts_enabled and customer == null -%}
                 <p class='cart__login-title h3'>{{ 'sections.cart.login.title' | t }}</p>
@@ -54,11 +57,9 @@
               {%- endif -%}
             </div>
           </div>
-          {%- if settings.cart_drawer_collection != blank -%}
-            <div class='cart-drawer__collection'>
-              {% render 'card-collection', card_collection: settings.cart_drawer_collection, columns: 1 %}
-            </div>
-          {%- endif -%}
+          <!-- Widget : Cart Drawer Recommendations -->
+          <div data-rebuy-id='235697'></div>
+          <!-- End Widget : Cart Drawer Recommendations -->
         </div>
       {%- endif -%}
 
@@ -107,6 +108,50 @@
             </div>
           </div>
         </div>
+
+        {% comment %} Check if shipping motivator should be hidden {% endcomment %}
+        <script>
+          // Check if shipping motivator is properly initialized
+          function checkShippingMotivatorStatus() {
+            const motivatorContainer = document.querySelector('[data-cart-motivator-container]');
+
+            if (!motivatorContainer) return;
+
+            // Check if shipping motivator script loaded and initialized
+            const hasShippingMotivatorScript = window.shippingMotivator || window.ShippingMotivator;
+            const hasConfigScript = document.querySelector('[data-motivator-config]');
+
+            console.log('🔍 Shipping motivator check:', {
+              hasScript: !!hasShippingMotivatorScript,
+              hasConfig: !!hasConfigScript,
+              configContent: hasConfigScript ? hasConfigScript.textContent.substring(0, 100) + '...' : 'none',
+            });
+
+            if (!hasShippingMotivatorScript && !hasConfigScript) {
+              // No shipping motivator functionality available, hide the section
+              motivatorContainer.style.display = 'none';
+              console.log('🚫 Cart shipping motivator hidden after update (no functionality available)');
+            } else {
+              // Show the motivator if it was hidden and functionality is available
+              motivatorContainer.style.display = 'block';
+              console.log('✅ Cart shipping motivator functionality detected after update');
+            }
+          }
+
+          // Expose globally for cart update calls
+          window.checkShippingMotivatorStatus = checkShippingMotivatorStatus;
+
+          // Initial check with delay for script loading
+          function initialCheck() {
+            setTimeout(checkShippingMotivatorStatus, 1000);
+          }
+
+          if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initialCheck);
+          } else {
+            initialCheck();
+          }
+        </script>
       {% endif %}
 
       <cart-drawer-items
@@ -556,9 +601,11 @@
             </small>
           </div>
         {% endcomment %}
-        <!-- Widget : Cart Drawer Recommendations -->
-        <div data-rebuy-id='235697'></div>
-        <!-- End Widget : Cart Drawer Recommendations -->
+        {%- unless cart == empty -%}
+          <!-- Widget : Cart Drawer Recommendations -->
+          <div data-rebuy-id='235697'></div>
+          <!-- End Widget : Cart Drawer Recommendations -->
+        {%- endunless -%}
       </cart-drawer-items>
       <div class='drawer__footer'>
         {%- if settings.show_cart_note -%}

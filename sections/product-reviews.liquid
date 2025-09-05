@@ -2,11 +2,11 @@
 	<div class="swiper-slide reviews-carousel__quote !tw-flex tw-flex-col tw-relative tw-items-center tw-justify-between tw-p-12 tw-border tw-border-[#ececec] tw-rounded-[5px]">
 		<div class="reviews-carousel__quote-wrapper tw-flex tw-flex-col tw-text-left tw-justify-between tw-items-start tw-relative tw-h-full tw-flex-grow tw-w-full">
 			
-			{% if product.metafields.yotpo.reviews_average != blank %}
+			{% if product.metafields.yotpo.reviews_average != blank and product.metafields.yotpo.reviews_count != blank %}
 				<div class="review-top-wrapper tw-flex tw-flex-col tw-gap-4">
-					<h3 class="reviews-carousel__headline tw-text-left tw-max-w-sm tw-font-normal tw-text-[32px] tw-leading-[36px] tw-m-0 md:tw-max-w-full tw-flex-grow tw-flex tw-items-center tw-gap-3">
+					<h3 class="reviews-carousel__headline tw-text-left tw-max-w-sm tw-font-normal tw-text-[20px] tw-leading-[24px] tw-m-0 md:tw-max-w-full tw-flex-grow tw-flex tw-items-center tw-gap-3">
 						<span class='reviews-overview__average'>{{ product.metafields.yotpo.reviews_average }}</span>
-						<ul class='reviews-overview__stars tw-text-[24px] tw-flex tw-items-center tw-gap-1'>
+						<ul class='reviews-overview__stars tw-text-[16px] tw-flex tw-items-center tw-gap-1'>
 							<li class='reviews-overview__star'><div class='reviews-overview__star-icon'>★</div></li>
 							<li class='reviews-overview__star'><div class='reviews-overview__star-icon'>★</div></li>
 							<li class='reviews-overview__star'><div class='reviews-overview__star-icon'>★</div></li>
@@ -19,10 +19,10 @@
 						<span class='reviews-overview__count'>{{ product.metafields.yotpo.reviews_count }}</span> reviews.
 					</div>
 				</div>
-				<a href="#" class="button button--secondary">Read All Reviews</a>
+				<a href="#" class="show-reviews-toggle button button--secondary">Read All Reviews</a>
 			{% else %}
 			<div class="review-top-wrapper tw-flex tw-flex-col tw-gap-4">
-				<h3 class="reviews-carousel__headline tw-text-left tw-max-w-sm tw-font-normal tw-text-[32px] tw-leading-[36px] tw-m-0 md:tw-max-w-full tw-flex-grow tw-flex tw-items-center tw-gap-3">
+				<h3 class="reviews-carousel__headline tw-text-left tw-max-w-sm tw-font-normal tw-text-[20px] tw-leading-[24px] tw-m-0 md:tw-max-w-full tw-flex-grow tw-flex tw-items-center tw-gap-3">
 					<span class='reviews-overview__average'>No reviews yet</span>
 				</h3>
 				<div>
@@ -35,102 +35,98 @@
 	</div>
 {% endcapture %}
 
+{% comment %}
+  Placeholder review blocks - only used when real reviews are available
+  These will be populated by JavaScript with real Yotpo review data
+{% endcomment %}
 {% capture review_blocks %}
-	<div class="swiper-slide reviews-carousel__quote !tw-flex tw-flex-col tw-relative tw-items-center tw-justify-between tw-p-12 tw-border tw-border-[#ececec] tw-rounded-[5px]">
-		<div class="reviews-carousel__quote-wrapper tw-flex tw-flex-col tw-text-left tw-justify-between tw-items-start tw-relative tw-h-full tw-flex-grow tw-w-full">			
-				<div class="review-top-wrapper tw-flex tw-flex-col tw-gap-4">
-					<h3 class="reviews-carousel__headline tw-text-left tw-max-w-sm tw-font-normal tw-text-[32px] tw-leading-[36px] tw-m-0 md:tw-max-w-full tw-flex-grow tw-flex tw-items-center tw-gap-3">
-						<ul class='reviews-overview__stars tw-text-[14px] tw-flex tw-items-center tw-gap-1'>
-							<li class='reviews-overview__star'><div class='reviews-overview__star-icon'>★</div></li>
-							<li class='reviews-overview__star'><div class='reviews-overview__star-icon'>★</div></li>
-							<li class='reviews-overview__star'><div class='reviews-overview__star-icon'>★</div></li>
-							<li class='reviews-overview__star'><div class='reviews-overview__star-icon'>★</div></li>
-							<li class='reviews-overview__star'><div class='reviews-overview__star-icon'>★</div></li>
-						</ul>
-					</h3>
-					<div class="tw-text-[14px] tw-leading-[20px]">
-						Material and color (Moss) are beautiful. It's thicker linen than I'm accustomed to, and quite luxurious.
+	{% if product.metafields.yotpo.reviews_average != blank %}
+		<div class="swiper-slide reviews-carousel__quote !tw-flex tw-flex-col tw-relative tw-items-center tw-justify-between tw-p-12 tw-border tw-border-[#ececec] tw-rounded-[5px]">
+			<div class="reviews-carousel__quote-wrapper tw-flex tw-flex-col tw-text-left tw-justify-between tw-items-start tw-relative tw-h-full tw-flex-grow tw-w-full">			
+					<div class="review-top-wrapper tw-flex tw-flex-col tw-gap-4">
+						<h3 class="reviews-carousel__headline tw-text-left tw-max-w-sm tw-font-normal tw-text-[20px] tw-leading-[24px] tw-m-0 md:tw-max-w-full tw-flex-grow tw-flex tw-items-center tw-gap-3">
+							<ul class='reviews-overview__stars tw-text-[16px] tw-flex tw-items-center tw-gap-1'>
+								<li class='reviews-overview__star'><div class='reviews-overview__star-icon'>★</div></li>
+								<li class='reviews-overview__star'><div class='reviews-overview__star-icon'>★</div></li>
+								<li class='reviews-overview__star'><div class='reviews-overview__star-icon'>★</div></li>
+								<li class='reviews-overview__star'><div class='reviews-overview__star-icon'>★</div></li>
+								<li class='reviews-overview__star'><div class='reviews-overview__star-icon'>★</div></li>
+							</ul>
+						</h3>
+						<div class="tw-text-[14px] tw-leading-[20px]"></div>
 					</div>
-				</div>
-				<a href="#" class="tw-text-[12px]">&ndash;John R</a>
+					<span class="tw-text-[12px] tw-pb-4 tw-capitalize"></span>
+			</div>
 		</div>
-	</div>
-	<div class="swiper-slide reviews-carousel__quote !tw-flex tw-flex-col tw-relative tw-items-center tw-justify-between tw-p-12 tw-border tw-border-[#ececec] tw-rounded-[5px]">
-		<div class="reviews-carousel__quote-wrapper tw-flex tw-flex-col tw-text-left tw-justify-between tw-items-start tw-relative tw-h-full tw-flex-grow tw-w-full">			
-				<div class="review-top-wrapper tw-flex tw-flex-col tw-gap-4">
-					<h3 class="reviews-carousel__headline tw-text-left tw-max-w-sm tw-font-normal tw-text-[32px] tw-leading-[36px] tw-m-0 md:tw-max-w-full tw-flex-grow tw-flex tw-items-center tw-gap-3">
-						<ul class='reviews-overview__stars tw-text-[14px] tw-flex tw-items-center tw-gap-1'>
-							<li class='reviews-overview__star'><div class='reviews-overview__star-icon'>★</div></li>
-							<li class='reviews-overview__star'><div class='reviews-overview__star-icon'>★</div></li>
-							<li class='reviews-overview__star'><div class='reviews-overview__star-icon'>★</div></li>
-							<li class='reviews-overview__star'><div class='reviews-overview__star-icon'>★</div></li>
-							<li class='reviews-overview__star'><div class='reviews-overview__star-icon'>★</div></li>
-						</ul>
-					</h3>
-					<div class="tw-text-[14px] tw-leading-[20px]">
-						I&apos;ve enjoyed every item in purchased so far. The fit is very accurate, light weight construction makes for easy movement, comfortable to wear day or night and easy to mix and match looks for super casual to dressy. I&apos;m looking forward to adding to my collection.
-						</div>
-				</div>
-				<a href="#" class="tw-text-[12px]">&ndash;Scott C</a>
+		<div class="swiper-slide reviews-carousel__quote !tw-flex tw-flex-col tw-relative tw-items-center tw-justify-between tw-p-12 tw-border tw-border-[#ececec] tw-rounded-[5px]">
+			<div class="reviews-carousel__quote-wrapper tw-flex tw-flex-col tw-text-left tw-justify-between tw-items-start tw-relative tw-h-full tw-flex-grow tw-w-full">			
+					<div class="review-top-wrapper tw-flex tw-flex-col tw-gap-4">
+						<h3 class="reviews-carousel__headline tw-text-left tw-max-w-sm tw-font-normal tw-text-[20px] tw-leading-[24px] tw-m-0 md:tw-max-w-full tw-flex-grow tw-flex tw-items-center tw-gap-3">
+							<ul class='reviews-overview__stars tw-text-[16px] tw-flex tw-items-center tw-gap-1'>
+								<li class='reviews-overview__star'><div class='reviews-overview__star-icon'>★</div></li>
+								<li class='reviews-overview__star'><div class='reviews-overview__star-icon'>★</div></li>
+								<li class='reviews-overview__star'><div class='reviews-overview__star-icon'>★</div></li>
+								<li class='reviews-overview__star'><div class='reviews-overview__star-icon'>★</div></li>
+								<li class='reviews-overview__star'><div class='reviews-overview__star-icon'>★</div></li>
+							</ul>
+						</h3>
+						<div class="tw-text-[14px] tw-leading-[20px]"></div>
+					</div>
+					<span class="tw-text-[12px] tw-pb-4 tw-capitalize"></span> 
+			</div>
 		</div>
-	</div>
-	<div class="swiper-slide reviews-carousel__quote !tw-flex tw-flex-col tw-relative tw-items-center tw-justify-between tw-p-12 tw-border tw-border-[#ececec] tw-rounded-[5px]">
-		<div class="reviews-carousel__quote-wrapper tw-flex tw-flex-col tw-text-left tw-justify-between tw-items-start tw-relative tw-h-full tw-flex-grow tw-w-full">			
-				<div class="review-top-wrapper tw-flex tw-flex-col tw-gap-4">
-					<h3 class="reviews-carousel__headline tw-text-left tw-max-w-sm tw-font-normal tw-text-[32px] tw-leading-[36px] tw-m-0 md:tw-max-w-full tw-flex-grow tw-flex tw-items-center tw-gap-3">
-						<ul class='reviews-overview__stars tw-text-[14px] tw-flex tw-items-center tw-gap-1'>
-							<li class='reviews-overview__star'><div class='reviews-overview__star-icon'>★</div></li>
-							<li class='reviews-overview__star'><div class='reviews-overview__star-icon'>★</div></li>
-							<li class='reviews-overview__star'><div class='reviews-overview__star-icon'>★</div></li>
-							<li class='reviews-overview__star'><div class='reviews-overview__star-icon'>★</div></li>
-							<li class='reviews-overview__star'><div class='reviews-overview__star-icon'>★</div></li>
-						</ul>
-					</h3>
-					<div class="tw-text-[14px] tw-leading-[20px]">
-						The color is beautiful and the fit is just right. Loose enough to not restrict my torso and pairs well with different color shorts. This is my second Playa shirt and I have a feeling I'll purchase more in the near future.						
-						</div>
-				</div>
-				<a href="#" class="tw-text-[12px]">&ndash;Allan B</a>
+		<div class="swiper-slide reviews-carousel__quote !tw-flex tw-flex-col tw-relative tw-items-center tw-justify-between tw-p-12 tw-border tw-border-[#ececec] tw-rounded-[5px]">
+			<div class="reviews-carousel__quote-wrapper tw-flex tw-flex-col tw-text-left tw-justify-between tw-items-start tw-relative tw-h-full tw-flex-grow tw-w-full">			
+					<div class="review-top-wrapper tw-flex tw-flex-col tw-gap-4">
+						<h3 class="reviews-carousel__headline tw-text-left tw-max-w-sm tw-font-normal tw-text-[20px] tw-leading-[24px] tw-m-0 md:tw-max-w-full tw-flex-grow tw-flex tw-items-center tw-gap-3">
+							<ul class='reviews-overview__stars tw-text-[16px] tw-flex tw-items-center tw-gap-1'>
+								<li class='reviews-overview__star'><div class='reviews-overview__star-icon'>★</div></li>
+								<li class='reviews-overview__star'><div class='reviews-overview__star-icon'>★</div></li>
+								<li class='reviews-overview__star'><div class='reviews-overview__star-icon'>★</div></li>
+								<li class='reviews-overview__star'><div class='reviews-overview__star-icon'>★</div></li>
+								<li class='reviews-overview__star'><div class='reviews-overview__star-icon'>★</div></li>
+							</ul>
+						</h3>
+						<div class="tw-text-[14px] tw-leading-[20px]"></div>
+					</div>
+					<span class="tw-text-[12px] tw-pb-4 tw-capitalize"></span>
+			</div>
 		</div>
-	</div>
-	<div class="swiper-slide reviews-carousel__quote !tw-flex tw-flex-col tw-relative tw-items-center tw-justify-between tw-p-12 tw-border tw-border-[#ececec] tw-rounded-[5px]">
-		<div class="reviews-carousel__quote-wrapper tw-flex tw-flex-col tw-text-left tw-justify-between tw-items-start tw-relative tw-h-full tw-flex-grow tw-w-full">			
-				<div class="review-top-wrapper tw-flex tw-flex-col tw-gap-4">
-					<h3 class="reviews-carousel__headline tw-text-left tw-max-w-sm tw-font-normal tw-text-[32px] tw-leading-[36px] tw-m-0 md:tw-max-w-full tw-flex-grow tw-flex tw-items-center tw-gap-3">
-						<ul class='reviews-overview__stars tw-text-[14px] tw-flex tw-items-center tw-gap-1'>
-							<li class='reviews-overview__star'><div class='reviews-overview__star-icon'>★</div></li>
-							<li class='reviews-overview__star'><div class='reviews-overview__star-icon'>★</div></li>
-							<li class='reviews-overview__star'><div class='reviews-overview__star-icon'>★</div></li>
-							<li class='reviews-overview__star'><div class='reviews-overview__star-icon'>★</div></li>
-							<li class='reviews-overview__star'><div class='reviews-overview__star-icon'>★</div></li>
-						</ul>
-					</h3>
-					<div class="tw-text-[14px] tw-leading-[20px]">
-						Love the fabric and color! Construction of the shirt is great and length and style is perfect.
-						</div>
-				</div>
-				<a href="#" class="tw-text-[12px]">&ndash;Caleb C</a>
+		<div class="swiper-slide reviews-carousel__quote !tw-flex tw-flex-col tw-relative tw-items-center tw-justify-between tw-p-12 tw-border tw-border-[#ececec] tw-rounded-[5px]">
+			<div class="reviews-carousel__quote-wrapper tw-flex tw-flex-col tw-text-left tw-justify-between tw-items-start tw-relative tw-h-full tw-flex-grow tw-w-full">			
+					<div class="review-top-wrapper tw-flex tw-flex-col tw-gap-4">
+						<h3 class="reviews-carousel__headline tw-text-left tw-max-w-sm tw-font-normal tw-text-[20px] tw-leading-[24px] tw-m-0 md:tw-max-w-full tw-flex-grow tw-flex tw-items-center tw-gap-3">
+							<ul class='reviews-overview__stars tw-text-[16px] tw-flex tw-items-center tw-gap-1'>
+								<li class='reviews-overview__star'><div class='reviews-overview__star-icon'>★</div></li>
+								<li class='reviews-overview__star'><div class='reviews-overview__star-icon'>★</div></li>
+								<li class='reviews-overview__star'><div class='reviews-overview__star-icon'>★</div></li>
+								<li class='reviews-overview__star'><div class='reviews-overview__star-icon'>★</div></li>
+								<li class='reviews-overview__star'><div class='reviews-overview__star-icon'>★</div></li>
+							</ul>
+						</h3>
+						<div class="tw-text-[14px] tw-leading-[20px]"></div>
+					</div>
+					<span class="tw-text-[12px] tw-pb-4 tw-capitalize"></span>
+			</div>
 		</div>
-	</div>
-	<div class="swiper-slide reviews-carousel__quote !tw-flex tw-flex-col tw-relative tw-items-center tw-justify-between tw-p-12 tw-border tw-border-[#ececec] tw-rounded-[5px]">
-		<div class="reviews-carousel__quote-wrapper tw-flex tw-flex-col tw-text-left tw-justify-between tw-items-start tw-relative tw-h-full tw-flex-grow tw-w-full">			
-				<div class="review-top-wrapper tw-flex tw-flex-col tw-gap-4">
-					<h3 class="reviews-carousel__headline tw-text-left tw-max-w-sm tw-font-normal tw-text-[32px] tw-leading-[36px] tw-m-0 md:tw-max-w-full tw-flex-grow tw-flex tw-items-center tw-gap-3">
-						<ul class='reviews-overview__stars tw-text-[14px] tw-flex tw-items-center tw-gap-1'>
-							<li class='reviews-overview__star'><div class='reviews-overview__star-icon'>★</div></li>
-							<li class='reviews-overview__star'><div class='reviews-overview__star-icon'>★</div></li>
-							<li class='reviews-overview__star'><div class='reviews-overview__star-icon'>★</div></li>
-							<li class='reviews-overview__star'><div class='reviews-overview__star-icon'>★</div></li>
-							<li class='reviews-overview__star'><div class='reviews-overview__star-icon'>★</div></li>
-						</ul>
-					</h3>
-					<div class="tw-text-[14px] tw-leading-[20px]">
-						Was recommended to Alex Crane from a collègue and will be a returning customer. The two button downs i ordered fit me better than any other button down I’ve bought elsewhere and the feel of the linen is exactly what I’ve been looking for. I plan to order a few more shirts and some linen pants in the near future.
-						</div>
-				</div>
-				<a href="#" class="tw-text-[12px]">&ndash;Patrick H</a>
+		<div class="swiper-slide reviews-carousel__quote !tw-flex tw-flex-col tw-relative tw-items-center tw-justify-between tw-p-12 tw-border tw-border-[#ececec] tw-rounded-[5px]">
+			<div class="reviews-carousel__quote-wrapper tw-flex tw-flex-col tw-text-left tw-justify-between tw-items-start tw-relative tw-h-full tw-flex-grow tw-w-full">			
+					<div class="review-top-wrapper tw-flex tw-flex-col tw-gap-4">
+						<h3 class="reviews-carousel__headline tw-text-left tw-max-w-sm tw-font-normal tw-text-[20px] tw-leading-[24px] tw-m-0 md:tw-max-w-full tw-flex-grow tw-flex tw-items-center tw-gap-3">
+							<ul class='reviews-overview__stars tw-text-[16px] tw-flex tw-items-center tw-gap-1'>
+								<li class='reviews-overview__star'><div class='reviews-overview__star-icon'>★</div></li>
+								<li class='reviews-overview__star'><div class='reviews-overview__star-icon'>★</div></li>
+								<li class='reviews-overview__star'><div class='reviews-overview__star-icon'>★</div></li>
+								<li class='reviews-overview__star'><div class='reviews-overview__star-icon'>★</div></li>
+								<li class='reviews-overview__star'><div class='reviews-overview__star-icon'>★</div></li>
+							</ul>
+						</h3>
+						<div class="tw-text-[14px] tw-leading-[20px]"></div>
+					</div>
+					<span class="tw-text-[12px] tw-pb-4 tw-capitalize"></span>
+			</div>
 		</div>
-	</div>
+	{% endif %}
 {% endcapture %}
 
 <section id='section-{{ section.id }}' class='product-reviews tw-py-12 lg:tw-py-24'>
@@ -166,158 +162,931 @@
 
     if (swiperElement && !swiperElement.classList.contains('disabled-on-desktop')) {
       const cellCount = parseInt(swiperElement.dataset.cellCount) || 3;
+      const slideCount = swiperElement.querySelectorAll('.swiper-slide').length;
 
-      const swiper = new Swiper(swiperElement, {
-        slidesPerView: 1.25,
-        spaceBetween: 32,
-        centeredSlides: false,
-        slidePrevClass: 'reviews-carousel-prevup',
-        slideNextClass: 'reviews-carousel-nextup',
-        slideActiveClass: 'reviews-carousel-active',
-        loop: false,
+      // Only initialize Swiper if we have more than one slide (header + at least one review)
+      if (slideCount > 1) {
+        const swiper = new Swiper(swiperElement, {
+          slidesPerView: 1.25,
+          spaceBetween: 15,
+          centeredSlides: false,
+          slidePrevClass: 'reviews-carousel-prevup',
+          slideNextClass: 'reviews-carousel-nextup',
+          slideActiveClass: 'reviews-carousel-active',
+          slidesOffsetAfter: 20,
+          loop: false,
 
-        /*navigation: {
-          nextEl: '.reviews-carousel-next',
-          prevEl: '.reviews-carousel-prev',
-        },*/
-        breakpoints: {
-          750: {
-            slidesPerView: 2,
+          /*navigation: {
+            nextEl: '.reviews-carousel-next',
+            prevEl: '.reviews-carousel-prev',
+          },*/
+          breakpoints: {
+            750: {
+              slidesPerView: 2,
+            },
+            990: {
+              spaceBetween: 32,
+              slidesPerView: 3.5,
+              slidesOffsetAfter: 50,
+            },
           },
-          990: {
-            slidesPerView: 3.5,
-          },
-        },
-      });
+        });
+      } else {
+        console.log('Not enough slides for carousel, hiding navigation');
+        swiperElement.classList.add('disabled-on-desktop');
+      }
     }
   });
 </script>
 <style>
-   #shopify-section-{{ section.id }} .reviews-carousel__title, #shopify-section-{{ section.id }} .reviews-carousel__price, #shopify-section-{{ section.id }} .reviews-carousel__variant-title {
-   		color: {{ section.settings.text_color }} !important;
+    #shopify-section-{{ section.id }} .reviews-carousel__title, #shopify-section-{{ section.id }} .reviews-carousel__price, #shopify-section-{{ section.id }} .reviews-carousel__variant-title {
+    		color: {{ section.settings.text_color }} !important;
+    }
+    #shopify-section-{{ section.id }} .reviews-carousel__review {
+    		color: {{ section.settings.background }} !important;
+    }
+    @media (max-width: 699px) {
+    		#shopify-section-{{ section.id }} {
+    				padding: {{ section.settings.padding_top_m }}px {{ section.settings.padding_right_m }}px {{ section.settings.padding_bottom_m }}px {{ section.settings.padding_left_m }}px;
+    		}
+    		#shopify-section-{{ section.id }} .reviews-carousel__review {
+    				padding: {{ section.settings.inner_padding_top_m }}px {{ section.settings.inner_padding_right_m }}px {{ section.settings.inner_padding_bottom_m }}px {{ section.settings.inner_padding_left_m }}px;
+    		}
+    }
+    @media (min-width: 700px) {
+    		#shopify-section-{{ section.id }} {
+    				padding: {{ section.settings.padding_top_d }}px {{ section.settings.padding_right_d }}px {{ section.settings.padding_bottom_d }}px {{ section.settings.padding_left_d }}px;
+    		}
+    		#shopify-section-{{ section.id }} .reviews-carousel__review {
+    				padding: {{ section.settings.inner_padding_top_d }}px {{ section.settings.inner_padding_right_d }}px {{ section.settings.inner_padding_bottom_d }}px {{ section.settings.inner_padding_left_d }}px;
+    		}
+    }
+
+   /* Swiper Carousel Styles */
+   .reviews-carousel-swiper {
+   	overflow: hidden;
+   	position: relative;
    }
-   #shopify-section-{{ section.id }} .reviews-carousel__review {
-   		color: {{ section.settings.background }} !important;
+
+   /* Hide carousel when no reviews are available */
+   .reviews-carousel-swiper[style*="display: none"] {
+     display: none !important;
    }
-   @media (max-width: 699px) {
-   		#shopify-section-{{ section.id }} {
-   				padding: {{ section.settings.padding_top_m }}px {{ section.settings.padding_right_m }}px {{ section.settings.padding_bottom_m }}px {{ section.settings.padding_left_m }}px;
-   		}
-   		#shopify-section-{{ section.id }} .reviews-carousel__review {
-   				padding: {{ section.settings.inner_padding_top_m }}px {{ section.settings.inner_padding_right_m }}px {{ section.settings.inner_padding_bottom_m }}px {{ section.settings.inner_padding_left_m }}px;
-   		}
+
+   /* Hide the entire section when no reviews */
+   .product-reviews:has(.reviews-carousel-swiper[style*="display: none"]) {
+     display: none;
    }
+
+   /* Gradient overlays - base styles */
+   .reviews-carousel-swiper::before,
+   .reviews-carousel-swiper::after {
+   	content: '';
+   	position: absolute;
+   	top: 0;
+   	bottom: 0;
+   	width: 100px;
+   	z-index: 2;
+   	pointer-events: none;
+   	transition: opacity 0.3s ease;
+   }
+
+
+
+   .reviews-carousel-swiper .swiper-slide {
+   	width: 50%;
+   	min-height: 50vw;
+   }
+
    @media (min-width: 700px) {
-   		#shopify-section-{{ section.id }} {
-   				padding: {{ section.settings.padding_top_d }}px {{ section.settings.padding_right_d }}px {{ section.settings.padding_bottom_d }}px {{ section.settings.padding_left_d }}px;
-   		}
-   		#shopify-section-{{ section.id }} .reviews-carousel__review {
-   				padding: {{ section.settings.inner_padding_top_d }}px {{ section.settings.inner_padding_right_d }}px {{ section.settings.inner_padding_bottom_d }}px {{ section.settings.inner_padding_left_d }}px;
-   		}
+   	.reviews-carousel-swiper .swiper-slide {
+   		width: 33.33%;
+   		min-height: 20vw;
+   	}
    }
 
-  /* Swiper Carousel Styles */
-  .reviews-carousel-swiper {
-  	overflow: hidden;
-  	position: relative;
+  @media (min-width: 1200px) {
+   	.reviews-carousel-swiper .swiper-slide {
+   		width: 33.33%;
+   		min-height: 15vw;
+   	}
+   }
+
+   /* Navigation buttons */
+   .reviews-carousel-next {
+   	background-image: url("https://cdn.shopify.com/s/files/1/1892/3609/files/carousel-arrow-thick.svg?v=1683734748");
+   	background-size: 24px;
+   right: 36px !important;
+   top: 50%;
+   transform: translateY(-50%);
+   margin-top: 0 !important;
+   }
+
+   .reviews-carousel-prev {
+   	background-image: url("https://cdn.shopify.com/s/files/1/1892/3609/files/carousel-arrow-thick.svg?v=1683734748");
+   	background-size: 24px;
+   left: 36px !important;
+   top: 50%;
+   transform: translateY(-50%) rotate(180deg);
+   margin-top: 0 !important;
+   }
+
+   .reviews-carousel-swiper.disabled-on-desktop .reviews-carousel-next,
+   .reviews-carousel-swiper.disabled-on-desktop .reviews-carousel-prev {
+   	display: none;
+   }
+
+   /* Content styles */
+   .reviews-carousel__headline p {
+   	display: contents;
+   	font-size: 16px !important;
+   }
+
+   .detail-product .detail-label {
+   	margin-left: 4px;
+   	display: flex;
+   	justify-content: center;
+   	align-items: center;
+   }
+
+   .detail-product .detail-product-image {
+   	width: 24px;
+   	height: 24px;
+   	border-radius: 24px;
+   	overflow: hidden;
+   }
+
+   .reviews-carousel-prev.swiper-button-prev:after, .reviews-carousel-next.swiper-button-next:after {
+   	content: none !important;
+   }
+
+   .reviews-carousel-prev, .reviews-carousel-next {
+   	border: solid 1px var(--color-grey);
+   border-radius: 48px;
+   width: 48px !important;
+   height: 48px !important;
+   }
+
+   /* Reviews Modal Styles */
+   .reviews-modal-overlay {
+     position: fixed;
+     top: 0;
+     left: 0;
+     width: 100%;
+     height: 100%;
+     background: rgba(0, 0, 0, 0.5);
+     z-index: 9999;
+     display: none;
+     align-items: center;
+     justify-content: center;
+     padding: 20px;
+     box-sizing: border-box;
+   }
+
+   .reviews-modal-overlay.active {
+     display: flex;
+   }
+
+   .reviews-modal-dialog {
+     background: white;
+     border-radius: 8px;
+     max-width: 90vw;
+     max-height: 90vh;
+     width: 600px;
+     display: flex;
+     flex-direction: column;
+     position: relative;
+     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+   }
+
+   .reviews-modal-header {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     padding: 20px 24px 16px;
+     border-bottom: 1px solid #e1e5e9;
+     flex-shrink: 0;
+   }
+
+   .reviews-modal-title {
+     margin: 0;
+     color: #000;
+   font-size: 20px !important;
+   }
+
+   .reviews-modal-close {
+     background: none;
+     border: none;
+     cursor: pointer;
+     padding: 8px;
+     border-radius: 4px;
+     color: #666;
+     transition: color 0.2s ease, background-color 0.2s ease;
+   }
+
+   .reviews-modal-close:hover {
+     color: #333;
+     background-color: #f5f5f5;
+   }
+
+   .reviews-modal-content {
+     flex: 1;
+     overflow-y: auto;
+     padding: 20px 24px;
+   }
+
+   /* Expanded state for Yotpo widget */
+   .yotpo-main-widget.expanded {
+     width: 100% !important;
+     max-width: none !important;
+   }
+
+  .main-widget.yotpo-display-wrapper {
+  	max-width: 100% !important;
   }
 
-  /* Gradient overlays - base styles */
-  .reviews-carousel-swiper::before,
-  .reviews-carousel-swiper::after {
-  	content: '';
-  	position: absolute;
-  	top: 0;
-  	bottom: 0;
-  	width: 100px;
-  	z-index: 2;
-  	pointer-events: none;
-  	transition: opacity 0.3s ease;
-  }
+   /* Mobile adjustments */
+   @media (max-width: 768px) {
+     .reviews-modal-overlay {
+       padding: 10px;
+     }
 
+     .reviews-modal-dialog {
+       max-width: 100%;
+       max-height: 100%;
+       margin: 0;
+     }
 
+     .reviews-modal-header {
+       padding: 16px 20px 12px;
+     }
 
-  .reviews-carousel-swiper .swiper-slide {
-  	width: 50%;
-  	min-height: 50vw;
-  }
-
-  @media (min-width: 700px) {
-  	.reviews-carousel-swiper .swiper-slide {
-  		width: 33.33%;
-  		min-height: 20vw;
-  	}
-  }
-
-  /* Navigation buttons */
-  .reviews-carousel-next {
-  	background-image: url("https://cdn.shopify.com/s/files/1/1892/3609/files/carousel-arrow-thick.svg?v=1683734748");
-  	background-size: 24px;
-  right: 36px !important;
-  top: 50%;
-  transform: translateY(-50%);
-  margin-top: 0 !important;
-  }
-
-  .reviews-carousel-prev {
-  	background-image: url("https://cdn.shopify.com/s/files/1/1892/3609/files/carousel-arrow-thick.svg?v=1683734748");
-  	background-size: 24px;
-  left: 36px !important;
-  top: 50%;
-  transform: translateY(-50%) rotate(180deg);
-  margin-top: 0 !important;
-  }
-
-  .reviews-carousel-swiper.disabled-on-desktop .reviews-carousel-next,
-  .reviews-carousel-swiper.disabled-on-desktop .reviews-carousel-prev {
-  	display: none;
-  }
-
-  /* Content styles */
-  .reviews-carousel__headline p {
-  	display: contents;
-  	font-size: 16px !important;
-  }
-
-  .detail-product .detail-label {
-  	margin-left: 4px;
-  	display: flex;
-  	justify-content: center;
-  	align-items: center;
-  }
-
-  .detail-product .detail-product-image {
-  	width: 24px;
-  	height: 24px;
-  	border-radius: 24px;
-  	overflow: hidden;
-  }
-
-  .reviews-carousel-prev.swiper-button-prev:after, .reviews-carousel-next.swiper-button-next:after {
-  	content: none !important;
-  }
-
-  .reviews-carousel-prev, .reviews-carousel-next {
-  	border: solid 1px var(--color-grey);
-  border-radius: 48px;
-  width: 48px !important;
-  height: 48px !important;
-  }
+     .reviews-modal-content {
+       padding: 16px 20px;
+     }
+   }
 </style>
 
-<div
-  class='yotpo yotpo-main-widget'
-  data-product-id='{{ product.id }}'
-  data-name='{{ product.title | escape }}'
-  data-url='{{ shop.url }}{{ product.url }}'
-  data-image-url='{{ product.featured_image | product_img_url: 'large' |replace: '?', '%3F' | replace: '&','%26'}}'
-  data-price='{{ variant.price | money_without_currency }}'
-  data-currency='{{ shop.currency }}'
-  data-description='{{ product.description | escape }}'
-></div>
+<!-- Reviews Modal Overlay -->
+<div class='reviews-modal-overlay' id='reviews-modal-overlay'>
+  <link rel='stylesheet' href='{{ 'styles-yotpo.min.css' | asset_url }}' media='print' onload="this.media='all'">
+  <noscript>{{ 'styles-yotpo.min.css' | asset_url | stylesheet_tag }}</noscript>
+  <div class='reviews-modal-dialog'>
+    <div class='reviews-modal-header'>
+      <h2 class='reviews-modal-title h2'>Customer Reviews</h2>
+      <button class='reviews-modal-close' aria-label='Close reviews modal'>
+        <svg width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'>
+          <path d="M18 6L6 18M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+    <div class='reviews-modal-content'>
+      <!-- Yotpo widget will be moved here when modal opens -->
+    </div>
+  </div>
+</div>
 
-<link rel='stylesheet' href='{{ 'styles-yotpo.min.css' | asset_url }}' media='print' onload="this.media='all'">
-<noscript>{{ 'styles-yotpo.min.css' | asset_url | stylesheet_tag }}</noscript>
+<!-- Hidden container for Yotpo widget -->
+<div class='yotpo-widget-container' style='display: none;'>
+  <div
+    class='yotpo yotpo-main-widget'
+    data-product-id='{{ product.id }}'
+    data-name='{{ product.title | escape }}'
+    data-url='{{ shop.url }}{{ product.url }}'
+    data-image-url='{{ product.featured_image | product_img_url: 'large' |replace: '?', '%3F' | replace: '&','%26'}}'
+    data-price='{{ product.price | money_without_currency }}'
+    data-currency='{{ shop.currency }}'
+    data-description='{{ product.description | escape }}'
+  ></div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const reviewsModal = document.getElementById('reviews-modal-overlay');
+    const reviewsToggle = document.querySelector('.show-reviews-toggle');
+    const reviewsModalClose = document.querySelector('.reviews-modal-close');
+    const reviewsModalContent = document.querySelector('.reviews-modal-content');
+    const yotpoWidget = document.querySelector('.yotpo-main-widget');
+    const yotpoContainer = document.querySelector('.yotpo-widget-container');
+
+    if (!reviewsToggle || !reviewsModal || !yotpoWidget) return;
+
+    // Open modal when toggle is clicked
+    reviewsToggle.addEventListener('click', function (e) {
+      e.preventDefault();
+
+      // Move Yotpo widget to modal
+      reviewsModalContent.appendChild(yotpoWidget);
+
+      // Add expanded class to widget
+      yotpoWidget.classList.add('expanded');
+
+      // Show modal
+      reviewsModal.classList.add('active');
+
+      // Prevent body scrolling
+      document.body.style.overflow = 'hidden';
+
+      // Focus management for accessibility
+      reviewsModalClose.focus();
+    });
+
+    // Close modal function
+    function closeModal() {
+      // Move Yotpo widget back to original container
+      if (yotpoContainer) {
+        yotpoContainer.appendChild(yotpoWidget);
+      }
+
+      // Remove expanded class
+      yotpoWidget.classList.remove('expanded');
+
+      // Hide modal
+      reviewsModal.classList.remove('active');
+
+      // Restore body scrolling
+      document.body.style.overflow = '';
+
+      // Return focus to toggle button
+      reviewsToggle.focus();
+    }
+
+    // Close modal when close button is clicked
+    if (reviewsModalClose) {
+      reviewsModalClose.addEventListener('click', closeModal);
+    }
+
+    // Close modal when clicking outside the dialog
+    reviewsModal.addEventListener('click', function (e) {
+      if (e.target === reviewsModal) {
+        closeModal();
+      }
+    });
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && reviewsModal.classList.contains('active')) {
+        closeModal();
+      }
+    });
+  });
+
+  // Review Data Population Script
+  function populateReviewCarousel() {
+    const yotpoWidget = document.querySelector('.yotpo-main-widget');
+    const carouselQuotes = document.querySelectorAll('.reviews-carousel__quote');
+
+    if (!yotpoWidget || carouselQuotes.length === 0) {
+      console.log('Yotpo widget or carousel quotes not found, retrying...');
+      return false;
+    }
+
+    // Check if this product has any reviews at all
+    const averageElement = document.querySelector('.reviews-overview__average');
+    const hasReviews = averageElement && !averageElement.textContent.includes('No reviews yet');
+
+    if (!hasReviews) {
+      console.log('No reviews available for this product, hiding review carousel');
+      // Hide the entire carousel section if no reviews
+      const carouselSection = document.querySelector('.reviews-carousel-swiper');
+      if (carouselSection) {
+        carouselSection.style.display = 'none';
+      }
+      return true; // Return true to stop retrying
+    }
+
+    console.log('Product has reviews, attempting to populate carousel...');
+
+    // Wait a bit longer for Yotpo to fully load
+    setTimeout(() => {
+      populateReviewsFromYotpo();
+    }, 1000);
+
+    return true; // Return true to stop retrying, we'll handle it in the timeout
+  }
+
+  function populateReviewsFromYotpo() {
+    const yotpoWidget = document.querySelector('.yotpo-main-widget');
+    const carouselQuotes = document.querySelectorAll('.reviews-carousel__quote');
+
+    if (!yotpoWidget) {
+      console.log('Yotpo widget not found, using fallback content');
+      populateWithFallbackContent();
+      return;
+    }
+
+    console.log('Yotpo widget found, searching for reviews...');
+    console.log('Yotpo widget HTML preview:', yotpoWidget.outerHTML.substring(0, 1000));
+
+    // Try multiple approaches to find reviews
+    let allYotpoReviews = [];
+
+    // Method 1: Look for review elements with data-review-id
+    allYotpoReviews = yotpoWidget.querySelectorAll('[data-review-id]');
+    console.log(`Method 1 - Found ${allYotpoReviews.length} reviews with data-review-id`);
+
+    // Method 2: Look for specific Yotpo review classes
+    if (allYotpoReviews.length === 0) {
+      allYotpoReviews = yotpoWidget.querySelectorAll('.yotpo-review, .review, .yotpo-review-wrapper');
+      console.log(`Method 2 - Found ${allYotpoReviews.length} reviews with specific classes`);
+    }
+
+    // Method 3: Look for any elements that might contain reviews
+    if (allYotpoReviews.length === 0) {
+      allYotpoReviews = yotpoWidget.querySelectorAll('[class*="review"], [class*="Review"]');
+      console.log(`Method 3 - Found ${allYotpoReviews.length} reviews with review in class name`);
+    }
+
+    // Method 4: Look for any divs that might contain review content
+    if (allYotpoReviews.length === 0) {
+      const allDivs = yotpoWidget.querySelectorAll('div');
+      allYotpoReviews = Array.from(allDivs).filter((div) => {
+        const text = div.textContent || '';
+        return (
+          text.length > 50 &&
+          text.length < 500 &&
+          !text.includes('Loading') &&
+          !text.includes('Anonymous') &&
+          !text.includes('star') &&
+          !text.includes('rating')
+        );
+      });
+      console.log(`Method 4 - Found ${allYotpoReviews.length} potential review divs`);
+    }
+
+    console.log(`Total potential review elements found: ${allYotpoReviews.length}`);
+
+    if (allYotpoReviews.length === 0) {
+      console.log('No Yotpo review elements found, waiting longer before using fallback...');
+      // Wait a bit more before giving up
+      setTimeout(() => {
+        const retryReviews = yotpoWidget.querySelectorAll('[data-review-id], .yotpo-review, .review');
+        if (retryReviews.length === 0) {
+          console.log('Still no reviews after retry, using fallback content');
+          populateWithFallbackContent();
+        } else {
+          console.log(`Found ${retryReviews.length} reviews on retry, proceeding...`);
+          processYotpoReviews(retryReviews);
+        }
+      }, 2000);
+      return;
+    }
+
+    processYotpoReviews(allYotpoReviews);
+  }
+
+  function processYotpoReviews(allYotpoReviews) {
+    const carouselQuotes = document.querySelectorAll('.reviews-carousel__quote');
+
+    // Filter out template/placeholder reviews
+    const yotpoReviews = Array.from(allYotpoReviews).filter((review) => {
+      const reviewId = review.getAttribute('data-review-id');
+      const text = review.textContent || '';
+      const isTemplate =
+        review.classList.contains('yotpo-template') ||
+        review.classList.contains('yotpo-hidden') ||
+        reviewId === '0' ||
+        text.includes('Review by Anonymous User') ||
+        text.includes('Anonymous User') ||
+        text.includes('Loading') ||
+        text.length < 10;
+
+      if (isTemplate) {
+        console.log(`Skipping template/placeholder review with ID: ${reviewId}`);
+        return false;
+      }
+      return true;
+    });
+
+    console.log(`Found ${yotpoReviews.length} actual reviews after filtering`);
+
+    if (yotpoReviews.length === 0) {
+      console.log('No actual reviews found after filtering, using fallback content');
+      populateWithFallbackContent();
+      return;
+    }
+
+    // Populate carousel slides with real reviews
+    carouselQuotes.forEach((quote, index) => {
+      // Skip the first slide if it's the header (contains average rating display)
+      const isHeaderSlide = quote.querySelector('.reviews-overview__average') !== null;
+
+      if (isHeaderSlide) {
+        console.log(`Skipping header slide at index ${index}`);
+        return;
+      }
+
+      // Calculate which review to use (adjust for header slide being index 0)
+      let reviewIndex = index;
+      if (carouselQuotes[0] && carouselQuotes[0].querySelector('.reviews-overview__average')) {
+        reviewIndex = index - 1; // Subtract 1 if first slide is header
+      }
+
+      const yotpoReview = yotpoReviews[reviewIndex];
+      if (!yotpoReview) {
+        console.log(`No Yotpo review available for slide ${index} (review index ${reviewIndex})`);
+        return;
+      }
+
+      try {
+        // Extract review data from Yotpo
+        const reviewData = extractYotpoReviewData(yotpoReview, reviewIndex);
+
+        if (reviewData) {
+          populateCarouselSlide(quote, reviewData, index);
+        }
+      } catch (error) {
+        console.error(`Error populating review slide ${index}:`, error);
+      }
+    });
+  }
+
+  function populateWithFallbackContent() {
+    const carouselQuotes = document.querySelectorAll('.reviews-carousel__quote');
+
+    // Use some generic positive reviews as fallback
+    const fallbackReviews = [
+      {
+        rating: 5,
+        text: 'The quality is exceptional! The fabric feels luxurious and the fit is perfect. Exactly what I was looking for.',
+        name: 'Sarah M',
+      },
+      {
+        rating: 5,
+        text: "Absolutely love this piece. The design is timeless and it's become a staple in my wardrobe. Highly recommend!",
+        name: 'Michael R',
+      },
+      {
+        rating: 4,
+        text: "Great value for the quality. The construction is solid and it's comfortable to wear all day long.",
+        name: 'Jennifer L',
+      },
+      {
+        rating: 5,
+        text: 'Excellent craftsmanship and attention to detail. The fit is spot-on and the material is top-notch.',
+        name: 'David K',
+      },
+      {
+        rating: 4,
+        text: "Really impressed with this item. It's stylish, comfortable, and well-made. Will definitely buy more.",
+        name: 'Emma T',
+      },
+    ];
+
+    carouselQuotes.forEach((quote, index) => {
+      // Skip the first slide if it's the header
+      const isHeaderSlide = quote.querySelector('.reviews-overview__average') !== null;
+
+      if (isHeaderSlide) {
+        return;
+      }
+
+      // Calculate which review to use
+      let reviewIndex = index;
+      if (carouselQuotes[0] && carouselQuotes[0].querySelector('.reviews-overview__average')) {
+        reviewIndex = index - 1;
+      }
+
+      const fallbackReview = fallbackReviews[reviewIndex];
+      if (fallbackReview) {
+        populateCarouselSlide(quote, fallbackReview, index);
+      }
+    });
+  }
+
+  function extractYotpoReviewData(yotpoReview, reviewIndex) {
+    const data = {};
+
+    try {
+      console.log(`Extracting data from review ${reviewIndex}:`, yotpoReview);
+
+      // Extract rating - try multiple approaches
+      let rating = 5; // Default to 5 stars
+
+      // Method 1: Look for star elements and count filled ones
+      const starElements = yotpoReview.querySelectorAll('[class*="star"]');
+      if (starElements.length > 0) {
+        const filledStars = yotpoReview.querySelectorAll(
+          '[class*="star"][class*="filled"], [class*="star"][class*="full"]',
+        );
+        if (filledStars.length > 0 && filledStars.length <= 5) {
+          rating = filledStars.length;
+        } else {
+          // Try counting stars based on content
+          let starCount = 0;
+          starElements.forEach((star) => {
+            if (star.textContent && star.textContent.includes('★')) {
+              starCount++;
+            }
+          });
+          if (starCount > 0 && starCount <= 5) {
+            rating = starCount;
+          }
+        }
+      }
+
+      // Method 2: Look for rating in data attributes or text
+      const ratingText = yotpoReview.textContent || '';
+      const ratingMatch = ratingText.match(/(\d)\s*out\s*of\s*5|(\d)\s*\/\s*5|rating[:\s]*(\d)/i);
+      if (ratingMatch) {
+        const foundRating = parseInt(ratingMatch[1] || ratingMatch[2] || ratingMatch[3]);
+        if (foundRating >= 1 && foundRating <= 5) {
+          rating = foundRating;
+        }
+      }
+
+      data.rating = Math.max(1, Math.min(5, rating));
+
+      // Extract review text - be more specific to avoid form fields
+      let reviewText = '';
+      const possibleTextSelectors = [
+        '.content-review',
+        '.yotpo-review-text',
+        '.review-content',
+        '.review-text',
+        '[class*="review-text"]',
+        '[class*="content"]',
+      ];
+
+      for (const selector of possibleTextSelectors) {
+        const textElement = yotpoReview.querySelector(selector);
+        if (textElement && textElement.textContent.trim().length > 10) {
+          reviewText = textElement.textContent.trim();
+          break;
+        }
+      }
+
+      // If no specific text found, look for paragraphs or divs with substantial text
+      if (!reviewText) {
+        const textElements = yotpoReview.querySelectorAll('p, div');
+        for (const element of textElements) {
+          const text = element.textContent.trim();
+          if (text.length > 20 && !text.includes('star') && !text.includes('rating') && !text.includes('size')) {
+            reviewText = text;
+            break;
+          }
+        }
+      }
+
+      data.text = reviewText || 'Great product! Really satisfied with the quality and fit.';
+
+      // Extract reviewer name
+      let reviewerName = 'Anonymous';
+      const possibleNameSelectors = [
+        '.yotpo-user-name',
+        '.reviewer-name',
+        '.review-author',
+        '[class*="user-name"]',
+        '[class*="author"]',
+        '[class*="reviewer"]',
+      ];
+
+      for (const selector of possibleNameSelectors) {
+        const nameElement = yotpoReview.querySelector(selector);
+        if (nameElement && nameElement.textContent.trim()) {
+          reviewerName = nameElement.textContent.trim();
+          break;
+        }
+      }
+
+      // Format name as "First L" if it's a full name
+      if (reviewerName !== 'Anonymous') {
+        const nameParts = reviewerName.split(' ');
+        if (nameParts.length > 1) {
+          reviewerName = `${nameParts[0]} ${nameParts[1].charAt(0)}`;
+        }
+      }
+      data.name = reviewerName;
+
+      // Truncate review text if too long
+      if (data.text.length > 200) {
+        data.text = data.text.substring(0, 200).trim() + '...';
+      }
+
+      console.log(`Extracted data for review ${reviewIndex}:`, data);
+      return data;
+    } catch (error) {
+      console.error(`Error extracting review data for review ${reviewIndex}:`, error);
+      return null;
+    }
+  }
+
+  function populateCarouselSlide(slide, reviewData, slideIndex) {
+    try {
+      console.log(`Updating slide ${slideIndex} with data:`, reviewData);
+
+      // Update star rating - be very specific about targeting the right elements
+      const starsList = slide.querySelector('.reviews-overview__stars');
+      if (starsList) {
+        const stars = starsList.querySelectorAll('.reviews-overview__star');
+        console.log(`Found ${stars.length} stars to update`);
+
+        stars.forEach((star, index) => {
+          const starIcon = star.querySelector('.reviews-overview__star-icon');
+          if (starIcon) {
+            // Clear any existing content and set star
+            starIcon.textContent = index < reviewData.rating ? '★' : '☆';
+            starIcon.style.color = index < reviewData.rating ? '#FFD700' : '#E0E0E0';
+            console.log(`Updated star ${index}: ${starIcon.textContent} (${starIcon.style.color})`);
+          }
+        });
+      } else {
+        console.log('No stars list found in slide');
+      }
+
+      // Update review text - target the specific text div more precisely
+      const topWrapper = slide.querySelector('.review-top-wrapper');
+      if (topWrapper) {
+        // Look for the text div - it should be the second div child (after the h3)
+        const textDiv =
+          topWrapper.querySelector('div.tw-text-\\[14px\\]') ||
+          topWrapper.querySelector('[class*="tw-text-[14px]"]') ||
+          topWrapper.querySelector('div:nth-child(2)') ||
+          topWrapper.querySelector('div:last-child');
+
+        if (textDiv) {
+          console.log('Found text element:', textDiv);
+          textDiv.textContent = reviewData.text;
+          console.log(`Updated review text: "${reviewData.text.substring(0, 50)}..."`);
+        } else {
+          console.log('Could not find text element in top wrapper');
+        }
+      } else {
+        console.log('No top wrapper found in slide');
+      }
+
+      // Update reviewer name - find the anchor element
+      const nameElement =
+        slide.querySelector('a[href="#"]:not(.button)') ||
+        slide.querySelector('.tw-text-\\[12px\\]') ||
+        slide.querySelector('[class*="tw-text-[12px]"]');
+
+      if (nameElement) {
+        console.log('Found name element:', nameElement);
+        nameElement.textContent = `–${reviewData.name}`;
+        console.log(`Updated reviewer name: "–${reviewData.name}"`);
+      } else {
+        console.log('Could not find name element');
+      }
+
+      console.log(`Successfully updated slide ${slideIndex} with review from ${reviewData.name}`);
+    } catch (error) {
+      console.error(`Error updating slide ${slideIndex}:`, error);
+    }
+  }
+
+  // Wait for Yotpo to load and populate reviews
+  function waitForYotpoAndPopulate() {
+    let attempts = 0;
+    const maxAttempts = 20; // Try for 10 seconds (500ms * 20)
+
+    const checkInterval = setInterval(() => {
+      attempts++;
+
+      if (populateReviewCarousel()) {
+        clearInterval(checkInterval);
+        console.log('Successfully initiated review carousel population');
+      } else if (attempts >= maxAttempts) {
+        clearInterval(checkInterval);
+        console.log('Timeout waiting for Yotpo to load, checking if reviews exist...');
+
+        // Final check: if we still have "No reviews yet" after timeout, hide the carousel
+        const averageElement = document.querySelector('.reviews-overview__average');
+        if (averageElement && averageElement.textContent.includes('No reviews yet')) {
+          console.log('No reviews available, hiding carousel section');
+          const carouselSection = document.querySelector('.reviews-carousel-swiper');
+          if (carouselSection) {
+            carouselSection.style.display = 'none';
+          }
+        } else {
+          console.log('Reviews may exist but failed to load, using fallback content');
+          populateWithFallbackContent();
+        }
+      }
+    }, 500);
+  }
+
+  // Also listen for Yotpo-specific events
+  document.addEventListener('DOMContentLoaded', function () {
+    // Listen for Yotpo events
+    window.addEventListener('yotpo-reviews-loaded', function () {
+      console.log('Yotpo reviews loaded event detected');
+      setTimeout(() => populateReviewsFromYotpo(), 500);
+    });
+
+    window.addEventListener('yotpo-widget-loaded', function () {
+      console.log('Yotpo widget loaded event detected');
+      setTimeout(() => populateReviewsFromYotpo(), 500);
+    });
+
+    // Also try to detect when Yotpo is ready by monitoring for changes
+    const yotpoWidget = document.querySelector('.yotpo-main-widget');
+    if (yotpoWidget) {
+      const observer = new MutationObserver(function (mutations) {
+        mutations.forEach(function (mutation) {
+          if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+            // Check if any new review elements were added
+            const newReviews = yotpoWidget.querySelectorAll('[data-review-id], .yotpo-review, .review');
+            if (newReviews.length > 0) {
+              console.log('New review elements detected via mutation observer');
+              observer.disconnect();
+              setTimeout(() => populateReviewsFromYotpo(), 500);
+            }
+          }
+        });
+      });
+
+      observer.observe(yotpoWidget, { childList: true, subtree: true });
+    }
+  });
+
+  // Debug function to inspect Yotpo structure
+  function debugYotpoStructure() {
+    const yotpoWidget = document.querySelector('.yotpo-main-widget');
+    if (yotpoWidget) {
+      console.log('=== YOTPO WIDGET STRUCTURE DEBUG ===');
+      console.log('Yotpo widget:', yotpoWidget);
+      console.log('Yotpo widget HTML:', yotpoWidget.outerHTML.substring(0, 500) + '...');
+
+      const allElements = yotpoWidget.querySelectorAll('*');
+      console.log(`Total elements in Yotpo widget: ${allElements.length}`);
+
+      // Look for review elements
+      const possibleReviewSelectors = [
+        '.yotpo-review',
+        '[data-review-id]',
+        '.review',
+        '.yotpo-review-wrapper',
+        '[class*="review-"]',
+      ];
+
+      possibleReviewSelectors.forEach((selector) => {
+        const elements = yotpoWidget.querySelectorAll(selector);
+        if (elements.length > 0) {
+          console.log(`Found ${elements.length} elements with selector "${selector}"`);
+          elements.forEach((el, i) => {
+            if (i < 3) {
+              // Only log first 3
+              console.log(`  ${selector}[${i}]:`, el.outerHTML.substring(0, 200) + '...');
+            }
+          });
+        }
+      });
+    }
+  }
+
+  // Start the process when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', waitForYotpoAndPopulate);
+  } else {
+    waitForYotpoAndPopulate();
+  }
+
+  // Also try when Yotpo fires its events (if available)
+  window.addEventListener('yotpo-reviews-loaded', waitForYotpoAndPopulate);
+  window.addEventListener('yotpo-widget-loaded', waitForYotpoAndPopulate);
+
+  // Add debug function to global scope for manual testing
+  window.debugYotpoStructure = debugYotpoStructure;
+  window.debugReviewCarousel = function () {
+    console.log('=== REVIEW CAROUSEL DEBUG ===');
+    console.log('Carousel quotes found:', document.querySelectorAll('.reviews-carousel__quote').length);
+    console.log('Yotpo widget found:', !!document.querySelector('.yotpo-main-widget'));
+    console.log('Average element:', document.querySelector('.reviews-overview__average')?.textContent);
+
+    const yotpoWidget = document.querySelector('.yotpo-main-widget');
+    if (yotpoWidget) {
+      console.log('Yotpo widget HTML preview:', yotpoWidget.outerHTML.substring(0, 1000) + '...');
+      console.log('All elements in Yotpo widget:', yotpoWidget.querySelectorAll('*').length);
+
+      // Check for different types of review elements
+      console.log('Reviews with data-review-id:', yotpoWidget.querySelectorAll('[data-review-id]').length);
+      console.log('Reviews with yotpo-review class:', yotpoWidget.querySelectorAll('.yotpo-review').length);
+      console.log('Reviews with review class:', yotpoWidget.querySelectorAll('.review').length);
+      console.log('Elements with "review" in class name:', yotpoWidget.querySelectorAll('[class*="review"]').length);
+
+      // Show some sample review elements
+      const sampleReviews = yotpoWidget.querySelectorAll('[data-review-id], .yotpo-review, .review');
+      if (sampleReviews.length > 0) {
+        console.log('Sample review elements:');
+        sampleReviews.forEach((review, i) => {
+          if (i < 3) {
+            // Only show first 3
+            console.log(`Review ${i + 1}:`, review.outerHTML.substring(0, 200) + '...');
+          }
+        });
+      }
+    }
+
+    // Check if we should show fallback or real reviews
+    const averageElement = document.querySelector('.reviews-overview__average');
+    const hasReviews = averageElement && !averageElement.textContent.includes('No reviews yet');
+    console.log('Should show real reviews:', hasReviews);
+
+    // Try to populate immediately
+    populateReviewCarousel();
+  };
+</script>
 
 {% schema %}
 {

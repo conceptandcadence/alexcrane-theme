@@ -14,6 +14,7 @@ module.exports = {
     './templates/**/*.liquid',
     './sections/**/*.liquid',
     './snippets/**/*.liquid',
+    './graphene/**/*.sbnhtml',
   ],
   theme: {
     screens: {

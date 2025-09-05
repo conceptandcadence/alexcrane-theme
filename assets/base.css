@@ -324,12 +324,12 @@ h5,
 
 @media only screen and (min-width: 990px) {
   .h2 {
-    font-size: calc(var(--font-heading-scale) * 2.4rem);
+    font-size: calc(var(--font-heading-scale) * 2rem);
   }
 }
 
 .h3 {
-  font-size: calc(var(--font-heading-scale) * 1.2rem);
+  font-size: calc(var(--font-heading-scale) * 1.4rem);
   text-decoration: underline;
   text-underline-offset: 0.35rem;
   text-decoration-thickness: 0.15rem;
@@ -338,7 +338,7 @@ h5,
 
 @media only screen and (min-width: 990px) {
   .h3 {
-    font-size: calc(var(--font-heading-scale) * 1.2rem);
+    font-size: calc(var(--font-heading-scale) * 1.4rem);
   }
 }
 
@@ -361,6 +361,197 @@ h5,
   font-size: calc(var(--font-heading-scale) * 1rem);
   text-underline-offset: 0.35rem;
   transition: text-decoration-color ease 100ms;
+}
+
+/* Tailwind-like utility classes with !important flags */
+/* Multiple syntax options: .h0-force, .h0-important, and .force-h0 */
+
+.h0-force,
+.h0-important,
+.force-h0 {
+  font-family: var(--font-heading-family) !important;
+  font-style: var(--font-heading-style) !important;
+  font-weight: var(--font-heading-weight) !important;
+  letter-spacing: 0 !important;
+  color: rgb(var(--color-foreground)) !important;
+  line-height: calc(1 + 0.3 / max(1, var(--font-heading-scale))) !important;
+  word-break: break-word !important;
+  font-size: calc(var(--font-heading-scale) * 4rem) !important;
+}
+
+.h1-force,
+.h1-important,
+.force-h1 {
+  font-family: var(--font-heading-family) !important;
+  font-style: var(--font-heading-style) !important;
+  font-weight: var(--font-heading-weight) !important;
+  letter-spacing: 0 !important;
+  color: rgb(var(--color-foreground)) !important;
+  line-height: calc(1 + 0.3 / max(1, var(--font-heading-scale))) !important;
+  word-break: break-word !important;
+  font-size: calc(var(--font-heading-scale) * 2.8rem) !important;
+}
+
+.h2-force,
+.h2-important,
+.force-h2 {
+  font-family: var(--font-heading-family) !important;
+  font-style: var(--font-heading-style) !important;
+  font-weight: var(--font-heading-weight) !important;
+  letter-spacing: 0 !important;
+  color: rgb(var(--color-foreground)) !important;
+  line-height: calc(1 + 0.3 / max(1, var(--font-heading-scale))) !important;
+  word-break: break-word !important;
+  font-size: calc(var(--font-heading-scale) * 1.8rem) !important;
+}
+
+.h3-force,
+.h3-important,
+.force-h3 {
+  font-family: var(--font-heading-family) !important;
+  font-style: var(--font-heading-style) !important;
+  font-weight: var(--font-heading-weight) !important;
+  letter-spacing: 0 !important;
+  color: rgb(var(--color-foreground)) !important;
+  line-height: calc(1 + 0.3 / max(1, var(--font-heading-scale))) !important;
+  word-break: break-word !important;
+  font-size: calc(var(--font-heading-scale) * 1.4rem) !important;
+  text-decoration: underline !important;
+  text-underline-offset: 0.35rem !important;
+  text-decoration-thickness: 0.15rem !important;
+  transition: text-decoration-color ease 100ms !important;
+}
+
+.h4-force,
+.h4-important,
+.force-h4 {
+  font-family: var(--font-heading-family) !important;
+  font-style: var(--font-heading-style) !important;
+  font-weight: var(--font-heading-weight) !important;
+  letter-spacing: 0 !important;
+  color: rgb(var(--color-foreground)) !important;
+  line-height: calc(1 + 0.3 / max(1, var(--font-heading-scale))) !important;
+  word-break: break-word !important;
+  font-size: calc(var(--font-heading-scale) * 1.2rem) !important;
+  text-underline-offset: 0.35rem !important;
+  transition: text-decoration-color ease 100ms !important;
+}
+
+.h5-force,
+.h5-important,
+.force-h5 {
+  font-family: var(--font-heading-family) !important;
+  font-style: var(--font-heading-style) !important;
+  font-weight: var(--font-heading-weight) !important;
+  letter-spacing: 0 !important;
+  color: rgb(var(--color-foreground)) !important;
+  line-height: calc(1 + 0.3 / max(1, var(--font-heading-scale))) !important;
+  word-break: break-word !important;
+  font-size: calc(var(--font-heading-scale) * 1.2rem) !important;
+  text-underline-offset: 0.35rem !important;
+  transition: text-decoration-color ease 100ms !important;
+}
+
+.h6-force,
+.h6-important,
+.force-h6 {
+  font-family: var(--font-heading-family) !important;
+  font-style: var(--font-heading-style) !important;
+  font-weight: var(--font-heading-weight) !important;
+  letter-spacing: 0 !important;
+  line-height: calc(1 + 0.3 / max(1, var(--font-heading-scale))) !important;
+  word-break: break-word !important;
+  color: rgba(var(--color-foreground), 0.75) !important;
+  font-size: calc(var(--font-heading-scale) * 1rem) !important;
+  text-underline-offset: 0.35rem !important;
+  transition: text-decoration-color ease 100ms !important;
+}
+
+/* Alternative Tailwind-style syntax using custom attributes for .h2! etc */
+[class*='h0!'],
+[class*='h1!'],
+[class*='h2!'],
+[class*='h3!'],
+[class*='h4!'],
+[class*='h5!'],
+[class*='h6!'] {
+  font-family: var(--font-heading-family) !important;
+  font-style: var(--font-heading-style) !important;
+  font-weight: var(--font-heading-weight) !important;
+  letter-spacing: 0 !important;
+  color: rgb(var(--color-foreground)) !important;
+  line-height: calc(1 + 0.3 / max(1, var(--font-heading-scale))) !important;
+  word-break: break-word !important;
+}
+
+[class*='h0!'] {
+  font-size: calc(var(--font-heading-scale) * 4rem) !important;
+}
+
+[class*='h1!'] {
+  font-size: calc(var(--font-heading-scale) * 2.8rem) !important;
+}
+
+[class*='h2!'] {
+  font-size: calc(var(--font-heading-scale) * 1.8rem) !important;
+}
+
+[class*='h3!'] {
+  font-size: calc(var(--font-heading-scale) * 1.4rem) !important;
+  text-decoration: underline !important;
+  text-underline-offset: 0.35rem !important;
+  text-decoration-thickness: 0.15rem !important;
+  transition: text-decoration-color ease 100ms !important;
+}
+
+[class*='h4!'] {
+  font-size: calc(var(--font-heading-scale) * 1.2rem) !important;
+  text-underline-offset: 0.35rem !important;
+  transition: text-decoration-color ease 100ms !important;
+}
+
+[class*='h5!'] {
+  font-size: calc(var(--font-heading-scale) * 1.2rem) !important;
+  text-underline-offset: 0.35rem !important;
+  transition: text-decoration-color ease 100ms !important;
+}
+
+[class*='h6!'] {
+  color: rgba(var(--color-foreground), 0.75) !important;
+  font-size: calc(var(--font-heading-scale) * 1rem) !important;
+  text-underline-offset: 0.35rem !important;
+  transition: text-decoration-color ease 100ms !important;
+}
+
+/* Responsive variants with !important */
+@media only screen and (min-width: 990px) {
+  .h0-force,
+  .h0-important,
+  .force-h0,
+  [class*='h0!'] {
+    font-size: calc(var(--font-heading-scale) * 4.8rem) !important;
+  }
+
+  .h1-force,
+  .h1-important,
+  .force-h1,
+  [class*='h1!'] {
+    font-size: calc(var(--font-heading-scale) * 4.2rem) !important;
+  }
+
+  .h2-force,
+  .h2-important,
+  .force-h2,
+  [class*='h2!'] {
+    font-size: calc(var(--font-heading-scale) * 2rem) !important;
+  }
+
+  .h3-force,
+  .h3-important,
+  .force-h3,
+  [class*='h3!'] {
+    font-size: calc(var(--font-heading-scale) * 1.4rem) !important;
+  }
 }
 
 blockquote {
@@ -2165,7 +2356,7 @@ input[type='checkbox'] {
 
 /* utility-bar */
 .utility-bar {
-  height: 100%;
+  height: 30px;
 }
 
 .utility-bar--bottom-border {

@@ -1,0 +1,38 @@
+/* Klaviyo Teaser */
+.kl-teaser-VdRkey {
+  z-index: 20 !important;
+  bottom: 20px !important;
+  border-radius: 2px !important;
+  overflow: hidden !important;
+  left: 0px !important;
+  width: 200px !important;
+}
+
+.go3176171171 span {
+  display: inline;
+  font-size: 1.2rem !important;
+  text-transform: uppercase;
+  letter-spacing: 0.075em;
+  padding: 0.75rem 1.5rem !important;
+}
+
+.go681896951 {
+  min-height: 36px !important;
+}
+
+.gorgias-chat-key-1vly0ou {
+  z-index: 999 !important;
+}
+
+.gorgias-chat-key-1vly0ou,
+.kl-teaser-VdRkey {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  transform-origin: center top !important;
+}
+
+[data-template='product'].scroll-over-viewport .kl-teaser-VdRkey,
+[data-template='product'].scroll-over-viewport .gorgias-chat-key-1vly0ou,
+[data-template='product'].scroll-over-viewport .gorgias-chat-button-1vly0ou {
+  transform: translateY(-50%) !important;
+  opacity: 0 !important;
+}

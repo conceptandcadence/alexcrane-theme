@@ -34,9 +34,6 @@
           padding-bottom: {{ section.settings.padding_bottom }}px;
         }
       }
-     .plp-actions {
-      	display: none !important;
-      }
 
     {% if products_to_show %}
     	#shopify-section-{{ section.id }} .grid__item:nth-child(n+{{products_to_show | plus: 1}}) {
@@ -456,7 +453,6 @@
                                   node.querySelector?.('li')
                                 ) {
                                   shouldReinitialize = true;
-                                  console.log('🔄 Content change detected:', node.tagName, node.classList);
                                 }
                               }
                             });
@@ -481,7 +477,6 @@
                       });
 
                       if (shouldReinitialize) {
-                        console.log('🎠 Content change detected - reinitializing carousels!');
                         // Clear existing carousels first
                         this.destroyAllCarousels();
                         // Reinitialize after a short delay to ensure DOM is ready

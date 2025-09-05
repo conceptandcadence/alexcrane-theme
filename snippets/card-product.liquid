@@ -748,7 +748,7 @@
                       aria-labelledby='{{ product_form_id }}-submit title-{{ section_id }}-{{ card_product.id }}'
                       data-product-url='{{ card_product.url }}'
                     >
-                      Choose Options
+                      {{ 'products.product.choose_options' | t }}
                       {%- render 'loading-spinner' -%}
                     </button>
                   </modal-opener>

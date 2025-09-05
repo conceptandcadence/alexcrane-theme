@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PLP Actions Reveal Effect Test</title>
+    <style>
+        /* Import the component-facets.css file */
+        @import url('assets/component-facets.css');
+        
+        /* Basic styling for the test page */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .test-title {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        
+        .test-section {
+            margin-bottom: 40px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+        }
+        
+        .test-section h3 {
+            margin-top: 0;
+            color: #555;
+        }
+        
+        /* Mock trigger button styling */
+        .plp-products-filter--trigger {
+            display: inline-flex;
+            align-items: center;
+            padding: 12px 20px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.2s ease;
+        }
+        
+        .plp-products-filter--trigger:hover {
+            background: #0056b3;
+        }
+        
+        .plp-products-filter--trigger.open {
+            background: #28a745;
+        }
+        
+        /* Mock plp-actions content */
+        .plp-actions {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            opacity: 0;
+            visibility: hidden;
+            height: 0;
+            overflow: hidden;
+            transform: translateY(-10px);
+            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                        visibility 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                        height 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                        transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .plp-actions.revealed {
+            opacity: 1;
+            visibility: visible;
+            height: auto;
+            transform: translateY(0);
+        }
+        
+        .plp-actions > * {
+            margin: 10px;
+            padding: 15px;
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            min-height: 40px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .instructions {
+            background: #e7f3ff;
+            border: 1px solid #b3d9ff;
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .instructions h4 {
+            margin-top: 0;
+            color: #0066cc;
+        }
+        
+        .instructions ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        
+        .instructions li {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1 class="test-title">PLP Actions Reveal Effect Test</h1>
+        
+        <div class="instructions">
+            <h4>How to test:</h4>
+            <ul>
+                <li>Click the "Toggle Filters" button below to see the reveal effect</li>
+                <li>The .plp-actions element will smoothly fade in with a subtle upward motion</li>
+                <li>Child elements will animate in with staggered timing for an elegant effect</li>
+                <li>Click again to hide the actions</li>
+            </ul>
+        </div>
+        
+        <div class="test-section">
+            <h3>Filter Trigger Button</h3>
+            <button class="plp-products-filter--trigger" onclick="toggleActions()">
+                <span class="icon-open">Toggle Filters</span>
+            </button>
+        </div>
+        
+        <div class="test-section">
+            <h3>PLP Actions (Hidden by default)</h3>
+            <div class="plp-actions">
+                <div>Sort by: Relevance</div>
+                <div>Filter: Brand</div>
+                <div>Filter: Price</div>
+                <div>Filter: Color</div>
+                <div>Filter: Size</div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h3>Technical Details</h3>
+            <p><strong>CSS Classes:</strong></p>
+            <ul>
+                <li><code>.plp-actions</code> - Hidden by default with opacity: 0, visibility: hidden, and transform: translateY(-10px)</li>
+                <li><code>.plp-actions.revealed</code> - Shows the element with smooth transitions</li>
+                <li><code>.plp-actions > *</code> - Child elements have staggered animations</li>
+            </ul>
+            
+            <p><strong>JavaScript:</strong></p>
+            <ul>
+                <li>Clicking the trigger button toggles the 'open' class on the trigger button</li>
+                <li>Simultaneously toggles the 'revealed' class on .plp-actions</li>
+                <li>Uses smooth cubic-bezier transitions for elegant animation</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function toggleActions() {
+            const trigger = document.querySelector('.plp-products-filter--trigger');
+            const actions = document.querySelector('.plp-actions');
+            
+            // Toggle the 'open' class on the trigger button
+            trigger.classList.toggle('open');
+            
+            // Toggle the 'revealed' class on plp-actions
+            actions.classList.toggle('revealed');
+            
+            // Update button text
+            const iconSpan = trigger.querySelector('.icon-open');
+            if (trigger.classList.contains('open')) {
+                iconSpan.textContent = 'Hide Filters';
+            } else {
+                iconSpan.textContent = 'Toggle Filters';
+            }
+        }
+        
+        // Initialize the reveal functionality (same as in graphenehc.js)
+        function init_plp_actions_reveal() {
+            const triggerButtons = document.querySelectorAll('.plp-products-filter--trigger');
+            const plpActions = document.querySelectorAll('.plp-actions');
+            
+            triggerButtons.forEach(trigger => {
+                trigger.addEventListener('click', function() {
+                    // Toggle the 'open' class on the trigger button
+                    this.classList.toggle('open');
+                    
+                    // Toggle the 'revealed' class on all plp-actions elements
+                    plpActions.forEach(action => {
+                        action.classList.toggle('revealed');
+                    });
+                });
+            });
+        }
+        
+        // Initialize when DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            init_plp_actions_reveal();
+        });
+    </script>
+</body>
+</html>

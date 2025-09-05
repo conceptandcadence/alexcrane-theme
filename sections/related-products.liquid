@@ -11,34 +11,253 @@
 <script src='{{ 'quick-add.js' | asset_url }}' defer='defer'></script>
 
 {%- style -%}
-     .section-{{ section.id }}-padding {
-       padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
-       padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
-     }
+             .section-{{ section.id }}-padding {
+               padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+               padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+             }
 
-     @media screen and (min-width: 750px) {
-       .section-{{ section.id }}-padding {
-         padding-top: {{ section.settings.padding_top }}px;
-         padding-bottom: {{ section.settings.padding_bottom }}px;
-       }
-     }
-    .rebuy-widget .card__content {
-    	padding: 0;
-    }
-   .rebuy-widget .card__information {
-   	padding-left: 0;
-   	padding-right: 0;
+             @media screen and (min-width: 750px) {
+               .section-{{ section.id }}-padding {
+                 padding-top: {{ section.settings.padding_top }}px;
+                 padding-bottom: {{ section.settings.padding_bottom }}px;
+               }
+             }
+            .rebuy-widget .card__content {
+            	padding: 1rem 0 0;
+            }
+           .rebuy-widget .card__information {
+           	padding-left: 0;
+           	padding-right: 0;
+  				padding-top: 0 !important;
+           }
+
+                    /* Ensure media container is positioned for absolute children */
+           .rebuy-widget .card__media {
+             position: relative;
+           }
+
+        .rebuy-widget .card--card .quick-add {
+        	margin: 0 !important;
+        }
+
+           /* Override conflicting carousel rules for Rebuy widgets */
+           .rebuy-widget .card-media-carousel.has-multiple-media .card-media-static {
+             display: block !important;
+           }
+
+           .rebuy-widget .card-media-carousel.has-multiple-media .rebuy-product-images.swiper {
+             display: block !important;
+           }
+
+           /* Rebuy Swiper Product Image Styles */
+           .rebuy-product-images.swiper {
+             position: absolute;
+             top: 0;
+             left: 0;
+             width: 100%;
+             height: 100%;
+             opacity: 0;
+             visibility: hidden;
+             transition: opacity 0.3s ease, visibility 0.3s ease;
+             overflow: hidden;
+           }
+
+          /* Static image container (shown by default) */
+          .card-media-static {
+            position: relative;
+            width: 100%;
+            height: 0;
+            padding-bottom: 125%;
+            opacity: 1;
+            visibility: visible;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+          }
+
+          .card-media-static .rebuy-product-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: block;
+          }
+
+          .card-media-static .card-media-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+          }
+
+          /* Hide static image on hover */
+          .rebuy-widget .card-wrapper:hover .card-media-static {
+            opacity: 0;
+            visibility: hidden;
+          }
+
+          /* Show carousel on hover */
+          .rebuy-widget .card-wrapper:hover .rebuy-product-images.swiper {
+            opacity: 1;
+            visibility: visible;
+            z-index: 2;
+          }
+
+              .rebuy-product-images .swiper-wrapper {
+             position: absolute;
+             top: 0;
+             left: 0;
+             height: 100%;
+             width: 100%;
+           }
+
+          .rebuy-product-images .swiper-slide {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+
+          .rebuy-product-images .card-media-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+
+          .rebuy-product-images .rebuy-product-image {
+            width: 100%;
+            height: 100%;
+            display: block;
+          }
+
+          .rebuy-product-images .card-media-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+          }
+
+          /* Swiper Navigation Buttons */
+          .rebuy-product-images .rebuy-nav-prev,
+          .rebuy-product-images .rebuy-nav-next {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 30px;
+            height: 30px;
+            background: rgba(255, 255, 255, 0);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.3s ease;
+            opacity: 0;
+          }
+
+          .rebuy-product-images:hover .rebuy-nav-prev,
+          .rebuy-product-images:hover .rebuy-nav-next {
+            opacity: 1;
+          }
+
+          .rebuy-product-images .rebuy-nav-prev {
+            left: 10px;
+          }
+
+          .rebuy-product-images .rebuy-nav-next {
+            right: 10px;
+          }
+
+          /* Swiper Pagination Dots */
+          .rebuy-product-images .rebuy-pagination {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 6px;
+            z-index: 10;
+          }
+
+          .rebuy-product-images .swiper-pagination-bullet {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            opacity: 1;
+          }
+
+          .rebuy-product-images .swiper-pagination-bullet-active {
+            background: white;
+            transform: scale(1.2);
+          }
+          #shopify-section-{{ section.id }} .recommended-product-grid {
+          column-gap: var(--grid-mobile-horizontal-spacing);
+          row-gap: var(--grid-mobile-vertical-spacing);
+          }
+          @media screen and (min-width: 990px) {
+             #shopify-section-{{ section.id }} .recommended-product-grid {
+          		column-gap: var(--grid-desktop-horizontal-spacing);
+          		row-gap: var(--grid-desktop-vertical-spacing);
+             }
+          }
+
+      .rebuy-nav-button {
+        background: transparent;
+        border-radius: 50%;
+        width: 2rem;
+        height: 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        pointer-events: auto;
+        transition: all 0.3s ease;
+        margin: 0 1rem;
+        z-index: 2;
+        border: none;
+        color: #000;
+      opacity: 0;
+      }
+
+     .card:hover .rebuy-nav-buttons {
+        opacity: 1;
+      }
+
+      .rebuy-nav-button:hover {
+        background: rgba(255, 255, 255, 0.5);
+      }
+   	 .card-slider-button .svg-wrapper {
+   		width: 1rem;
+   		height: 1rem;
+   		pointer-events: none;
    }
-  #shopify-section-{{ section.id }} .recommended-product-grid {
-  column-gap: var(--grid-mobile-horizontal-spacing);
-  row-gap: var(--grid-mobile-vertical-spacing);
-  }
-  @media screen and (min-width: 990px) {
-     #shopify-section-{{ section.id }} .recommended-product-grid {
-  		column-gap: var(--grid-desktop-horizontal-spacing);
-  		row-gap: var(--grid-desktop-vertical-spacing);
-     }
-  }
+  .rebuy-widget .swiper-button-prev:after,
+  .rebuy-widget .swiper-button-next:after {
+    	content: none !important;
+    }
+
+      .rebuy-nav-button svg {
+       width: 10px !important;
+       height: 6px !important;
+       color: #000 !important;
+       stroke: currentColor !important;
+       pointer-events: none;
+  		 fill: none !important;
+      }
+
+      .rebuy-nav-button--prev svg {
+        transform: rotate(90deg);
+      }
+
+      .rebuy-nav-button--next svg {
+        transform: rotate(-90deg);
+      }
 {%- endstyle -%}
 <!-- Widget : Product Recommendations -->
 <div data-rebuy-id='232526' data-rebuy-shopify-product-ids='{{ product.id }}'></div>
@@ -62,10 +281,109 @@
 									v-bind:style="{ '--ratio-percent': '125%' }">
 									<div class="card__inner ratio tw-rounded-[2px] tw-overflow-hidden"
 										v-bind:style="{ '--ratio-percent': '125%' }">
-										<!-- Media Section -->
+										
+										
+										<!-- Media Section with Variant Images -->
 										<div class="card__media tw-relative">
-											<div class="card-media-carousel">
-												<div class="card-media-container" v-bind:style="{ '--ratio-percent': '100%' }">
+											<!-- Debug: Check available variants and images -->
+											<div style="display: none;">
+												{{ console.log('=== REBUY PRODUCT DEBUG ===') }}
+												{{ console.log('Product:', product) }}
+												{{ console.log('Product ID:', product.id) }}
+												{{ console.log('Product Images Array:', product.images) }}
+												{{ console.log('Images Length:', product.images ? product.images.length : 'No images') }}
+												{{ console.log('First Image:', product.images && product.images[0] ? product.images[0] : 'No first image') }}
+												{{ console.log('Multiple Images Check:', product.images && product.images.length > 1) }}
+												{{ console.log('=== END DEBUG ===') }}
+											</div>
+											
+																						<div class="card-media-carousel has-multiple-media">
+												<!-- Static image shown by default for multi-image products -->
+												<div v-if="product.images && product.images.length > 1" class="card-media-container card-media-static">
+													<a class="rebuy-product-image" 
+														v-if="Shopify.country === 'GB'"
+														v-bind:href="learnMoreURL(product).replace(/^/,'/en-gb').replace('/en-gb/en-gb','/en-gb')"
+														v-bind:class="[hasLearnMore() ? 'clickable' : '']"> 
+														<img v-bind:src="product.images[0].src"
+															v-bind:alt="'View ' + product.title"
+															class="card-media-image motion-reduce"
+															loading="lazy">
+													</a>
+													<a class="rebuy-product-image" 
+														v-else-if="Shopify.country === 'CA'"
+														v-bind:href="learnMoreURL(product).replace(/^/,'/en-ca').replace('/en-ca/en-ca','/en-ca')"
+														v-bind:class="[hasLearnMore() ? 'clickable' : '']"> 
+														<img v-bind:src="product.images[0].src"
+															v-bind:alt="'View ' + product.title"
+															class="card-media-image motion-reduce"
+															loading="lazy">
+													</a>
+													<a class="rebuy-product-image" 
+														v-else
+														v-bind:href="learnMoreURL(product)" 
+														v-on:click="learnMore(product);"
+														v-bind:class="[hasLearnMore() ? 'clickable' : '']">
+														<img v-bind:src="product.images[0].src"
+															v-bind:alt="'View ' + product.title"
+															class="card-media-image motion-reduce"
+															loading="lazy"> 
+													</a>
+												</div>
+
+												<!-- Full Product Images Carousel (shown on hover) -->
+												<div v-if="product.images && product.images.length > 1" 
+													 class="rebuy-product-images swiper" 
+													 v-bind:data-product-id="product.id"
+													 v-bind:id="'rebuy-swiper-' + product.id">
+													
+													<div class="swiper-wrapper">
+														<div v-for="(image, imageIndex) in product.images.slice(0, 5)" 
+															:key="'slide-' + imageIndex"
+															class="swiper-slide">
+															<div class="card-media-container">
+																<a class="rebuy-product-image" 
+																	v-if="Shopify.country === 'GB'"
+																	v-bind:href="learnMoreURL(product).replace(/^/,'/en-gb').replace('/en-gb/en-gb','/en-gb')"
+																	v-bind:class="[hasLearnMore() ? 'clickable' : '']"> 
+																	<img v-bind:src="image.src"
+																		v-bind:alt="'View ' + product.title + ' - Image ' + (imageIndex + 1)"
+																		class="card-media-image motion-reduce"
+																		loading="lazy">
+																</a>
+																<a class="rebuy-product-image" 
+																	v-else-if="Shopify.country === 'CA'"
+																	v-bind:href="learnMoreURL(product).replace(/^/,'/en-ca').replace('/en-ca/en-ca','/en-ca')"
+																	v-bind:class="[hasLearnMore() ? 'clickable' : '']"> 
+																	<img v-bind:src="image.src"
+																		v-bind:alt="'View ' + product.title + ' - Image ' + (imageIndex + 1)"
+																		class="card-media-image motion-reduce"
+																		loading="lazy">
+																</a>
+																<a class="rebuy-product-image" 
+																	v-else
+																	v-bind:href="learnMoreURL(product)" 
+																	v-on:click="learnMore(product);"
+																	v-bind:class="[hasLearnMore() ? 'clickable' : '']">
+																	<img v-bind:src="image.src"
+																		v-bind:alt="'View ' + product.title + ' - Image ' + (imageIndex + 1)"
+																		class="card-media-image motion-reduce"
+																		loading="lazy"> 
+																</a>
+															</div>
+														</div>
+													</div>
+													
+													<!-- Swiper Navigation -->
+													<button type="button" class="rebuy-nav-button rebuy-nav-button--prev swiper-button-prev rebuy-nav-prev" name="previous" aria-label="Previous slide">
+														<svg viewBox="0 0 10 6"><path fill-rule="evenodd" clip-rule="evenodd" d="M9 1L5 5 1 1"></path></svg>
+													</button>
+													<button type="button" class="rebuy-nav-button rebuy-nav-button--next swiper-button-next rebuy-nav-next" name="next" aria-label="Next slide">
+														<svg viewBox="0 0 10 6"><path fill-rule="evenodd" clip-rule="evenodd" d="M9 1L5 5 1 1"></path></svg>
+													</button>
+												</div>
+												
+												<!-- Fallback: Single image for products with only one image -->
+												<div v-else class="card-media-container" v-bind:style="{ '--ratio-percent': '100%' }">
 													<a class="rebuy-product-image" 
 														v-if="Shopify.country === 'GB'"
 														v-bind:href="learnMoreURL(product).replace(/^/,'/en-gb').replace('/en-gb/en-gb','/en-gb')"
@@ -109,7 +427,7 @@
 														v-bind:aria-labelledby="'rebuy-quick-add-' + product.id + '-submit'"
 														v-bind:data-product-url="learnMoreURL(product)"
 														v-bind:id="'rebuy-quick-add-' + product.id + '-submit'">
-														<span>Choose Options</span>
+														<span>Quick View</span>
 														<div class="loading__spinner hidden" role="status">
 															<svg aria-hidden="true" focusable="false" class="spinner" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
 																<circle class="path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle>
@@ -164,14 +482,14 @@
 															<div class="price__sale" v-if="variantOnSale(product, product.selected_variant)">
 																<span class="visually-hidden visually-hidden--inline">Regular price</span>
 																<span>
-																	<s class="price-item price-item--regular" v-html="formatMoney(variantCompareAtPrice(product, product.selected_variant))"></s>
+																	<s class="price-item price-item--regular" v-html="formatMoney(variantCompareAtPrice(product, product.selected_variant)).replace('.00', '')"></s>
 																</span>
 																<span class="visually-hidden visually-hidden--inline">Sale price</span>
-																<span class="price-item price-item--sale price-item--last" v-html="formatMoney(variantPrice(product, product.selected_variant))"></span>
+																<span class="price-item price-item--sale price-item--last" v-html="formatMoney(variantPrice(product, product.selected_variant)).replace('.00', '')"></span>
 															</div>
 															<div class="price__regular" v-else>
 																<span class="visually-hidden visually-hidden--inline">Regular price</span>
-																<span class="price-item price-item--regular" v-html="formatMoney(variantPrice(product, product.selected_variant))"></span>
+																<span class="price-item price-item--regular" v-html="formatMoney(variantPrice(product, product.selected_variant)).replace('.00', '')"></span>
 															</div>
 														</div>
 													</div>
@@ -185,23 +503,6 @@
 											<!-- Swatches Section -->
 											<div class="secondary tw-flex tw-flex-col tw-gap-3 tw-pt-[1px]">
 												<!-- Color Swatches -->
-
-												<!-- Debug: Only show for first product -->
-												<div v-if="product_index === 10000" class="debug-info tw-text-[8px] tw-bg-yellow-100 tw-p-2 tw-mb-2 tw-border">
-													<strong>🐛 Debug - Product {{ product.id }}:</strong><br/>
-													<strong>Title:</strong> {{ product.title }}<br/>
-													<strong>Standard Options:</strong> {{ (product.options || []).length }} options<br/>
-													<div v-if="product.options && product.options.length > 0">
-														<div v-for="(option, idx) in product.options">
-															Option {{ idx }}: {{ option.name }} = {{ (option.values || []).join(', ') }}
-														</div>
-													</div>
-													<strong>Product Keys:</strong> {{ Object.keys(product).join(', ') }}<br/>
-													<strong>Colorsets JSON:</strong> {{ product?.metafields?.options?.colorsets }}<br/>
-
-													<strong>Variants Count:</strong> {{ (product.variants || []).length }}<br/>
-													<strong>Has Images:</strong> {{ (product.images || []).length }} images
-												</div>
 
 												<!-- Temporarily disabled colorsets until we understand the data structure -->
 												<div v-if="false" class="rebuy-color-swatches">
@@ -606,3 +907,140 @@
   ]
 }
 {% endschema %}
+
+<script>
+  // Rebuy Product Image Switching Function
+  window.showProductImage = function (dotIndex, productId) {
+    console.log('🔄 [REBUY-IMAGES] Switching to product image:', dotIndex, 'for product:', productId);
+
+    // Find the product container
+    const productContainer =
+      document.querySelector(`[data-rebuy-product-id="${productId}"]`) ||
+      document.querySelector(`.product-id-${productId}`) ||
+      event.target.closest('.grid__item');
+
+    if (!productContainer) {
+      console.warn('❌ [REBUY-IMAGES] Product container not found for:', productId);
+      return;
+    }
+
+    // Find all product images in this product
+    const productImages = productContainer.querySelectorAll('.product-image');
+    const productDots = productContainer.querySelectorAll('.rebuy-product-dot');
+
+    console.log('📸 [REBUY-IMAGES] Found', productImages.length, 'product images and', productDots.length, 'dots');
+
+    // Hide all product images
+    productImages.forEach((img, index) => {
+      if (index === dotIndex) {
+        img.style.display = 'block';
+        img.style.opacity = '1';
+      } else {
+        img.style.display = 'none';
+        img.style.opacity = '0';
+      }
+    });
+
+    // Update active dot
+    productDots.forEach((dot, index) => {
+      if (index === dotIndex) {
+        dot.classList.add('active');
+      } else {
+        dot.classList.remove('active');
+      }
+    });
+
+    console.log('✅ [REBUY-IMAGES] Successfully switched to product image:', dotIndex);
+  };
+
+  // Initialize product image functionality when Rebuy widgets load
+  document.addEventListener('DOMContentLoaded', function () {
+    console.log('🚀 [REBUY-IMAGES] Initializing product image functionality');
+
+    // Watch for Rebuy widgets to be loaded
+    const observer = new MutationObserver(function (mutations) {
+      mutations.forEach(function (mutation) {
+        if (mutation.type === 'childList') {
+          mutation.addedNodes.forEach(function (node) {
+            if (
+              node.nodeType === 1 &&
+              (node.classList?.contains('rebuy-widget') || node.querySelector?.('.rebuy-widget'))
+            ) {
+              console.log('🔍 [REBUY-IMAGES] Rebuy widget detected, setting up product images');
+              setTimeout(initializeProductImages, 100);
+            }
+          });
+        }
+      });
+    });
+
+    // Start observing
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+    });
+
+    // Also initialize immediately in case widgets are already loaded
+    setTimeout(initializeProductImages, 500);
+  });
+
+  function initializeProductImages() {
+    const rebuyWidgets = document.querySelectorAll('.rebuy-widget');
+    console.log('🚀 [REBUY-SWIPER] Found', rebuyWidgets.length, 'rebuy widgets');
+
+    rebuyWidgets.forEach((widget, widgetIndex) => {
+      const swiperContainers = widget.querySelectorAll('.rebuy-product-images.swiper');
+      console.log('🎠 [REBUY-SWIPER] Widget', widgetIndex, 'has', swiperContainers.length, 'swiper containers');
+
+      swiperContainers.forEach((container, containerIndex) => {
+        const productId = container.getAttribute('data-product-id');
+        const swiperId = container.getAttribute('id');
+
+        console.log('🔧 [REBUY-SWIPER] Initializing Swiper for product:', productId, 'ID:', swiperId);
+
+        try {
+          // Initialize Swiper with configuration
+          const swiper = new Swiper(container, {
+            // Basic config
+            direction: 'horizontal',
+            loop: true, // Enable infinite loop
+            grabCursor: true,
+            initialSlide: 1, // Start on second slide
+
+            // Navigation
+            navigation: {
+              nextEl: container.querySelector('.rebuy-nav-next'),
+              prevEl: container.querySelector('.rebuy-nav-prev'),
+            },
+
+            // Pagination dots
+            pagination: {
+              el: container.querySelector('.rebuy-pagination'),
+              clickable: true,
+              dynamicBullets: false,
+            },
+
+            // Effects
+            effect: 'slide',
+            speed: 300,
+
+            // Events
+            on: {
+              init: function () {
+                console.log('✅ [REBUY-SWIPER] Initialized successfully for product:', productId);
+              },
+              slideChange: function () {
+                console.log('📸 [REBUY-SWIPER] Slide changed to:', this.activeIndex, 'for product:', productId);
+              },
+            },
+          });
+
+          // Store swiper instance for potential future use
+          container.swiperInstance = swiper;
+        } catch (error) {
+          console.error('❌ [REBUY-SWIPER] Failed to initialize Swiper for product:', productId, error);
+        }
+      });
+    });
+  }
+</script>

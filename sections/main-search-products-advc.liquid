@@ -1,0 +1,944 @@
+{{ 'template-collection.css' | asset_url | stylesheet_tag }}
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+
+{% if section.settings.image_shape == 'blob' %}
+  {{ 'mask-blobs.css' | asset_url | stylesheet_tag }}
+{%- endif -%}
+
+{%- unless section.settings.quick_add == 'none' -%}
+  {{ 'quick-add.css' | asset_url | stylesheet_tag }}
+{%- endunless -%}
+
+{%- if section.settings.quick_add == 'standard' -%}
+  <script src='{{ 'quick-add.js' | asset_url }}' defer='defer'></script>
+  <script src='{{ 'product-form.js' | asset_url }}' defer='defer'></script>
+{%- endif -%}
+
+{%- if section.settings.quick_add == 'bulk' -%}
+  <script src='{{ 'quick-add-bulk.js' | asset_url }}' defer='defer'></script>
+  <script src='{{ 'quantity-popover.js' | asset_url }}' defer='defer'></script>
+  <script src='{{ 'price-per-item.js' | asset_url }}' defer='defer'></script>
+  <script src='{{ 'quick-order-list.js' | asset_url }}' defer='defer'></script>
+{%- endif -%}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+<div class='section-{{ section.id }}-padding gradient color-{{ section.settings.color_scheme }}'>
+  {% comment %} Sort is the first tabbable element when filter type is vertical {% endcomment %}
+  {%- if section.settings.enable_sorting and section.settings.filter_type == 'vertical' -%}
+    <facet-filters-form class='facets facets-vertical-sort page-width small-hide'>
+      <form class='facets-vertical-form' id='FacetSortForm'>
+        <div class='facet-filters sorting caption'>
+          <div class='facet-filters__field'>
+            <h2 class='facet-filters__label caption-large text-body'>
+              <label for='SortBy'>{{ 'products.facets.sort_by_label' | t }}</label>
+            </h2>
+            <div class='select'>
+              {%- assign sort_by = collection.sort_by | default: collection.default_sort_by -%}
+              <select
+                name='sort_by'
+                class='facet-filters__sort select__select caption-large'
+                id='SortBy'
+                aria-describedby='a11y-refresh-page-message'
+              >
+                {%- for option in collection.sort_options -%}
+                  <option
+                    value='{{ option.value | escape }}'
+                    {% if option.value == sort_by %}
+                      selected='selected'
+                    {% endif %}
+                  >
+                    {{ option.name | escape }}
+                  </option>
+                {%- endfor -%}
+              </select>
+              <span class='svg-wrapper'>
+                {{- 'icon-caret.svg' | inline_asset_content -}}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class='product-count-vertical light' role='status'>
+          <h2 class='product-count__text text-body'>
+            <span id='ProductCountDesktop'>
+              {%- if collection.results_count -%}
+                {{
+                  'templates.search.results_with_count'
+                  | t: terms: collection.terms, count: collection.results_count
+                }}
+              {%- elsif collection.products_count == collection.all_products_count -%}
+                {{ 'products.facets.product_count_simple' | t: count: collection.products_count }}
+              {%- else -%}
+                {{
+                  'products.facets.product_count'
+                  | t: product_count: collection.products_count, count: collection.all_products_count
+                }}
+              {%- endif -%}
+            </span>
+          </h2>
+          {%- render 'loading-spinner' -%}
+        </div>
+      </form>
+    </facet-filters-form>
+  {%- endif -%}
+
+  <div class='{% if section.settings.filter_type == 'vertical' %} facets-vertical page-width{% endif %}'>
+    {{ 'component-facets.css' | asset_url | stylesheet_tag }}
+    <script src='{{ 'facets.js' | asset_url }}' defer='defer'></script>
+    {%- if section.settings.enable_filtering or section.settings.enable_sorting -%}
+      <aside
+        aria-labelledby='verticalTitle'
+        class='facets-wrapper{% unless section.settings.enable_filtering %} facets-wrapper--no-filters{% endunless %}{% if section.settings.filter_type != 'vertical' %} page-width{% endif %}'
+        id='main-collection-filters'
+        data-id='{{ section.id }}'
+      >
+        {% render 'facets',
+          results: collection,
+          enable_filtering: section.settings.enable_filtering,
+          enable_sorting: section.settings.enable_sorting,
+          filter_type: section.settings.filter_type,
+          paginate: false
+        %}
+      </aside>
+    {%- endif -%}
+
+    <div
+      class='product-grid-container{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}'
+      id='ProductGridContainer'
+      {% if settings.animations_reveal_on_scroll %}
+        data-cascade
+      {% endif %}
+    >
+      {%- if collection.products.size == 0 -%}
+        <div class='collection collection--empty page-width' id='product-grid' data-id='{{ section.id }}'>
+          <div class='loading-overlay gradient'></div>
+          <div class='title-wrapper center'>
+            <h2 class='title title--primary'>
+              {{ 'sections.collection_template.empty' | t -}}
+              <br>
+              {{
+                'sections.collection_template.use_fewer_filters_html'
+                | t: link: collection.url, class: 'underlined-link link'
+              }}
+            </h2>
+          </div>
+        </div>
+      {%- else -%}
+        <div
+          class='collection{% if section.settings.filter_type != 'vertical' %} page-width{% endif %}'
+        >
+          <div class='loading-overlay gradient'></div>
+          <div id='Results'></div>
+          <script>
+            $g.load({
+              page_context: {
+                currency_id: window.theme.country_code,
+              },
+              template: {
+                id: 'search',
+                target: '#Results',
+                sub_templates: [
+                  {
+                    id: 'sort_and_filters_html', // the id given to the capture in the graphene templates
+                    target: '#search-header', // the target selector to push the HTML into
+                  },
+                ],
+              },
+            });
+          </script>
+
+          <!-- Swiper CSS and JS for GrapheneHC Carousels -->
+          <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.0.5/swiper-bundle.min.css'>
+          <script src='https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.0.5/swiper-bundle.min.js' defer></script>
+          {{ 'component-card-media-carousel.css' | asset_url | stylesheet_tag }}
+          {{ 'quick-add.css' | asset_url | stylesheet_tag }}
+          <script src='{{ 'swatch-quick-add.js' | asset_url }}' defer='defer'></script>
+
+          <!-- Endless Scroll for GrapheneHC -->
+          {%- if section.settings.enable_endless_scroll -%}
+            <script src='{{ 'endless-scroll.js' | asset_url }}' defer='defer'></script>
+            <style>
+              /* Hide pagination when endless scroll is enabled */
+              .plp-pagination {
+                display: none !important;
+              }
+            </style>
+          {%- endif -%}
+
+          <!-- GrapheneHC Carousel Manager -->
+          <script>
+            (function () {
+              'use strict';
+
+              console.log('🎠 GrapheneHC Carousel Manager Loading...');
+
+              // Wait for Swiper to load with multiple fallback strategies
+              function waitForSwiper(callback, attempts = 0, maxAttempts = 20) {
+                if (window.Swiper && typeof window.Swiper === 'function') {
+                  console.log('✅ Swiper loaded successfully');
+                  callback();
+                  return;
+                }
+
+                if (attempts >= maxAttempts) {
+                  console.error('❌ Failed to load Swiper after max attempts');
+                  return;
+                }
+
+                console.log(`🔍 Swiper check attempt ${attempts + 1}: ${typeof window.Swiper}`);
+
+                // Try alternative CDN at attempt 10
+                if (attempts === 10) {
+                  console.log('🔄 Trying alternative Swiper CDN...');
+                  const script = document.createElement('script');
+                  script.src = 'https://unpkg.com/swiper@11/swiper-bundle.min.js';
+                  script.onload = () => {
+                    console.log('✅ Alternative Swiper CDN loaded');
+                  };
+                  document.head.appendChild(script);
+                }
+
+                setTimeout(() => waitForSwiper(callback, attempts + 1, maxAttempts), 300);
+              }
+
+              // Card Media Carousel Manager
+              class GrapheneCarouselManager {
+                constructor() {
+                  this.carousels = new Map();
+                  this.observer = null;
+                }
+
+                init() {
+                  // Wait for Swiper, then start watching for content
+                  waitForSwiper(() => {
+                    this.startContentMonitoring();
+                    this.setupExistingCarousels();
+                  });
+                }
+
+                startContentMonitoring() {
+                  // Watch for changes in the #Results div
+                  const resultsDiv = document.getElementById('Results');
+                  if (!resultsDiv) {
+                    setTimeout(() => this.startContentMonitoring(), 1000);
+                    return;
+                  }
+
+                  // Create mutation observer to watch for new content
+                  this.observer = new MutationObserver((mutations) => {
+                    let shouldReinitialize = false;
+
+                    mutations.forEach((mutation) => {
+                      if (mutation.type === 'childList') {
+                        // Check for any added nodes (including complete content replacement)
+                        if (mutation.addedNodes.length > 0) {
+                          mutation.addedNodes.forEach((node) => {
+                            if (node.nodeType === 1) {
+                              // Element node - check if it contains carousel elements
+                              if (
+                                node.classList?.contains('card-media-carousel') ||
+                                node.querySelector?.('.card-media-carousel') ||
+                                node.classList?.contains('product-card-wrapper') ||
+                                node.querySelector?.('.product-card-wrapper') ||
+                                // Check for GrapheneHC product listings
+                                node.tagName === 'UL' ||
+                                node.querySelector?.('ul') ||
+                                node.querySelector?.('li')
+                              ) {
+                                shouldReinitialize = true;
+                              }
+                            }
+                          });
+                        }
+
+                        // Also check for removed nodes (content replacement)
+                        if (mutation.removedNodes.length > 0) {
+                          mutation.removedNodes.forEach((node) => {
+                            if (
+                              node.nodeType === 1 &&
+                              (node.classList?.contains('card-media-carousel') ||
+                                node.querySelector?.('.card-media-carousel') ||
+                                node.tagName === 'UL' ||
+                                node.querySelector?.('ul'))
+                            ) {
+                              shouldReinitialize = true;
+                              console.log('🗑️ Content removal detected:', node.tagName, node.classList);
+                            }
+                          });
+                        }
+                      }
+                    });
+
+                    if (shouldReinitialize) {
+                      // Clear existing carousels first
+                      this.destroyAllCarousels();
+                      // Reinitialize after a short delay to ensure DOM is ready
+                      setTimeout(() => this.setupExistingCarousels(), 200);
+                    }
+                  });
+
+                  this.observer.observe(resultsDiv, {
+                    childList: true,
+                    subtree: true,
+                  });
+                }
+
+                setupExistingCarousels() {
+                  const carouselElements = document.querySelectorAll('.card-media-carousel.has-multiple-media');
+
+                  carouselElements.forEach((carouselElement, index) => {
+                    this.setupCarousel(carouselElement);
+                  });
+                }
+
+                setupCarousel(carouselElement) {
+                  const productId = carouselElement.getAttribute('data-product-id');
+                  const cardId = carouselElement.getAttribute('data-card-id');
+                  const carouselId = `${cardId}-${productId}`;
+
+                  // Check if already initialized
+                  if (this.carousels.has(carouselId)) {
+                    return;
+                  }
+
+                  const swiperElement = carouselElement.querySelector('.card-slider.swiper');
+                  const hasMultipleMedia = carouselElement.classList.contains('has-multiple-media');
+
+                  if (!swiperElement) {
+                    return;
+                  }
+
+                  // Get navigation elements
+                  const prevButton = carouselElement.querySelector('.card-slider-button--prev');
+                  const nextButton = carouselElement.querySelector('.card-slider-button--next');
+                  const dots = carouselElement.querySelectorAll('.card-slider-dot');
+
+                  // Capture manager reference for callbacks
+                  const manager = this;
+
+                  // Initialize Swiper with debugging
+
+                  let swiper;
+                  try {
+                    swiper = new window.Swiper(swiperElement, {
+                      slidesPerView: 1,
+                      spaceBetween: 0,
+                      loop: hasMultipleMedia && carouselElement.querySelectorAll('.swiper-slide').length > 1,
+                      touchRatio: hasMultipleMedia ? 1 : 0,
+                      allowTouchMove: hasMultipleMedia,
+                      grabCursor: hasMultipleMedia,
+                      resistance: true,
+                      resistanceRatio: 0.85,
+                      initialSlide: hasMultipleMedia ? 1 : 0,
+                      navigation: hasMultipleMedia
+                        ? {
+                            nextEl: nextButton,
+                            prevEl: prevButton,
+                          }
+                        : false,
+                      pagination:
+                        hasMultipleMedia && dots.length > 0
+                          ? {
+                              el: carouselElement.querySelector('.card-slider-dots'),
+                              clickable: true,
+                              bulletClass: 'card-slider-dot',
+                              bulletActiveClass: 'card-slider-dot--active',
+                              renderBullet: function (index, className) {
+                                return `<button type="button" class="${className}" aria-label="Go to slide ${
+                                  index + 1
+                                }"></button>`;
+                              },
+                            }
+                          : false,
+                      on: {
+                        slideChange: function () {
+                          manager.updateButtonStates(carouselId, this);
+                        },
+                      },
+                    });
+                    console.log(`✅ Swiper initialized successfully for ${carouselId}`);
+                  } catch (error) {
+                    console.error(`❌ Failed to initialize Swiper for ${carouselId}:`, error);
+                    return;
+                  }
+
+                  // Store carousel state
+                  const state = {
+                    element: carouselElement,
+                    swiper: swiper,
+                    prevButton: prevButton,
+                    nextButton: nextButton,
+                    dots: dots,
+                  };
+
+                  this.carousels.set(carouselId, state);
+
+                  // Create swipe zones for better UX
+                  this.createSwipeZones(carouselElement, swiper);
+                }
+
+                createSwipeZones(carouselElement, swiper) {
+                  // Create left and right swipe zones
+                  const leftZone = document.createElement('div');
+                  const rightZone = document.createElement('div');
+
+                  Object.assign(leftZone.style, {
+                    position: 'absolute',
+                    top: '0',
+                    left: '0',
+                    width: '30%',
+                    height: '100%',
+                    zIndex: '5',
+                    cursor: 'grab',
+                    pointerEvents: 'none',
+                  });
+
+                  Object.assign(rightZone.style, {
+                    position: 'absolute',
+                    top: '0',
+                    right: '0',
+                    width: '30%',
+                    height: '100%',
+                    zIndex: '5',
+                    cursor: 'grab',
+                    pointerEvents: 'none',
+                  });
+
+                  // Create center product link zone
+                  const productLinkArea = document.createElement('div');
+                  Object.assign(productLinkArea.style, {
+                    position: 'absolute',
+                    top: '0',
+                    left: '30%',
+                    width: '40%',
+                    height: '100%',
+                    zIndex: '4',
+                    cursor: 'pointer',
+                    pointerEvents: 'auto',
+                    background: 'transparent',
+                  });
+
+                  // Handle click on product link area
+                  productLinkArea.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const productLink = carouselElement.closest('.card').querySelector('.card__heading a');
+                    if (productLink) {
+                      window.location.href = productLink.href;
+                    }
+                  });
+
+                  carouselElement.appendChild(leftZone);
+                  carouselElement.appendChild(rightZone);
+                  carouselElement.appendChild(productLinkArea);
+                }
+
+                updateButtonStates(carouselId, swiper) {
+                  const state = this.carousels.get(carouselId);
+                  if (!state) return;
+
+                  const { prevButton, nextButton, dots } = state;
+
+                  // Update button states
+                  if (prevButton) {
+                    prevButton.disabled = swiper.isBeginning && !swiper.params.loop;
+                  }
+                  if (nextButton) {
+                    nextButton.disabled = swiper.isEnd && !swiper.params.loop;
+                  }
+
+                  // Update dot states
+                  if (dots.length > 0) {
+                    dots.forEach((dot, index) => {
+                      if (index === swiper.realIndex) {
+                        dot.classList.add('card-slider-dot--active');
+                      } else {
+                        dot.classList.remove('card-slider-dot--active');
+                      }
+                    });
+                  }
+                }
+
+                destroyAllCarousels() {
+                  console.log(`🧹 Destroying ${this.carousels.size} existing carousels...`);
+
+                  // Destroy all existing Swiper instances
+                  this.carousels.forEach((state, carouselId) => {
+                    if (state.swiper) {
+                      try {
+                        state.swiper.destroy(true, true);
+                        console.log(`✅ Destroyed carousel: ${carouselId}`);
+                      } catch (error) {
+                        console.warn(`⚠️ Error destroying carousel ${carouselId}:`, error);
+                      }
+                    }
+                  });
+
+                  // Clear the carousels map
+                  this.carousels.clear();
+                  console.log('🧹 All carousels destroyed and cleared');
+                }
+              }
+
+              // Initialize the carousel manager
+              window.GrapheneCarouselManager = new GrapheneCarouselManager();
+
+              // Start initialization when DOM is ready
+              if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', () => {
+                  window.GrapheneCarouselManager.init();
+                });
+              } else {
+                window.GrapheneCarouselManager.init();
+              }
+            })();
+          </script>
+
+          <script data-refactor>
+            // Vanilla JS Navigation Manager
+            (function () {
+              // Helper functions for DOM manipulation
+              function $(selector) {
+                return document.querySelector(selector);
+              }
+
+              function $$(selector) {
+                return document.querySelectorAll(selector);
+              }
+
+              function hasClass(element, className) {
+                return element && element.classList.contains(className);
+              }
+
+              function addClass(elements, className) {
+                if (!elements) return;
+                if (elements.length !== undefined) {
+                  elements.forEach((el) => el.classList.add(className));
+                } else {
+                  elements.classList.add(className);
+                }
+              }
+
+              function removeClass(elements, className) {
+                if (!elements) return;
+                if (elements.length !== undefined) {
+                  elements.forEach((el) => el.classList.remove(className));
+                } else {
+                  elements.classList.remove(className);
+                }
+              }
+
+              function setHeight(element, height) {
+                if (!element) return;
+                element.style.height = height;
+              }
+
+              function getHeight(element) {
+                if (!element) return 0;
+                return element.offsetHeight + 'px';
+              }
+
+              // Initialize navigation heights and states
+              function initializeNavigation() {
+                const shopFiltersContainer = $('.shop-filters__container');
+                const collectionNav = $('#collection-nav .collection-nav');
+
+                if (shopFiltersContainer) {
+                  setHeight(shopFiltersContainer, getHeight(shopFiltersContainer));
+                  removeClass(shopFiltersContainer, 'plp-nav-expanded');
+                  removeClass(shopFiltersContainer, 'init');
+                }
+
+                if (collectionNav) {
+                  setHeight(collectionNav, getHeight(collectionNav));
+                  removeClass(collectionNav, 'plp-nav-expanded');
+                  removeClass(collectionNav, 'init');
+                }
+              }
+
+              // Recalculate heights on window resize
+              function handleResize() {
+                const shopFiltersContainer = $('.shop-filters__container');
+                const collectionNav = $('#collection-nav .collection-nav');
+
+                if (shopFiltersContainer) {
+                  setHeight(shopFiltersContainer, '');
+                  addClass(shopFiltersContainer, 'plp-nav-expanded');
+                  addClass(shopFiltersContainer, 'init');
+                  setHeight(shopFiltersContainer, getHeight(shopFiltersContainer));
+                  removeClass(shopFiltersContainer, 'plp-nav-expanded');
+                  removeClass(shopFiltersContainer, 'init');
+                }
+
+                if (collectionNav) {
+                  setHeight(collectionNav, '');
+                  addClass(collectionNav, 'plp-nav-expanded');
+                  addClass(collectionNav, 'init');
+                  setHeight(collectionNav, getHeight(collectionNav));
+                  removeClass(collectionNav, 'plp-nav-expanded');
+                  removeClass(collectionNav, 'init');
+                }
+              }
+
+              // Handle shop navigation toggle
+              function handleShopToggle(e) {
+                e.preventDefault();
+
+                const collectionNav = $('#collection-nav .collection-nav');
+                const shopNavItems = $$('.collection-nav-mobile__item.shop');
+                const filterNavItems = $$('.collection-nav-mobile__item.filter');
+                const shopFiltersContainer = $('.shop-filters__container');
+
+                if (hasClass(collectionNav, 'plp-nav-expanded')) {
+                  // Close
+                  removeClass(shopNavItems, 'plp-nav-expanded');
+                  removeClass(shopNavItems, 'disabled');
+                  removeClass(filterNavItems, 'disabled');
+                  removeClass(filterNavItems, 'plp-nav-expanded');
+                  removeClass(collectionNav, 'plp-nav-expanded');
+                  removeClass(shopFiltersContainer, 'plp-nav-expanded');
+                  console.log('shop close');
+                } else {
+                  // Open
+                  addClass(shopNavItems, 'plp-nav-expanded');
+                  removeClass(shopNavItems, 'disabled');
+                  addClass(filterNavItems, 'disabled');
+                  removeClass(filterNavItems, 'plp-nav-expanded');
+                  addClass(collectionNav, 'plp-nav-expanded');
+                  removeClass(shopFiltersContainer, 'plp-nav-expanded');
+                  console.log('shop open');
+                }
+              }
+
+              // Handle filter navigation toggle
+              function handleFilterToggle(e) {
+                e.preventDefault();
+
+                setTimeout(() => {
+                  const shopFiltersContainer = $('.shop-filters__container');
+                  const shopNavItems = $$('.collection-nav-mobile__item.shop');
+                  const filterNavItems = $$('.collection-nav-mobile__item.filter');
+                  const collectionNav = $('#collection-nav .collection-nav');
+
+                  if (hasClass(shopFiltersContainer, 'plp-nav-expanded')) {
+                    // Close
+                    removeClass(shopNavItems, 'plp-nav-expanded');
+                    removeClass(shopNavItems, 'disabled');
+                    removeClass(filterNavItems, 'disabled');
+                    removeClass(filterNavItems, 'plp-nav-expanded');
+                    removeClass(collectionNav, 'plp-nav-expanded');
+                    removeClass(shopFiltersContainer, 'plp-nav-expanded');
+                    console.log('filter close');
+                  } else {
+                    // Open
+                    addClass(shopNavItems, 'disabled');
+                    removeClass(shopNavItems, 'plp-nav-expanded');
+                    addClass(filterNavItems, 'plp-nav-expanded');
+                    removeClass(filterNavItems, 'disabled');
+                    removeClass(collectionNav, 'plp-nav-expanded');
+                    addClass(shopFiltersContainer, 'plp-nav-expanded');
+                    console.log('filter open');
+                  }
+                }, 100);
+              }
+
+              // Body click handler (commented out problematic code)
+              function handleBodyClick(e) {
+                console.log(e.target);
+                // Note: Original code had issues - preventing all body clicks and broken logic
+                // Commented out the problematic parts:
+                // e.preventDefault();
+                // setTimeout(() => {
+                //   if (hasClass($('.shop-filters__container'), 'plp-nav-expanded')) {
+                //     removeClass($('.shop-filters__toggle'), 'open');
+                //     removeClass($('.shop-filters__container'), 'plp-nav-expanded');
+                //   } else {
+                //     addClass($('.shop-filters__toggle'), 'open');
+                //     addClass($('.shop-filters__container'), 'plp-nav-expanded');
+                //   }
+                // }, 100);
+              }
+
+              // Initialize when DOM is ready
+              function init() {
+                initializeNavigation();
+
+                // Event listeners
+                document.body.addEventListener('click', handleBodyClick);
+                window.addEventListener('resize', handleResize);
+
+                // Shop navigation toggle
+                $$('.collection-nav-mobile__item.shop').forEach((item) => {
+                  item.addEventListener('click', handleShopToggle);
+                });
+
+                // Filter navigation toggle
+                $$('.collection-nav-mobile__item.filter').forEach((item) => {
+                  item.addEventListener('click', handleFilterToggle);
+                });
+              }
+
+              // Initialize immediately if DOM is ready, otherwise wait
+              if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', init);
+              } else {
+                init();
+              }
+            })();
+          </script>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+
+  {% if section.settings.image_shape == 'arch' %}
+    {{ 'mask-arch.svg' | inline_asset_content }}
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Search Products",
+  "class": "section",
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "min": 8,
+      "max": 36,
+      "step": 4,
+      "default": 16,
+      "label": "t:sections.main-collection-product-grid.settings.products_per_page.label"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "default": 4,
+      "label": "t:sections.main-collection-product-grid.settings.columns_desktop.label"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "info": "t:sections.all.colors.has_cards_info",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.main-collection-product-grid.settings.header__3.content"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "options": [
+        {
+          "value": "adapt",
+          "label": "t:sections.main-collection-product-grid.settings.image_ratio.options__1.label"
+        },
+        {
+          "value": "portrait",
+          "label": "t:sections.main-collection-product-grid.settings.image_ratio.options__2.label"
+        },
+        {
+          "value": "square",
+          "label": "t:sections.main-collection-product-grid.settings.image_ratio.options__3.label"
+        }
+      ],
+      "default": "adapt",
+      "label": "t:sections.main-collection-product-grid.settings.image_ratio.label"
+    },
+    {
+      "type": "select",
+      "id": "image_shape",
+      "options": [
+        {
+          "value": "default",
+          "label": "t:sections.all.image_shape.options__1.label"
+        },
+        {
+          "value": "arch",
+          "label": "t:sections.all.image_shape.options__2.label"
+        },
+        {
+          "value": "blob",
+          "label": "t:sections.all.image_shape.options__3.label"
+        },
+        {
+          "value": "chevronleft",
+          "label": "t:sections.all.image_shape.options__4.label"
+        },
+        {
+          "value": "chevronright",
+          "label": "t:sections.all.image_shape.options__5.label"
+        },
+        {
+          "value": "diamond",
+          "label": "t:sections.all.image_shape.options__6.label"
+        },
+        {
+          "value": "parallelogram",
+          "label": "t:sections.all.image_shape.options__7.label"
+        },
+        {
+          "value": "round",
+          "label": "t:sections.all.image_shape.options__8.label"
+        }
+      ],
+      "default": "default",
+      "label": "t:sections.all.image_shape.label",
+      "info": "t:sections.all.image_shape.info"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_secondary_image",
+      "default": false,
+      "label": "t:sections.main-collection-product-grid.settings.show_secondary_image.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "default": false,
+      "label": "t:sections.main-collection-product-grid.settings.show_vendor.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_rating",
+      "default": false,
+      "label": "t:sections.main-collection-product-grid.settings.show_rating.label",
+      "info": "t:sections.main-collection-product-grid.settings.show_rating.info"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_swatches",
+      "default": false,
+      "label": "t:sections.main-collection-product-grid.settings.show_swatches.label"
+    },
+    {
+      "type": "select",
+      "id": "quick_add",
+      "default": "none",
+      "label": "t:sections.main-collection-product-grid.settings.quick_add.label",
+      "info": "t:sections.main-collection-product-grid.settings.quick_add.info",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:sections.main-collection-product-grid.settings.quick_add.options.option_1"
+        },
+        {
+          "value": "standard",
+          "label": "t:sections.main-collection-product-grid.settings.quick_add.options.option_2"
+        },
+        {
+          "value": "bulk",
+          "label": "t:sections.main-collection-product-grid.settings.quick_add.options.option_3"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "t:sections.main-collection-product-grid.settings.header__1.content"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_filtering",
+      "default": true,
+      "label": "t:sections.main-collection-product-grid.settings.enable_filtering.label",
+      "info": "t:sections.main-collection-product-grid.settings.enable_filtering.info"
+    },
+    {
+      "type": "select",
+      "id": "filter_type",
+      "options": [
+        {
+          "value": "horizontal",
+          "label": "t:sections.main-collection-product-grid.settings.filter_type.options__1.label"
+        },
+        {
+          "value": "vertical",
+          "label": "t:sections.main-collection-product-grid.settings.filter_type.options__2.label"
+        },
+        {
+          "value": "drawer",
+          "label": "t:sections.main-collection-product-grid.settings.filter_type.options__3.label"
+        }
+      ],
+      "default": "horizontal",
+      "label": "t:sections.main-collection-product-grid.settings.filter_type.label",
+      "info": "t:sections.main-collection-product-grid.settings.filter_type.info"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sorting",
+      "default": true,
+      "label": "t:sections.main-collection-product-grid.settings.enable_sorting.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_endless_scroll",
+      "default": true,
+      "label": "Enable endless scrolling",
+      "info": "Automatically load more products as the user scrolls down the page"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.main-collection-product-grid.settings.header_mobile.content"
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "default": "2",
+      "label": "t:sections.main-collection-product-grid.settings.columns_mobile.label",
+      "options": [
+        {
+          "value": "1",
+          "label": "t:sections.main-collection-product-grid.settings.columns_mobile.options__1.label"
+        },
+        {
+          "value": "2",
+          "label": "t:sections.main-collection-product-grid.settings.columns_mobile.options__2.label"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 36
+    }
+  ]
+}
+{% endschema %}

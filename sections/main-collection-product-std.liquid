@@ -182,10 +182,11 @@
                 {%- assign skip_card_product_styles = true -%}
               {%- endfor -%}
             </ul>
-
-            {%- if paginate.pages > 1 -%}
-              {% render 'pagination', paginate: paginate, anchor: '' %}
-            {%- endif -%}
+            {% comment %}
+              {%- if paginate.pages > 1 -%}
+                {% render 'pagination', paginate: paginate, anchor: '' %}
+              {%- endif -%}
+            {% endcomment %}
           </div>
         {%- endif -%}
       </div>

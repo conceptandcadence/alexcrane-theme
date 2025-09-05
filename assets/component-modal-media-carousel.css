@@ -143,23 +143,22 @@
   width: 0.5rem;
   height: 0.5rem;
   border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.8);
-  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  background: rgba(0, 0, 0, 0.25);
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
   padding: 0;
 }
 
 .modal-slider-dot:hover {
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(0, 0, 0, 0.25);
   transform: scale(1.15);
-  border-color: rgba(255, 255, 255, 1);
+  border-color: rgba(0, 0, 0, 0.25);
 }
 
 .modal-slider-dot--active {
-  background: rgba(255, 255, 255, 1);
-  border-color: rgba(255, 255, 255, 1);
+  background: rgba(0, 0, 0, 1);
+  border-color: rgba(0, 0, 0, 1);
   transform: scale(1.2);
 }
 

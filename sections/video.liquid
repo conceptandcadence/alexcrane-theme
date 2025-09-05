@@ -2,53 +2,104 @@
 {{ 'component-deferred-media.css' | asset_url | stylesheet_tag }}
 
 {%- style -%}
-   .section-{{ section.id }}-padding {
-     padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
-     padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
-   }
-
-  .video-section.page-width .page-width {
-  	padding: 0;
-  }
-
-   @media screen and (min-width: 750px) {
      .section-{{ section.id }}-padding {
-       padding-top: {{ section.settings.padding_top }}px;
-       padding-bottom: {{ section.settings.padding_bottom }}px;
+       padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+       padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
      }
-   }
 
-   .video-content-{{ section.id }} {
-     margin-top: 36px;
-   }
+    .video-section.page-width .page-width {
+    	padding: 0;
+    }
 
-   .video-content-{{ section.id }} .content-container {
-     margin-top: 0;
-   }
+     @media screen and (min-width: 750px) {
+       .section-{{ section.id }}-padding {
+         padding-top: {{ section.settings.padding_top }}px;
+         padding-bottom: {{ section.settings.padding_bottom }}px;
+       }
+     }
 
-   .video-content-{{ section.id }} .content-container.quarter { max-width: 25%; }
-   .video-content-{{ section.id }} .content-container.third { max-width: 33.333%; }
-   .video-content-{{ section.id }} .content-container.half { max-width: 50%; }
-   .video-content-{{ section.id }} .content-container.two_thirds { max-width: 66.666%; }
-   .video-content-{{ section.id }} .content-container.three_quarters { max-width: 75%; }
-   .video-content-{{ section.id }} .content-container.full { max-width: 100%; }
+     .video-content-{{ section.id }} {
+       margin-top: 36px;
+     }
+
+    .video-content-{{ section.id }} .rte a {
+   display: inline-block;
+   color: #000;
+   text-underline-offset: .35rem;
+   text-decoration-thickness: .15rem;
+   text-decoration-color: #000;
+   font-size: 1.4rem;
+   margin-top: 0.5rem;
+  text-decoration: underline;
+     }
 
    @media screen and (max-width: 749px) {
-   .video-content-{{ section.id }} {
-   	margin-top: 48px;
+   .video-content-{{ section.id }} .rte a {
+   	font-size: 1.2rem;
    }
-     .video-content-{{ section.id }} .content-container.quarter,
-     .video-content-{{ section.id }} .content-container.third,
-     .video-content-{{ section.id }} .content-container.half,
-     .video-content-{{ section.id }} .content-container.two_thirds,
-     .video-content-{{ section.id }} .content-container.three_quarters {
-       max-width: 100%;
-     }
    }
 
-   .video-content-{{ section.id }} .content-container > * + * {
-     margin-top: 1rem;
-   }
+     .video-content-{{ section.id }} .content-container {
+       margin-top: 0;
+     }
+
+     .video-content-{{ section.id }} .content-container.quarter { max-width: 25%; }
+     .video-content-{{ section.id }} .content-container.third { max-width: 33.333%; }
+     .video-content-{{ section.id }} .content-container.half { max-width: 50%; }
+     .video-content-{{ section.id }} .content-container.two_thirds { max-width: 66.666%; }
+     .video-content-{{ section.id }} .content-container.three_quarters { max-width: 75%; }
+     .video-content-{{ section.id }} .content-container.full { max-width: 100%; }
+
+     @media screen and (max-width: 749px) {
+     .video-content-{{ section.id }} {
+     	margin-top: 48px;
+     }
+       .video-content-{{ section.id }} .content-container.quarter,
+       .video-content-{{ section.id }} .content-container.third,
+       .video-content-{{ section.id }} .content-container.half,
+       .video-content-{{ section.id }} .content-container.two_thirds,
+       .video-content-{{ section.id }} .content-container.three_quarters {
+         max-width: 100%;
+       }
+     }
+
+     .video-content-{{ section.id }} .content-container > * + * {
+       margin-top: 1rem;
+     }
+
+     /* Video overlay title styles */
+     .video-section__media--with-overlay {
+       position: relative;
+     }
+
+     .video-section__overlay {
+       position: absolute;
+       top: 0;
+       left: 0;
+       right: 0;
+       bottom: 0;
+       display: flex;
+       align-items: center;
+       justify-content: center;
+       z-index: 2;
+       pointer-events: none;
+     }
+
+     .video-section__overlay-title {
+       color: white;
+       text-align: center;
+       margin: 0;
+       padding: 2rem;
+       max-width: 80%;
+       line-height: 1.2;
+     }
+
+     @media screen and (max-width: 749px) {
+       .video-section__overlay-title {
+         padding: 1rem;
+         max-width: 90%;
+       }
+     }
 {%- endstyle -%}
 
 {%- liquid
@@ -79,7 +130,7 @@
     {%- if section.settings.enable_autoplay -%}
       {%- comment -%} When autoplay is enabled, render video directly without deferred loading {%- endcomment -%}
       <div
-        class='video-section__media gradient global-media-settings{% if section.settings.full_width %} global-media-settings--full-width{% endif %}{% if fix_ratio %} media-fit-cover{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}'
+        class='video-section__media video-section__media--with-overlay gradient global-media-settings{% if section.settings.full_width %} global-media-settings--full-width{% endif %}{% if fix_ratio %} media-fit-cover{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}'
         {% if poster != null %}
           style='--ratio-percent: {{ 1 | divided_by: poster.aspect_ratio | times: 100 }}%;'
         {% endif %}
@@ -119,11 +170,19 @@
               muted: true
           }}
         {%- endif -%}
+
+        {%- unless section.settings.overlay_title == blank -%}
+          <div class='video-section__overlay'>
+            <h1 class='video-section__overlay-title h1'>
+              {{ section.settings.overlay_title }}
+            </h1>
+          </div>
+        {%- endunless -%}
       </div>
     {%- else -%}
       {%- comment -%} When autoplay is disabled, use deferred loading with poster image {%- endcomment -%}
       <deferred-media
-        class='video-section__media deferred-media gradient global-media-settings{% if section.settings.full_width %} global-media-settings--full-width{% endif %}{% if fix_ratio %} media-fit-cover{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}'
+        class='video-section__media video-section__media--with-overlay deferred-media gradient global-media-settings{% if section.settings.full_width %} global-media-settings--full-width{% endif %}{% if fix_ratio %} media-fit-cover{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}'
         data-media-id='{{ video_id }}'
         {% if poster != null %}
           style='--ratio-percent: {{ 1 | divided_by: poster.aspect_ratio | times: 100 }}%;'
@@ -150,6 +209,14 @@
             </span>
           </span>
         </button>
+
+        {%- unless section.settings.overlay_title == blank -%}
+          <div class='video-section__overlay'>
+            <h1 class='video-section__overlay-title h1'>
+              {{ section.settings.overlay_title }}
+            </h1>
+          </div>
+        {%- endunless -%}
         <template>
           {%- if section.settings.video == null and section.settings.video_url != null -%}
             {%- liquid
@@ -220,6 +287,12 @@
     "groups": ["header", "footer"]
   },
   "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "overlay_title",
+      "label": "Overlay title",
+      "info": "Title that displays over the video"
+    },
     {
       "type": "inline_richtext",
       "id": "heading",
