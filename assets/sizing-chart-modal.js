@@ -17,8 +17,9 @@
       !modalContent ||
       !sizingChartContainer ||
       sizingCharts.length === 0
-    )
+    ) {
       return;
+    }
 
     // Handle opening size chart modal
     document.addEventListener('click', function (e) {
