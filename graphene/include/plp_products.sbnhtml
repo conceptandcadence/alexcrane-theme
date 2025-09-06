@@ -399,56 +399,56 @@ $product_index = 0
 							</div>
 							
 							<div class="card__content">
-								<div class="card__information">
-									<h3 class="card__heading" id="title-{{ $product.id }}">
-										<a href="{{ $product?.url }}" class="full-unstyled-link tw-text-[12px] tw-leading-[15px] lg:tw-text-[14px] lg:tw-leading-[17px]">
-											{{ $title }}
-										</a>
-									</h3>
-								</div>
-								<div class="card__badge">
-									<!-- Badges handled above in card__media -->
-								</div>
-							</div>
-							
-							<div class="card__content">
-								<div class="price tw-text-[11px] tw-leading-[14px] lg:tw-text-[12px] lg:tw-leading-[15px]">
-									{{~ if $is_gift_card ~}}
-										<div class="price__container">
-											<dl class="price__regular tw-order-2">
-												<span class="visually-hidden">Regular price</span>
-												<dd class="price__regular-value">
-													{{ $product?.min_pricing.price | money | string.remove '.00' }}&ndash;{{ $product?.max_pricing.price | money | string.remove '.00' }}
-												</dd>
-											</dl>
-										</div>
-									{{~ else ~}}
-										<div class="price__container">
-											{{~ if $compare_price > $current_price ~}}
+								<div class="card__content-inner">
+									<div class="card__information">
+										<h3 class="card__heading" id="title-{{ $product.id }}">
+											<a href="{{ $product?.url }}" class="full-unstyled-link tw-text-[12px] tw-leading-[15px] lg:tw-text-[14px] lg:tw-leading-[17px]">
+												{{ $title }}
+											</a>
+										</h3>
+									</div>
+																		<div class="price tw-text-[11px] tw-leading-[14px] lg:tw-text-[12px] lg:tw-leading-[15px]">
+										{{~ if $is_gift_card ~}}
+											<div class="price__container">
 												<dl class="price__regular tw-order-2">
 													<span class="visually-hidden">Regular price</span>
 													<dd class="price__regular-value">
-														<s class="price-item--crossed-out">{{ $compare_price | money | string.remove '.00' }}</s>
+														{{ $product?.min_pricing.price | money | string.remove '.00' }}&ndash;{{ $product?.max_pricing.price | money | string.remove '.00' }}
 													</dd>
 												</dl>
-												<dl class="price__sale tw-order-1">
-													<span class="visually-hidden">Sale price</span>
-													<dd class="price__sale-value">
-														{{ $current_price | money | string.remove '.00' }}
-													</dd>
-												</dl>
-											{{~ else ~}}
-												<dl class="price__regular tw-order-2">
-													<span class="visually-hidden">Regular price</span>
-													<dd class="price__regular-value">
-														{{ $current_price | money | string.remove '.00' }}
-													</dd>
-												</dl>
-											{{~ end ~}}
-										</div>
-									{{~ end ~}}
+											</div>
+										{{~ else ~}}
+											<div class="price__container">
+												{{~ if $compare_price > $current_price ~}}
+													<dl class="price__regular tw-order-2">
+														<span class="visually-hidden">Regular price</span>
+														<dd class="price__regular-value">
+															<s class="price-item--crossed-out">{{ $compare_price | money | string.remove '.00' }}</s>
+														</dd>
+													</dl>
+													<dl class="price__sale tw-order-1">
+														<span class="visually-hidden">Sale price</span>
+														<dd class="price__sale-value">
+															{{ $current_price | money | string.remove '.00' }}
+														</dd>
+													</dl>
+												{{~ else ~}}
+													<dl class="price__regular tw-order-2">
+														<span class="visually-hidden">Regular price</span>
+														<dd class="price__regular-value">
+															{{ $current_price | money | string.remove '.00' }}
+														</dd>
+													</dl>
+												{{~ end ~}}
+											</div>
+										{{~ end ~}}
+									</div>
+								</div>
+								<div class="secondary tw-flex tw-flex-col tw-gap-3 tw-pt-[1px]">
+									<!-- Update with colorsets on reference product -->
 								</div>
 							</div>
+
 						</div>
 					</div>
 				</li>
@@ -751,11 +751,6 @@ $product_index = 0
   width: 10px;
   height: 6px;
   color: #333;
-}
-
-/* Quick Add Styles */
-.card__quick-add {
-  background: linear-gradient(0deg, rgba(0,0,0,0.3) 0%, transparent 100%);
 }
 
 /* Shop The Look Styles */

@@ -28,7 +28,7 @@
         endif
       -%}
       {%- if picker_type == 'swatch' -%}
-        <fieldset class='js product-form__input product-form__input--swatch'>
+        <fieldset class='js product-form__input product-form__input--swatch tw-flex tw-flex-row tw-gap-3 tw-flex-wrap'>
           <legend class='form__label'>
             {{ option.name }}:
             <span data-selected-value>
@@ -44,17 +44,11 @@
         </fieldset>
       {%- elsif picker_type == 'button' -%}
         <fieldset class='js product-form__input product-form__input--pill tw-flex tw-flex-row tw-gap-3 tw-flex-wrap'>
-          {% if option.name == 'Size' %}
-            <div class='tw-flex tw-flex-row tw-justify-between tw-w-full'>
-              <legend class='form__label'>
-                {{ option.name }}
-              </legend>
-            </div>
-          {% else %}
+          <div class='tw-flex tw-flex-row tw-justify-between tw-w-full'>
             <legend class='form__label'>
               {{ option.name }}
             </legend>
-          {% endif %}
+          </div>
           {% render 'product-variant-options',
             product: product,
             option: option,
@@ -62,12 +56,14 @@
             picker_type: picker_type
           %}
         </fieldset>
-        <button
-          data-sizing-chart-toggle
-          class='tw-text-[12px] tw-leading-[15px] tw-text-[#767676] tw-font-normal tw-underline tw-mt-[14px] tw-block tw-z-10 tw--mb-4 tw-relative'
-        >
-          Size Chart
-        </button>
+        {% if option.name == 'Size' %}
+          <button
+            data-sizing-chart-toggle
+            class='tw-text-[12px] tw-leading-[15px] tw-text-[#767676] tw-font-normal tw-underline tw-mt-[14px] tw-block tw-z-10 tw--mb-4 tw-relative'
+          >
+            Size Chart
+          </button>
+        {% endif %}
       {%- else -%}
         <div class='product-form__input product-form__input--dropdown'>
           <label class='form__label' for='Option-{{ section.id }}-{{ forloop.index0 }}'>

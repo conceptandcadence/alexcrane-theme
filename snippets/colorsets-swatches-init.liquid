@@ -1,0 +1,53 @@
+{%- comment -%}
+  Colorsets Swatches Initialization
+
+  This snippet initializes the colorsets swatches system.
+  Include this after the colorsets.liquid snippet and before the closing </body> tag.
+
+  Usage:
+  {% render 'colorsets-swatches-init' %}
+{%- endcomment -%}
+
+{%- unless request.design_mode -%}
+  <script src='{{ 'colorsets-swatches.js' | asset_url }}' defer></script>
+
+  <script>
+    // Additional initialization for specific integrations
+    document.addEventListener('DOMContentLoaded', function () {
+      // Rebuy integration - refresh swatches when Rebuy content loads
+      if (window.rebuy) {
+        const originalRender = window.rebuy.render;
+        window.rebuy.render = function () {
+          originalRender.apply(this, arguments);
+          setTimeout(() => {
+            if (window.ColorsetSwatches && window.ColorsetSwatches.isInitialized) {
+              window.ColorsetSwatches.refresh();
+            }
+          }, 500);
+        };
+      }
+
+      // GrapheneHC integration - refresh swatches when GrapheneHC content loads
+      document.addEventListener('graphene:loaded', function () {
+        setTimeout(() => {
+          if (window.ColorsetSwatches && window.ColorsetSwatches.isInitialized) {
+            window.ColorsetSwatches.refresh();
+          }
+        }, 500);
+      });
+
+      // Generic AJAX content loading - refresh swatches on common events
+      const refreshEvents = ['DOMNodeInserted', 'ajaxComplete', 'load'];
+      refreshEvents.forEach((eventName) => {
+        document.addEventListener(eventName, function () {
+          if (window.ColorsetSwatches && window.ColorsetSwatches.isInitialized) {
+            clearTimeout(window.colorsetRefreshTimeout);
+            window.colorsetRefreshTimeout = setTimeout(() => {
+              window.ColorsetSwatches.refresh();
+            }, 300);
+          }
+        });
+      });
+    });
+  </script>
+{%- endunless -%}

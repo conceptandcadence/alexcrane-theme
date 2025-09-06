@@ -1,12 +1,88 @@
 {% comment %}
-GrapheneHC core JavaScript + CSS - Required
+  GrapheneHC core JavaScript + CSS - Required
 {% endcomment %}
 {%- if settings.graphenehc_enabled -%}
-{{ "graphenehc.css" | asset_url | stylesheet_tag }}
-<script src="{{ settings.graphenehc_js_url }}"></script>
-<script>
-  graphenehc.init({
-    theme: "38caf17c88c5431c932b42cdc117b64e"
-  });
-</script>
+  {{ 'graphenehc.css' | asset_url | stylesheet_tag }}
+  <script>
+    // GrapheneHC with error handling for local development
+    (function () {
+      // Only load GrapheneHC in production or when specifically enabled for local dev
+      const isLocalDev = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost';
+      const grapheneUrl = '{{ settings.graphenehc_js_url }}';
+
+       if (isLocalDev) {
+         console.warn('[GrapheneHC] Skipping GrapheneHC load on local development server to prevent CORS errors');
+         // Create a comprehensive GrapheneHC stub for local development
+         window.graphenehc = {
+           init: function () {
+             console.log('[GrapheneHC] Stub init called');
+           },
+           autocomplete: function () {
+             console.log('[GrapheneHC] Stub autocomplete called');
+           },
+         };
+         window.$g = {
+           load: function () {
+             console.log('[GrapheneHC] Stub $g.load called');
+           },
+           autocomplete: function () {
+             console.log('[GrapheneHC] Stub $g.autocomplete called');
+           },
+           search: function () {
+             console.log('[GrapheneHC] Stub $g.search called');
+           },
+           collection: function () {
+             console.log('[GrapheneHC] Stub $g.collection called');
+           },
+           product: function () {
+             console.log('[GrapheneHC] Stub $g.product called');
+           },
+         };
+         return;
+       }
+
+      // Production loading with error handling
+      const script = document.createElement('script');
+      script.src = grapheneUrl;
+      script.onload = function () {
+        try {
+          graphenehc.init({
+            theme: '38caf17c88c5431c932b42cdc117b64e',
+          });
+        } catch (error) {
+          console.error('[GrapheneHC] Init error:', error);
+        }
+      };
+       script.onerror = function (error) {
+         console.error('[GrapheneHC] Failed to load GrapheneHC script:', error);
+         // Create comprehensive fallback stubs
+         window.graphenehc = {
+           init: function () {
+             console.log('[GrapheneHC] Fallback init');
+           },
+           autocomplete: function () {
+             console.log('[GrapheneHC] Fallback autocomplete');
+           },
+         };
+         window.$g = {
+           load: function () {
+             console.log('[GrapheneHC] Fallback $g.load');
+           },
+           autocomplete: function () {
+             console.log('[GrapheneHC] Fallback $g.autocomplete');
+           },
+           search: function () {
+             console.log('[GrapheneHC] Fallback $g.search');
+           },
+           collection: function () {
+             console.log('[GrapheneHC] Fallback $g.collection');
+           },
+           product: function () {
+             console.log('[GrapheneHC] Fallback $g.product');
+           },
+         };
+       };
+      document.head.appendChild(script);
+    })();
+  </script>
 {%- endif -%}

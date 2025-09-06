@@ -531,46 +531,64 @@
                 -%}
 
               {%- when 'tabbed_list' -%}
+                {% assign active_tab = true %}
                 <div class='product__tabbed-list !tw-mt-0'>
                   <ul class='tw-flex tw-relative tw-mb-8'>
-                    <li class='product__tab tw-mr-6'>
-                      <button
-                        class='product__tab tw-text-[12px] tw-leading-[15px] tw-border-b tw-border-black hover:tw-border-black'
-                        data-panel='details'
-                      >
-                        Details
-                      </button>
-                    </li>
-                    <li class='product__tab tw-mr-4'>
-                      <button
-                        class='product__tab tw-text-[12px] tw-leading-[15px] tw-border-b tw-border-[#ececec] hover:tw-border-black'
-                        data-panel='materials'
-                      >
-                        Materials
-                      </button>
-                    </li>
-                    <li class='product__tab tw-mr-6'>
-                      <button
-                        class='product__tab tw-text-[12px] tw-leading-[15px] tw-border-b tw-border-[#ececec] hover:tw-border-black'
-                        data-panel='returns'
-                      >
-                        Returns
-                      </button>
-                    </li>
-                    <li class='product__tab tw-mr-6'>
-                      <button
-                        class='product__tab tw-text-[12px] tw-leading-[15px] tw-border-b tw-border-[#ececec] hover:tw-border-black'
-                        data-panel='shop-the-look'
-                      >
-                        Shop the Look
-                      </button>
-                    </li>
+                    {% if product.metafields.custom_fields.details_model != blank %}
+                      <li class='product__tab tw-mr-6'>
+                        <button
+                          class='product__tab tw-text-[12px] tw-leading-[15px] tw-border-b {% if active_tab %}tw-border-black hover:tw-border-black{% else %}tw-border-[#ececec] hover:tw-border-black{% endif %}'
+                          data-panel='details'
+                        >
+                          Details
+                        </button>
+                      </li>
+                      {% assign active_tab = false %}
+                    {% endif %}
+                    {% if product.metafields.custom_fields.fit
+                      or product.metafields.custom_fields.details_origin
+                      or product.metafields.custom_fields.details_care
+                      or product.metafields.custom_fields.details_model != blank
+                    %}
+                      <li class='product__tab tw-mr-4'>
+                        <button
+                          class='product__tab tw-text-[12px] tw-leading-[15px] tw-border-b {% if active_tab %}tw-border-black hover:tw-border-black{% else %}tw-border-[#ececec] hover:tw-border-black{% endif %}'
+                          data-panel='materials'
+                        >
+                          Materials
+                        </button>
+                      </li>
+                      {% assign active_tab = false %}
+                    {% endif %}
+                    {% if product.tags contains 'no-returns' %}
+                      <li class='product__tab tw-mr-6'>
+                        <button
+                          class='product__tab tw-text-[12px] tw-leading-[15px] tw-border-b {% if active_tab %}tw-border-black hover:tw-border-black{% else %}tw-border-[#ececec] hover:tw-border-black{% endif %}'
+                          data-panel='returns'
+                        >
+                          Returns
+                        </button>
+                      </li>
+                      {% assign active_tab = false %}
+                    {% endif %}
+                    {% if product.metafields.shopthelook.products.value != blank %}
+                      <li class='product__tab tw-mr-6'>
+                        <button
+                          class='product__tab tw-text-[12px] tw-leading-[15px] tw-border-b {% if active_tab %}tw-border-black hover:tw-border-black{% else %}tw-border-[#ececec] hover:tw-border-black{% endif %}'
+                          data-panel='shop-the-look'
+                        >
+                          Shop the Look
+                        </button>
+                      </li>
+                      {% assign active_tab = false %}
+                    {% endif %}
                   </ul>
+                  {% assign active_tab = true %}
                   <ul class='product__text-body tw-flex tw-flex-col' {{ block.shopify_attributes }}>
                     <li
-                      class='product__tab-content rte tw-text-[12px] tw-leading-[15px] tw-flex tw-justify-between tw-gap-4'
+                      class='product__tab tw-text-[12px] tw-leading-[15px]'
                       data-panel='materials'
-                      aria-expanded='false'
+                      aria-expanded='{% if active_tab %}true{% else %}false{% endif %}'
                     >
                       {% if product.metafields.options.materials.value != blank %}
                         {% for material in product.metafields.options.materials.value %}
@@ -603,12 +621,13 @@
                             </div>
                           {% endif %}
                         {% endfor %}
+                        {% assign active_tab = false %}
                       {% endif %}
                     </li>
                     <li
                       class='product__tab-content rte tw-text-[12px] tw-leading-[15px]'
                       data-panel='details'
-                      aria-expanded='true'
+                      aria-expanded='{% if active_tab %}true{% else %}false{% endif %}'
                     >
                       {% if product.metafields.custom_fields.details_fit != blank %}
                         <div class='product-detail fit tw-mb-4'>
@@ -619,6 +638,7 @@
                             {{ product.metafields.custom_fields.details_fit }}
                           </div>
                         </div>
+                        {% assign active_tab = false %}
                       {% endif %}
                       {% if product.metafields.custom_fields.details_model != blank %}
                         <div class='product-detail model tw-mb-4'>
@@ -629,6 +649,7 @@
                             {{ product.metafields.custom_fields.details_model }}
                           </div>
                         </div>
+                        {% assign active_tab = false %}
                       {% endif %}
                       {% if product.metafields.custom_fields.details_care != blank %}
                         <div class='product-detail care tw-mb-4'>
@@ -639,6 +660,7 @@
                             {{ product.metafields.custom_fields.details_care }}
                           </div>
                         </div>
+                        {% assign active_tab = false %}
                       {% endif %}
                       {% if product.metafields.custom_fields.details_origin != blank %}
                         <div class='product-detail origin tw-mb-4'>
@@ -649,60 +671,67 @@
                             {{ product.metafields.custom_fields.details_origin }}
                           </div>
                         </div>
+                        {% assign active_tab = false %}
                       {% endif %}
                     </li>
-                    <li
-                      class='product__tab-content rte tw-text-[12px] tw-leading-[15px]'
-                      data-panel='returns'
-                      aria-expanded='false'
-                    >
-                      <span class='hidden stock-ship__shipping available tw-mb-4'>
-                        {{- product.metafields.custom_fields.shipping_time | default: 'Ships in 1-2 business days' -}}
-                      </span>
-                      <div class='!tw-text-black tw-text-[12px] tw-leading-[15px] tw-mb-4'>
-                        We offer returns and exchanges on all domestic (US) orders. For returns, you have 30 days from
-                        the date of shipping to return for a refund. For exchanges, you have up to 40 days to exchange
-                        for something else or store credit.
-                      </div>
-                    </li>
-                    <li
-                      class='product__tab-content tw-mt-4 rte tw-text-[12px] tw-leading-[15px]'
-                      data-panel='shop-the-look'
-                      aria-expanded='false'
-                    >
-                      <div
-                        class='product-grid-container'
+                    {% if product.tags contains 'no-returns' %}
+                      <li
+                        class='product__tab-content rte tw-text-[12px] tw-leading-[15px]'
+                        data-panel='returns'
+                        aria-expanded='{% if active_tab %}true{% else %}false{% endif %}'
                       >
-                        <ul
-                          data-id='{{ section.id }}'
-                          class='
-                            grid product-grid grid--3-col-tablet-down
-                            grid--3-col-desktop lg:!tw-gap-x-[12px] !tw-px-0
-                          '
+                        <span class='hidden stock-ship__shipping available tw-mb-4'>
+                          {{- product.metafields.custom_fields.shipping_time | default: 'Ships in 1-2 business days' -}}
+                        </span>
+                        <div class='!tw-text-black tw-text-[12px] tw-leading-[15px] tw-mb-4'>
+                          We offer returns and exchanges on all domestic (US) orders. For returns, you have 30 days from
+                          the date of shipping to return for a refund. For exchanges, you have up to 40 days to exchange
+                          for something else or store credit.
+                        </div>
+                        {% assign active_tab = false %}
+                      </li>
+                    {% endif %}
+                    {% if product.metafields.shopthelook.products.value != blank %}
+                      <li
+                        class='product__tab-content tw-mt-4 rte tw-text-[12px] tw-leading-[15px]'
+                        data-panel='shop-the-look'
+                        aria-expanded='{% if active_tab %}true{% else %}false{% endif %}'
+                      >
+                        <div
+                          class='product-grid-container'
                         >
-                          {% assign skip_card_product_styles = false %}
-                          {%- for product in product.metafields.shopthelook.products.value limit: 2 -%}
-                            {% assign lazy_load = false %}
-                            {%- if forloop.index > 2 -%}
-                              {%- assign lazy_load = true -%}
-                            {%- endif -%}
-                            <li class='grid__item'>
-                              {% render 'card-product',
-                                card_product: product,
-                                media_aspect_ratio: 'adapt',
-                                show_secondary_image: true,
-                                show_vendor: false,
-                                show_rating: false,
-                                show_swatches: true,
-                                lazy_load: true,
-                                quick_add: 'standard'
-                              %}
-                            </li>
-                            {%- assign skip_card_product_styles = true -%}
-                          {%- endfor -%}
-                        </ul>
-                      </div>
-                    </li>
+                          <ul
+                            data-id='{{ section.id }}'
+                            class='
+                              grid product-grid grid--3-col-tablet-down
+                              grid--3-col-desktop lg:!tw-gap-x-[12px] !tw-px-0
+                            '
+                          >
+                            {% assign skip_card_product_styles = false %}
+                            {%- for product in product.metafields.shopthelook.products.value limit: 2 -%}
+                              {% assign lazy_load = false %}
+                              {%- if forloop.index > 2 -%}
+                                {%- assign lazy_load = true -%}
+                              {%- endif -%}
+                              <li class='grid__item'>
+                                {% render 'card-product',
+                                  card_product: product,
+                                  media_aspect_ratio: 'adapt',
+                                  show_secondary_image: true,
+                                  show_vendor: false,
+                                  show_rating: false,
+                                  show_swatches: true,
+                                  lazy_load: true,
+                                  quick_add: 'standard'
+                                %}
+                              </li>
+                              {%- assign skip_card_product_styles = true -%}
+                            {%- endfor -%}
+                          </ul>
+                        </div>
+                      </li>
+                      {% assign active_tab = false %}
+                    {% endif %}
                   </ul>
                 </div>
 
@@ -1056,14 +1085,8 @@
 																		</div>
 																	</div>
 
-																	<!-- Swatches Section -->
 																	<div class="secondary tw-flex tw-flex-col tw-gap-3 tw-pt-[1px]">
-																		<!-- Color Swatches -->
-
-																		<!-- Temporarily disabled colorsets until we understand the data structure -->
-																		<div v-if="false" class="rebuy-color-swatches">
-																			<!-- Will implement once we see the debug data -->
-																		</div>
+																		<!-- Update with colorsets on reference product -->
 																	</div>
 																</div>
 

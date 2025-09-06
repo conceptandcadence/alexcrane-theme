@@ -477,9 +477,3 @@ span[data-view='cm']:after {
   padding-left: 2px;
   color: #000;
 }
-
-span[data-view='in']:after {
-  content: 'in';
-  padding-left: 2px;
-  color: #000;
-}

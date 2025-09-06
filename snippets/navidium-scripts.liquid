@@ -50,7 +50,34 @@
   };
 </script>
 <!-- <script  src="https://d10pwglna6up6p.cloudfront.net/navidium-widgets/js/nvd-js-asset.js"></script> -->
-<script src='https://d10pwglna6up6p.cloudfront.net/navidium-widgets/js/nvd-widget-v-jquery.js' defer></script>
+<script>
+  // Load Navidium script with local development detection and error handling
+  (function () {
+    const isLocalDev = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost';
+
+    if (isLocalDev) {
+      console.warn('[Navidium] Skipping Navidium load on local development server to prevent jQuery dependency errors');
+      // Create fallback nvd_init function for local development
+      window.nvd_init = function () {
+        console.log('[Navidium] Local development stub nvd_init called');
+      };
+      return;
+    }
+
+    // Production loading with error handling
+    const script = document.createElement('script');
+    script.src = 'https://d10pwglna6up6p.cloudfront.net/navidium-widgets/js/nvd-widget-v-jquery.js';
+    script.defer = true;
+    script.onerror = function () {
+      console.warn('[Navidium] Failed to load Navidium script, creating fallback');
+      // Create a fallback nvd_init function
+      window.nvd_init = function () {
+        console.log('[Navidium] Fallback nvd_init called');
+      };
+    };
+    document.head.appendChild(script);
+  })();
+</script>
 <!-- navidium script end -->
 <style>
   .d-flexCstm-ld {
@@ -115,16 +142,29 @@
     observeCartChanges();
   }
 
+  // Safe nvd_init caller with error handling
+  function safeNvdInit() {
+    if (typeof nvd_init === 'function') {
+      try {
+        nvd_init();
+      } catch (error) {
+        console.warn('[Navidium] nvd_init error:', error);
+      }
+    } else {
+      console.warn('[Navidium] nvd_init function not available yet');
+    }
+  }
+
   document.addEventListener('rebuy:smartcart.ready', (event) => {
-    setTimeout(nvd_init, 300);
+    setTimeout(safeNvdInit, 300);
   });
   document.addEventListener('rebuy:smartcart.show', (event) => {
-    setTimeout(nvd_init, 300);
+    setTimeout(safeNvdInit, 300);
   });
   document.addEventListener('rebuy:cart.change', (event) => {
-    setTimeout(nvd_init, 300);
+    setTimeout(safeNvdInit, 300);
   });
   document.addEventListener('rebuy:cart.add', (event) => {
-    setTimeout(nvd_init, 300);
+    setTimeout(safeNvdInit, 300);
   });
 </script>

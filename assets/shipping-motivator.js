@@ -717,7 +717,7 @@ class ShippingMotivator {
         console.warn('Failed to auto-restore fulfilled goals:', error);
       }
     }
-
+    /*
     console.log(
       '🔍 Update check - cart:',
       !!this.cart,
@@ -747,7 +747,7 @@ class ShippingMotivator {
       this.hide();
       return;
     }
-
+*/
     const cartValue = this.cart.total_price;
 
     // Re-find cart motivator if it was replaced by AJAX or not initially found

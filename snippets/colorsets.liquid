@@ -1,0 +1,95 @@
+{%- comment -%} Debug script removed for production {%- endcomment -%}
+
+<script type='application/json' id='colorsets-data'>
+  {
+    "colorsets": [
+      {%- for colorset in metaobjects.colorset.values -%}
+        {%- if forloop.index0 > 0 -%},{%- endif -%}
+        {
+          "id": {{ colorset.id | json }},
+          "handle": {{ colorset.system.handle | json }},
+          "created_at": {{ colorset.system.created_at | json }},
+          "updated_at": {{ colorset.system.updated_at | json }},
+          "products_count": {{ colorset.products.value.size | default: 0 }},
+          "products": [
+            {%- for product in colorset.products.value limit: 50 -%}
+              {%- if forloop.index0 > 0 -%},{%- endif -%}
+              {
+                "id": {{ product.id | json }},
+                "handle": {{ product.handle | json }},
+                "title": {{ product.title | json }},
+                "price": {{ product.price | json }},
+                "compare_at_price": {{ product.compare_at_price | json }},
+                "available": {{ product.available | json }},
+                "url": {{ product.url | json }},
+                "vendor": {{ product.vendor | json }},
+                "type": {{ product.type | json }},
+                "tags": {{ product.tags | json }}
+                {%- if product.metafields.options.colorway.value != blank -%}
+                  ,"colorway": {
+                    "admin_name": {{ product.metafields.options.colorway.value.admin_name | json }},
+                    "title": {{ product.metafields.options.colorway.value.title | json }},
+                    "image_gid": {{ product.metafields.options.colorway.value.image | json }}
+                    {%- if product.metafields.options.colorway.value.image != blank -%}
+                      ,"image_url": {{ product.metafields.options.colorway.value.image | image_url: width: 100 | json }}
+                    {%- endif -%}
+                  }
+                {%- endif -%}
+                {%- if product.featured_image != blank -%}
+                  ,"featured_image": {
+                    "url": {{ product.featured_image | img_url: 'master' | json }},
+                    "alt": {{ product.featured_image.alt | json }},
+                    "width": {{ product.featured_image.width | json }},
+                    "height": {{ product.featured_image.height | json }}
+                  }
+                {%- endif -%}
+                {%- if product.variants.size > 0 -%}
+                  ,"variants": [
+                    {%- for variant in product.variants limit: 10 -%}
+                      {%- if forloop.index0 > 0 -%},{%- endif -%}
+                      {
+                        "id": {{ variant.id | json }},
+                        "title": {{ variant.title | json }},
+                        "price": {{ variant.price | json }},
+                        "compare_at_price": {{ variant.compare_at_price | json }},
+                        "available": {{ variant.available | json }},
+                        "inventory_quantity": {{ variant.inventory_quantity | json }},
+                        "sku": {{ variant.sku | json }}
+                      }
+                    {%- endfor -%}
+                  ]
+                {%- endif -%}
+              }
+            {%- endfor -%}
+          ]
+          {%- comment -%} Also try collection reference as fallback {%- endcomment -%}
+          {%- if colorset.collection != blank and colorset.collection.value != blank -%}
+            ,"collection": {
+              "id": {{ colorset.collection.value.id | json }},
+              "handle": {{ colorset.collection.value.handle | json }},
+              "title": {{ colorset.collection.value.title | json }},
+              "products_count": {{ colorset.collection.value.products_count | json }},
+              "url": {{ colorset.collection.value.url | json }},
+              "products": [
+                {%- for product in colorset.collection.value.products limit: 20 -%}
+                  {%- if forloop.index0 > 0 -%},{%- endif -%}
+                  {
+                    "id": {{ product.id | json }},
+                    "handle": {{ product.handle | json }},
+                    "title": {{ product.title | json }},
+                    "price": {{ product.price | json }},
+                    "url": {{ product.url | json }}
+                  }
+                {%- endfor -%}
+              ]
+            }
+          {%- endif -%}
+        }
+      {%- endfor -%}
+    ],
+     "meta": {
+       "total_count": {{ metaobjects.colorset.values.size | default: 0 | json }},
+       "generated_at": {{ 'now' | date: '%Y-%m-%dT%H:%M:%S%z' | json }}
+     }
+  }
+</script>

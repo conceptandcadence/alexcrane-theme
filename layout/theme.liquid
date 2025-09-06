@@ -59,6 +59,15 @@
             {{ body_font_bold_italic | font_face: font_display: 'swap' }}
             {{ settings.type_header_font | font_face: font_display: 'swap' }}
 
+      /* CircularStd Font Loading - Disabled for local development to prevent 404 errors */
+      {% comment %}
+      Note: CircularStd font files are missing from assets.
+      Font loading is disabled to prevent 404 errors during development.
+      The theme uses system fonts as fallback via CSS variables below.
+      {% endcomment %}
+
+      /* Font loading disabled - using system fonts only */
+
             {% for scheme in settings.color_schemes -%}
               {% assign scheme_classes = scheme_classes | append: ', .color-' | append: scheme.id %}
               {% if forloop.index == 1 -%}
@@ -96,8 +105,8 @@
               --color-badge-background: var(--color-blue);
               --color-badge-border: {{ scheme.settings.text.red }},{{ scheme.settings.text.green }},{{ scheme.settings.text.blue }};
               --payment-terms-background-color: rgb({{ scheme.settings.background.rgb }});
-         --color-grey: #ececec;
-      --color-discount: #21bc81;
+         			--color-grey: #ececec;
+      				--color-discount: #21bc81;
             }
             {% endfor %}
 
@@ -107,12 +116,12 @@
             }
 
             :root {
-              --font-body-family: 'Circular Std'; /*{{ settings.type_body_font.family }}, {{ settings.type_body_font.fallback_families }};*/
+              --font-body-family: 'CircularStd', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; /*{{ settings.type_body_font.family }}, {{ settings.type_body_font.fallback_families }};*/
               --font-body-style: {{ settings.type_body_font.style }};
               --font-body-weight: {{ settings.type_body_font.weight }};
               --font-body-weight-bold: {{ settings.type_body_font.weight | plus: 300 | at_most: 1000 }};
 
-              --font-heading-family: 'Circular Std'; /*{{ settings.type_header_font.family }}, {{ settings.type_header_font.fallback_families }};*/
+              --font-heading-family: 'CircularStd', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; /*{{ settings.type_header_font.family }}, {{ settings.type_header_font.fallback_families }};*/
               --font-heading-style: {{ settings.type_header_font.style }};
               --font-heading-weight: {{ settings.type_header_font.weight }};
 
@@ -229,6 +238,9 @@
               --variant-pills-shadow-blur-radius: {{ settings.variant_pills_shadow_blur }}px;
 
          		 --color-blue: 74, 105, 173;
+         		 --color-black: 0, 0, 0;
+         		 --color-white: 255, 255, 255;
+         		 --color-transparent: 0, 0, 0, 0;
             }
 
             *,
@@ -591,104 +603,50 @@
     </script>
     <!-- End Google Tag Manager -->
     <script>
+      // Minimal stubs for libraries that expect jQuery/imagesLoaded without actually including jQuery
       (function () {
-        if (window.jQuery) return; // don't override if jQuery exists
+        // Only add stubs if jQuery doesn't already exist
+        if (window.jQuery || window.$) return;
 
-        function $(selector) {
-          // very small selector resolver
-          const elements =
-            typeof selector === 'string'
-              ? document.querySelectorAll(selector)
-              : selector instanceof Node
-              ? [selector]
-              : selector instanceof Window
-              ? [selector]
-              : selector && selector.length
-              ? selector
-              : [document]; // default to document if odd usage
-
-          // helper
-          const isFn = (f) => typeof f === 'function';
-
-          // normalize .one(...) like jQuery
-          function addOne(el, type, selector, handler) {
-            if (!isFn(handler)) return; // no-op if no handler found
-            // jQuery 'ready' → DOMContentLoaded on document
-            const t = type === 'ready' && (el === document || el === window) ? 'DOMContentLoaded' : type;
-            const wrapped = function (e) {
-              if (selector) {
-                // simple delegated check
-                if (!e.target || !e.target.closest || !e.target.closest(selector)) return;
-              }
-              handler.call(el, e);
-            };
-            try {
-              el.addEventListener(t, wrapped, { once: true });
-            } catch (err) {
-              // event namespace like "click.ns" → strip namespace
-              el.addEventListener(t.split('.')[0], wrapped, { once: true });
-            }
+        // Add minimal imagesLoaded stub for Flickity compatibility
+        window.imagesLoaded = function (elem, callback) {
+          // Simple stub that calls the callback immediately
+          if (typeof callback === 'function') {
+            setTimeout(callback, 0);
           }
-
-          function parseAndAttachOnce(args) {
-            // Signatures we’ll support:
-            // .one(events [, selector] [, data], handler)
-            // .one(events [, data], handler)
-            // .one({ event: handler, ... })
-            // events can be space-separated and namespaced
-            if (typeof args[0] === 'object' && !Array.isArray(args[0])) {
-              // event map: .one({ click: fn, mouseenter: fn })
-              const map = args[0];
-              elements.forEach((el) => {
-                for (const key in map) {
-                  const handler = map[key];
-                  key
-                    .trim()
-                    .split(/\s+/)
-                    .forEach((evt) => addOne(el, evt.split('.')[0], null, handler));
-                }
-              });
-              return;
-            }
-
-            const events = String(args[0] || '');
-            // find selector (string) and handler (function) among remaining args
-            let selectorStr = null,
-              handler = null;
-            for (let i = 1; i < args.length; i++) {
-              if (typeof args[i] === 'string' && selectorStr == null) selectorStr = args[i];
-              if (isFn(args[i])) handler = args[i];
-            }
-
-            if (!isFn(handler)) {
-              // Prevent the "handler.call is not a function" crash; jQuery would error silently
-              if (window.console && console.warn) {
-                console.warn('[mini-$] $.one called without a function handler. No-op.');
-              }
-              return;
-            }
-
-            const evts = events.trim().split(/\s+/).filter(Boolean);
-            elements.forEach((el) => {
-              evts.forEach((evt) => addOne(el, evt.split('.')[0], selectorStr, handler));
-            });
-          }
-
           return {
-            one: function () {
-              parseAndAttachOnce(arguments);
+            on: function (event, handler) {
+              if (event === 'always' && typeof handler === 'function') {
+                setTimeout(handler, 0);
+              }
               return this;
             },
           };
-        }
+        };
 
-        window.jQuery = window.$ = $;
+        // Prevent Flickity from trying to use jQuery by ensuring it detects no jQuery
+        window.jQuery = undefined;
+        window.$ = undefined;
       })();
     </script>
-    <script
-      src='https://navidium-static-assets.s3.amazonaws.com/navidium-widgets/extension/navidium-extension-checker.js'
-      defer
-    ></script>
+    <script>
+      // Load Navidium extension checker only in production
+      (function () {
+        const isLocalDev = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost';
+
+        if (isLocalDev) {
+          console.warn('[Navidium] Skipping Navidium extension checker on local development server');
+          return;
+        }
+
+        // Production loading
+        const script = document.createElement('script');
+        script.src =
+          'https://navidium-static-assets.s3.amazonaws.com/navidium-widgets/extension/navidium-extension-checker.js';
+        script.defer = true;
+        document.head.appendChild(script);
+      })();
+    </script>
   </head>
 
   <body
@@ -793,5 +751,8 @@
         display: none !important;
       }
     </style>
+
+    {%- render 'colorsets' -%}
+    {%- render 'colorsets-swatches-init' -%}
   </body>
 </html>

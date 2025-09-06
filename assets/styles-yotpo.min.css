@@ -52,7 +52,7 @@
 .yotpo li,
 .yotpo form,
 .yotpo label {
-  font-family: Circular Std, 'Helvetica Neue', Helvetica, Arial, sans-serif,
+  font-family: CircularStd, 'Helvetica Neue', Helvetica, Arial, sans-serif,
     sans-serif;
 }
 .yotpo-reviews .primary-title {
@@ -82,7 +82,7 @@
   padding: 10px 15px;
   font-size: 12px;
   text-transform: capitalize;
-  font-family: Circular Std, 'Helvetica Neue', Helvetica, Arial, sans-serif,
+  font-family: CircularStd, 'Helvetica Neue', Helvetica, Arial, sans-serif,
     sans-serif;
 }
 .yotpo .yotpo-default-button:hover,
@@ -216,7 +216,7 @@
   color: #fff !important;
 }
 .bottom-line-items-container .avg-score {
-  font-family: 'Circular Std', 'Helvetica Neue', Helvetica, Arial, sans-serif,
+  font-family: 'CircularStd', 'Helvetica Neue', Helvetica, Arial, sans-serif,
     sans-serif !important;
   color: #000 !important;
   font-weight: 400 !important;
@@ -305,7 +305,7 @@
 .yotpo li,
 .yotpo form,
 .yotpo label {
-  font-family: Circular Std, 'Helvetica Neue', Helvetica, Arial, sans-serif,
+  font-family: CircularStd, 'Helvetica Neue', Helvetica, Arial, sans-serif,
     sans-serif;
 }
 .yotpo-reviews .primary-title {
@@ -331,7 +331,7 @@
   padding: 10px 15px;
   font-size: 16px;
   text-transform: capitalize;
-  font-family: Circular Std, 'Helvetica Neue', Helvetica, Arial, sans-serif,
+  font-family: CircularStd, 'Helvetica Neue', Helvetica, Arial, sans-serif,
     sans-serif;
 }
 .yotpo .yotpo-default-button:hover,
@@ -437,7 +437,7 @@
   color: #fff !important;
 }
 .bottom-line-items-container .avg-score {
-  font-family: 'Circular Std', 'Helvetica Neue', Helvetica, Arial, sans-serif,
+  font-family: 'CircularStd', 'Helvetica Neue', Helvetica, Arial, sans-serif,
     sans-serif !important;
   color: #000 !important;
   font-weight: 400 !important;
