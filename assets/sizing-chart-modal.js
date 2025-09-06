@@ -3,6 +3,7 @@
   'use strict';
 
   function initSizingChartModal() {
+    console.log('Initializing sizing chart modal...');
     const modal = document.getElementById('sizing-chart-modal-overlay');
     const modalContent = document.querySelector('.sizing-chart-modal-content');
     const modalClose = document.querySelector('.sizing-chart-modal-close');
@@ -12,21 +13,35 @@
     );
     const sizingCharts = document.querySelectorAll('.sizing-chart');
 
+    console.log('Elements found:', {
+      modal: !!modal,
+      modalContent: !!modalContent,
+      modalClose: !!modalClose,
+      modalTitle: !!modalTitle,
+      sizingChartContainer: !!sizingChartContainer,
+      sizingCharts: sizingCharts.length,
+    });
+
     if (
       !modal ||
       !modalContent ||
       !sizingChartContainer ||
       sizingCharts.length === 0
     ) {
+      console.log('Missing required elements, aborting initialization');
       return;
     }
 
+    console.log('All elements found, setting up event listeners...');
+
     // Handle opening size chart modal
     document.addEventListener('click', function (e) {
+      console.log('Click detected on:', e.target);
       if (
         e.target.matches('[data-sizing-chart-toggle]') ||
         e.target.closest('[data-sizing-chart-toggle]')
       ) {
+        console.log('Size chart toggle clicked!');
         e.preventDefault();
         const trigger = e.target.matches('[data-sizing-chart-toggle]')
           ? e.target
