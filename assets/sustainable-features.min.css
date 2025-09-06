@@ -1,0 +1,119 @@
+.sustainable-features__header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-top: solid 1px var(--color-blue-dark);
+  padding: 48px 18px;
+  text-align: center;
+}
+@media (min-width: 700px) {
+  .sustainable-features__header {
+    padding: 64px 48px;
+  }
+}
+.sustainable-features__header h2 {
+  font-size: 28px;
+  margin: 0;
+}
+@media (min-width: 700px) {
+  .sustainable-features__header h2 {
+    font-size: 36px;
+  }
+}
+.sustainable-features {
+  display: flex;
+  flex-direction: column;
+  border-top: solid 1px var(--color-blue-dark);
+}
+@media (min-width: 700px) {
+  .sustainable-features {
+    flex-direction: row;
+  }
+}
+.sustainable-features .sustainable-feature {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  padding: 28px 28px 16px;
+}
+@media (min-width: 700px) {
+  .sustainable-features .sustainable-feature:not(:last-child) {
+    border-right: solid 1px var(--color-blue-dark);
+  }
+  .sustainable-features .sustainable-feature {
+    padding: 36px;
+  }
+}
+@media (min-width: 1200px) {
+  .sustainable-features .sustainable-feature {
+    padding: 48px;
+  }
+}
+.sustainable-features .sustainable-feature .sustainable-features__media {
+  display: block;
+  position: relative;
+  width: 100%;
+  font-size: 0;
+  overflow: hidden;
+  padding-bottom: 100%;
+}
+@media (max-width: 699px) {
+  .sustainable-features .sustainable-feature .sustainable-features__media {
+    border-bottom: solid 1px var(--color-blue-dark);
+  }
+}
+.sustainable-features .sustainable-feature .sustainable-features__media img {
+  position: absolute;
+  width: auto;
+  min-height: 100%;
+  min-width: 100%;
+  font-size: 0;
+  height: 100%;
+  max-width: 150%;
+  max-height: 150%;
+  -o-object-fit: fill;
+  object-fit: fill;
+}
+.sustainable-features
+  .sustainable-feature
+  .sustainable-features__media
+  .sustainable-features__video-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+}
+.sustainable-features
+  .sustainable-feature
+  .sustainable-features__media
+  .sustainable-features__video-container
+  .sustainable-features__video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  transition: opacity 0.25s ease-in-out;
+  opacity: 1;
+}
+.sustainable-features .sustainable-feature .sustainable-features__text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 24px 0 16px;
+}
+@media (min-width: 700px) {
+  .sustainable-features .sustainable-feature .sustainable-features__text {
+    padding: 48px 18px 18px;
+  }
+}
+
+.sustainable-features .sustainable-feature .sustainable-features__text h3 {
+  width: 100%;
+  margin: 0 0 12px;
+  text-align: left;
+}
+/*# sourceMappingURL=sustainable-features.min.css.map */

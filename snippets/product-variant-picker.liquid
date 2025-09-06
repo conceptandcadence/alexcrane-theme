@@ -62,14 +62,12 @@
             picker_type: picker_type
           %}
         </fieldset>
-        {% if option.name == 'Size' %}
-          <button
-            data-sizing-chart-toggle
-            class='tw-text-[12px] tw-leading-[15px] tw-text-[#767676] tw-font-normal tw-underline tw-mt-[14px] tw-block tw-z-10 tw--mb-4 tw-relative'
-          >
-            Size Chart
-          </button>
-        {% endif %}
+        <button
+          data-sizing-chart-toggle
+          class='tw-text-[12px] tw-leading-[15px] tw-text-[#767676] tw-font-normal tw-underline tw-mt-[14px] tw-block tw-z-10 tw--mb-4 tw-relative'
+        >
+          Size Chart
+        </button>
       {%- else -%}
         <div class='product-form__input product-form__input--dropdown'>
           <label class='form__label' for='Option-{{ section.id }}-{{ forloop.index0 }}'>

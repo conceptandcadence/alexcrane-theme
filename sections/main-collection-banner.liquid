@@ -1,7 +1,5 @@
 {% comment %}theme-check-disable ImgLazyLoading{% endcomment %}
 {{ 'component-collection-hero.css' | asset_url | stylesheet_tag }}
-{{ 'component-facets.css' | asset_url | stylesheet_tag }}
-<script src='{{ 'graphenehc.js' | asset_url }}' defer></script>
 
 {%- style -%}
   @media screen and (max-width: 749px) {
@@ -18,27 +16,12 @@
       grid-template-columns: 1fr !important;
       row-gap: 0 !important;
     }
-    .grid__item.collection-hero__text-wrapper {
-      width: 100% !important;
-      max-width: 100% !important;
-    }
-  }
-  @media screen and (min-width: 990px) {
-    #search-header {
-      width: calc(66.66% - var(--grid-desktop-horizontal-spacing) * 2 / 3);
-      max-width: calc(66.66% - var(--grid-desktop-horizontal-spacing) * 2 / 3);
-    }
   }
 {%- endstyle -%}
 
 <div class='collection-hero page-width{% if section.settings.show_collection_image and collection.image %} collection-hero--with-image{% endif %} color-{{ section.settings.color_scheme }} gradient'>
   <div class='collection-hero__inner page-width grid product-grid grid--2-col-tablet-down grid--3-col-desktop {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}'>
-    <div
-      {% if template.name == 'page' and template.suffix == 'search' %}
-        id='search-header'
-      {% endif %}
-      class='grid__item collection-hero__text-wrapper'
-    >
+    <div class='grid__item collection-hero__text-wrapper'>
       <h1 class='collection-hero__title{% if collection.description == blank %} !tw-mb-[4rem]{% endif %}'>
         <span class='visually-hidden'>{{ 'sections.collection_template.title' | t }}: </span>
         {{- collection.title | escape -}}
@@ -74,12 +57,10 @@
       </div>
     {%- endif -%}
 
-    {% unless template.name == 'page' and template.suffix == 'search' %}
-      <!-- Image -->
-      <div class='grid__item'>
-        <span class='tw-sr-only'>{{ collection.title | escape }}</span>
-      </div>
-    {% endunless %}
+    <!-- Image -->
+    <div class='grid__item'>
+      <span class='tw-sr-only'>{{ collection.title | escape }}</span>
+    </div>
 
     {%- if section.settings.show_collection_filters -%}
       <div
@@ -88,10 +69,10 @@
       >
         <nav id='collection-nav' aria-label='Collection Navigation'>
           <div class='collection-nav collection-nav-container tw-w-full'>
-            <div class='tw-flex tw-gap-4 tw-w-full'>
+            <div class='shop-filterz tw-flex tw-gap-4 tw-w-full'>
               <!-- sort by list -->
               <div class='plp-products-sort tw-w-full'>
-                <div class='tw-border tw-border-[#ECECEC] tw-rounded-[5px] !tw-px-6 tw-py-4'>
+                <div class='filter-triggerzz tw-border tw-border-[#ECECEC] tw-rounded-[5px] !tw-px-6 tw-py-4'>
                   <label for='sort'><span class='visually-hidden'>Sort:</span></label>
                   <select name='sort' onchange='graphenehc.reload({url: this.value});' class='!tw-w-full'>
                     <option disabled='disabled' selected='selected' value=''>Sort</option>
@@ -106,29 +87,22 @@
                   </select>
                 </div>
               </div>
-              <div class='plp-products-filter tw-w-full'>
-                <div class='plp-products-filter tw-border tw-border-[#ECECEC] tw-rounded-[5px] !tw-px-6 tw-py-4'>
-                  <button
-                    class='plp-products-filter--trigger tw-w-full'
-                    name='filter'
-                    onclick="this.classList.toggle('open');"
-                  >
-                    <span>Filter</span>
+              <div class='plp-products-filter filter-triggerzz tw-border tw-border-[#ECECEC] tw-rounded-[5px] !tw-px-6 tw-py-4'>
+                <button class='plp-products-filter--trigger' name='filter' onclick="this.classList.toggle('open');">
+                  <span>Filter</span>
 
-                    <span class='tw-w-4 tw-h-4 tw-mr-0'>
-                      {{ 'icon-caret.svg' | inline_asset_content }}
-                    </span>
-                  </button>
-                </div>
+                  <span class='tw-w-4 tw-h-4 tw-mr-0'>
+                    {{ 'icon-caret.svg' | inline_asset_content }}
+                  </span>
+                </button>
               </div>
               <div class='plp-products-view tw-w-full'>
-                <div class='tw-border tw-border-[#ECECEC] tw-rounded-[5px] !tw-px-6 tw-py-4'>
+                <div class='filter-triggerzz tw-border tw-border-[#ECECEC] tw-rounded-[5px] !tw-px-6 tw-py-4'>
                   <label for='view'><span class='visually-hidden'>Sort:</span></label>
                   <select name='view' onchange='graphenehc.reload({url: this.value});' class='!tw-w-full'>
                     <option disabled='disabled' selected='selected' value=''>View</option>
-                    <option value='flats'>Flats</option>
-                    <option value='lifestyle'>Lifestyle</option>
-                    <option value='alternating'>Alternating</option>
+                    <option value='/collections/bestsellers/men'>Flats</option>
+                    <option value='/collections/bestsellers/men?view=average_purchases%7edesc'>Lifestyle</option>
                   </select>
                 </div>
               </div>

@@ -267,7 +267,19 @@
         "send": "Send",
         "post_success": "Thanks for contacting us. We'll get back to you as soon as possible.",
         "error_heading": "Please adjust the following:"
-      }
+      },
+			"wholesale": {
+				"name": "What is your full name?",
+				"email": "What is your email?",
+				"phone": "What is your phone number?",
+				"store": "What is the name of your store?",
+				"website": "What is your website address?",
+				"address": "What is the address of your store (city, state, country)?",
+				"gender": "Are you interested in mens, womens or both?",
+				"notes": "Notes, Questions, Comments",
+				"submit": "Submit",
+				"post_success": "Thank you for your interest in opening a wholesale account with us! We'll be in touch as soon as possible."
+			}
     },
     "404": {
       "title": "Page not found",

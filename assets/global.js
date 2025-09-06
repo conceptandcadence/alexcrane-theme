@@ -1501,36 +1501,84 @@ if (!customElements.get('bulk-add')) {
   customElements.define('bulk-add', BulkAdd);
 }
 
-// Enhanced search modal focus handler
+// Enhanced search modal focus handler - backup for details-modal.js
 document.addEventListener('DOMContentLoaded', function () {
-  // Add focus event listener to all header search buttons
+  // Add focus event listener to all header search buttons as a backup
   const headerSearchButtons = document.querySelectorAll(
     '.header__search summary, .header__search .header__icon--search',
   );
 
   headerSearchButtons.forEach((button) => {
-    button.addEventListener('click', function () {
-      // Wait for modal to open and then focus search input
-      setTimeout(() => {
-        const searchInput =
-          document.querySelector(
-            '.header__search.details-modal[open] #Search',
-          ) ||
-          document.querySelector(
-            '.header__search.details-modal[open] .search__input',
-          ) ||
-          document.querySelector(
-            '.header__search.details-modal[open] input[type="search"]',
-          );
+    button.addEventListener('click', function (event) {
+      // Backup focus handler - only run if details-modal.js doesn't handle it
+      const detailsModal = event.target.closest('details-modal');
 
-        if (searchInput) {
-          searchInput.focus();
-          // Optional: select all text for better UX when search has existing value
-          if (searchInput.value) {
-            searchInput.select();
+      // Wait for modal to open and then focus search input
+      requestAnimationFrame(() => {
+        setTimeout(() => {
+          const searchInput =
+            document.querySelector(
+              '.header__search.details-modal[open] #Search',
+            ) ||
+            document.querySelector(
+              '.header__search.details-modal[open] .search__input',
+            ) ||
+            document.querySelector(
+              '.header__search.details-modal[open] input[type="search"]',
+            );
+
+          if (searchInput && document.activeElement !== searchInput) {
+            try {
+              searchInput.focus();
+              // Select all text for better UX when search has existing value
+              if (searchInput.value && searchInput.value.trim()) {
+                searchInput.select();
+              }
+            } catch (error) {
+              console.warn('Backup search input focus failed:', error);
+            }
           }
-        }
-      }, 100);
+        }, 150); // Slightly longer delay than details-modal.js
+      });
     });
+  });
+
+  // Additional observer-based approach for when modal opens
+  const searchModalObserver = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      if (mutation.type === 'attributes' && mutation.attributeName === 'open') {
+        const detailsElement = mutation.target;
+        const searchModal = detailsElement.closest('.header__search');
+
+        if (searchModal && detailsElement.hasAttribute('open')) {
+          // Modal just opened, focus the search input
+          requestAnimationFrame(() => {
+            const searchInput =
+              searchModal.querySelector('#Search') ||
+              searchModal.querySelector('.search__input') ||
+              searchModal.querySelector('input[type="search"]');
+
+            if (searchInput && document.activeElement !== searchInput) {
+              try {
+                searchInput.focus();
+                if (searchInput.value && searchInput.value.trim()) {
+                  searchInput.select();
+                }
+              } catch (error) {
+                console.warn(
+                  'Observer-based search input focus failed:',
+                  error,
+                );
+              }
+            }
+          });
+        }
+      }
+    });
+  });
+
+  // Observe all search modal details elements
+  document.querySelectorAll('.header__search details').forEach((details) => {
+    searchModalObserver.observe(details, { attributes: true });
   });
 });

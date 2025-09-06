@@ -1,0 +1,584 @@
+{% assign image_mobile = section.settings.image_mobile %}
+{% assign image_desktop = section.settings.image_desktop %}
+
+{% if section.blocks.size > 0 %}
+  <div
+    class='sustainable-features__header{% if image_mobile != blank or image_desktop != blank %} image-header{% endif %}'
+    style='flex-direction: column;'
+  >
+    {% if image_mobile != blank %}
+      {%- capture sizes -%}100vw{%- endcapture -%}
+      {{
+        image_mobile
+        | image_url: width: 1500
+        | image_tag:
+          sizes: sizes,
+          widths: '200, 400, 600, 700, 800, 900, 1000, 1200, 1500',
+          class: 'mobile',
+          loading: 'lazy',
+          alt: page.title
+      }}
+    {% endif %}
+    {% if image_desktop != blank %}
+      {%- capture sizes -%}100vw{%- endcapture -%}
+      {{
+        image_desktop
+        | image_url: width: 1500
+        | image_tag:
+          sizes: sizes,
+          widths: '200, 400, 600, 700, 800, 900, 1000, 1200, 1500',
+          class: 'desktop',
+          loading: 'lazy',
+          alt: page.title
+      }}
+    {% endif %}
+    <div class='header-wrapper'>
+      {% if section.settings.title != blank %}
+        <h2>{{ section.settings.title }}</h2>
+      {% endif %}
+      {% if section.settings.description != blank %}
+        <div style='max-width: 400px; margin: 0 auto;'>{{ section.settings.description }}</div>
+      {% endif %}
+    </div>
+  </div>
+  <section class='sustainable-features'>
+    {% for block in section.blocks %}
+      <div class='sustainable-feature'>
+        {% assign current_image = block.settings.image %}
+        {% if current_image != blank %}
+          <div class='sustainable-features__media'>
+            {%- capture sizes -%}100vw{%- endcapture -%}
+            {{
+              current_image
+              | image_url: width: 1500
+              | image_tag:
+                sizes: sizes,
+                widths: '200, 400, 600, 700, 800, 900, 1000, 1200, 1500',
+                loading: 'lazy',
+                alt: page.title
+            }}
+          </div>
+        {% endif %}
+        <div class='sustainable-features__text' style='align-items: flex-start;'>
+          <h3 class='h2-force tw-mb-2'>{{ block.settings.title }}</h3>
+          <div class='sustainable-features__description'>
+            {{ block.settings.description }}
+          </div>
+          {% if block.settings.link_text != blank and block.settings.link_url != blank %}
+            <a
+              class='button button--primary'
+              href='{{ block.settings.link_url }}'
+              style='font-size: 14px;margin-top: 16px;'
+            >
+              {{- block.settings.link_text -}}
+            </a>
+          {% endif %}
+
+          {% if block.settings.application %}
+            {%- form 'contact', class: 'Form Form--spacingTight' -%}
+              {%- if form.posted_successfully? -%}
+                <p class='ProductForm__Title Alert Alert--success'>
+                  {{ 'templates.contact.wholesale.post_success' | t }}
+                </p>
+              {%- endif -%}
+
+              {%- if form.errors -%}
+                <div class='Form__Alert Alert Alert--error'>
+                  <ul class='Alert__ErrorList'>
+                    {%- for field in form.errors -%}
+                      {%- if field == 'form' -%}
+                        <li class='Alert__ErrorItem'>{{ form.errors.messages[field] }}</li>
+                      {%- else -%}
+                        <li class='Alert__ErrorItem'>
+                          <strong>{{ form.errors.translated_fields[field] }}</strong> {{ form.errors.messages[field] }}
+                        </li>
+                      {%- endif -%}
+                    {%- endfor -%}
+                  </ul>
+                </div>
+              {%- endif -%}
+
+              <input type='hidden' class='Form__Input' name='contact[wholesale]' value='Website Wholesale Inquiry'>
+
+              <div class='Form__Group'>
+                <div class='Form__Item'>
+                  <input
+                    type='text'
+                    class='Form__Input'
+                    name='contact[name]'
+                    aria-label='{{ 'templates.contact.wholesale.name' | t }}'
+                    placeholder='{{ 'templates.contact.wholesale.name' | t }}'
+                    required
+                    {% if customer %}
+                      value='{{ customer.name }}'
+                    {% endif %}
+                  >
+                  <label class='Form__FloatingLabel u-h6'>{{ 'templates.contact.wholesale.name' | t }}</label>
+                </div>
+              </div>
+
+              <div class='Form__Group'>
+                <div class='Form__Item'>
+                  <input
+                    type='email'
+                    class='Form__Input'
+                    name='contact[email]'
+                    aria-label='{{ 'templates.contact.wholesale.email' | t }}'
+                    placeholder='{{ 'templates.contact.wholesale.email' | t }}'
+                    required
+                    {% if customer %}
+                      value='{{ customer.email }}'
+                    {% endif %}
+                  >
+                  <label class='Form__FloatingLabel u-h6'>{{ 'templates.contact.wholesale.email' | t }}</label>
+                </div>
+              </div>
+
+              <div class='Form__Group'>
+                <div class='Form__Item'>
+                  <input
+                    type='tel'
+                    class='Form__Input'
+                    name='contact[phone]'
+                    aria-label='{{ 'templates.contact.wholesale.phone' | t }}'
+                    placeholder='{{ 'templates.contact.wholesale.phone' | t }}'
+                    required
+                    {% if customer %}
+                      value='{{ customer.phone }}'
+                    {% endif %}
+                  >
+                  <label class='Form__FloatingLabel u-h6'>{{ 'templates.contact.wholesale.phone' | t }}</label>
+                </div>
+              </div>
+
+              <div class='Form__Group'>
+                <div class='Form__Item'>
+                  <input
+                    type='text'
+                    class='Form__Input'
+                    name='contact[store]'
+                    aria-label='{{ 'templates.contact.wholesale.store' | t }}'
+                    placeholder='{{ 'templates.contact.wholesale.store' | t }}'
+                    required
+                    {% if customer %}
+                      value='{{ customer.store }}'
+                    {% endif %}
+                  >
+                  <label class='Form__FloatingLabel u-h6'>{{ 'templates.contact.wholesale.store' | t }}</label>
+                </div>
+              </div>
+
+              <div class='Form__Group'>
+                <div class='Form__Item'>
+                  <input
+                    type='text'
+                    class='Form__Input'
+                    name='contact[address]'
+                    aria-label='{{ 'templates.contact.wholesale.address' | t }}'
+                    placeholder='{{ 'templates.contact.wholesale.address' | t }}'
+                    required
+                    {% if customer %}
+                      value='{{ customer.address }}'
+                    {% endif %}
+                  >
+                  <label class='Form__FloatingLabel u-h6'>{{ 'templates.contact.wholesale.address' | t }}</label>
+                </div>
+              </div>
+
+              <div class='Form__Group'>
+                <div class='Form__Item'>
+                  <input
+                    type='text'
+                    class='Form__Input'
+                    name='contact[gender]'
+                    aria-label='{{ 'templates.contact.wholesale.gender' | t }}'
+                    placeholder='{{ 'templates.contact.wholesale.gender' | t }}'
+                    required
+                    {% if customer %}
+                      value='{{ customer.gender }}'
+                    {% endif %}
+                  >
+                  <label class='Form__FloatingLabel u-h6'>{{ 'templates.contact.wholesale.gender' | t }}</label>
+                </div>
+              </div>
+
+              <div class='Form__Item'>
+                <label class='Form__FloatingLabel u-h6 textarea'>{{ 'templates.contact.wholesale.notes' | t }}</label>
+                <textarea
+                  name='contact[notes]'
+                  cols='30'
+                  rows='10'
+                  class='Form__Textarea'
+                  aria-label='{{ 'templates.contact.wholesale.notes' | t }}'
+                  placeholder='{{ 'templates.contact.wholesale.notes' | t }}'
+                ></textarea>
+              </div>
+
+              <button
+                type='submit'
+                class='Form__Submit button button--primary button--full'
+                style='font-size: 14px; width: 100%;'
+              >
+                {{ 'templates.contact.wholesale.submit' | t }}
+              </button>
+            {%- endform -%}
+          {% endif %}
+        </div>
+      </div>
+    {% endfor %}
+  </section>
+{% endif %}
+
+<link rel='stylesheet' href='{{ 'sustainable-features.min.css' | asset_url }}' media='print' onload="this.media='all'">
+<noscript>{{ 'sustainable-features.min.css' | asset_url | stylesheet_tag }}</noscript>
+
+<style>
+  .sustainable-features .Form__Input {
+    box-shadow: none !important;
+    border-bottom: solid 1px var(--color-grey);
+  }
+  .sustainable-features .Form {
+    width: 100%;
+    padding-top: 24px;
+  }
+
+  .Form__Item {
+    position: relative;
+    margin-bottom: 15px;
+  }
+
+  .Form__Input,
+  .Form__Textarea,
+  .spr-form-input-text,
+  .spr-form-input-email,
+  .spr-form-input-textarea {
+    -webkit-appearance: none;
+    display: block;
+    padding: 16px 18px;
+    border-radius: 0;
+    border: 1px solid var(--color-black);
+    width: 100%;
+    line-height: normal;
+    resize: none;
+    transition: border-color 0.1s ease-in-out;
+    background: transparent;
+    margin-top: 20px;
+  }
+  .Form__Input {
+    padding: 0 0 12px;
+    border: 0;
+    border-bottom: 1px solid var(--color-black);
+  }
+  .Form__Textarea {
+    margin-top: 12px;
+    border: 1px solid var(--color-black);
+    box-shadow: none !important;
+  }
+
+  .Form__Input:focus,
+  .Form__Textarea:focus,
+  .spr-form-input-text:focus,
+  .spr-form-input-email:focus,
+  .spr-form-input-textarea:focus {
+    border-color: var(--color-black);
+    outline: none;
+  }
+
+  .Form__Input::-moz-placeholder,
+  .Form__Textarea::-moz-placeholder,
+  .spr-form-input-text::-moz-placeholder,
+  .spr-form-input-email::-moz-placeholder,
+  .spr-form-input-textarea::-moz-placeholder {
+    color: var(--color-black);
+    font-weight: 500;
+  }
+
+  .Form__Input:-ms-input-placeholder,
+  .Form__Textarea:-ms-input-placeholder,
+  .spr-form-input-text:-ms-input-placeholder,
+  .spr-form-input-email:-ms-input-placeholder,
+  .spr-form-input-textarea:-ms-input-placeholder {
+    color: transparent;
+  }
+
+  .Form__Input::placeholder,
+  .spr-form-input-text::placeholder,
+  .spr-form-input-email::placeholder,
+  .spr-form-input-textarea::placeholder {
+    color: transparent;
+  }
+  .Form__Textarea::placeholder {
+    color: var(--color-black);
+    opacity: 0.5;
+  }
+
+  .Form__FloatingLabel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 0;
+    line-height: normal;
+    color: var(--color-black);
+    font-size: 14px;
+    font-weight: 500;
+    opacity: 1;
+    background: rgba(var(--background-rgb), 0);
+    pointer-events: none;
+    transform: translateY(100%);
+    transition: all 0.3s ease-in-out;
+  }
+
+  .Form__FloatingLabel.textarea {
+    display: block;
+    position: relative;
+    top: unset;
+    left: unset;
+    padding: 0;
+    line-height: normal;
+    color: var(--color-black);
+    transform: translateY(0);
+    margin-top: 16px;
+  }
+
+  .Form__Input:not(:-moz-placeholder-shown) ~ .Form__FloatingLabel,
+  .Form__Textarea:not(:-moz-placeholder-shown) ~ .Form__FloatingLabel {
+    opacity: 1;
+    color: #767676;
+    transform: translateY(0);
+  }
+
+  .Form__Input:not(:-ms-input-placeholder) ~ .Form__FloatingLabel,
+  .Form__Textarea:not(:-ms-input-placeholder) ~ .Form__FloatingLabel {
+    opacity: 1;
+    color: #767676;
+    transform: translateY(0);
+  }
+
+  .Form__Input:not(:placeholder-shown) ~ .Form__FloatingLabel,
+  .Form__Textarea:not(:placeholder-shown) ~ .Form__FloatingLabel {
+    opacity: 1;
+    color: #767676;
+    transform: translateY(0);
+  }
+
+  .Form__Checkbox {
+    position: absolute;
+    opacity: 0;
+  }
+
+  .Form__Checkbox ~ label::before {
+    display: inline-block;
+    content: '';
+    width: 1em;
+    height: 1em;
+    margin-right: 10px;
+    border: 1px solid var(--color-black);
+    vertical-align: -2px;
+  }
+
+  .Form__Checkbox ~ svg {
+    position: absolute;
+    top: 5px;
+    left: 1px;
+    width: 12px;
+    height: 12px;
+    transform: scale(0);
+    transition: transform 0.2s ease-in-out;
+    will-change: transform;
+  }
+
+  .Form__Checkbox:checked ~ label::before {
+    border-color: var(--color-black);
+  }
+
+  .Form__Checkbox:checked ~ svg {
+    transform: scale(1);
+  }
+
+  .Form__Alert,
+  .spr-form-message {
+    margin-bottom: 20px;
+  }
+
+  .Form__Submit {
+    display: block;
+    margin-top: 20px;
+  }
+
+  .Form__Label,
+  .spr-form-label {
+    display: block;
+    padding-bottom: 8px;
+    font-size: calc(var(--base-text-font-size) - (var(--default-text-font-size) - 11px));
+    text-transform: uppercase;
+    font-family: var(--heading-font-family);
+    font-weight: var(--heading-font-weight);
+    font-style: var(--heading-font-style);
+    letter-spacing: 0.2em;
+    line-height: normal;
+  }
+
+  .Form--small .Form__Input,
+  .Form--small .Form__Textarea {
+    font-size: calc(var(--base-text-font-size) - (var(--default-text-font-size) - 13px));
+    padding-top: 10px;
+    padding-bottom: 10px;
+    box-shadow: none !important;
+  }
+
+  .Form__Textarea {
+    border: solid 1px var(--color-grey) !important;
+  }
+
+  .Form--spacingTight .Form__Item {
+    margin-bottom: 15px;
+  }
+
+  .Form--spacingTight .Form__Alert {
+    margin-bottom: 20px;
+  }
+
+  .Form__Group,
+  .Form__FlexGroup {
+    display: flex;
+  }
+
+  .Form__Group > .Form__Item {
+    flex: 1;
+  }
+  .Form__FlexGroup > .Form__Item {
+    flex: 1;
+    display: flex;
+  }
+
+  .Alert--success {
+    color: var(--color-blue-bright);
+  }
+
+  @media screen and (min-width: 641px) {
+    .Form__Item,
+    .Form__Alert {
+      margin-bottom: 12px;
+    }
+
+    .Form__Group > :nth-child(2) {
+      margin-left: 30px;
+    }
+
+    .Form--spacingTight .Form__Group > :nth-child(2) {
+      margin-left: 15px;
+    }
+  }
+
+  .sustainable-features__header {
+    z-index: 1;
+  }
+
+  .sustainable-features__header.image-header {
+    padding: 0 !important;
+    position: relative;
+  }
+  .sustainable-features__header .mobile {
+    display: block !important;
+  }
+  .sustainable-features__header .desktop {
+    display: none !important;
+  }
+  .sustainable-features__header .header-wrapper {
+    padding: 0 !important;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .sustainable-features__header img {
+    width: 100%;
+    z-index: 1;
+  }
+  .sustainable-features__header .header-wrapper * {
+    color: #fff !important;
+    z-index: 2;
+  }
+  @media screen and (min-width: 641px) {
+    .sustainable-features__header .mobile {
+      display: none !important;
+    }
+    .sustainable-features__header .desktop {
+      display: block !important;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Wholesale",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Section Title"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>Section Description</p>"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "Mobile Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_desktop",
+      "label": "Desktop Image"
+    }
+  ],
+  "max_blocks": 2,
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "label": "Description"
+        },
+        {
+          "type": "text",
+          "id": "link_text",
+          "label": "Link Text"
+        },
+        {
+          "type": "url",
+          "id": "link_url",
+          "label": "Link URL"
+        },
+        {
+          "type": "checkbox",
+          "id": "application",
+          "label": "Display application",
+          "default": false
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

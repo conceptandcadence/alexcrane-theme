@@ -58,6 +58,13 @@
 .sizechart__measurement_description,
 .sizechart__questions {
   margin: 0 0 12px !important;
+  width: 100%;
+}
+.sizechart_track {
+  width: 100%;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  white-space: nowrap;
 }
 @media screen and (max-width: 640px) {
   .size-instruction__image img {
@@ -79,37 +86,6 @@
 .sizechart__measurement_description:first-child {
   margin-top: 0 !important;
 }
-section.sizing-chart
-  .sizechart
-  .sizechart__measurement1
-  .sizechart__measurement_value,
-section.sizing-chart
-  .sizechart
-  .sizechart__measurement2
-  .sizechart__measurement_value,
-section.sizing-chart
-  .sizechart
-  .sizechart__measurement3
-  .sizechart__measurement_value,
-section.sizing-chart
-  .sizechart
-  .sizechart__measurement1
-  .sizechart__measurement_header,
-section.sizing-chart
-  .sizechart
-  .sizechart__measurement2
-  .sizechart__measurement_header,
-section.sizing-chart
-  .sizechart
-  .sizechart__measurement3
-  .sizechart__measurement_header {
-  padding: 8px 0 !important;
-}
-@media (min-width: 1200px) {
-  section.sizing-chart {
-    padding: 48px 48px 0 !important;
-  }
-}
 @media screen and (min-width: 1200px) {
   .sizechart__wrapper {
     padding-right: 40px;
@@ -119,7 +95,7 @@ section.sizing-chart
   }
   .sizechart__measurement_header,
   .sizechart__header.descriptor {
-    min-width: 110px !important;
+    min-width: 130px !important;
   }
 }
 
@@ -160,7 +136,7 @@ section.sizing-chart
   align-items: center;
   justify-content: space-between;
   padding: 20px 24px 16px;
-  border-bottom: 1px solid #e1e5e9;
+  border-bottom: 1px solid var(--color-grey);
   flex-shrink: 0;
 }
 
@@ -196,7 +172,7 @@ section.sizing-chart
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 20px;
+  margin-bottom: 12px;
   gap: 20px;
 }
 
@@ -212,7 +188,7 @@ section.sizing-chart
 .sizing-chart-header .measurement-toggle {
   display: flex;
   gap: 0;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-grey);
   border-radius: 4px;
   overflow: hidden;
 }
@@ -220,21 +196,25 @@ section.sizing-chart
 .sizing-chart-header .toggle-sizing-unit {
   padding: 8px 16px;
   border: none;
-  border-right: 1px solid #ddd;
+  border-right: 1px solid var(--color-grey);
   border-radius: 0;
   text-decoration: none;
-  color: #333;
+  color: #000;
   transition: all 0.2s ease;
   background-color: #fff;
+  font-size: 12px;
 }
 
 .sizing-chart-header .toggle-sizing-unit:last-child {
   border-right: none;
 }
 
-.sizing-chart-header .toggle-sizing-unit:hover,
+.sizing-chart-header .toggle-sizing-unit:hover {
+  background-color: var(--color-grey);
+  color: #000;
+}
 .sizing-chart-header .toggle-sizing-unit.active {
-  background-color: #000;
+  background-color: #4a69ad;
   color: #fff;
 }
 
@@ -252,12 +232,12 @@ section.sizing-chart
 }
 
 .sizing-chart[data-view='in'] .toggle-sizing-unit[data-unit='in'] {
-  background-color: #000;
+  background-color: #4a69ad;
   color: #fff;
 }
 
 .sizing-chart[data-view='cm'] .toggle-sizing-unit[data-unit='cm'] {
-  background-color: #000;
+  background-color: #4a69ad;
   color: #fff;
 }
 
@@ -267,9 +247,13 @@ section.sizing-chart
 }
 
 .sizing-chart__description {
-  margin-bottom: 20px;
-  color: #666;
+  color: #000;
   line-height: 1.5;
+}
+
+.sizing-chart__description p {
+  font-size: 12px;
+  color: #767676;
 }
 
 /* Clean table styling */
@@ -277,25 +261,24 @@ section.sizing-chart
   width: 100%;
   border-collapse: collapse;
   margin: 20px 0;
-  border: 1px solid #e1e5e9;
-  border-radius: 8px;
-  overflow: hidden;
+  border: 1px solid var(--color-grey);
+  border-radius: 5px;
+  min-width: 600px;
 }
 
 .sizechart__headers {
   display: flex;
-  background-color: #f8f9fa;
-  border-bottom: 2px solid #e1e5e9;
+  background-color: #fff;
+  border-bottom: 1px solid var(--color-grey);
 }
 
 .sizechart__header {
   flex: 1;
-  padding: 12px 8px;
-  text-align: center;
-  font-weight: 600;
-  font-size: 14px;
-  color: #333;
-  border-right: 1px solid #e1e5e9;
+  padding: 10px 16px;
+  text-align: left;
+  font-size: 12px;
+  color: #767676;
+  border-right: 1px solid var(--color-grey);
 }
 
 .sizechart__header:last-child {
@@ -304,16 +287,13 @@ section.sizing-chart
 
 .sizechart__header.descriptor {
   min-width: 120px;
-  background-color: #000;
-  color: #fff;
-  font-weight: 700;
 }
 
 .sizechart__measurement1,
 .sizechart__measurement2,
 .sizechart__measurement3 {
   display: flex;
-  border-bottom: 1px solid #e1e5e9;
+  border-bottom: 1px solid var(--color-grey);
 }
 
 .sizechart__measurement1:last-child,
@@ -324,25 +304,23 @@ section.sizing-chart
 
 .sizechart__measurement_header {
   min-width: 120px;
-  padding: 12px 8px;
-  background-color: #f8f9fa;
-  font-weight: 600;
-  font-size: 14px;
-  color: #333;
-  text-align: center;
-  border-right: 1px solid #e1e5e9;
+  padding: 10px 16px;
+  font-size: 12px;
+  color: #767676;
+  text-align: left;
+  border-right: 1px solid var(--color-grey);
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
 }
 
 .sizechart__measurement_value {
   flex: 1;
-  padding: 12px 8px;
-  text-align: center;
-  font-size: 14px;
-  color: #333;
-  border-right: 1px solid #e1e5e9;
+  padding: 10px 16px;
+  text-align: left;
+  font-size: 12px;
+  color: #000;
+  border-right: 1px solid var(--color-grey);
   background-color: #fff;
   transition: background-color 0.2s ease;
 }
@@ -352,7 +330,7 @@ section.sizing-chart
 }
 
 .sizechart__measurement_value:hover {
-  background-color: #f8f9fa;
+  background-color: #fafafa;
 }
 
 /* Size instructions styling */
@@ -371,7 +349,7 @@ section.sizing-chart
   max-width: 200px;
   height: auto;
   border-radius: 8px;
-  border: 1px solid #e1e5e9;
+  border: 1px solid var(--color-grey);
 }
 
 .size-instruction-text {
@@ -380,30 +358,31 @@ section.sizing-chart
 
 .sizechart__measurement_description {
   margin: 16px 0;
-  padding: 16px;
-  background-color: #f8f9fa;
-  border-radius: 8px;
-  border-left: 4px solid #000;
+  padding: 10px 16px;
+  border-radius: 5px;
+  border: 1px solid var(--color-grey);
 }
 
 .sizechart__measurement_description strong {
+  margin: 0 0 6px 0;
   display: block;
-  font-weight: 600;
-  font-size: 16px;
-  color: #000;
-  margin-bottom: 8px;
 }
 
 .sizechart__measurement_content {
+  width: 100%;
   color: #666;
   line-height: 1.5;
 }
 
+.sizechart__measurement_content p {
+  color: #666;
+  font-size: 12px;
+}
+
 .sizechart__questions {
   margin: 24px 0 0 0;
-  padding: 16px;
-  background-color: #f8f9fa;
-  border-radius: 8px;
+  padding: 10px 16px;
+  border-radius: 5px;
   text-align: center;
 }
 
@@ -414,20 +393,23 @@ section.sizing-chart
   margin-bottom: 8px;
 }
 
-.sizechart__questions a {
-  color: #007bff;
-  text-decoration: none;
-  font-weight: 500;
+.sizechart__questions,
+.sizechart__questions * {
+  font-size: 12px;
 }
 
-.sizechart__questions a:hover {
-  text-decoration: underline;
+.sizechart__questions a {
+  border-bottom: solid 1px #000;
 }
 
 /* Mobile adjustments */
-@media (max-width: 768px) {
+@media (max-width: 749px) {
+  .sizechart__measurement_descriptions {
+    flex-direction: column !important;
+    gap: 0 !important;
+  }
   .sizing-chart-modal-overlay {
-    padding: 10px;
+    padding: 10px 16px;
   }
 
   .sizing-chart-modal-dialog {
@@ -442,19 +424,24 @@ section.sizing-chart
   }
 
   .sizing-chart-modal-content {
-    padding: 16px 20px;
+    padding: 16px 0px 16px 20px;
   }
 
   .sizechart__header,
   .sizechart__measurement_header,
   .sizechart__measurement_value {
-    padding: 8px 4px;
+    padding: 10px 16px;
     font-size: 12px;
+  }
+
+  .sizechart__measurement_descriptions,
+  .sizechart__questions {
+    padding-right: 16px !important;
   }
 
   .sizechart__header.descriptor,
   .sizechart__measurement_header {
-    min-width: 80px;
+    padding: 10px 16px;
   }
 
   .size-instructions {
@@ -473,11 +460,26 @@ section.sizing-chart
   }
 
   .sizing-chart-header-right {
-    align-self: flex-end;
+    align-self: flex-start;
   }
 
   .sizing-chart-header .measurement-toggle {
     justify-content: center;
     width: auto;
   }
+  .sizechart__questions {
+    text-align: left;
+  }
+}
+
+span[data-view='cm']:after {
+  content: 'cm';
+  padding-left: 2px;
+  color: #000;
+}
+
+span[data-view='in']:after {
+  content: 'in';
+  padding-left: 2px;
+  color: #000;
 }

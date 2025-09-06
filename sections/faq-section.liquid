@@ -29,7 +29,7 @@
             </p>
           {% endif %}
           {%- if section.settings.heading != blank -%}
-            <h2 class='collapsible-content__heading inline-richtext {{ section.settings.heading_size }}'>
+            <h2 class='collapsible-content__heading inline-richtext tw-text-left {{ section.settings.heading_size }}'>
               {{ section.settings.heading }}
             </h2>
           {%- else -%}
@@ -82,7 +82,7 @@
                 >
                   <summary id='Summary-{{ block.id }}-{{ section.id }}'>
                     {% render 'icon-accordion', icon: block.settings.icon %}
-                    <h3 class='accordion__title inline-richtext tw-text-[18px]'>
+                    <h3 class='accordion__title inline-richtext'>
                       {{ block.settings.heading | default: block.settings.page.title | escape }}
                     </h3>
                     {{- 'icon-caret.svg' | inline_asset_content -}}

@@ -5223,6 +5223,110 @@
           "sizechart_rcwkYj"
         ],
         "settings": {}
+      },
+      "affiliate": {
+        "type": "affiliate",
+        "blocks": {
+          "47c4f7e9-80cb-451e-ba15-840a1d2db217": {
+            "type": "feature",
+            "settings": {
+              "title": "Affiliates",
+              "description": "<p>Dig the Alex Crane vibe? Think your audience will too? If so, let's talk shop. We work with affiliates to promote new launches and spread the good word. </p>",
+              "link_text": "Apply to become an affiliate",
+              "link_url": "https://join.collabs.shopify.com/community/apply/0yGpJsBseRc"
+            }
+          },
+          "1ab58359-e421-4db0-a77e-def55a3580c8": {
+            "type": "feature",
+            "settings": {
+              "title": "Publishers and Websites",
+              "description": "<p>If you're a fashion and lifestyle publisher and want to earn commish on sales to alexcrane.co, you've come to the right spot.</p>",
+              "link_text": "Apply to become an affiliate",
+              "link_url": "http://www.shareasale.com/join/alexcrane"
+            }
+          }
+        },
+        "block_order": [
+          "47c4f7e9-80cb-451e-ba15-840a1d2db217",
+          "1ab58359-e421-4db0-a77e-def55a3580c8"
+        ],
+        "settings": {
+          "title": "Join The Fam",
+          "description": "",
+          "image_mobile": "shopify://shop_images/collection_new_mobile1.jpg",
+          "image_desktop": "shopify://shop_images/collection_new_desktop1.jpg"
+        }
+      },
+      "wholesale": {
+        "type": "wholesale",
+        "blocks": {
+          "1d95425b-5e40-4ced-9175-8dbe1c91ec19": {
+            "type": "feature",
+            "settings": {
+              "title": "Open a wholesale account",
+              "description": "<p>Thank you for your interest in opening a wholesale account with us. We'd love to hear more about you! Please complete the below questionnaire to get started, and we'll be in touch as soon as possible.</p>",
+              "link_text": "",
+              "link_url": "",
+              "application": true
+            }
+          },
+          "2970d47c-0989-42b6-bee0-24811a42b8d3": {
+            "type": "feature",
+            "settings": {
+              "title": "Already have an account?",
+              "description": "<p>If you already have an account, you can log into our wholesale platform to place an order.</p>",
+              "link_text": "Log into nuorder",
+              "link_url": "https://www.nuorder.com/",
+              "application": false
+            }
+          }
+        },
+        "block_order": [
+          "1d95425b-5e40-4ced-9175-8dbe1c91ec19",
+          "2970d47c-0989-42b6-bee0-24811a42b8d3"
+        ],
+        "settings": {
+          "title": "Wholesale",
+          "description": "",
+          "image_mobile": "shopify://shop_images/BO2-MOBILE.jpg",
+          "image_desktop": "shopify://shop_images/new_desktop_d82ad259-d7fc-4563-852f-7f4f1fe3e48c.jpg"
+        }
+      },
+      "corporate-gifting": {
+        "type": "corporate-gifting",
+        "blocks": {
+          "1d95425b-5e40-4ced-9175-8dbe1c91ec19a": {
+            "type": "feature",
+            "settings": {
+              "title": "",
+              "description": "<p>Thank you for your interest in opening a corporate gifting account with us. We'd love to hear more about you! Please complete the below questionnaire to get started, and we'll be in touch as soon as possible.</p>",
+              "link_text": "",
+              "link_url": "",
+              "application": true
+            }
+          },
+          "2970d47c-0989-42b6-bee0-24811a42b8d3a": {
+            "type": "feature",
+            "disabled": true,
+            "settings": {
+              "title": "Already have an account?",
+              "description": "<p>If you already have an account, you can log into our wholesale platform to place an order.</p>",
+              "link_text": "Log into nuorder",
+              "link_url": "https://www.nuorder.com/",
+              "application": false
+            }
+          }
+        },
+        "block_order": [
+          "1d95425b-5e40-4ced-9175-8dbe1c91ec19a",
+          "2970d47c-0989-42b6-bee0-24811a42b8d3a"
+        ],
+        "settings": {
+          "title": "Corporate Gifting",
+          "description": "",
+          "image_mobile": "shopify://shop_images/BO2-MOBILE.jpg",
+          "image_desktop": "shopify://shop_images/Header_Desktop1.jpg"
+        }
       }
     },
     "content_for_index": [],

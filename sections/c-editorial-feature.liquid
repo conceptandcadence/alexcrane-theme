@@ -1,73 +1,77 @@
 {{ 'component-image-with-text.css' | asset_url | stylesheet_tag }}
 
 {%- style -%}
-  .section-{{ section.id }}-padding {
-    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
-    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
-  }
+   .section-{{ section.id }}-padding {
+     padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+     padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+   }
 
-  @media screen and (min-width: 750px) {
-    .section-{{ section.id }}-padding {
-      padding-top: {{ section.settings.padding_top }}px;
-      padding-bottom: {{ section.settings.padding_bottom }}px;
-    }
+   @media screen and (min-width: 750px) {
+     .section-{{ section.id }}-padding {
+       padding-top: {{ section.settings.padding_top }}px;
+       padding-bottom: {{ section.settings.padding_bottom }}px;
+     }
+   }
+  .editorial-products .card__heading a, .editorial-products .price span {
+  	color: #000 !important;
+  	font-weight: 400 !important;
+  	font-size: 12px !important;
+  	line-height: 15px !important;
   }
-	.editorial-products .card__heading a, .editorial-products .price span {
-		color: #000 !important;
-		font-weight: 400 !important;
-		font-size: 12px !important;
-		line-height: 15px !important;
-	}
-	.editorial-products__close {
-    top: -36px;
-    right: 0;
-	}
-	.editorial-feature .image-with-text__content {
-		padding: 0 !important;
-	}
-	.editorial-products .grid--3-col-desktop .grid__item {
-        width: calc(33.33% - var(--grid-desktop-horizontal-spacing) * 2 / 3);
-        max-width: calc(33.33% - var(--grid-desktop-horizontal-spacing) * 1 / 3);
-    }
-	@media screen and (min-width: 990px) {
-    .editorial-products .grid--3-col-desktop .grid__item {
-        width: calc(33.33% - var(--grid-desktop-horizontal-spacing) * 2 / 3);
-        max-width: calc(33.33% - var(--grid-desktop-horizontal-spacing) * 1 / 3);
-    }
-	}
-	.editorial-products .primary {
-		gap: 2px !important;
-	}
-	.editorial-products .secondary {
-		display: none !important;
-	}
-	.editorial-products .quick-add__submit {
-		min-height: 24px !important;
-		height: 24px !important;
-	}
+  .editorial-feature .image-with-text__content {
+  	padding: 0 !important;
+  }
+  .editorial-products .grid--3-col-desktop .grid__item {
+         width: calc(33.33% - var(--grid-desktop-horizontal-spacing) * 2 / 3);
+         max-width: calc(33.33% - var(--grid-desktop-horizontal-spacing) * 1 / 3);
+     }
+
+  .editorial-products .primary {
+  	gap: 2px !important;
+  }
+  .editorial-products .secondary {
+  	display: none !important;
+  }
+  .editorial-products .quick-add__submit {
+  	min-height: 24px !important;
+  	height: 24px !important;
+  }
+   .editorial-products {
+     display: none;
+     position: absolute;
+     width: calc(66.67% + var(--grid-desktop-horizontal-spacing) / 3);
+     height: calc(100% - 44px);
+     top: 44px;
+     left: calc(33.33% - var(--grid-desktop-horizontal-spacing) / 3);
+     padding: 0;
+     background: #fff;
+     z-index: 10;
+     border-radius: 2px;
+   }
+  @media screen and (min-width: 990px) {
   .editorial-products {
-    display: none;
-    position: absolute;
-    width: 100%;
-    height: calc(100% - 44px);
-    top: 44px;
-    left: 0; 
-    padding: 0;
-    background: #fff;
+  	top: 0;
+  height: 100%;
+  }
+     .editorial-products .grid--3-col-desktop .grid__item {
+         width: calc(33.33% - var(--grid-desktop-horizontal-spacing) * 2 / 3);
+         max-width: calc(33.33% - var(--grid-desktop-horizontal-spacing) * 1 / 3);
+     }
+  }
+  @media screen and (max-width: 749px) {
+  	.editorial-products {
+  		position: relative;
+  		top: 0;
+  		left: 0;
+  		width: 100%;
+  		height: auto;
+  		margin-top: 12px;
+  	}
   }
 
-	@media screen and (max-width: 749px) {
-		.editorial-products {
-			position: relative;
-			top: 0;
-			height:auto;
-			margin-top: 12px;
-		}
-	}
-
-  .editorial-products.show {
-    display: flex;
-  }
+   .editorial-products.show {
+     display: flex;
+   }
 {%- endstyle -%}
 
 {%- liquid
@@ -84,8 +88,8 @@
   <div class='page-width'>
     <div class='image-with-text image-with-text--{{ section.settings.content_layout }} isolate{% if settings.text_boxes_border_thickness > 0 and settings.text_boxes_border_opacity > 0 and settings.media_border_thickness > 0 and settings.media_border_opacity > 0 %} collapse-borders{% endif %}{% unless section.settings.color_scheme == section.settings.section_color_scheme and settings.media_border_thickness > 0 and settings.text_boxes_shadow_opacity == 0 and settings.text_boxes_border_thickness == 0 or settings.text_boxes_border_opacity == 0 %} collapse-corners{% endunless %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}'>
       <div class='image-with-text__grid grid grid--1-col grid--{% if section.settings.desktop_image_width == 'medium' %}2-col-tablet{% else %}3-col-tablet{% endif %}{% if section.settings.layout == 'text_first' %} image-with-text__grid--reverse{% endif %}'>
-          {% if section.settings.image != blank %}
-						<div class='image-with-text__media-item image-with-text__media-item-1 image-with-text__media-item--{{ section.settings.desktop_image_width }} image-with-text__media-item--{{ section.settings.desktop_content_position }} grid__item'>
+        {% if section.settings.image != blank %}
+          <div class='image-with-text__media-item image-with-text__media-item-1 image-with-text__media-item--{{ section.settings.desktop_image_width }} image-with-text__media-item--{{ section.settings.desktop_content_position }} grid__item'>
             <div
               class='image-with-text__media image-with-text__media--{{ section.settings.height }} global-media-settings{% unless remove_color_classes %} gradient color-{{ section.settings.color_scheme }}{% else %} background-transparent{% endunless %}{% if section.settings.image != blank %} media{% else %} image-with-text__media--placeholder placeholder{% endif %}{% if section.settings.image_behavior != 'none' %} animate--{{ section.settings.image_behavior }}{% endif %} tw-rounded-[2px]'
               {% if section.settings.height == 'adapt' and section.settings.image != blank %}
@@ -115,12 +119,11 @@
                 {{ 'detailed-apparel-1' | placeholder_svg_tag: 'placeholder-svg' }}
               {%- endif -%}
             </div>
-						</div>
-          {% endif %}
+          </div>
+        {% endif %}
 
-          {% if section.settings.image_2 != blank %}
-						<div class='image-with-text__media-item image-with-text__media-item-2 max-md:!tw-hidden image-with-text__media-item--{{ section.settings.desktop_image_width }} image-with-text__media-item--{{ section.settings.desktop_content_position }} grid__item'>
-						
+        {% if section.settings.image_2 != blank %}
+          <div class='image-with-text__media-item image-with-text__media-item-2 max-md:!tw-hidden image-with-text__media-item--{{ section.settings.desktop_image_width }} image-with-text__media-item--{{ section.settings.desktop_content_position }} grid__item'>
             <div
               class='image-with-text__media image-with-text__media--{{ section.settings.height }} global-media-settings{% unless remove_color_classes %} gradient color-{{ section.settings.color_scheme }}{% else %} background-transparent{% endunless %}{% if section.settings.image_2 != blank %} media{% else %} image-with-text__media--placeholder placeholder{% endif %}{% if section.settings.image_2_behavior != 'none' %} animate--{{ section.settings.image_2_behavior }}{% endif %}'
               {% if section.settings.height == 'adapt' and section.settings.image_2 != blank %}
@@ -152,116 +155,114 @@
                 {{ 'detailed-apparel-1' | placeholder_svg_tag: 'placeholder-svg' }}
               {%- endif -%}
             </div>
-						</div>
-          {% endif %}
+          </div>
+        {% endif %}
 
-					<div class='image-with-text__text-item grid__item'>
-						<div
-							id='ImageWithText--{{ section.id }}'
-							class='image-with-text__content image-with-text__content--{{ section.settings.desktop_content_position }} image-with-text__content--desktop-{{ section.settings.desktop_content_alignment }} image-with-text__content--mobile-{{ section.settings.mobile_content_alignment }} image-with-text__content--{{ section.settings.height }} content-container{% unless remove_color_classes %} gradient color-{{ section.settings.color_scheme }}{% else %} background-transparent{% endunless %}'
-						>
-							<div class='image-with-text__content-inner {% if section.settings.image_2 == blank %}md:tw-max-w-[320px] tw-mx-auto{% endif %} tw-flex tw-flex-col tw-items-start tw-gap-4'>
-								{%- for block in section.blocks -%}
-									{% case block.type %}
-										{%- when 'heading' -%}
-											<div>
-												<h2
-												class='image-with-text__heading inline-richtext {{ block.settings.heading_size }} {}tw-border-b tw-border-b-black border-b-solid tw-inline-flex tw-items-center'
-												{{ block.shopify_attributes }}
-											>
-												{{ block.settings.heading }}
-											</h2>
-											</div>
-										{%- when 'caption' -%}
-											<p
-												class='image-with-text__text image-with-text__text--caption tw-text-[14px] tw-leading-[20px]'
-												{{ block.shopify_attributes }}
-											>
-												{{ block.settings.caption | escape }}
-											</p>
-										{%- when 'text' -%}
-											<div class='image-with-text__text rte image-with-text__text--caption tw-text-[14px] tw-leading-[20px]'>
-												{{ block.settings.text }}
-											</div>
-										{%- when 'button' -%}
-											{%- if block.settings.button_label != blank -%}
-												<button
-													type="button"
-													class='editorial-products__button !tw-inline-block tw-text-[12px] lg:tw-text-[14px] lg:tw-leading-[17px] tw-text-black tw-border-b tw-border-b-black tw-bg-transparent tw-border-0 tw-cursor-pointer'
-													{{ block.shopify_attributes }}
-												>
-													{{ block.settings.button_label | escape }}
-												</button>
-											{%- endif -%}
-										{%- when 'products' -%}
-											<div class='editorial-products tw-flex tw-flex-row tw-gap-4 tw-w-full'>
-												<button type="button" class="editorial-products__close tw-absolute tw-top-4 tw-right-4 tw-w-8 tw-h-8 tw-flex tw-items-center tw-justify-center tw-bg-transparent tw-border-0 tw-cursor-pointer tw-text-black hover:tw-opacity-70 tw-z-10">
-													<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-														<path d="M12 4L4 12M4 4L12 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-													</svg>
-												</button>
-												<div
-													class='product-grid-container tw-w-full'
-												>
-													<ul
-														data-id='{{ section.id }}'
-														class='
-															grid product-grid grid--3-col-tablet-down
-															grid--3-col-desktop lg:!tw-gap-x-[24px] !tw-px-0
-														'
-													>
-														{% if block.settings.product_1 != blank %}
-														<li class='grid__item'>
-															{% render 'card-product',
-																card_product: all_products[block.settings.product_1],
-																media_aspect_ratio: 'adapt',
-																show_secondary_image: true,
-																show_vendor: false,
-																show_rating: false,
-																show_swatches: true,
-																lazy_load: true,
-																quick_add: 'standard'
-															%}
-														</li>
-														{% endif %}
-														{% if block.settings.product_2 != blank %}
-															<li class='grid__item'>
-																{% render 'card-product',
-																	card_product: all_products[block.settings.product_2],
-																	media_aspect_ratio: 'adapt',
-																	show_secondary_image: true,
-																	show_vendor: false,
-																	show_rating: false,
-																	show_swatches: true,
-																	lazy_load: true,
-																	quick_add: 'standard'
-																%}
-															</li>
-															{% endif %}
-															{% if block.settings.product_3 != blank %}
-																<li class='grid__item'>
-																	{% render 'card-product',
-																		card_product: all_products[block.settings.product_3],
-																		media_aspect_ratio: 'adapt',
-																		show_secondary_image: true,
-																		show_vendor: false,
-																		show_rating: false,
-																		show_swatches: true,
-																		lazy_load: true,
-																		quick_add: 'standard'
-																	%}
-																</li>
-																{% endif %}
-													</ul>
-												</div>
-											</div>
-									{%- endcase -%}
-								{%- endfor -%}
-							</div>
-						</div>
-					</div>
+        <div class='image-with-text__text-item grid__item'>
+          <div
+            id='ImageWithText--{{ section.id }}'
+            class='image-with-text__content image-with-text__content--{{ section.settings.desktop_content_position }} image-with-text__content--desktop-{{ section.settings.desktop_content_alignment }} image-with-text__content--mobile-{{ section.settings.mobile_content_alignment }} image-with-text__content--{{ section.settings.height }} content-container{% unless remove_color_classes %} gradient color-{{ section.settings.color_scheme }}{% else %} background-transparent{% endunless %}'
+          >
+            <div class='image-with-text__content-inner {% if section.settings.image_2 == blank %}md:tw-max-w-[320px] tw-mx-auto{% endif %} tw-flex tw-flex-col tw-items-start tw-gap-4'>
+              {%- for block in section.blocks -%}
+                {% case block.type %}
+                  {%- when 'heading' -%}
+                    <div>
+                      <h2
+                        class='image-with-text__heading inline-richtext {{ block.settings.heading_size }} {}tw-border-b tw-border-b-black border-b-solid tw-inline-flex tw-items-center'
+                        {{ block.shopify_attributes }}
+                      >
+                        {{ block.settings.heading }}
+                      </h2>
+                    </div>
+                  {%- when 'caption' -%}
+                    <p
+                      class='image-with-text__text image-with-text__text--caption tw-text-[14px] tw-leading-[20px]'
+                      {{ block.shopify_attributes }}
+                    >
+                      {{ block.settings.caption | escape }}
+                    </p>
+                  {%- when 'text' -%}
+                    <div class='image-with-text__text rte image-with-text__text--caption tw-text-[14px] tw-leading-[20px]'>
+                      {{ block.settings.text }}
+                    </div>
+                  {%- when 'button' -%}
+                    {%- if block.settings.button_label != blank -%}
+                      <button
+                        type='button'
+                        class='editorial-products__button !tw-inline-block tw-text-[12px] lg:tw-text-[14px] lg:tw-leading-[17px] tw-text-black tw-border-b tw-border-b-black tw-bg-transparent tw-border-0 tw-cursor-pointer'
+                        {{ block.shopify_attributes }}
+                      >
+                        {{ block.settings.button_label | escape }}
+                      </button>
+                    {%- endif -%}
+                  {%- when 'products' -%}
+                    {%- comment -%} Store products data for overlay {%- endcomment -%}
+                    {%- assign editorial_products_data = block -%}
+                {%- endcase -%}
+              {%- endfor -%}
+            </div>
+          </div>
         </div>
       </div>
+
+      {%- comment -%} Editorial Products Overlay - positioned over 2nd and 3rd grid cells {%- endcomment -%}
+      {%- if editorial_products_data -%}
+        <div class='editorial-products tw-flex tw-flex-col tw-gap-4 tw-w-full' data-section-id='{{ section.id }}'>
+          <div class='product-grid-container tw-w-full'>
+            <ul
+              data-id='{{ section.id }}'
+              class='
+                grid product-grid grid--3-col-tablet-down
+                grid--3-col-desktop lg:!tw-gap-x-[24px] !tw-px-0
+              '
+            >
+              {% if editorial_products_data.settings.product_1 != blank %}
+                <li class='grid__item'>
+                  {% render 'card-product',
+                    card_product: all_products[editorial_products_data.settings.product_1],
+                    media_aspect_ratio: 'adapt',
+                    show_secondary_image: true,
+                    show_vendor: false,
+                    show_rating: false,
+                    show_swatches: true,
+                    lazy_load: true,
+                    quick_add: 'standard'
+                  %}
+                </li>
+              {% endif %}
+              {% if editorial_products_data.settings.product_2 != blank %}
+                <li class='grid__item'>
+                  {% render 'card-product',
+                    card_product: all_products[editorial_products_data.settings.product_2],
+                    media_aspect_ratio: 'adapt',
+                    show_secondary_image: true,
+                    show_vendor: false,
+                    show_rating: false,
+                    show_swatches: true,
+                    lazy_load: true,
+                    quick_add: 'standard'
+                  %}
+                </li>
+              {% endif %}
+              {% if editorial_products_data.settings.product_3 != blank %}
+                <li class='grid__item'>
+                  {% render 'card-product',
+                    card_product: all_products[editorial_products_data.settings.product_3],
+                    media_aspect_ratio: 'adapt',
+                    show_secondary_image: true,
+                    show_vendor: false,
+                    show_rating: false,
+                    show_swatches: true,
+                    lazy_load: true,
+                    quick_add: 'standard'
+                  %}
+                </li>
+              {% endif %}
+            </ul>
+          </div>
+        </div>
+      {%- endif -%}
     </div>
   </div>
 </div>
@@ -511,7 +512,7 @@
               "value": "tw-text-[18px] tw-leading-[28px]",
               "label": "t:sections.all.heading_size.options__2.label"
             },
-						{
+            {
               "value": "tw-text-[24px] tw-leading-[32px]",
               "label": "t:sections.all.heading_size.options__3.label"
             }
@@ -659,43 +660,39 @@
 {% endschema %}
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-  const editorialButtons = document.querySelectorAll('.editorial-products__button');
-  const closeButtons = document.querySelectorAll('.editorial-products__close');
-  
-  // Handle open button clicks
-  editorialButtons.forEach(function(button) {
-    button.addEventListener('click', function(e) {
-      e.preventDefault();
-      
-      // Find the closest editorial-products container
-      const section = button.closest('.image-with-text__content-inner');
-      const productsContainer = section.querySelector('.editorial-products');
-      
-      if (productsContainer) {
-        productsContainer.classList.add('show');
-        button.setAttribute('aria-expanded', 'true');
-      }
-    });
-  });
-  
-  // Handle close button clicks
-  closeButtons.forEach(function(closeButton) {
-    closeButton.addEventListener('click', function(e) {
-      e.preventDefault();
-      
-      // Find the closest editorial-products container
-      const productsContainer = closeButton.closest('.editorial-products');
-      const section = closeButton.closest('.image-with-text__content-inner');
-      const openButton = section.querySelector('.editorial-products__button');
-      
-      if (productsContainer) {
-        productsContainer.classList.remove('show');
-        if (openButton) {
-          openButton.setAttribute('aria-expanded', 'false');
+  document.addEventListener('DOMContentLoaded', function () {
+    const editorialButtons = document.querySelectorAll('.editorial-products__button');
+
+    // Handle toggle button clicks
+    editorialButtons.forEach(function (button) {
+      // Store the original button text
+      const originalText = button.textContent.trim();
+      const hideText = 'Hide Products';
+
+      button.addEventListener('click', function (e) {
+        e.preventDefault();
+
+        // Find the editorial-products container in the same section
+        const imageWithTextContainer = button.closest('.image-with-text');
+        const productsContainer = imageWithTextContainer.querySelector('.editorial-products');
+
+        if (productsContainer) {
+          // Toggle the overlay visibility
+          const isShowing = productsContainer.classList.contains('show');
+
+          if (isShowing) {
+            // Hide products
+            productsContainer.classList.remove('show');
+            button.textContent = originalText;
+            button.setAttribute('aria-expanded', 'false');
+          } else {
+            // Show products
+            productsContainer.classList.add('show');
+            button.textContent = hideText;
+            button.setAttribute('aria-expanded', 'true');
+          }
         }
-      }
+      });
     });
   });
-});
 </script>

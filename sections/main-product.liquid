@@ -1060,23 +1060,6 @@
 																	<div class="secondary tw-flex tw-flex-col tw-gap-3 tw-pt-[1px]">
 																		<!-- Color Swatches -->
 
-																		<!-- Debug: Only show for first product -->
-																		<div v-if="product_index === 10000" class="debug-info tw-text-[8px] tw-bg-yellow-100 tw-p-2 tw-mb-2 tw-border">
-																			<strong>🐛 Debug - Product {{ product.id }}:</strong><br/>
-																			<strong>Title:</strong> {{ product.title }}<br/>
-																			<strong>Standard Options:</strong> {{ (product.options || []).length }} options<br/>
-																			<div v-if="product.options && product.options.length > 0">
-																				<div v-for="(option, idx) in product.options">
-																					Option {{ idx }}: {{ option.name }} = {{ (option.values || []).join(', ') }}
-																				</div>
-																			</div>
-																			<strong>Product Keys:</strong> {{ Object.keys(product).join(', ') }}<br/>
-																			<strong>Colorsets JSON:</strong> {{ product?.metafields?.options?.colorsets }}<br/>
-
-																			<strong>Variants Count:</strong> {{ (product.variants || []).length }}<br/>
-																			<strong>Has Images:</strong> {{ (product.images || []).length }} images
-																		</div>
-
 																		<!-- Temporarily disabled colorsets until we understand the data structure -->
 																		<div v-if="false" class="rebuy-color-swatches">
 																			<!-- Will implement once we see the debug data -->

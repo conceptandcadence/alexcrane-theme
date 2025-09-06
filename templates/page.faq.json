@@ -11,8 +11,9 @@
   "sections": {
     "main": {
       "type": "main-page",
-      "disabled": true,
       "settings": {
+        "enable_title": true,
+        "enable_description": false,
         "padding_top": 28,
         "padding_bottom": 28
       }

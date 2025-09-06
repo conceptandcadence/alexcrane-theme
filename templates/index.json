@@ -46,8 +46,9 @@
       ],
       "settings": {
         "image": "shopify://shop_images/webhomepageaugust.jpg",
+        "mobile_image": "shopify://shop_images/mobilehomepageaugust.jpg",
         "image_overlay_opacity": 0,
-        "image_height": "large",
+        "image_height": "adapt",
         "desktop_content_position": "middle-right",
         "show_text_box": false,
         "desktop_content_alignment": "center",
@@ -198,6 +199,7 @@
     "video": {
       "type": "video",
       "settings": {
+        "overlay_title": "",
         "heading": "Sustainability",
         "description": "<p>This might come as a surprise, but most clothes are made from plastic. Our clothes are made from 100% natural, renewable materials—and that makes us pretty rare. Learn more about our sustainability efforts and what sets us apart.</p><p><a href=\"/pages/sustainability\" title=\"Sustainability\">Learn More</a></p>",
         "content_width": "third",

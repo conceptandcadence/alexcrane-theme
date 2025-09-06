@@ -1021,6 +1021,7 @@ html body #collection-nav {
 .plp-products-filter--trigger {
   position: relative;
   align-items: center;
+  width: 100%;
 }
 
 .plp-products-filter--trigger.open .icon-open,

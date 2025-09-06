@@ -122,7 +122,7 @@
       ],
       "name": "Product Materials",
       "settings": {
-        "title": "100% Natural Materials",
+        "title": "",
         "height": "adapt",
         "desktop_image_width": "medium",
         "layout": "image_first",

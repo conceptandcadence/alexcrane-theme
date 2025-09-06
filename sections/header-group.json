@@ -7,7 +7,7 @@
  * made to this file may be overwritten.
  * ------------------------------------------------------------
  */
- {
+{
   "name": "t:sections.header.name",
   "type": "header",
   "sections": {
@@ -33,7 +33,6 @@
         },
         "goal_gwp_product_qdBz4X": {
           "type": "goal_gwp_product",
-          "disabled": true,
           "settings": {
             "goal_value": 250,
             "goal_title": "Tote",
@@ -45,7 +44,6 @@
         },
         "goal_gwp_collection_D6WjwL": {
           "type": "goal_gwp_collection",
-          "disabled": true,
           "settings": {
             "goal_value": 350,
             "goal_title": "Free Gift",

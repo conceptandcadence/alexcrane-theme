@@ -1233,6 +1233,10 @@
 							"image_2": {
 									"label": "Second image"
 							},
+							"mobile_image": {
+									"label": "Mobile image",
+									"info": "This image will be displayed on mobile devices instead of the main image. The banner height will adapt to this image's aspect ratio on mobile."
+							},
 							"image_overlay_opacity": {
 									"label": "Image overlay opacity"
 							},

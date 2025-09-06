@@ -140,7 +140,7 @@ func product_card
       <div class="card__inner color-background-1 gradient ratio" style="--ratio-percent: {{ $ratio_percent }}%;">
         {{ if $primary_image?.src }}
           <div class="card__media">
-            <div class="media media--transparent media--hover-effect">
+            <div class="media media--transparent media--hover-effect" style="position: relative;">
               {{ if $hover_enabled }}
                 <img
                   srcset="{{ $hover_image?.srcset }}"
@@ -163,6 +163,14 @@ func product_card
                 width="533"
                 height="533"
               >
+              
+              <!-- Product Link Area -->
+              <a href="{{ $product?.url }}" 
+                class="product-link-area" 
+                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 998; cursor: pointer; display: block; background: transparent; pointer-events: auto;"
+                aria-label="View {{ $title }}">
+                &nbsp;
+              </a>
             </div>
           </div>
         {{ end }}
@@ -346,10 +354,18 @@ func autocomplete_product_card
                     </div>
                   </button>
                 </div>
+
+                <!-- Product Link Area (center 50% clickable area) -->
+                <a href="{{ $product?.url }}" 
+                  class="product-link-area" 
+                  style="position: absolute; top: 0; left: 25%; width: 50%; height: 100%; z-index: 998; cursor: pointer; display: block; background: transparent; pointer-events: auto;"
+                  aria-label="View {{ $title }}">
+                  &nbsp;
+                </a>
               </div>
             {{ else }}
               <!-- Single Image -->
-              <div class="media media--transparent media--hover-effect">
+              <div class="media media--transparent media--hover-effect" style="position: relative;">
                 <img
                   srcset="{{ $primary_image?.srcset }}"
                   src="{{ $primary_image?.src }}"
@@ -360,6 +376,14 @@ func autocomplete_product_card
                   width="533"
                   height="533"
                 >
+                
+                <!-- Product Link Area for single image -->
+                <a href="{{ $product?.url }}" 
+                  class="product-link-area" 
+                  style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 998; cursor: pointer; display: block; background: transparent; pointer-events: auto;"
+                  aria-label="View {{ $title }}">
+                  &nbsp;
+                </a>
               </div>
             {{ end }}
 

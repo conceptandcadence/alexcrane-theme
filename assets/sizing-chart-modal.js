@@ -3,7 +3,6 @@
   'use strict';
 
   function initSizingChartModal() {
-    console.log('Initializing sizing chart modal...');
     const modal = document.getElementById('sizing-chart-modal-overlay');
     const modalContent = document.querySelector('.sizing-chart-modal-content');
     const modalClose = document.querySelector('.sizing-chart-modal-close');
@@ -13,79 +12,27 @@
     );
     const sizingCharts = document.querySelectorAll('.sizing-chart');
 
-    console.log('Elements found:', {
-      modal: !!modal,
-      modalContent: !!modalContent,
-      modalClose: !!modalClose,
-      modalTitle: !!modalTitle,
-      sizingChartContainer: !!sizingChartContainer,
-      sizingCharts: sizingCharts.length,
-    });
-
-    // Debug: Check what sizing charts exist
-    console.log(
-      'Available sizing charts:',
-      Array.from(sizingCharts).map((chart) => ({
-        element: chart,
-        chartType: chart.dataset.chartType,
-        visible: chart.style.display !== 'none',
-      })),
-    );
-
-    // Debug: Check current product info if available
-    if (window.product) {
-      console.log('Current product tags:', window.product.tags);
-    }
-
-    if (!modal || !modalContent || !sizingChartContainer) {
-      console.log('Missing required modal elements, aborting initialization');
+    if (
+      !modal ||
+      !modalContent ||
+      !sizingChartContainer ||
+      sizingCharts.length === 0
+    )
       return;
-    }
-
-    if (sizingCharts.length === 0) {
-      console.log('⚠️ No sizing charts found - this might be because:');
-      console.log(
-        '1. Product is missing the correct tag (e.g., "size-acshirts")',
-      );
-      console.log('2. Size charts section is not configured properly');
-      console.log('3. Product has no matching size chart configuration');
-
-      // Still set up the event listener in case charts get loaded later
-      console.log('Setting up event listener anyway for dynamic content...');
-    } else {
-      console.log(
-        '✅ Found',
-        sizingCharts.length,
-        'sizing charts, proceeding with initialization',
-      );
-    }
-
-    console.log('All elements found, setting up event listeners...');
 
     // Handle opening size chart modal
     document.addEventListener('click', function (e) {
-      console.log('Click detected on:', e.target);
       if (
         e.target.matches('[data-sizing-chart-toggle]') ||
         e.target.closest('[data-sizing-chart-toggle]')
       ) {
-        console.log('Size chart toggle clicked!');
         e.preventDefault();
         const trigger = e.target.matches('[data-sizing-chart-toggle]')
           ? e.target
           : e.target.closest('[data-sizing-chart-toggle]');
 
-        // Re-query sizing charts in case they were loaded dynamically
-        const currentSizingCharts = document.querySelectorAll('.sizing-chart');
-
-        if (currentSizingCharts.length === 0) {
-          console.log('❌ No sizing charts available to display');
-          alert('Size chart is not available for this product.');
-          return;
-        }
-
         // Determine which chart to show based on product tags or default to first
-        let chartToShow = currentSizingCharts[0]; // Default to first chart
+        let chartToShow = sizingCharts[0]; // Default to first chart
 
         // Try to find specific chart based on current product context if available
         const chartType = trigger.dataset.chartType;
@@ -95,11 +42,6 @@
           );
           if (specificChart) chartToShow = specificChart;
         }
-
-        console.log(
-          '📏 Showing sizing chart:',
-          chartToShow.dataset.chartType || 'default',
-        );
 
         // Move the chart content to modal
         modalContent.appendChild(chartToShow);

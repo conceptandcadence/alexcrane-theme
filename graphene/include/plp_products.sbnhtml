@@ -199,47 +199,55 @@ $product_index = 0
 												</div>
 											</div>
 										
-										<!-- Swiper Carousel -->
-										<div class="card-slider swiper">
-											<div id="CardSlider-{{ $unique_id }}" class="card-media-list swiper-wrapper" role="list">
-												{{~ $slide_index = 0 ~}}
-												{{~ for $media in $media_array ~}}
-															{{~
-																$media_image_url = $media.src + "_165x"
-																$media_image = {
-																	src: $media_image_url,
-																	srcset: $media_image_url + " 165w, " + ($media.src + "_360x") + " 360w, " + ($media.src + "_533x") + " 533w"
-																}
-															~}}
-															<div class="card-media-item swiper-slide" data-media-id="{{ $unique_id }}-{{ $slide_index }}">
-														<div class="card-media-container" style="--ratio-percent: {{ $ratio_percent }}%;">
-															<img class="card-media-image" 
-																		srcset="{{ $media_image.srcset }}"
-																		src="{{ $media_image.src }}"
-																sizes="(min-width: 1200px) 300px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)"
-																alt="{{ $title }}"
-																width="533"
-																height="533"
-																loading="lazy">
-														</div>
+																			<!-- Swiper Carousel -->
+									<div class="card-slider swiper">
+										<div id="CardSlider-{{ $unique_id }}" class="card-media-list swiper-wrapper" role="list">
+											{{~ $slide_index = 0 ~}}
+											{{~ for $media in $media_array ~}}
+														{{~
+															$media_image_url = $media.src + "_165x"
+															$media_image = {
+																src: $media_image_url,
+																srcset: $media_image_url + " 165w, " + ($media.src + "_360x") + " 360w, " + ($media.src + "_533x") + " 533w"
+															}
+														~}}
+														<div class="card-media-item swiper-slide" data-media-id="{{ $unique_id }}-{{ $slide_index }}">
+													<div class="card-media-container" style="--ratio-percent: {{ $ratio_percent }}%;">
+														<img class="card-media-image" 
+																	srcset="{{ $media_image.srcset }}"
+																	src="{{ $media_image.src }}"
+															sizes="(min-width: 1200px) 300px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)"
+															alt="{{ $title }}"
+															width="533"
+															height="533"
+															loading="lazy">
 													</div>
-														{{~ $slide_index = $slide_index | math.plus 1 ~}}
-												{{~ end ~}}
-											</div> 
-											
-											<!-- Navigation Buttons -->
-											<div class="card-slider-buttons">
-												<button type="button" class="card-slider-button card-slider-button--prev" name="previous" aria-label="Previous slide">
-													<span class='svg-wrapper'>
-														<svg class="icon icon-caret" viewBox="0 0 10 6"><path fill="currentColor" fill-rule="evenodd" d="M9.354.646a.5.5 0 0 0-.708 0L5 4.293 1.354.646a.5.5 0 0 0-.708.708l4 4a.5.5 0 0 0 .708 0l4-4a.5.5 0 0 0 0-.708" clip-rule="evenodd"/></svg>
-													</span>
-												</button>
-												<button type="button" class="card-slider-button card-slider-button--next" name="next" aria-label="Next slide">
-													<span class='svg-wrapper'>
-														<svg class="icon icon-caret" viewBox="0 0 10 6"><path fill="currentColor" fill-rule="evenodd" d="M9.354.646a.5.5 0 0 0-.708 0L5 4.293 1.354.646a.5.5 0 0 0-.708.708l4 4a.5.5 0 0 0 .708 0l4-4a.5.5 0 0 0 0-.708" clip-rule="evenodd"/></svg>
-													</span>
-												</button>
-											</div>
+												</div>
+													{{~ $slide_index = $slide_index | math.plus 1 ~}}
+											{{~ end ~}}
+										</div> 
+										
+										<!-- Navigation Buttons -->
+										<div class="card-slider-buttons">
+											<button type="button" class="card-slider-button card-slider-button--prev" name="previous" aria-label="Previous slide">
+												<span class='svg-wrapper'>
+													<svg class="icon icon-caret" viewBox="0 0 10 6"><path fill="currentColor" fill-rule="evenodd" d="M9.354.646a.5.5 0 0 0-.708 0L5 4.293 1.354.646a.5.5 0 0 0-.708.708l4 4a.5.5 0 0 0 .708 0l4-4a.5.5 0 0 0 0-.708" clip-rule="evenodd"/></svg>
+												</span>
+											</button>
+											<button type="button" class="card-slider-button card-slider-button--next" name="next" aria-label="Next slide">
+												<span class='svg-wrapper'>
+													<svg class="icon icon-caret" viewBox="0 0 10 6"><path fill="currentColor" fill-rule="evenodd" d="M9.354.646a.5.5 0 0 0-.708 0L5 4.293 1.354.646a.5.5 0 0 0-.708.708l4 4a.5.5 0 0 0 .708 0l4-4a.5.5 0 0 0 0-.708" clip-rule="evenodd"/></svg>
+												</span>
+											</button>
+										</div>
+
+										<!-- Product Link Area (center 50% clickable area) -->
+										<a href="{{ $product?.url }}" 
+											class="product-link-area" 
+											style="position: absolute; top: 0; left: 25%; width: 50%; height: 100%; z-index: 998; cursor: pointer; display: block; background: transparent; pointer-events: auto;"
+											aria-label="View {{ $title }}">
+											&nbsp;
+										</a>
 
 											{{~ if $media_count > 2 ~}}
 												<!-- Dots Navigation -->
@@ -258,7 +266,7 @@ $product_index = 0
 									</div>
 								{{~ else ~}}
 											<!-- Single image display -->
-											<div class="media media--transparent media--hover-effect">
+											<div class="media media--transparent media--hover-effect" style="position: relative;">
 												{{~ if $hover_enabled ~}}
 													<img
 														srcset="{{ $hover_image?.srcset }}"
@@ -281,6 +289,14 @@ $product_index = 0
 													width="533"
 													height="533"
 												>
+												
+												<!-- Product Link Area for single image -->
+												<a href="{{ $product?.url }}" 
+													class="product-link-area" 
+													style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 998; cursor: pointer; display: block; background: transparent; pointer-events: auto;"
+													aria-label="View {{ $title }}">
+													&nbsp;
+												</a>
 											</div>
 																		{{~ end ~}}
 						</div>

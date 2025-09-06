@@ -46,11 +46,12 @@ class DetailsModal extends HTMLElement {
     document.body.addEventListener('click', this.onBodyClickEvent);
     document.body.classList.add('overflow-hidden');
 
-    // Enhanced search input focus handling
+    // Enhanced search input focus handling with multiple fallbacks
     const searchInput =
-      this.detailsContainer.querySelector('input:not([type="hidden"])') ||
       this.detailsContainer.querySelector('#Search') ||
-      this.detailsContainer.querySelector('.search__input');
+      this.detailsContainer.querySelector('.search__input') ||
+      this.detailsContainer.querySelector('input[type="search"]') ||
+      this.detailsContainer.querySelector('input:not([type="hidden"])');
 
     // Find focus container - fallback to detailsContainer if no tabindex element exists
     const focusContainer =
@@ -59,13 +60,22 @@ class DetailsModal extends HTMLElement {
 
     trapFocus(focusContainer, searchInput);
 
-    // Additional focus insurance for search modals
+    // Enhanced focus for search modals with better timing and error handling
     if (this.classList.contains('header__search') && searchInput) {
-      // Small delay to ensure modal is fully rendered
-      setTimeout(() => {
-        searchInput.focus();
-        searchInput.select(); // Optional: select all text for better UX
-      }, 50);
+      // Use requestAnimationFrame for better timing with DOM rendering
+      requestAnimationFrame(() => {
+        setTimeout(() => {
+          try {
+            searchInput.focus();
+            // Select all text for better UX when search has existing value
+            if (searchInput.value && searchInput.value.trim()) {
+              searchInput.select();
+            }
+          } catch (error) {
+            console.warn('Search input focus failed:', error);
+          }
+        }, 50);
+      });
     }
   }
 

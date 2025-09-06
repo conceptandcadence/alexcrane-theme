@@ -14,14 +14,24 @@
   }
 {%- endstyle -%}
 
-<div class="page-width page-width--narrow section-{{ section.id }}-padding">
-  <h1 class="main-page-title page-title h0{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
-    {{ page.title | escape }}
-  </h1>
-  <div class="rte{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
-    {{ page.content }}
-  </div>
+<div class='page-width page-width--narrow section-{{ section.id }}-padding'>
+  {% if section.settings.enable_title %}
+    <h1 class='main-page-title page-title tw-text-center h0{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}'>
+      {{ page.title | escape }}
+    </h1>
+  {% endif %}
+  {% if section.settings.enable_description %}
+    <div class='{{ section.settings.description_alignment }} rte{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}'>
+      {{ page.content }}
+    </div>
+  {% endif %}
 </div>
+
+<style>
+  .rte p {
+    margin-bottom: 1rem;
+  }
+</style>
 
 {% schema %}
 {
@@ -32,6 +42,38 @@
     {
       "type": "header",
       "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_title",
+      "label": "Enable Title",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_description",
+      "label": "Enable Description",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "description_alignment",
+      "options": [
+        {
+          "value": "tw-text-left",
+          "label": "t:settings_schema.global.settings.text_alignment.options__1.label"
+        },
+        {
+          "value": "tw-text-center",
+          "label": "t:settings_schema.global.settings.text_alignment.options__2.label"
+        },
+        {
+          "value": "tw-text-right",
+          "label": "t:settings_schema.global.settings.text_alignment.options__3.label"
+        }
+      ],
+      "default": "tw-text-left",
+      "label": "t:settings_schema.global.settings.text_alignment.label"
     },
     {
       "type": "range",

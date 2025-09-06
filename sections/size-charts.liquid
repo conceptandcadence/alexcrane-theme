@@ -36,502 +36,514 @@
                   </div>
                 </div>
               </div>
-
-              <div class='sizechart'>
-                <div class='sizechart__headers'>
-                  <div class='sizechart__header descriptor'>Size</div>
-                  {% if block.settings.size_1_title != blank %}
-                    <div class='sizechart__header'>{{ block.settings.size_1_title }}</div>
-                  {% endif %}
-                  {% if block.settings.size_2_title != blank %}
-                    <div class='sizechart__header'>{{ block.settings.size_2_title }}</div>
-                  {% endif %}
-                  {% if block.settings.size_3_title != blank %}
-                    <div class='sizechart__header'>{{ block.settings.size_3_title }}</div>
-                  {% endif %}
-                  {% if block.settings.size_4_title != blank %}
-                    <div class='sizechart__header'>{{ block.settings.size_4_title }}</div>
-                  {% endif %}
-                  {% if block.settings.size_5_title != blank %}
-                    <div class='sizechart__header'>{{ block.settings.size_5_title }}</div>
-                  {% endif %}
-                  {% if block.settings.size_6_title != blank %}
-                    <div class='sizechart__header'>{{ block.settings.size_6_title }}</div>
-                  {% endif %}
-                  {% if block.settings.size_7_title != blank %}
-                    <div class='sizechart__header'>{{ block.settings.size_7_title }}</div>
-                  {% endif %}
-                  {% if block.settings.size_8_title != blank %}
-                    <div class='sizechart__header'>{{ block.settings.size_8_title }}</div>
-                  {% endif %}
-                  {% if block.settings.size_9_title != blank %}
-                    <div class='sizechart__header'>{{ block.settings.size_9_title }}</div>
-                  {% endif %}
-                  {% if block.settings.size_10_title != blank %}
-                    <div class='sizechart__header'>{{ block.settings.size_10_title }}</div>
-                  {% endif %}
-                </div>
-                <div class='sizechart__measurement1'>
-                  {% if block.settings.measurement_1_title %}
-                    <div class='sizechart__measurement_header'>{{ block.settings.measurement_1_title }}</div>
-                  {% else %}
-                    <div class='sizechart__measurement_header toggle'>Measurement 1</div>
-                  {% endif %}
-
-                  {% if block.settings.size_1_m1_in != blank or block.settings.size_1_m1_icm != blank %}
-                    <div class='sizechart__measurement_value'>
-                      {% if block.settings.size_1_m1_in != blank -%}
-                        <span data-view='in'>{{ block.settings.size_1_m1_in }}</span>
-                      {%- endif %}
-                      {% if block.settings.size_1_m1_icm != blank -%}
-                        <span data-view='cm'>{{ block.settings.size_1_m1_icm }}</span>
-                      {%- endif %}
-                    </div>
-                  {% endif %}
-                  {% if block.settings.size_2_m1_in != blank or block.settings.size_2_m1_icm != blank %}
-                    <div class='sizechart__measurement_value'>
-                      {% if block.settings.size_2_m1_in != blank -%}
-                        <span data-view='in'>{{ block.settings.size_2_m1_in }}</span>
-                      {%- endif %}
-                      {% if block.settings.size_2_m1_icm != blank -%}
-                        <span data-view='cm'>{{ block.settings.size_2_m1_icm }}</span>
-                      {%- endif %}
-                    </div>
-                  {% endif %}
-                  {% if block.settings.size_3_m1_in != blank or block.settings.size_3_m1_icm != blank %}
-                    <div class='sizechart__measurement_value'>
-                      {% if block.settings.size_3_m1_in != blank -%}
-                        <span data-view='in'>{{ block.settings.size_3_m1_in }}</span>
-                      {%- endif %}
-                      {% if block.settings.size_3_m1_icm != blank -%}
-                        <span data-view='cm'>{{ block.settings.size_3_m1_icm }}</span>
-                      {%- endif %}
-                    </div>
-                  {% endif %}
-                  {% if block.settings.size_4_m1_in != blank or block.settings.size_4_m1_icm != blank %}
-                    <div class='sizechart__measurement_value'>
-                      {% if block.settings.size_4_m1_in != blank -%}
-                        <span data-view='in'>{{ block.settings.size_4_m1_in }}</span>
-                      {%- endif %}
-                      {% if block.settings.size_4_m1_icm != blank -%}
-                        <span data-view='cm'>{{ block.settings.size_4_m1_icm }}</span>
-                      {%- endif %}
-                    </div>
-                  {% endif %}
-                  {% if block.settings.size_5_m1_in != blank or block.settings.size_5_m1_icm != blank %}
-                    <div class='sizechart__measurement_value'>
-                      {% if block.settings.size_5_m1_in != blank -%}
-                        <span data-view='in'>{{ block.settings.size_5_m1_in }}</span>
-                      {%- endif %}
-                      {% if block.settings.size_5_m1_icm != blank -%}
-                        <span data-view='cm'>{{ block.settings.size_5_m1_icm }}</span>
-                      {%- endif %}
-                    </div>
-                  {% endif %}
-                  {% if block.settings.size_6_m1_in != blank or block.settings.size_6_m1_icm != blank %}
-                    <div class='sizechart__measurement_value'>
-                      {% if block.settings.size_6_m1_in != blank -%}
-                        <span data-view='in'>{{ block.settings.size_6_m1_in }}</span>
-                      {%- endif %}
-                      {% if block.settings.size_6_m1_icm != blank -%}
-                        <span data-view='cm'>{{ block.settings.size_6_m1_icm }}</span>
-                      {%- endif %}
-                    </div>
-                  {% endif %}
-                  {% if block.settings.size_7_m1_in != blank or block.settings.size_7_m1_icm != blank %}
-                    <div class='sizechart__measurement_value'>
-                      {% if block.settings.size_7_m1_in != blank -%}
-                        <span data-view='in'>{{ block.settings.size_7_m1_in }}</span>
-                      {%- endif %}
-                      {% if block.settings.size_7_m1_icm != blank -%}
-                        <span data-view='cm'>{{ block.settings.size_7_m1_icm }}</span>
-                      {%- endif %}
-                    </div>
-                  {% endif %}
-                  {% if block.settings.size_8_m1_in != blank or block.settings.size_8_m1_icm != blank %}
-                    <div class='sizechart__measurement_value'>
-                      {% if block.settings.size_8_m1_in != blank -%}
-                        <span data-view='in'>{{ block.settings.size_8_m1_in }}</span>
-                      {%- endif %}
-                      {% if block.settings.size_8_m1_icm != blank -%}
-                        <span data-view='cm'>{{ block.settings.size_8_m1_icm }}</span>
-                      {%- endif %}
-                    </div>
-                  {% endif %}
-                  {% if block.settings.size_9_m1_in != blank or block.settings.size_9_m1_icm != blank %}
-                    <div class='sizechart__measurement_value'>
-                      {% if block.settings.size_9_m1_in != blank -%}
-                        <span data-view='in'>{{ block.settings.size_9_m1_in }}</span>
-                      {%- endif %}
-                      {% if block.settings.size_9_m1_icm != blank -%}
-                        <span data-view='cm'>{{ block.settings.size_9_m1_icm }}</span>
-                      {%- endif %}
-                    </div>
-                  {% endif %}
-                  {% if block.settings.size_10_m1_in != blank or block.settings.size_10_m1_icm != blank %}
-                    <div class='sizechart__measurement_value'>
-                      {% if block.settings.size_10_m1_in != blank -%}
-                        <span data-view='in'>{{ block.settings.size_10_m1_in }}</span>
-                      {%- endif %}
-                      {% if block.settings.size_10_m1_icm != blank -%}
-                        <span data-view='cm'>{{ block.settings.size_10_m1_icm }}</span>
-                      {%- endif %}
-                    </div>
-                  {% endif %}
-                </div>
-                {% if block.settings.measurement_2_title != blank %}
-                  <div class='sizechart__measurement2'>
-                    {% if block.settings.measurement_2_title %}
-                      <div class='sizechart__measurement_header'>{{ block.settings.measurement_2_title }}</div>
+              <div class='sizechart_track'>
+                <div class='sizechart'>
+                  <div class='sizechart__headers'>
+                    <div class='sizechart__header descriptor'>Size</div>
+                    {% if block.settings.size_1_title != blank %}
+                      <div class='sizechart__header'>{{ block.settings.size_1_title }}</div>
+                    {% endif %}
+                    {% if block.settings.size_2_title != blank %}
+                      <div class='sizechart__header'>{{ block.settings.size_2_title }}</div>
+                    {% endif %}
+                    {% if block.settings.size_3_title != blank %}
+                      <div class='sizechart__header'>{{ block.settings.size_3_title }}</div>
+                    {% endif %}
+                    {% if block.settings.size_4_title != blank %}
+                      <div class='sizechart__header'>{{ block.settings.size_4_title }}</div>
+                    {% endif %}
+                    {% if block.settings.size_5_title != blank %}
+                      <div class='sizechart__header'>{{ block.settings.size_5_title }}</div>
+                    {% endif %}
+                    {% if block.settings.size_6_title != blank %}
+                      <div class='sizechart__header'>{{ block.settings.size_6_title }}</div>
+                    {% endif %}
+                    {% if block.settings.size_7_title != blank %}
+                      <div class='sizechart__header'>{{ block.settings.size_7_title }}</div>
+                    {% endif %}
+                    {% if block.settings.size_8_title != blank %}
+                      <div class='sizechart__header'>{{ block.settings.size_8_title }}</div>
+                    {% endif %}
+                    {% if block.settings.size_9_title != blank %}
+                      <div class='sizechart__header'>{{ block.settings.size_9_title }}</div>
+                    {% endif %}
+                    {% if block.settings.size_10_title != blank %}
+                      <div class='sizechart__header'>{{ block.settings.size_10_title }}</div>
+                    {% endif %}
+                  </div>
+                  <div class='sizechart__measurement1'>
+                    {% if block.settings.measurement_1_title %}
+                      <div class='sizechart__measurement_header'>{{ block.settings.measurement_1_title }}</div>
                     {% else %}
-                      <div class='sizechart__measurement_header toggle'>Measurement 2</div>
+                      <div class='sizechart__measurement_header toggle'>Measurement 1</div>
                     {% endif %}
 
-                    {% if block.settings.size_1_m2_in != blank or block.settings.size_1_m2_icm != blank %}
+                    {% if block.settings.size_1_m1_in != blank or block.settings.size_1_m1_icm != blank %}
                       <div class='sizechart__measurement_value'>
-                        {% if block.settings.size_1_m2_in != blank -%}
-                          <span data-view='in'>{{ block.settings.size_1_m2_in }}</span>
+                        {% if block.settings.size_1_m1_in != blank -%}
+                          <span data-view='in'>{{ block.settings.size_1_m1_in }}</span>
                         {%- endif %}
-                        {% if block.settings.size_1_m2_icm != blank -%}
-                          <span data-view='cm'>{{ block.settings.size_1_m2_icm }}</span>
+                        {% if block.settings.size_1_m1_icm != blank -%}
+                          <span data-view='cm'>{{ block.settings.size_1_m1_icm }}</span>
                         {%- endif %}
                       </div>
                     {% endif %}
-                    {% if block.settings.size_2_m2_in != blank or block.settings.size_2_m2_icm != blank %}
+                    {% if block.settings.size_2_m1_in != blank or block.settings.size_2_m1_icm != blank %}
                       <div class='sizechart__measurement_value'>
-                        {% if block.settings.size_2_m2_in != blank -%}
-                          <span data-view='in'>{{ block.settings.size_2_m2_in }}</span>
+                        {% if block.settings.size_2_m1_in != blank -%}
+                          <span data-view='in'>{{ block.settings.size_2_m1_in }}</span>
                         {%- endif %}
-                        {% if block.settings.size_2_m2_icm != blank -%}
-                          <span data-view='cm'>{{ block.settings.size_2_m2_icm }}</span>
+                        {% if block.settings.size_2_m1_icm != blank -%}
+                          <span data-view='cm'>{{ block.settings.size_2_m1_icm }}</span>
                         {%- endif %}
                       </div>
                     {% endif %}
-                    {% if block.settings.size_3_m2_in != blank or block.settings.size_3_m2_icm != blank %}
+                    {% if block.settings.size_3_m1_in != blank or block.settings.size_3_m1_icm != blank %}
                       <div class='sizechart__measurement_value'>
-                        {% if block.settings.size_3_m2_in != blank -%}
-                          <span data-view='in'>{{ block.settings.size_3_m2_in }}</span>
+                        {% if block.settings.size_3_m1_in != blank -%}
+                          <span data-view='in'>{{ block.settings.size_3_m1_in }}</span>
                         {%- endif %}
-                        {% if block.settings.size_3_m2_icm != blank -%}
-                          <span data-view='cm'>{{ block.settings.size_3_m2_icm }}</span>
+                        {% if block.settings.size_3_m1_icm != blank -%}
+                          <span data-view='cm'>{{ block.settings.size_3_m1_icm }}</span>
                         {%- endif %}
                       </div>
                     {% endif %}
-                    {% if block.settings.size_4_m2_in != blank or block.settings.size_4_m2_icm != blank %}
+                    {% if block.settings.size_4_m1_in != blank or block.settings.size_4_m1_icm != blank %}
                       <div class='sizechart__measurement_value'>
-                        {% if block.settings.size_4_m2_in != blank -%}
-                          <span data-view='in'>{{ block.settings.size_4_m2_in }}</span>
+                        {% if block.settings.size_4_m1_in != blank -%}
+                          <span data-view='in'>{{ block.settings.size_4_m1_in }}</span>
                         {%- endif %}
-                        {% if block.settings.size_4_m2_icm != blank -%}
-                          <span data-view='cm'>{{ block.settings.size_4_m2_icm }}</span>
+                        {% if block.settings.size_4_m1_icm != blank -%}
+                          <span data-view='cm'>{{ block.settings.size_4_m1_icm }}</span>
                         {%- endif %}
                       </div>
                     {% endif %}
-                    {% if block.settings.size_5_m2_in != blank or block.settings.size_5_m2_icm != blank %}
+                    {% if block.settings.size_5_m1_in != blank or block.settings.size_5_m1_icm != blank %}
                       <div class='sizechart__measurement_value'>
-                        {% if block.settings.size_5_m2_in != blank -%}
-                          <span data-view='in'>{{ block.settings.size_5_m2_in }}</span>
+                        {% if block.settings.size_5_m1_in != blank -%}
+                          <span data-view='in'>{{ block.settings.size_5_m1_in }}</span>
                         {%- endif %}
-                        {% if block.settings.size_5_m2_icm != blank -%}
-                          <span data-view='cm'>{{ block.settings.size_5_m2_icm }}</span>
+                        {% if block.settings.size_5_m1_icm != blank -%}
+                          <span data-view='cm'>{{ block.settings.size_5_m1_icm }}</span>
                         {%- endif %}
                       </div>
                     {% endif %}
-                    {% if block.settings.size_6_m2_in != blank or block.settings.size_6_m2_icm != blank %}
+                    {% if block.settings.size_6_m1_in != blank or block.settings.size_6_m1_icm != blank %}
                       <div class='sizechart__measurement_value'>
-                        {% if block.settings.size_6_m2_in != blank -%}
-                          <span data-view='in'>{{ block.settings.size_6_m2_in }}</span>
+                        {% if block.settings.size_6_m1_in != blank -%}
+                          <span data-view='in'>{{ block.settings.size_6_m1_in }}</span>
                         {%- endif %}
-                        {% if block.settings.size_6_m2_icm != blank -%}
-                          <span data-view='cm'>{{ block.settings.size_6_m2_icm }}</span>
+                        {% if block.settings.size_6_m1_icm != blank -%}
+                          <span data-view='cm'>{{ block.settings.size_6_m1_icm }}</span>
                         {%- endif %}
                       </div>
                     {% endif %}
-                    {% if block.settings.size_7_m2_in != blank or block.settings.size_7_m2_icm != blank %}
+                    {% if block.settings.size_7_m1_in != blank or block.settings.size_7_m1_icm != blank %}
                       <div class='sizechart__measurement_value'>
-                        {% if block.settings.size_7_m2_in != blank -%}
-                          <span data-view='in'>{{ block.settings.size_7_m2_in }}</span>
+                        {% if block.settings.size_7_m1_in != blank -%}
+                          <span data-view='in'>{{ block.settings.size_7_m1_in }}</span>
                         {%- endif %}
-                        {% if block.settings.size_7_m2_icm != blank -%}
-                          <span data-view='cm'>{{ block.settings.size_7_m2_icm }}</span>
+                        {% if block.settings.size_7_m1_icm != blank -%}
+                          <span data-view='cm'>{{ block.settings.size_7_m1_icm }}</span>
                         {%- endif %}
                       </div>
                     {% endif %}
-                    {% if block.settings.size_8_m2_in != blank or block.settings.size_8_m2_icm != blank %}
+                    {% if block.settings.size_8_m1_in != blank or block.settings.size_8_m1_icm != blank %}
                       <div class='sizechart__measurement_value'>
-                        {% if block.settings.size_8_m2_in != blank -%}
-                          <span data-view='in'>{{ block.settings.size_8_m2_in }}</span>
+                        {% if block.settings.size_8_m1_in != blank -%}
+                          <span data-view='in'>{{ block.settings.size_8_m1_in }}</span>
                         {%- endif %}
-                        {% if block.settings.size_8_m2_icm != blank -%}
-                          <span data-view='cm'>{{ block.settings.size_8_m2_icm }}</span>
+                        {% if block.settings.size_8_m1_icm != blank -%}
+                          <span data-view='cm'>{{ block.settings.size_8_m1_icm }}</span>
                         {%- endif %}
                       </div>
                     {% endif %}
-                    {% if block.settings.size_9_m2_in != blank or block.settings.size_9_m2_icm != blank %}
+                    {% if block.settings.size_9_m1_in != blank or block.settings.size_9_m1_icm != blank %}
                       <div class='sizechart__measurement_value'>
-                        {% if block.settings.size_9_m2_in != blank -%}
-                          <span data-view='in'>{{ block.settings.size_9_m2_in }}</span>
+                        {% if block.settings.size_9_m1_in != blank -%}
+                          <span data-view='in'>{{ block.settings.size_9_m1_in }}</span>
                         {%- endif %}
-                        {% if block.settings.size_9_m2_icm != blank -%}
-                          <span data-view='cm'>{{ block.settings.size_9_m2_icm }}</span>
+                        {% if block.settings.size_9_m1_icm != blank -%}
+                          <span data-view='cm'>{{ block.settings.size_9_m1_icm }}</span>
                         {%- endif %}
                       </div>
                     {% endif %}
-                    {% if block.settings.size_10_m2_in != blank or block.settings.size_10_m2_icm != blank %}
+                    {% if block.settings.size_10_m1_in != blank or block.settings.size_10_m1_icm != blank %}
                       <div class='sizechart__measurement_value'>
-                        {% if block.settings.size_10_m2_in != blank -%}
-                          <span data-view='in'>{{ block.settings.size_10_m2_in }}</span>
+                        {% if block.settings.size_10_m1_in != blank -%}
+                          <span data-view='in'>{{ block.settings.size_10_m1_in }}</span>
                         {%- endif %}
-                        {% if block.settings.size_10_m2_icm != blank -%}
-                          <span data-view='cm'>{{ block.settings.size_10_m2_icm }}</span>
+                        {% if block.settings.size_10_m1_icm != blank -%}
+                          <span data-view='cm'>{{ block.settings.size_10_m1_icm }}</span>
                         {%- endif %}
                       </div>
                     {% endif %}
                   </div>
-                {% endif %}
-                {% if block.settings.measurement_3_title != blank %}
-                  <div class='sizechart__measurement3'>
-                    {% if block.settings.measurement_3_title %}
-                      <div class='sizechart__measurement_header'>{{ block.settings.measurement_3_title }}</div>
-                    {% endif %}
+                  {% if block.settings.measurement_2_title != blank %}
+                    <div class='sizechart__measurement2'>
+                      {% if block.settings.measurement_2_title %}
+                        <div class='sizechart__measurement_header'>{{ block.settings.measurement_2_title }}</div>
+                      {% else %}
+                        <div class='sizechart__measurement_header toggle'>Measurement 2</div>
+                      {% endif %}
 
-                    {% if block.settings.size_1_m3_in != blank or block.settings.size_1_m3_icm != blank %}
-                      <div class='sizechart__measurement_value'>
-                        {% if block.settings.size_1_m3_in != blank -%}
-                          <span data-view='in'>{{ block.settings.size_1_m3_in }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_1_m3_icm != blank -%}
-                          <span data-view='cm'>{{ block.settings.size_1_m3_icm }}</span>
-                        {%- endif %}
-                      </div>
-                    {% endif %}
-                    {% if block.settings.size_2_m3_in != blank or block.settings.size_2_m3_icm != blank %}
-                      <div class='sizechart__measurement_value'>
-                        {% if block.settings.size_2_m3_in != blank -%}
-                          <span data-view='in'>{{ block.settings.size_2_m3_in }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_2_m3_icm != blank -%}
-                          <span data-view='cm'>{{ block.settings.size_2_m3_icm }}</span>
-                        {%- endif %}
-                      </div>
-                    {% endif %}
-                    {% if block.settings.size_3_m3_in != blank or block.settings.size_3_m3_icm != blank %}
-                      <div class='sizechart__measurement_value'>
-                        {% if block.settings.size_3_m3_in != blank -%}
-                          <span data-view='in'>{{ block.settings.size_3_m3_in }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_3_m3_icm != blank -%}
-                          <span data-view='cm'>{{ block.settings.size_3_m3_icm }}</span>
-                        {%- endif %}
-                      </div>
-                    {% endif %}
-                    {% if block.settings.size_4_m3_in != blank or block.settings.size_4_m3_icm != blank %}
-                      <div class='sizechart__measurement_value'>
-                        {% if block.settings.size_4_m3_in != blank -%}
-                          <span data-view='in'>{{ block.settings.size_4_m3_in }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_4_m3_icm != blank -%}
-                          <span data-view='cm'>{{ block.settings.size_4_m3_icm }}</span>
-                        {%- endif %}
-                      </div>
-                    {% endif %}
-                    {% if block.settings.size_5_m3_in != blank or block.settings.size_5_m3_icm != blank %}
-                      <div class='sizechart__measurement_value'>
-                        {% if block.settings.size_5_m3_in != blank -%}
-                          <span data-view='in'>{{ block.settings.size_5_m3_in }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_5_m3_icm != blank -%}
-                          <span data-view='cm'>{{ block.settings.size_5_m3_icm }}</span>
-                        {%- endif %}
-                      </div>
-                    {% endif %}
-                    {% if block.settings.size_6_m3_in != blank or block.settings.size_6_m3_icm != blank %}
-                      <div class='sizechart__measurement_value'>
-                        {% if block.settings.size_6_m3_in != blank -%}
-                          <span data-view='in'>{{ block.settings.size_6_m3_in }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_6_m3_icm != blank -%}
-                          <span data-view='cm'>{{ block.settings.size_6_m3_icm }}</span>
-                        {%- endif %}
-                      </div>
-                    {% endif %}
-                    {% if block.settings.size_7_m3_in != blank or block.settings.size_7_m3_icm != blank %}
-                      <div class='sizechart__measurement_value'>
-                        {% if block.settings.size_7_m3_in != blank -%}
-                          <span data-view='in'>{{ block.settings.size_7_m3_in }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_7_m3_icm != blank -%}
-                          <span data-view='cm'>{{ block.settings.size_7_m3_icm }}</span>
-                        {%- endif %}
-                      </div>
-                    {% endif %}
-                    {% if block.settings.size_8_m3_in != blank or block.settings.size_8_m3_icm != blank %}
-                      <div class='sizechart__measurement_value'>
-                        {% if block.settings.size_8_m3_in != blank -%}
-                          <span data-view='in'>{{ block.settings.size_8_m3_in }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_8_m3_icm != blank -%}
-                          <span data-view='cm'>{{ block.settings.size_8_m3_icm }}</span>
-                        {%- endif %}
-                      </div>
-                    {% endif %}
-                    {% if block.settings.size_9_m3_in != blank or block.settings.size_9_m3_icm != blank %}
-                      <div class='sizechart__measurement_value'>
-                        {% if block.settings.size_9_m3_in != blank -%}
-                          <span data-view='in'>{{ block.settings.size_9_m3_in }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_9_m3_icm != blank -%}
-                          <span data-view='cm'>{{ block.settings.size_9_m3_icm }}</span>
-                        {%- endif %}
-                      </div>
-                    {% endif %}
-                    {% if block.settings.size_10_m3_in != blank or block.settings.size_10_m3_icm != blank %}
-                      <div class='sizechart__measurement_value'>
-                        {% if block.settings.size_10_m3_in != blank -%}
-                          <span data-view='in'>{{ block.settings.size_10_m3_in }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_10_m3_icm != blank -%}
-                          <span data-view='cm'>{{ block.settings.size_10_m3_icm }}</span>
-                        {%- endif %}
-                      </div>
-                    {% endif %}
+                      {% if block.settings.size_1_m2_in != blank or block.settings.size_1_m2_icm != blank %}
+                        <div class='sizechart__measurement_value'>
+                          {% if block.settings.size_1_m2_in != blank -%}
+                            <span data-view='in'>{{ block.settings.size_1_m2_in }}</span>
+                          {%- endif %}
+                          {% if block.settings.size_1_m2_icm != blank -%}
+                            <span data-view='cm'>{{ block.settings.size_1_m2_icm }}</span>
+                          {%- endif %}
+                        </div>
+                      {% endif %}
+                      {% if block.settings.size_2_m2_in != blank or block.settings.size_2_m2_icm != blank %}
+                        <div class='sizechart__measurement_value'>
+                          {% if block.settings.size_2_m2_in != blank -%}
+                            <span data-view='in'>{{ block.settings.size_2_m2_in }}</span>
+                          {%- endif %}
+                          {% if block.settings.size_2_m2_icm != blank -%}
+                            <span data-view='cm'>{{ block.settings.size_2_m2_icm }}</span>
+                          {%- endif %}
+                        </div>
+                      {% endif %}
+                      {% if block.settings.size_3_m2_in != blank or block.settings.size_3_m2_icm != blank %}
+                        <div class='sizechart__measurement_value'>
+                          {% if block.settings.size_3_m2_in != blank -%}
+                            <span data-view='in'>{{ block.settings.size_3_m2_in }}</span>
+                          {%- endif %}
+                          {% if block.settings.size_3_m2_icm != blank -%}
+                            <span data-view='cm'>{{ block.settings.size_3_m2_icm }}</span>
+                          {%- endif %}
+                        </div>
+                      {% endif %}
+                      {% if block.settings.size_4_m2_in != blank or block.settings.size_4_m2_icm != blank %}
+                        <div class='sizechart__measurement_value'>
+                          {% if block.settings.size_4_m2_in != blank -%}
+                            <span data-view='in'>{{ block.settings.size_4_m2_in }}</span>
+                          {%- endif %}
+                          {% if block.settings.size_4_m2_icm != blank -%}
+                            <span data-view='cm'>{{ block.settings.size_4_m2_icm }}</span>
+                          {%- endif %}
+                        </div>
+                      {% endif %}
+                      {% if block.settings.size_5_m2_in != blank or block.settings.size_5_m2_icm != blank %}
+                        <div class='sizechart__measurement_value'>
+                          {% if block.settings.size_5_m2_in != blank -%}
+                            <span data-view='in'>{{ block.settings.size_5_m2_in }}</span>
+                          {%- endif %}
+                          {% if block.settings.size_5_m2_icm != blank -%}
+                            <span data-view='cm'>{{ block.settings.size_5_m2_icm }}</span>
+                          {%- endif %}
+                        </div>
+                      {% endif %}
+                      {% if block.settings.size_6_m2_in != blank or block.settings.size_6_m2_icm != blank %}
+                        <div class='sizechart__measurement_value'>
+                          {% if block.settings.size_6_m2_in != blank -%}
+                            <span data-view='in'>{{ block.settings.size_6_m2_in }}</span>
+                          {%- endif %}
+                          {% if block.settings.size_6_m2_icm != blank -%}
+                            <span data-view='cm'>{{ block.settings.size_6_m2_icm }}</span>
+                          {%- endif %}
+                        </div>
+                      {% endif %}
+                      {% if block.settings.size_7_m2_in != blank or block.settings.size_7_m2_icm != blank %}
+                        <div class='sizechart__measurement_value'>
+                          {% if block.settings.size_7_m2_in != blank -%}
+                            <span data-view='in'>{{ block.settings.size_7_m2_in }}</span>
+                          {%- endif %}
+                          {% if block.settings.size_7_m2_icm != blank -%}
+                            <span data-view='cm'>{{ block.settings.size_7_m2_icm }}</span>
+                          {%- endif %}
+                        </div>
+                      {% endif %}
+                      {% if block.settings.size_8_m2_in != blank or block.settings.size_8_m2_icm != blank %}
+                        <div class='sizechart__measurement_value'>
+                          {% if block.settings.size_8_m2_in != blank -%}
+                            <span data-view='in'>{{ block.settings.size_8_m2_in }}</span>
+                          {%- endif %}
+                          {% if block.settings.size_8_m2_icm != blank -%}
+                            <span data-view='cm'>{{ block.settings.size_8_m2_icm }}</span>
+                          {%- endif %}
+                        </div>
+                      {% endif %}
+                      {% if block.settings.size_9_m2_in != blank or block.settings.size_9_m2_icm != blank %}
+                        <div class='sizechart__measurement_value'>
+                          {% if block.settings.size_9_m2_in != blank -%}
+                            <span data-view='in'>{{ block.settings.size_9_m2_in }}</span>
+                          {%- endif %}
+                          {% if block.settings.size_9_m2_icm != blank -%}
+                            <span data-view='cm'>{{ block.settings.size_9_m2_icm }}</span>
+                          {%- endif %}
+                        </div>
+                      {% endif %}
+                      {% if block.settings.size_10_m2_in != blank or block.settings.size_10_m2_icm != blank %}
+                        <div class='sizechart__measurement_value'>
+                          {% if block.settings.size_10_m2_in != blank -%}
+                            <span data-view='in'>{{ block.settings.size_10_m2_in }}</span>
+                          {%- endif %}
+                          {% if block.settings.size_10_m2_icm != blank -%}
+                            <span data-view='cm'>{{ block.settings.size_10_m2_icm }}</span>
+                          {%- endif %}
+                        </div>
+                      {% endif %}
+                    </div>
+                  {% endif %}
+                  {% if block.settings.measurement_3_title != blank %}
+                    <div class='sizechart__measurement3'>
+                      {% if block.settings.measurement_3_title %}
+                        <div class='sizechart__measurement_header'>{{ block.settings.measurement_3_title }}</div>
+                      {% endif %}
+
+                      {% if block.settings.size_1_m3_in != blank or block.settings.size_1_m3_icm != blank %}
+                        <div class='sizechart__measurement_value'>
+                          {% if block.settings.size_1_m3_in != blank -%}
+                            <span data-view='in'>{{ block.settings.size_1_m3_in }}</span>
+                          {%- endif %}
+                          {% if block.settings.size_1_m3_icm != blank -%}
+                            <span data-view='cm'>{{ block.settings.size_1_m3_icm }}</span>
+                          {%- endif %}
+                        </div>
+                      {% endif %}
+                      {% if block.settings.size_2_m3_in != blank or block.settings.size_2_m3_icm != blank %}
+                        <div class='sizechart__measurement_value'>
+                          {% if block.settings.size_2_m3_in != blank -%}
+                            <span data-view='in'>{{ block.settings.size_2_m3_in }}</span>
+                          {%- endif %}
+                          {% if block.settings.size_2_m3_icm != blank -%}
+                            <span data-view='cm'>{{ block.settings.size_2_m3_icm }}</span>
+                          {%- endif %}
+                        </div>
+                      {% endif %}
+                      {% if block.settings.size_3_m3_in != blank or block.settings.size_3_m3_icm != blank %}
+                        <div class='sizechart__measurement_value'>
+                          {% if block.settings.size_3_m3_in != blank -%}
+                            <span data-view='in'>{{ block.settings.size_3_m3_in }}</span>
+                          {%- endif %}
+                          {% if block.settings.size_3_m3_icm != blank -%}
+                            <span data-view='cm'>{{ block.settings.size_3_m3_icm }}</span>
+                          {%- endif %}
+                        </div>
+                      {% endif %}
+                      {% if block.settings.size_4_m3_in != blank or block.settings.size_4_m3_icm != blank %}
+                        <div class='sizechart__measurement_value'>
+                          {% if block.settings.size_4_m3_in != blank -%}
+                            <span data-view='in'>{{ block.settings.size_4_m3_in }}</span>
+                          {%- endif %}
+                          {% if block.settings.size_4_m3_icm != blank -%}
+                            <span data-view='cm'>{{ block.settings.size_4_m3_icm }}</span>
+                          {%- endif %}
+                        </div>
+                      {% endif %}
+                      {% if block.settings.size_5_m3_in != blank or block.settings.size_5_m3_icm != blank %}
+                        <div class='sizechart__measurement_value'>
+                          {% if block.settings.size_5_m3_in != blank -%}
+                            <span data-view='in'>{{ block.settings.size_5_m3_in }}</span>
+                          {%- endif %}
+                          {% if block.settings.size_5_m3_icm != blank -%}
+                            <span data-view='cm'>{{ block.settings.size_5_m3_icm }}</span>
+                          {%- endif %}
+                        </div>
+                      {% endif %}
+                      {% if block.settings.size_6_m3_in != blank or block.settings.size_6_m3_icm != blank %}
+                        <div class='sizechart__measurement_value'>
+                          {% if block.settings.size_6_m3_in != blank -%}
+                            <span data-view='in'>{{ block.settings.size_6_m3_in }}</span>
+                          {%- endif %}
+                          {% if block.settings.size_6_m3_icm != blank -%}
+                            <span data-view='cm'>{{ block.settings.size_6_m3_icm }}</span>
+                          {%- endif %}
+                        </div>
+                      {% endif %}
+                      {% if block.settings.size_7_m3_in != blank or block.settings.size_7_m3_icm != blank %}
+                        <div class='sizechart__measurement_value'>
+                          {% if block.settings.size_7_m3_in != blank -%}
+                            <span data-view='in'>{{ block.settings.size_7_m3_in }}</span>
+                          {%- endif %}
+                          {% if block.settings.size_7_m3_icm != blank -%}
+                            <span data-view='cm'>{{ block.settings.size_7_m3_icm }}</span>
+                          {%- endif %}
+                        </div>
+                      {% endif %}
+                      {% if block.settings.size_8_m3_in != blank or block.settings.size_8_m3_icm != blank %}
+                        <div class='sizechart__measurement_value'>
+                          {% if block.settings.size_8_m3_in != blank -%}
+                            <span data-view='in'>{{ block.settings.size_8_m3_in }}</span>
+                          {%- endif %}
+                          {% if block.settings.size_8_m3_icm != blank -%}
+                            <span data-view='cm'>{{ block.settings.size_8_m3_icm }}</span>
+                          {%- endif %}
+                        </div>
+                      {% endif %}
+                      {% if block.settings.size_9_m3_in != blank or block.settings.size_9_m3_icm != blank %}
+                        <div class='sizechart__measurement_value'>
+                          {% if block.settings.size_9_m3_in != blank -%}
+                            <span data-view='in'>{{ block.settings.size_9_m3_in }}</span>
+                          {%- endif %}
+                          {% if block.settings.size_9_m3_icm != blank -%}
+                            <span data-view='cm'>{{ block.settings.size_9_m3_icm }}</span>
+                          {%- endif %}
+                        </div>
+                      {% endif %}
+                      {% if block.settings.size_10_m3_in != blank or block.settings.size_10_m3_icm != blank %}
+                        <div class='sizechart__measurement_value'>
+                          {% if block.settings.size_10_m3_in != blank -%}
+                            <span data-view='in'>{{ block.settings.size_10_m3_in }}</span>
+                          {%- endif %}
+                          {% if block.settings.size_10_m3_icm != blank -%}
+                            <span data-view='cm'>{{ block.settings.size_10_m3_icm }}</span>
+                          {%- endif %}
+                        </div>
+                      {% endif %}
+                    </div>
+                  {% endif %}
+                  {% if block.settings.measurement_4_title != blank %}
+                    <div class='sizechart__measurement3'>
+                      {% if block.settings.measurement_4_title %}
+                        <div class='sizechart__measurement_header'>{{ block.settings.measurement_4_title }}</div>
+                      {% endif %}
+
+                      {% if block.settings.size_1_m4_in != blank or block.settings.size_1_m4_icm != blank %}
+                        <div class='sizechart__measurement_value'>
+                          {% if block.settings.size_1_m4_in != blank -%}
+                            <span data-view='in'>{{ block.settings.size_1_m4_in }}</span>
+                          {%- endif %}
+                          {% if block.settings.size_1_m4_icm != blank -%}
+                            <span data-view='cm'>{{ block.settings.size_1_m4_icm }}</span>
+                          {%- endif %}
+                        </div>
+                      {% endif %}
+                      {% if block.settings.size_2_m4_in != blank or block.settings.size_2_m4_icm != blank %}
+                        <div class='sizechart__measurement_value'>
+                          {% if block.settings.size_2_m4_in != blank -%}
+                            <span data-view='in'>{{ block.settings.size_2_m4_in }}</span>
+                          {%- endif %}
+                          {% if block.settings.size_2_m4_icm != blank -%}
+                            <span data-view='cm'>{{ block.settings.size_2_m4_icm }}</span>
+                          {%- endif %}
+                        </div>
+                      {% endif %}
+                      {% if block.settings.size_3_m4_in != blank or block.settings.size_3_m4_icm != blank %}
+                        <div class='sizechart__measurement_value'>
+                          {% if block.settings.size_3_m4_in != blank -%}
+                            <span data-view='in'>{{ block.settings.size_3_m4_in }}</span>
+                          {%- endif %}
+                          {% if block.settings.size_3_m4_icm != blank -%}
+                            <span data-view='cm'>{{ block.settings.size_3_m4_icm }}</span>
+                          {%- endif %}
+                        </div>
+                      {% endif %}
+                      {% if block.settings.size_4_m4_in != blank or block.settings.size_4_m4_icm != blank %}
+                        <div class='sizechart__measurement_value'>
+                          {% if block.settings.size_4_m4_in != blank -%}
+                            <span data-view='in'>{{ block.settings.size_4_m4_in }}</span>
+                          {%- endif %}
+                          {% if block.settings.size_4_m4_icm != blank -%}
+                            <span data-view='cm'>{{ block.settings.size_4_m4_icm }}</span>
+                          {%- endif %}
+                        </div>
+                      {% endif %}
+                      {% if block.settings.size_5_m4_in != blank or block.settings.size_5_m4_icm != blank %}
+                        <div class='sizechart__measurement_value'>
+                          {% if block.settings.size_5_m4_in != blank -%}
+                            <span data-view='in'>{{ block.settings.size_5_m4_in }}</span>
+                          {%- endif %}
+                          {% if block.settings.size_5_m4_icm != blank -%}
+                            <span data-view='cm'>{{ block.settings.size_5_m4_icm }}</span>
+                          {%- endif %}
+                        </div>
+                      {% endif %}
+                      {% if block.settings.size_6_m4_in != blank or block.settings.size_6_m4_icm != blank %}
+                        <div class='sizechart__measurement_value'>
+                          {% if block.settings.size_6_m4_in != blank -%}
+                            <span data-view='in'>{{ block.settings.size_6_m4_in }}</span>
+                          {%- endif %}
+                          {% if block.settings.size_6_m4_icm != blank -%}
+                            <span data-view='cm'>{{ block.settings.size_6_m4_icm }}</span>
+                          {%- endif %}
+                        </div>
+                      {% endif %}
+                      {% if block.settings.size_7_m4_in != blank or block.settings.size_7_m4_icm != blank %}
+                        <div class='sizechart__measurement_value'>
+                          {% if block.settings.size_7_m4_in != blank -%}
+                            <span data-view='in'>{{ block.settings.size_7_m4_in }}</span>
+                          {%- endif %}
+                          {% if block.settings.size_7_m4_icm != blank -%}
+                            <span data-view='cm'>{{ block.settings.size_7_m4_icm }}</span>
+                          {%- endif %}
+                        </div>
+                      {% endif %}
+                      {% if block.settings.size_8_m4_in != blank or block.settings.size_8_m4_icm != blank %}
+                        <div class='sizechart__measurement_value'>
+                          {% if block.settings.size_8_m4_in != blank -%}
+                            <span data-view='in'>{{ block.settings.size_8_m4_in }}</span>
+                          {%- endif %}
+                          {% if block.settings.size_8_m4_icm != blank -%}
+                            <span data-view='cm'>{{ block.settings.size_8_m4_icm }}</span>
+                          {%- endif %}
+                        </div>
+                      {% endif %}
+                      {% if block.settings.size_9_m4_in != blank or block.settings.size_9_m4_icm != blank %}
+                        <div class='sizechart__measurement_value'>
+                          {% if block.settings.size_9_m4_in != blank -%}
+                            <span data-view='in'>{{ block.settings.size_9_m4_in }}</span>
+                          {%- endif %}
+                          {% if block.settings.size_9_m4_icm != blank -%}
+                            <span data-view='cm'>{{ block.settings.size_9_m4_icm }}</span>
+                          {%- endif %}
+                        </div>
+                      {% endif %}
+                      {% if block.settings.size_10_m4_in != blank or block.settings.size_10_m4_icm != blank %}
+                        <div class='sizechart__measurement_value'>
+                          {% if block.settings.size_10_m4_in != blank -%}
+                            <span data-view='in'>{{ block.settings.size_10_m4_in }}</span>
+                          {%- endif %}
+                          {% if block.settings.size_10_m4_icm != blank -%}
+                            <span data-view='cm'>{{ block.settings.size_10_m4_icm }}</span>
+                          {%- endif %}
+                        </div>
+                      {% endif %}
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+              <div class='sizechart__measurement_descriptions tw-flex tw-gap-4'>
+                {% if block.settings.measurement_1_title != blank
+                  and block.settings.measurement_1_description != blank
+                %}
+                  <div class='sizechart__measurement_description'>
+                    <strong class='h5-force'>{{ block.settings.measurement_1_title }}</strong>
+                    <div class='sizechart__measurement_content'>{{ block.settings.measurement_1_description }}</div>
                   </div>
                 {% endif %}
-                {% if block.settings.measurement_4_title != blank %}
-                  <div class='sizechart__measurement3'>
-                    {% if block.settings.measurement_4_title %}
-                      <div class='sizechart__measurement_header'>{{ block.settings.measurement_4_title }}</div>
-                    {% endif %}
-
-                    {% if block.settings.size_1_m4_in != blank or block.settings.size_1_m4_icm != blank %}
-                      <div class='sizechart__measurement_value'>
-                        {% if block.settings.size_1_m4_in != blank -%}
-                          <span data-view='in'>{{ block.settings.size_1_m4_in }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_1_m4_icm != blank -%}
-                          <span data-view='cm'>{{ block.settings.size_1_m4_icm }}</span>
-                        {%- endif %}
-                      </div>
-                    {% endif %}
-                    {% if block.settings.size_2_m4_in != blank or block.settings.size_2_m4_icm != blank %}
-                      <div class='sizechart__measurement_value'>
-                        {% if block.settings.size_2_m4_in != blank -%}
-                          <span data-view='in'>{{ block.settings.size_2_m4_in }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_2_m4_icm != blank -%}
-                          <span data-view='cm'>{{ block.settings.size_2_m4_icm }}</span>
-                        {%- endif %}
-                      </div>
-                    {% endif %}
-                    {% if block.settings.size_3_m4_in != blank or block.settings.size_3_m4_icm != blank %}
-                      <div class='sizechart__measurement_value'>
-                        {% if block.settings.size_3_m4_in != blank -%}
-                          <span data-view='in'>{{ block.settings.size_3_m4_in }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_3_m4_icm != blank -%}
-                          <span data-view='cm'>{{ block.settings.size_3_m4_icm }}</span>
-                        {%- endif %}
-                      </div>
-                    {% endif %}
-                    {% if block.settings.size_4_m4_in != blank or block.settings.size_4_m4_icm != blank %}
-                      <div class='sizechart__measurement_value'>
-                        {% if block.settings.size_4_m4_in != blank -%}
-                          <span data-view='in'>{{ block.settings.size_4_m4_in }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_4_m4_icm != blank -%}
-                          <span data-view='cm'>{{ block.settings.size_4_m4_icm }}</span>
-                        {%- endif %}
-                      </div>
-                    {% endif %}
-                    {% if block.settings.size_5_m4_in != blank or block.settings.size_5_m4_icm != blank %}
-                      <div class='sizechart__measurement_value'>
-                        {% if block.settings.size_5_m4_in != blank -%}
-                          <span data-view='in'>{{ block.settings.size_5_m4_in }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_5_m4_icm != blank -%}
-                          <span data-view='cm'>{{ block.settings.size_5_m4_icm }}</span>
-                        {%- endif %}
-                      </div>
-                    {% endif %}
-                    {% if block.settings.size_6_m4_in != blank or block.settings.size_6_m4_icm != blank %}
-                      <div class='sizechart__measurement_value'>
-                        {% if block.settings.size_6_m4_in != blank -%}
-                          <span data-view='in'>{{ block.settings.size_6_m4_in }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_6_m4_icm != blank -%}
-                          <span data-view='cm'>{{ block.settings.size_6_m4_icm }}</span>
-                        {%- endif %}
-                      </div>
-                    {% endif %}
-                    {% if block.settings.size_7_m4_in != blank or block.settings.size_7_m4_icm != blank %}
-                      <div class='sizechart__measurement_value'>
-                        {% if block.settings.size_7_m4_in != blank -%}
-                          <span data-view='in'>{{ block.settings.size_7_m4_in }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_7_m4_icm != blank -%}
-                          <span data-view='cm'>{{ block.settings.size_7_m4_icm }}</span>
-                        {%- endif %}
-                      </div>
-                    {% endif %}
-                    {% if block.settings.size_8_m4_in != blank or block.settings.size_8_m4_icm != blank %}
-                      <div class='sizechart__measurement_value'>
-                        {% if block.settings.size_8_m4_in != blank -%}
-                          <span data-view='in'>{{ block.settings.size_8_m4_in }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_8_m4_icm != blank -%}
-                          <span data-view='cm'>{{ block.settings.size_8_m4_icm }}</span>
-                        {%- endif %}
-                      </div>
-                    {% endif %}
-                    {% if block.settings.size_9_m4_in != blank or block.settings.size_9_m4_icm != blank %}
-                      <div class='sizechart__measurement_value'>
-                        {% if block.settings.size_9_m4_in != blank -%}
-                          <span data-view='in'>{{ block.settings.size_9_m4_in }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_9_m4_icm != blank -%}
-                          <span data-view='cm'>{{ block.settings.size_9_m4_icm }}</span>
-                        {%- endif %}
-                      </div>
-                    {% endif %}
-                    {% if block.settings.size_10_m4_in != blank or block.settings.size_10_m4_icm != blank %}
-                      <div class='sizechart__measurement_value'>
-                        {% if block.settings.size_10_m4_in != blank -%}
-                          <span data-view='in'>{{ block.settings.size_10_m4_in }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_10_m4_icm != blank -%}
-                          <span data-view='cm'>{{ block.settings.size_10_m4_icm }}</span>
-                        {%- endif %}
-                      </div>
-                    {% endif %}
+                {% if block.settings.measurement_2_title != blank
+                  and block.settings.measurement_2_description != blank
+                %}
+                  <div class='sizechart__measurement_description'>
+                    <strong class='h5-force'>{{ block.settings.measurement_2_title }}</strong>
+                    <div class='sizechart__measurement_content'>{{ block.settings.measurement_2_description }}</div>
+                  </div>
+                {% endif %}
+                {% if block.settings.measurement_3_title != blank
+                  and block.settings.measurement_3_description != blank
+                %}
+                  <div class='sizechart__measurement_description'>
+                    <strong class='h5-force'>{{ block.settings.measurement_3_title }}</strong>
+                    <div class='sizechart__measurement_content'>{{ block.settings.measurement_3_description }}</div>
+                  </div>
+                {% endif %}
+                {% if block.settings.measurement_4_title != blank
+                  and block.settings.measurement_4_description != blank
+                %}
+                  <div class='sizechart__measurement_description'>
+                    <strong class='h5-force'>{{ block.settings.measurement_4_title }}</strong>
+                    <div class='sizechart__measurement_content'>{{ block.settings.measurement_4_description }}</div>
                   </div>
                 {% endif %}
               </div>
-              {% if block.settings.measurement_1_title != blank and block.settings.measurement_1_description != blank %}
-                <div class='sizechart__measurement_description'>
-                  <strong>{{ block.settings.measurement_1_title }}</strong>
-                  <div class='sizechart__measurement_content'>{{ block.settings.measurement_1_description }}</div>
-                </div>
-              {% endif %}
-              {% if block.settings.measurement_2_title != blank and block.settings.measurement_2_description != blank %}
-                <div class='sizechart__measurement_description'>
-                  <strong>{{ block.settings.measurement_2_title }}</strong>
-                  <div class='sizechart__measurement_content'>{{ block.settings.measurement_2_description }}</div>
-                </div>
-              {% endif %}
-              {% if block.settings.measurement_3_title != blank and block.settings.measurement_3_description != blank %}
-                <div class='sizechart__measurement_description'>
-                  <strong>{{ block.settings.measurement_3_title }}</strong>
-                  <div class='sizechart__measurement_content'>{{ block.settings.measurement_3_description }}</div>
-                </div>
-              {% endif %}
-              {% if block.settings.measurement_4_title != blank and block.settings.measurement_4_description != blank %}
-                <div class='sizechart__measurement_description'>
-                  <strong>{{ block.settings.measurement_4_title }}</strong>
-                  <div class='sizechart__measurement_content'>{{ block.settings.measurement_4_description }}</div>
-                </div>
-              {% endif %}
               <div class='sizechart__questions'>
-                <strong>Questions?</strong> Write us at <a href='mailto:hey@alexcrane.co'>hey@alexcrane.co</a>
+                <strong class='h5-force tw-block'>Questions?</strong> Visit our <a href='/pages/faqs'>FAQs</a> or write
+                us at <a href='mailto:hey@alexcrane.co'>hey@alexcrane.co</a>
               </div>
             </div>
           </section>
@@ -606,488 +618,6 @@
                     <strong>Questions?</strong> Write us at <a href='mailto:hey@alexcrane.co'>hey@alexcrane.co</a>
                   </div>
                 </div>
-              </div>
-
-              <div class='sizechart'>
-                <div class='sizechart__headers'>
-                  <div class='sizechart__header descriptor'>Size</div>
-                  {% if block.settings.size_1_title != blank %}
-                    <div class='sizechart__header'>{{ block.settings.size_1_title }}</div>
-                  {% endif %}
-                  {% if block.settings.size_2_title != blank %}
-                    <div class='sizechart__header'>{{ block.settings.size_2_title }}</div>
-                  {% endif %}
-                  {% if block.settings.size_3_title != blank %}
-                    <div class='sizechart__header'>{{ block.settings.size_3_title }}</div>
-                  {% endif %}
-                  {% if block.settings.size_4_title != blank %}
-                    <div class='sizechart__header'>{{ block.settings.size_4_title }}</div>
-                  {% endif %}
-                  {% if block.settings.size_5_title != blank %}
-                    <div class='sizechart__header'>{{ block.settings.size_5_title }}</div>
-                  {% endif %}
-                  {% if block.settings.size_6_title != blank %}
-                    <div class='sizechart__header'>{{ block.settings.size_6_title }}</div>
-                  {% endif %}
-                  {% if block.settings.size_7_title != blank %}
-                    <div class='sizechart__header'>{{ block.settings.size_7_title }}</div>
-                  {% endif %}
-                  {% if block.settings.size_8_title != blank %}
-                    <div class='sizechart__header'>{{ block.settings.size_8_title }}</div>
-                  {% endif %}
-                  {% if block.settings.size_9_title != blank %}
-                    <div class='sizechart__header'>{{ block.settings.size_9_title }}</div>
-                  {% endif %}
-                  {% if block.settings.size_10_title != blank %}
-                    <div class='sizechart__header'>{{ block.settings.size_10_title }}</div>
-                  {% endif %}
-                </div>
-                {% if block.settings.pant_waist_description != blank %}
-                  <div class='sizechart__measurement1'>
-                    <div class='sizechart__measurement_header'>Waist</div>
-
-                    {% if block.settings.size_1_pant_waist_in != blank
-                      or block.settings.size_1_pant_waist_cm != blank
-                    %}
-                      <div class='sizechart__measurement_value'>
-                        {% if block.settings.size_1_pant_waist_in != blank -%}
-                          <span data-view='in'>{{ block.settings.size_1_pant_waist_in }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_1_pant_waist_cm != blank -%}
-                          <span data-view='cm'>{{ block.settings.size_1_pant_waist_cm }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_1_pant_waist_cm == blank -%}
-                          <span data-view='cm'>{{ block.settings.size_1_pant_waist_in | times: 2.54 | round }}</span>
-                        {%- endif %}
-                      </div>
-                    {% endif %}
-                    {% if block.settings.size_2_pant_waist_in != blank
-                      or block.settings.size_2_pant_waist_cm != blank
-                    %}
-                      <div class='sizechart__measurement_value'>
-                        {% if block.settings.size_2_pant_waist_in != blank -%}
-                          <span data-view='in'>{{ block.settings.size_2_pant_waist_in }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_2_pant_waist_cm != blank -%}
-                          <span data-view='cm'>{{ block.settings.size_2_pant_waist_cm }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_2_pant_waist_cm == blank -%}
-                          <span data-view='cm'>{{ block.settings.size_2_pant_waist_in | times: 2.54 | round }}</span>
-                        {%- endif %}
-                      </div>
-                    {% endif %}
-                    {% if block.settings.size_3_pant_waist_in != blank
-                      or block.settings.size_3_pant_waist_cm != blank
-                    %}
-                      <div class='sizechart__measurement_value'>
-                        {% if block.settings.size_3_pant_waist_in != blank -%}
-                          <span data-view='in'>{{ block.settings.size_3_pant_waist_in }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_3_pant_waist_cm != blank -%}
-                          <span data-view='cm'>{{ block.settings.size_3_pant_waist_cm }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_3_pant_waist_cm == blank -%}
-                          <span data-view='cm'>{{ block.settings.size_3_pant_waist_in | times: 2.54 | round }}</span>
-                        {%- endif %}
-                      </div>
-                    {% endif %}
-                    {% if block.settings.size_4_pant_waist_in != blank
-                      or block.settings.size_4_pant_waist_cm != blank
-                    %}
-                      <div class='sizechart__measurement_value'>
-                        {% if block.settings.size_4_pant_waist_in != blank -%}
-                          <span data-view='in'>{{ block.settings.size_4_pant_waist_in }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_4_pant_waist_cm != blank -%}
-                          <span data-view='cm'>{{ block.settings.size_4_pant_waist_cm }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_4_pant_waist_cm == blank -%}
-                          <span data-view='cm'>{{ block.settings.size_4_pant_waist_in | times: 2.54 | round }}</span>
-                        {%- endif %}
-                      </div>
-                    {% endif %}
-                    {% if block.settings.size_5_pant_waist_in != blank
-                      or block.settings.size_5_pant_waist_cm != blank
-                    %}
-                      <div class='sizechart__measurement_value'>
-                        {% if block.settings.size_5_pant_waist_in != blank -%}
-                          <span data-view='in'>{{ block.settings.size_5_pant_waist_in }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_5_pant_waist_cm != blank -%}
-                          <span data-view='cm'>{{ block.settings.size_5_pant_waist_cm }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_5_pant_waist_cm == blank -%}
-                          <span data-view='cm'>{{ block.settings.size_5_pant_waist_in | times: 2.54 | round }}</span>
-                        {%- endif %}
-                      </div>
-                    {% endif %}
-                    {% if block.settings.size_6_pant_waist_in != blank
-                      or block.settings.size_6_pant_waist_cm != blank
-                    %}
-                      <div class='sizechart__measurement_value'>
-                        {% if block.settings.size_6_pant_waist_in != blank -%}
-                          <span data-view='in'>{{ block.settings.size_6_pant_waist_in }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_6_pant_waist_cm != blank -%}
-                          <span data-view='cm'>{{ block.settings.size_6_pant_waist_cm }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_6_pant_waist_cm == blank -%}
-                          <span data-view='cm'>{{ block.settings.size_6_pant_waist_in | times: 2.54 | round }}</span>
-                        {%- endif %}
-                      </div>
-                    {% endif %}
-                    {% if block.settings.size_7_pant_waist_in != blank
-                      or block.settings.size_7_pant_waist_cm != blank
-                    %}
-                      <div class='sizechart__measurement_value'>
-                        {% if block.settings.size_7_pant_waist_in != blank -%}
-                          <span data-view='in'>{{ block.settings.size_7_pant_waist_in }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_7_pant_waist_cm != blank -%}
-                          <span data-view='cm'>{{ block.settings.size_7_pant_waist_cm }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_7_pant_waist_cm == blank -%}
-                          <span data-view='cm'>{{ block.settings.size_7_pant_waist_in | times: 2.54 | round }}</span>
-                        {%- endif %}
-                      </div>
-                    {% endif %}
-                    {% if block.settings.size_8_pant_waist_in != blank
-                      or block.settings.size_8_pant_waist_cm != blank
-                    %}
-                      <div class='sizechart__measurement_value'>
-                        {% if block.settings.size_8_pant_waist_in != blank -%}
-                          <span data-view='in'>{{ block.settings.size_8_pant_waist_in }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_8_pant_waist_cm != blank -%}
-                          <span data-view='cm'>{{ block.settings.size_8_pant_waist_cm }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_8_pant_waist_cm == blank -%}
-                          <span data-view='cm'>{{ block.settings.size_8_pant_waist_in | times: 2.54 | round }}</span>
-                        {%- endif %}
-                      </div>
-                    {% endif %}
-                    {% if block.settings.size_9_pant_waist_in != blank
-                      or block.settings.size_9_pant_waist_cm != blank
-                    %}
-                      <div class='sizechart__measurement_value'>
-                        {% if block.settings.size_9_pant_waist_in != blank -%}
-                          <span data-view='in'>{{ block.settings.size_9_pant_waist_in }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_9_pant_waist_cm != blank -%}
-                          <span data-view='cm'>{{ block.settings.size_9_pant_waist_cm }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_9_pant_waist_cm == blank -%}
-                          <span data-view='cm'>{{ block.settings.size_9_pant_waist_in | times: 2.54 | round }}</span>
-                        {%- endif %}
-                      </div>
-                    {% endif %}
-                    {% if block.settings.size_10_pant_waist_in != blank
-                      or block.settings.size_10_pant_waist_cm != blank
-                    %}
-                      <div class='sizechart__measurement_value'>
-                        {% if block.settings.size_10_pant_waist_in != blank -%}
-                          <span data-view='in'>{{ block.settings.size_10_pant_waist_in }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_10_pant_waist_cm != blank -%}
-                          <span data-view='cm'>{{ block.settings.size_10_pant_waist_cm }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_10_pant_waist_cm == blank -%}
-                          <span data-view='cm'>{{ block.settings.size_10_pant_waist_in | times: 2.54 | round }}</span>
-                        {%- endif %}
-                      </div>
-                    {% endif %}
-                  </div>
-                {% endif %}
-                {% if block.settings.pant_inseam_description != blank %}
-                  <div class='sizechart__measurement1'>
-                    <div class='sizechart__measurement_header'>Inseam</div>
-                    {% if block.settings.size_1_pant_inseam_in != blank
-                      or block.settings.size_1_pant_inseam_cm != blank
-                    %}
-                      <div class='sizechart__measurement_value'>
-                        {% if block.settings.size_1_pant_inseam_in != blank -%}
-                          <span data-view='in'>{{ block.settings.size_1_pant_inseam_in }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_1_pant_inseam_cm != blank -%}
-                          <span data-view='cm'>{{ block.settings.size_1_pant_inseam_cm }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_1_pant_inseam_cm == blank -%}
-                          <span data-view='cm'>{{ block.settings.size_1_pant_inseam_in | times: 2.54 | round }}</span>
-                        {%- endif %}
-                      </div>
-                    {% endif %}
-                    {% if block.settings.size_2_pant_inseam_in != blank
-                      or block.settings.size_2_pant_inseam_cm != blank
-                    %}
-                      <div class='sizechart__measurement_value'>
-                        {% if block.settings.size_2_pant_inseam_in != blank -%}
-                          <span data-view='in'>{{ block.settings.size_2_pant_inseam_in }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_2_pant_inseam_cm != blank -%}
-                          <span data-view='cm'>{{ block.settings.size_2_pant_inseam_cm }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_2_pant_inseam_cm == blank -%}
-                          <span data-view='cm'>{{ block.settings.size_2_pant_inseam_in | times: 2.54 | round }}</span>
-                        {%- endif %}
-                      </div>
-                    {% endif %}
-                    {% if block.settings.size_3_pant_inseam_in != blank
-                      or block.settings.size_3_pant_inseam_cm != blank
-                    %}
-                      <div class='sizechart__measurement_value'>
-                        {% if block.settings.size_3_pant_inseam_in != blank -%}
-                          <span data-view='in'>{{ block.settings.size_3_pant_inseam_in }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_3_pant_inseam_cm != blank -%}
-                          <span data-view='cm'>{{ block.settings.size_3_pant_inseam_cm }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_3_pant_inseam_cm == blank -%}
-                          <span data-view='cm'>{{ block.settings.size_3_pant_inseam_in | times: 2.54 | round }}</span>
-                        {%- endif %}
-                      </div>
-                    {% endif %}
-                    {% if block.settings.size_4_pant_inseam_in != blank
-                      or block.settings.size_4_pant_inseam_cm != blank
-                    %}
-                      <div class='sizechart__measurement_value'>
-                        {% if block.settings.size_4_pant_inseam_in != blank -%}
-                          <span data-view='in'>{{ block.settings.size_4_pant_inseam_in }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_4_pant_inseam_cm != blank -%}
-                          <span data-view='cm'>{{ block.settings.size_4_pant_inseam_cm }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_4_pant_inseam_cm == blank -%}
-                          <span data-view='cm'>{{ block.settings.size_4_pant_inseam_in | times: 2.54 | round }}</span>
-                        {%- endif %}
-                      </div>
-                    {% endif %}
-                    {% if block.settings.size_5_pant_inseam_in != blank
-                      or block.settings.size_5_pant_inseam_cm != blank
-                    %}
-                      <div class='sizechart__measurement_value'>
-                        {% if block.settings.size_5_pant_inseam_in != blank -%}
-                          <span data-view='in'>{{ block.settings.size_5_pant_inseam_in }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_5_pant_inseam_cm != blank -%}
-                          <span data-view='cm'>{{ block.settings.size_5_pant_inseam_cm }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_5_pant_inseam_cm == blank -%}
-                          <span data-view='cm'>{{ block.settings.size_5_pant_inseam_in | times: 2.54 | round }}</span>
-                        {%- endif %}
-                      </div>
-                    {% endif %}
-                    {% if block.settings.size_6_pant_inseam_in != blank
-                      or block.settings.size_6_pant_inseam_cm != blank
-                    %}
-                      <div class='sizechart__measurement_value'>
-                        {% if block.settings.size_6_pant_inseam_in != blank -%}
-                          <span data-view='in'>{{ block.settings.size_6_pant_inseam_in }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_6_pant_inseam_cm != blank -%}
-                          <span data-view='cm'>{{ block.settings.size_6_pant_inseam_cm }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_6_pant_inseam_cm == blank -%}
-                          <span data-view='cm'>{{ block.settings.size_6_pant_inseam_in | times: 2.54 | round }}</span>
-                        {%- endif %}
-                      </div>
-                    {% endif %}
-                    {% if block.settings.size_7_pant_inseam_in != blank
-                      or block.settings.size_7_pant_inseam_cm != blank
-                    %}
-                      <div class='sizechart__measurement_value'>
-                        {% if block.settings.size_7_pant_inseam_in != blank -%}
-                          <span data-view='in'>{{ block.settings.size_7_pant_inseam_in }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_7_pant_inseam_cm != blank -%}
-                          <span data-view='cm'>{{ block.settings.size_7_pant_inseam_cm }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_7_pant_inseam_cm == blank -%}
-                          <span data-view='cm'>{{ block.settings.size_7_pant_inseam_in | times: 2.54 | round }}</span>
-                        {%- endif %}
-                      </div>
-                    {% endif %}
-                    {% if block.settings.size_8_pant_inseam_in != blank
-                      or block.settings.size_8_pant_inseam_cm != blank
-                    %}
-                      <div class='sizechart__measurement_value'>
-                        {% if block.settings.size_8_pant_inseam_in != blank -%}
-                          <span data-view='in'>{{ block.settings.size_8_pant_inseam_in }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_8_pant_inseam_cm != blank -%}
-                          <span data-view='cm'>{{ block.settings.size_8_pant_inseam_cm }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_8_pant_inseam_cm == blank -%}
-                          <span data-view='cm'>{{ block.settings.size_8_pant_inseam_in | times: 2.54 | round }}</span>
-                        {%- endif %}
-                      </div>
-                    {% endif %}
-                    {% if block.settings.size_9_pant_inseam_in != blank
-                      or block.settings.size_9_pant_inseam_cm != blank
-                    %}
-                      <div class='sizechart__measurement_value'>
-                        {% if block.settings.size_9_pant_inseam_in != blank -%}
-                          <span data-view='in'>{{ block.settings.size_9_pant_inseam_in }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_9_pant_inseam_cm != blank -%}
-                          <span data-view='cm'>{{ block.settings.size_9_pant_inseam_cm }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_9_pant_inseam_cm == blank -%}
-                          <span data-view='cm'>{{ block.settings.size_9_pant_inseam_in | times: 2.54 | round }}</span>
-                        {%- endif %}
-                      </div>
-                    {% endif %}
-                    {% if block.settings.size_10_pant_inseam_in != blank
-                      or block.settings.size_10_pant_inseam_cm != blank
-                    %}
-                      <div class='sizechart__measurement_value'>
-                        {% if block.settings.size_10_pant_inseam_in != blank -%}
-                          <span data-view='in'>{{ block.settings.size_10_pant_inseam_in }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_10_pant_inseam_cm != blank -%}
-                          <span data-view='cm'>{{ block.settings.size_10_pant_inseam_cm }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_10_pant_inseam_cm == blank -%}
-                          <span data-view='cm'>{{ block.settings.size_10_pant_inseam_in | times: 2.54 | round }}</span>
-                        {%- endif %}
-                      </div>
-                    {% endif %}
-                  </div>
-                {% endif %}
-                {% if block.settings.pant_leg_description != blank %}
-                  <div class='sizechart__measurement1'>
-                    <div class='sizechart__measurement_header'>Leg Opening</div>
-                    {% if block.settings.size_1_pant_leg_in != blank or block.settings.size_1_pant_leg_cm != blank %}
-                      <div class='sizechart__measurement_value'>
-                        {% if block.settings.size_1_pant_leg_in != blank -%}
-                          <span data-view='in'>{{ block.settings.size_1_pant_leg_in }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_1_pant_leg_cm != blank -%}
-                          <span data-view='cm'>{{ block.settings.size_1_pant_leg_cm }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_1_pant_leg_cm == blank -%}
-                          <span data-view='cm'>{{ block.settings.size_1_pant_leg_in | times: 2.54 | round }}</span>
-                        {%- endif %}
-                      </div>
-                    {% endif %}
-                    {% if block.settings.size_2_pant_leg_in != blank or block.settings.size_2_pant_leg_cm != blank %}
-                      <div class='sizechart__measurement_value'>
-                        {% if block.settings.size_2_pant_leg_in != blank -%}
-                          <span data-view='in'>{{ block.settings.size_2_pant_leg_in }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_2_pant_leg_cm != blank -%}
-                          <span data-view='cm'>{{ block.settings.size_2_pant_leg_cm }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_2_pant_leg_cm == blank -%}
-                          <span data-view='cm'>{{ block.settings.size_2_pant_leg_in | times: 2.54 | round }}</span>
-                        {%- endif %}
-                      </div>
-                    {% endif %}
-                    {% if block.settings.size_3_pant_leg_in != blank or block.settings.size_3_pant_leg_cm != blank %}
-                      <div class='sizechart__measurement_value'>
-                        {% if block.settings.size_3_pant_leg_in != blank -%}
-                          <span data-view='in'>{{ block.settings.size_3_pant_leg_in }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_3_pant_leg_cm != blank -%}
-                          <span data-view='cm'>{{ block.settings.size_3_pant_leg_cm }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_3_pant_leg_cm == blank -%}
-                          <span data-view='cm'>{{ block.settings.size_3_pant_leg_in | times: 2.54 | round }}</span>
-                        {%- endif %}
-                      </div>
-                    {% endif %}
-                    {% if block.settings.size_4_pant_leg_in != blank or block.settings.size_4_pant_leg_cm != blank %}
-                      <div class='sizechart__measurement_value'>
-                        {% if block.settings.size_4_pant_leg_in != blank -%}
-                          <span data-view='in'>{{ block.settings.size_4_pant_leg_in }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_4_pant_leg_cm != blank -%}
-                          <span data-view='cm'>{{ block.settings.size_4_pant_leg_cm }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_4_pant_leg_cm == blank -%}
-                          <span data-view='cm'>{{ block.settings.size_4_pant_leg_in | times: 2.54 | round }}</span>
-                        {%- endif %}
-                      </div>
-                    {% endif %}
-                    {% if block.settings.size_5_pant_leg_in != blank or block.settings.size_5_pant_leg_cm != blank %}
-                      <div class='sizechart__measurement_value'>
-                        {% if block.settings.size_5_pant_leg_in != blank -%}
-                          <span data-view='in'>{{ block.settings.size_5_pant_leg_in }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_5_pant_leg_cm != blank -%}
-                          <span data-view='cm'>{{ block.settings.size_5_pant_leg_cm }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_5_pant_leg_cm == blank -%}
-                          <span data-view='cm'>{{ block.settings.size_5_pant_leg_in | times: 2.54 | round }}</span>
-                        {%- endif %}
-                      </div>
-                    {% endif %}
-                    {% if block.settings.size_6_pant_leg_in != blank or block.settings.size_6_pant_leg_cm != blank %}
-                      <div class='sizechart__measurement_value'>
-                        {% if block.settings.size_6_pant_leg_in != blank -%}
-                          <span data-view='in'>{{ block.settings.size_6_pant_leg_in }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_6_pant_leg_cm != blank -%}
-                          <span data-view='cm'>{{ block.settings.size_6_pant_leg_cm }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_6_pant_leg_cm == blank -%}
-                          <span data-view='cm'>{{ block.settings.size_6_pant_leg_in | times: 2.54 | round }}</span>
-                        {%- endif %}
-                      </div>
-                    {% endif %}
-                    {% if block.settings.size_7_pant_leg_in != blank or block.settings.size_7_pant_leg_cm != blank %}
-                      <div class='sizechart__measurement_value'>
-                        {% if block.settings.size_7_pant_leg_in != blank -%}
-                          <span data-view='in'>{{ block.settings.size_7_pant_leg_in }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_7_pant_leg_cm != blank -%}
-                          <span data-view='cm'>{{ block.settings.size_7_pant_leg_cm }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_7_pant_leg_cm == blank -%}
-                          <span data-view='cm'>{{ block.settings.size_7_pant_leg_in | times: 2.54 | round }}</span>
-                        {%- endif %}
-                      </div>
-                    {% endif %}
-                    {% if block.settings.size_8_pant_leg_in != blank or block.settings.size_8_pant_leg_cm != blank %}
-                      <div class='sizechart__measurement_value'>
-                        {% if block.settings.size_8_pant_leg_in != blank -%}
-                          <span data-view='in'>{{ block.settings.size_8_pant_leg_in }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_8_pant_leg_cm != blank -%}
-                          <span data-view='cm'>{{ block.settings.size_8_pant_leg_cm }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_8_pant_leg_cm == blank -%}
-                          <span data-view='cm'>{{ block.settings.size_8_pant_leg_in | times: 2.54 | round }}</span>
-                        {%- endif %}
-                      </div>
-                    {% endif %}
-                    {% if block.settings.size_9_pant_leg_in != blank or block.settings.size_9_pant_leg_cm != blank %}
-                      <div class='sizechart__measurement_value'>
-                        {% if block.settings.size_9_pant_leg_in != blank -%}
-                          <span data-view='in'>{{ block.settings.size_9_pant_leg_in }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_9_pant_leg_cm != blank -%}
-                          <span data-view='cm'>{{ block.settings.size_9_pant_leg_cm }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_9_pant_leg_cm == blank -%}
-                          <span data-view='cm'>{{ block.settings.size_9_pant_leg_in | times: 2.54 | round }}</span>
-                        {%- endif %}
-                      </div>
-                    {% endif %}
-                    {% if block.settings.size_10_pant_leg_in != blank or block.settings.size_10_pant_leg_cm != blank %}
-                      <div class='sizechart__measurement_value'>
-                        {% if block.settings.size_10_pant_leg_in != blank -%}
-                          <span data-view='in'>{{ block.settings.size_10_pant_leg_in }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_10_pant_leg_cm != blank -%}
-                          <span data-view='cm'>{{ block.settings.size_10_pant_leg_cm }}</span>
-                        {%- endif %}
-                        {% if block.settings.size_10_pant_leg_cm == blank -%}
-                          <span data-view='cm'>{{ block.settings.size_10_pant_leg_in | times: 2.54 | round }}</span>
-                        {%- endif %}
-                      </div>
-                    {% endif %}
-                  </div>
-                {% endif %}
               </div>
             </div>
           </section>

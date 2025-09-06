@@ -1,0 +1,839 @@
+{%- liquid
+  assign valid_goals = blank
+  assign current_country = localization.country.iso_code
+
+  for block in section.blocks
+    if block.type == 'goal_discount' or block.type == 'goal_gwp_product' or block.type == 'goal_gwp_collection'
+      assign goal_countries = block.settings.goal_countries | split: ','
+      assign is_valid_country = false
+
+      if block.settings.goal_countries == blank
+        assign is_valid_country = true
+      else
+        for country in goal_countries
+          assign country_code = country | strip | upcase
+          if country_code == current_country
+            assign is_valid_country = true
+            break
+          endif
+        endfor
+      endif
+
+      if is_valid_country
+        assign valid_goals = valid_goals | append: block.id | append: ','
+      endif
+    endif
+  endfor
+
+  assign goals_count = valid_goals | split: ',' | size | minus: 1
+-%}
+
+{% if goals_count > 0 %}
+  <div
+    class='shipping-motivator shipping-motivator--loading{% if cart_mode %} shipping-motivator--cart{% endif %}'
+    style='visibility: hidden;'
+    data-motivator
+    {% if cart_mode %}
+      -cart
+    {% endif %}
+    data-progress-template='{{ section.settings.progress_message_template | escape }}'
+    data-complete-template='{{ section.settings.complete_message_template | escape }}'
+    data-currency-format='{{ shop.money_format | strip_html }}'
+    role='region'
+    aria-label='Shipping progress tracker'
+  >
+    <div class='shipping-motivator__content'>
+      <div class='shipping-motivator__progress-container'>
+        <div class='shipping-motivator__progress-bar'>
+          <div class='shipping-motivator__progress-fill shipping-motivator__progress-fill--loading' style='width: 25%;'>
+            <span class='shipping-motivator__progress-fill-text visually-hidden'>Loading...</span>
+          </div>
+        </div>
+
+        <div class='shipping-motivator__message'>
+          <span class='shipping-motivator__text shipping-motivator__text--loading'>
+            <span class='shipping-motivator__loading-dots'> <span>.</span><span>.</span><span>.</span> </span>
+          </span>
+          {% if cart_mode %}
+            <button
+              class='shipping-motivator__close-btn'
+              type='button'
+              aria-label='Close cart drawer'
+              onclick='document.querySelector("#CartDrawer").classList.remove("active")'
+            >
+              <svg class='icon icon-close' viewBox='0 0 18 17' aria-hidden='true'>
+                <path d="M.865 15.978a.5.5 0 0 0 .707.707l7.433-7.431 7.579 7.282a.501.501 0 0 0 .846-.37.5.5 0 0 0-.153-.351L9.712 8.546l7.417-7.416a.5.5 0 1 0-.707-.708L8.991 7.853 1.413.573a.5.5 0 1 0-.693.72l7.563 7.268-7.418 7.417Z" fill="currentColor"/>
+              </svg>
+            </button>
+          {% endif %}
+        </div>
+
+        <div class='shipping-motivator__goals'>
+          {% for block in section.blocks %}
+            {% if block.type == 'goal_discount'
+              or block.type == 'goal_gwp_product'
+              or block.type == 'goal_gwp_collection'
+            %}
+              {%- liquid
+                assign goal_countries = block.settings.goal_countries | split: ','
+                assign is_valid_country = false
+
+                if block.settings.goal_countries == blank
+                  assign is_valid_country = true
+                else
+                  for country in goal_countries
+                    assign country_code = country | strip | upcase
+                    if country_code == current_country
+                      assign is_valid_country = true
+                      break
+                    endif
+                  endfor
+                endif
+              -%}
+
+              {% if is_valid_country %}
+                <div
+                  class='shipping-motivator__goal'
+                  data-goal-type='{{ block.type }}'
+                  data-goal-value='{{ block.settings.goal_value | times: 100 }}'
+                  data-goal-title='{{ block.settings.goal_title | escape }}'
+                  data-goal-message='{{ block.settings.goal_complete_msg | escape }}'
+                  {% if block.settings.goal_product %}
+                    data-goal-product='{{ block.settings.goal_product.handle }}'
+                    data-goal-product-removable='{{ block.settings.goal_product_removable }}'
+                  {% endif %}
+                  {% if block.settings.goal_collection %}
+                    data-goal-collection='{{ block.settings.goal_collection.id }}'
+                    data-goal-collection-handle='{{ block.settings.goal_collection.handle }}'
+                  {% endif %}
+                  {{ block.shopify_attributes }}
+                >
+                  <div class='shipping-motivator__goal-marker'>
+                    <div class='shipping-motivator__goal-label'>
+                      <span class='shipping-motivator__goal-checkmark'>✓</span>
+                      <span class='shipping-motivator__goal-title'>{{ block.settings.goal_title }}</span>
+                    </div>
+                  </div>
+                </div>
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    .shipping-motivator {
+      visibility: visible !important;
+      width: 100%;
+      background: rgb(var(--color-button));
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 100;
+      color: rgb(var(--color-foreground));
+      font-size: 1.2rem;
+      line-height: 1.4;
+      transition: opacity 0.4s ease-out, visibility 0.4s ease-out;
+    }
+
+    .shipping-motivator.shipping-motivator--hidden {
+      opacity: 0;
+      /* visibility: hidden; */
+    }
+
+    .shipping-motivator.shipping-motivator--loading {
+      opacity: 1;
+    }
+
+    .shipping-motivator__progress-fill--loading {
+      animation: loading-pulse 2s ease-in-out infinite;
+    }
+
+    .shipping-motivator__text {
+      transition: opacity 0.3s ease-out;
+    }
+
+    .shipping-motivator__text--loading {
+      opacity: 0.7;
+    }
+
+    .shipping-motivator__loading-dots {
+      display: inline-block;
+    }
+
+    .shipping-motivator__loading-dots span {
+      opacity: 0.3;
+      animation: loading-dots 1.5s ease-in-out infinite;
+    }
+
+    .shipping-motivator__loading-dots span:nth-child(2) {
+      animation-delay: 0.5s;
+    }
+
+    .shipping-motivator__loading-dots span:nth-child(3) {
+      animation-delay: 1s;
+    }
+
+    @keyframes loading-pulse {
+      0%,
+      100% {
+        opacity: 0.6;
+        transform: scaleX(1);
+      }
+      50% {
+        opacity: 0.8;
+        transform: scaleX(1.02);
+      }
+    }
+
+    @keyframes loading-dots {
+      0%,
+      80%,
+      100% {
+        opacity: 0.3;
+      }
+      40% {
+        opacity: 1;
+      }
+    }
+
+    .shipping-motivator__content {
+      max-width: 100%;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .shipping-motivator__message {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      text-align: center;
+      font-weight: 400;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .shipping-motivator__progress-container {
+      /* position: relative; */
+    }
+
+    .shipping-motivator__progress-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgb(var(--color-button));
+      overflow: hidden;
+    }
+
+    @keyframes gentle-pulse {
+      0%,
+      100% {
+        transform: scaleX(1);
+        opacity: 1;
+      }
+      50% {
+        transform: scaleX(1.025);
+        opacity: 0.9;
+      }
+    }
+
+    .shipping-motivator__progress-fill {
+      height: 100%;
+      background: rgb(var(--color-background));
+      transition: width 0.8s ease-out, opacity 0.4s ease-out;
+      animation: gentle-pulse 3s ease-in-out infinite;
+      position: relative;
+      box-shadow: 2px 0px 16px 0 rgba(0, 0, 0, 0.1);
+    }
+
+    .shipping-motivator__progress--complete .shipping-motivator__progress-fill {
+      background: rgb(var(--color-foreground));
+      animation: none;
+    }
+
+    .shipping-motivator__progress--complete .shipping-motivator__message {
+      color: black;
+    }
+    .shipping-motivator--cart .shipping-motivator__progress--complete .shipping-motivator__progress-bar,
+    .shipping-motivator--cart .shipping-motivator__progress--complete .shipping-motivator__goals {
+      height: 0;
+    }
+
+    .shipping-motivator__goals {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 8px;
+      height: 100%;
+      overflow: hidden;
+      transition: height 0.3s ease;
+    }
+
+    .shipping-motivator__goal {
+      position: relative;
+      opacity: 0.6;
+      border-right: 1px solid rgba(var(--color-foreground), 0.25);
+      transition: opacity 0.3s ease;
+    }
+
+    .shipping-motivator__goal--completed {
+      opacity: 1;
+    }
+
+    .shipping-motivator__goal--completed .shipping-motivator__goal-marker {
+      /* background: rgba(var(--color-foreground), 1); */
+    }
+
+    .shipping-motivator--cart .shipping-motivator__goal--completed .shipping-motivator__goal-title {
+      color: rgba(var(--color-foreground), 0.5);
+    }
+
+    .shipping-motivator__goal-marker {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 4px;
+      padding: 2px 10px;
+      border-radius: 4px;
+      transition: background 0.3s ease;
+    }
+
+    .shipping-motivator__goal-label {
+      display: inline-flex;
+    }
+
+    .shipping-motivator__goal-title {
+      font-size: 10px;
+      white-space: nowrap;
+      transition: color 0.3s ease;
+    }
+
+    .shipping-motivator__goal-checkmark {
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      font-size: 10px;
+      color: #000;
+    }
+
+    @media (max-width: 768px) {
+      .shipping-motivator {
+        padding: 8px 16px;
+        font-size: 13px;
+      }
+
+      .shipping-motivator__goals {
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .shipping-motivator__goal-title {
+        font-size: 1.2rem;
+      }
+    }
+
+    .utility-bar .shipping-motivator__goals {
+      display: none;
+    }
+
+    /* Cart drawer specific styles */
+    .shipping-motivator--cart {
+      position: relative;
+      background: var(--color-grey);
+      margin: 0;
+      margin-bottom: 0;
+
+      overflow: visible;
+      border-bottom: solid 1px var(--color-grey);
+    }
+
+    .shipping-motivator--cart .shipping-motivator__progress-bar {
+      height: 34px;
+    }
+
+    .shipping-motivator--cart .shipping-motivator__content {
+      padding: 0;
+      gap: 8px;
+    }
+
+    .shipping-motivator--cart .shipping-motivator__message {
+      position: relative;
+      z-index: 3;
+      background: rgba(var(--color-foreground), 1);
+      color: rgb(var(--color-foreground));
+      width: 100%;
+      justify-content: flex-start;
+      padding: 12px 10px;
+      transition: padding 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .shipping-motivator--cart .shipping-motivator__progress--complete .shipping-motivator__message {
+      padding: 12px 10px;
+    }
+
+    .shipping-motivator--cart .shipping-motivator__progress-bar {
+      position: relative;
+      z-index: 2;
+      height: 34px;
+      overflow: hidden;
+      transition: height 0.3s ease;
+    }
+
+    .shipping-motivator--cart .shipping-motivator__text {
+      font-size: 1.2rem;
+      color: #000;
+    }
+
+    .shipping-motivator--cart .shipping-motivator__goals {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      position: absolute;
+      margin: 0;
+      z-index: 3;
+      gap: 0;
+      top: 0;
+      height: 34px;
+      width: 100%;
+    }
+
+    .shipping-motivator--cart .shipping-motivator__goal {
+      opacity: 1;
+      font-size: 1.2rem;
+      height: 100%;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+    }
+
+    .shipping-motivator--cart .shipping-motivator__goal-title {
+      color: #fff;
+    }
+
+    .shipping-motivator--cart .shipping-motivator__goal-checkmark {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.25);
+      padding: 0px 2px 0px 3px;
+      border-radius: 10px;
+      font-size: 8px;
+      line-height: 14px;
+      font-weight: bold;
+    }
+
+    .shipping-motivator--cart.shipping-motivator--hidden {
+      opacity: 0;
+      visibility: hidden;
+      margin-bottom: -24px;
+      transition: opacity 0.3s ease, visibility 0.3s ease, margin-bottom 0.3s ease;
+    }
+
+    .cart-drawer__motivator {
+      padding: 0;
+    }
+
+    /* Close button for cart drawer */
+    .shipping-motivator__close-btn {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      margin-left: 8px;
+      border-radius: 3px;
+      opacity: 0;
+      transform: translateX(10px);
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .shipping-motivator__close-btn .icon {
+      width: 14px;
+      height: 14px;
+      color: #000;
+    }
+
+    /* Show button on hover over message or when focused */
+    .shipping-motivator__message:hover .shipping-motivator__close-btn,
+    .shipping-motivator__close-btn:focus {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .shipping-motivator__close-btn:hover {
+      background: rgba(0, 0, 0, 0.1);
+    }
+
+    .shipping-motivator__close-btn:focus {
+      outline: 2px solid rgba(var(--color-button), 0.8);
+      outline-offset: 2px;
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .collection-sliders-container {
+      margin-top: -40px;
+      z-index: 3;
+      position: relative;
+      width: 100%;
+      background: #fff;
+    }
+
+    .collection-slider {
+      background: transparent;
+      border: 0;
+      padding: 0;
+      margin-bottom: 0;
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .collection-slider--hidden {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+
+    .collection-slider__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 9px;
+      border-bottom: 1px solid var(--color-grey);
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+      margin-bottom: 0;
+    }
+
+    .collection-slider__header:hover {
+      background: rgba(var(--color-foreground), 0.08);
+    }
+
+    .collection-slider__header--collapsed {
+    }
+
+    .collection-slider__title {
+      font-size: 1.2rem;
+      color: #000;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .collection-slider__toggle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.3s ease-in-out;
+      width: 12px;
+      height: 12px;
+      background: rgba(var(--color-foreground), 0.1);
+      border: none;
+      cursor: pointer;
+      color: #000;
+      font-size: 1.2rem;
+    }
+
+    .collection-slider__toggle--expanded {
+      transform: rotate3d(1, 0, 0, 180deg);
+    }
+
+    .collection-slider__content {
+      background: rgba(var(--color-foreground), 0.02);
+      border: 1px solid rgba(var(--color-foreground), 0.1);
+      border-top: none;
+      padding: 10px 0 10px 10px;
+      overflow: hidden;
+      overflow-y: visible;
+      transition: all 0.3s ease;
+      max-height: 1000px;
+      opacity: 1;
+    }
+
+    .collection-slider__content--collapsed {
+      max-height: 0;
+      padding: 0 16px;
+      opacity: 0;
+    }
+
+    .collection-slider__container {
+      position: relative;
+    }
+
+    .collection-slider__swiper {
+      overflow: visible !important;
+    }
+
+    .collection-slider__product {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      cursor: pointer;
+      height: 100%;
+    }
+
+    .collection-slider__product-image {
+      width: 100%;
+      height: auto;
+      margin-bottom: 4px;
+      overflow: hidden;
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-start;
+    }
+
+    .collection-slider__product-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .collection-slider__product-info {
+      flex: 1;
+      width: 100%;
+    }
+
+    .collection-slider__product-title {
+      font-size: 1.2rem;
+      color: rgb(var(--color-shadow));
+      margin: 3px 0 8px 0;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      overflow: hidden;
+    }
+
+    .collection-slider__product-info {
+      font-size: 1.2rem;
+      color: rgb(var(--color-shadow));
+      line-height: 1.25;
+      width: 100%;
+    }
+
+    .collection-slider__product-price {
+      display: none;
+      font-size: 1.2rem;
+      color: rgba(var(--color-foreground), 0.7);
+      margin: 0;
+      margin-bottom: 6px;
+    }
+
+    .collection-slider__variant-selector {
+      width: 100%;
+      padding: 4px 8px;
+      margin-bottom: 8px;
+      border: 1px solid var(--color-grey);
+      color: rgb(var(--color-shadow));
+      font-size: 10px;
+      line-height: 1.2;
+      cursor: pointer;
+      transition: border-color 0.2s ease;
+    }
+
+    .collection-slider__variant-selector:focus {
+      outline: none;
+      border-color: rgb(var(--color-button));
+    }
+
+    .collection-slider__variant-selector option {
+      padding: 4px 8px;
+      font-size: 10px;
+    }
+
+    .collection-slider__add-btn {
+      background: rgb(var(--color-background));
+      color: rgb(var(--color-foreground));
+      border: none;
+      border-radius: 2px;
+      padding: 8px 10px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: background 0.2s ease;
+      width: 100%;
+    }
+
+    .collection-slider__add-btn:hover:not(:disabled) {
+      background: rgba(var(--color-button), 0.9);
+    }
+
+    .collection-slider__add-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    /* Swiper Navigation */
+    .collection-slider .swiper-button-next,
+    .collection-slider .swiper-button-prev {
+      color: rgb(var(--color-shadow));
+      top: unset !important;
+      bottom: -5px !important;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+    }
+
+    .collection-slider .swiper-button-next:after,
+    .collection-slider .swiper-button-prev:after {
+      font-size: 10px;
+      font-weight: 600;
+    }
+
+    .collection-slider .swiper-button-next {
+      right: 10px;
+    }
+
+    .collection-slider .swiper-button-prev {
+      left: 0;
+    }
+
+    .collection-slider .swiper-pagination {
+      top: unset !important;
+      left: unset !important;
+      right: unset !important;
+      bottom: unset !important;
+      position: relative;
+      text-align: center;
+      transform: translateY(4px);
+    }
+
+    .collection-slider .swiper-pagination-bullet {
+      background: rgba(var(--color-shadow), 0.3);
+      opacity: 1;
+      width: 5px;
+      height: 5px;
+      margin: 8px 2px 0 !important;
+    }
+
+    .collection-slider .swiper-pagination-bullet-active {
+      background: rgb(var(--color-shadow));
+    }
+
+    @media (max-width: 768px) {
+      .shipping-motivator--cart {
+        margin: 0;
+        margin-bottom: 0;
+        height: 50px;
+      }
+
+      .shipping-motivator--cart .shipping-motivator__content {
+        padding: 8px 12px;
+      }
+
+      /* Mobile adjustments for close button */
+      .shipping-motivator__close-btn {
+        width: 22px;
+        height: 22px;
+        margin-left: 6px;
+      }
+
+      .shipping-motivator__close-btn .icon {
+        width: 12px;
+        height: 12px;
+      }
+
+      .collection-slider {
+        padding: 12px;
+      }
+
+      .collection-slider__product-image {
+        width: 60px;
+        height: 60px;
+      }
+
+      .collection-slider__product-title {
+        font-size: 1.2rem;
+      }
+
+      .collection-slider__product-price {
+        font-size: 10px;
+      }
+
+      .collection-slider__variant-selector {
+        font-size: 9px;
+        padding: 3px 6px;
+        margin-bottom: 6px;
+      }
+
+      .collection-slider__variant-selector option {
+        font-size: 9px;
+      }
+
+      .collection-slider .swiper-button-next,
+      .collection-slider .swiper-button-prev {
+        display: none;
+      }
+    }
+  </style>
+{% endif %}
+
+{% comment %} Move scripts outside conditional to prevent parsing issues {% endcomment %}
+{% if goals_count > 0 %}
+  <script type='application/json' data-motivator-config>
+    {
+      "goals": [
+        {% assign goal_index = 0 %}
+        {% for block in section.blocks %}
+          {% if block.type == 'goal_discount' or block.type == 'goal_gwp_product' or block.type == 'goal_gwp_collection' %}
+            {%- liquid
+              assign goal_countries = block.settings.goal_countries | split: ','
+              assign is_valid_country = false
+
+              if block.settings.goal_countries == blank
+                assign is_valid_country = true
+              else
+                for country in goal_countries
+                  assign country_code = country | strip | upcase
+                  if country_code == current_country
+                    assign is_valid_country = true
+                    break
+                  endif
+                endfor
+              endif
+            -%}
+
+            {% if is_valid_country %}
+              {% if goal_index > 0 %},{% endif %}
+              {
+                "id": "{{ block.id }}",
+                "type": "{{ block.type }}",
+                "value": {{ block.settings.goal_value | times: 100 }},
+                "title": {{ block.settings.goal_title | json }},
+                "message": {{ block.settings.goal_complete_msg | json }}
+                {% if block.settings.goal_product %}, "productId": {{ block.settings.goal_product.handle | json }}, "removable": {{ block.settings.goal_product_removable }}{% endif %}
+                {% if block.settings.goal_collection %}, "collectionId": {{ block.settings.goal_collection.id }}, "collectionHandle": {{ block.settings.goal_collection.handle | json }}{% endif %}
+              }
+              {% assign goal_index = goal_index | plus: 1 %}
+            {% endif %}
+          {% endif %}
+        {% endfor %}
+      ],
+      "templates": {
+        "progress": {{ section.settings.progress_message_template | json }},
+        "complete": {{ section.settings.complete_message_template | json }}
+      },
+      "moneyFormat": {{ shop.money_format | strip_html | json }}
+    }
+  </script>
+
+  <script src='{{ 'shipping-motivator.js' | asset_url }}' defer></script>
+{% endif %}

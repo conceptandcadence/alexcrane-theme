@@ -1,0 +1,200 @@
+{% assign image_mobile = section.settings.image_mobile %}
+{% assign image_desktop = section.settings.image_desktop %}
+
+{% if section.blocks.size > 0 %}
+  <div
+    class='sustainable-features__header{% if image_mobile != blank or image_desktop != blank %} image-header{% endif %}'
+    style='flex-direction: column;'
+  >
+    {% if image_mobile != blank %}
+      {%- capture sizes -%}100vw{%- endcapture -%}
+      {{
+        image_mobile
+        | image_url: width: 1500
+        | image_tag:
+          sizes: sizes,
+          widths: '200, 400, 600, 700, 800, 900, 1000, 1200, 1500',
+          class: 'mobile',
+          loading: 'lazy',
+          alt: page.title
+      }}
+    {% endif %}
+    {% if image_desktop != blank %}
+      {%- capture sizes -%}100vw{%- endcapture -%}
+      {{
+        image_desktop
+        | image_url: width: 1500
+        | image_tag:
+          sizes: sizes,
+          widths: '200, 400, 600, 700, 800, 900, 1000, 1200, 1500',
+          class: 'desktop',
+          loading: 'lazy',
+          alt: page.title
+      }}
+    {% endif %}
+    <div class='header-wrapper'>
+      {% if section.settings.title != blank %}
+        <h2>{{ section.settings.title }}</h2>
+      {% endif %}
+      {% if section.settings.description != blank %}
+        <div style='max-width: 400px; margin: 0 auto;'>{{ section.settings.description }}</div>
+      {% endif %}
+    </div>
+  </div>
+  <section class='sustainable-features'>
+    {% for block in section.blocks %}
+      <div class='sustainable-feature'>
+        {% assign current_image = block.settings.image %}
+        {% if current_image != blank %}
+          <div class='sustainable-features__media'>
+            {%- capture sizes -%}100vw{%- endcapture -%}
+            {{
+              current_image
+              | image_url: width: 1500
+              | image_tag:
+                sizes: sizes,
+                widths: '200, 400, 600, 700, 800, 900, 1000, 1200, 1500',
+                loading: 'lazy',
+                alt: block.settings.title
+            }}
+          </div>
+        {% endif %}
+        <div class='sustainable-features__text' style='align-items: flex-start;'>
+          <h3 class='h2-force tw-mb-2'>{{ block.settings.title }}</h3>
+          <div class='sustainable-features__description'>
+            {{ block.settings.description }}
+          </div>
+          {% if block.settings.link_text != blank and block.settings.link_url != blank %}
+            <a
+              class='button button--primary'
+              href='{{ block.settings.link_url }}'
+              style='font-size: 14px;margin-top: 16px;'
+            >
+              {{- block.settings.link_text -}}
+            </a>
+          {% endif %}
+        </div>
+      </div>
+    {% endfor %}
+  </section>
+{% endif %}
+
+<link rel='stylesheet' href='{{ 'sustainable-features.min.css' | asset_url }}' media='print' onload="this.media='all'">
+<noscript>{{ 'sustainable-features.min.css' | asset_url | stylesheet_tag }}</noscript>
+
+<style>
+  .sustainable-features .Form {
+    width: 100%;
+    padding-bottom: 10px;
+  }
+  .sustainable-features .Form__Input {
+    box-shadow: none !important;
+    border-bottom: solid 1px var(--color-grey);
+  }
+  .sustainable-features__header.image-header {
+    padding: 0 !important;
+    position: relative;
+    z-index: 1;
+  }
+  .sustainable-features__header .mobile {
+    display: block !important;
+  }
+  .sustainable-features__header .desktop {
+    display: none !important;
+  }
+  .sustainable-features__header .header-wrapper {
+    padding: 0 !important;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .sustainable-features__header img {
+    width: 100%;
+    z-index: 1;
+  }
+  .sustainable-features__header .header-wrapper * {
+    color: #fff !important;
+    z-index: 2;
+  }
+  @media screen and (min-width: 641px) {
+    .sustainable-features__header .mobile {
+      display: none !important;
+    }
+    .sustainable-features__header .desktop {
+      display: block !important;
+    }
+  }
+
+  .sustainable-features .sustainable-feature .sustainable-features__media {
+    padding-bottom: 50% !important;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Ambassador",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Section Title"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>Section Description</p>"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "Mobile Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_desktop",
+      "label": "Desktop Image"
+    }
+  ],
+  "max_blocks": 2,
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "label": "Description"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "link_text",
+          "label": "Link Text"
+        },
+        {
+          "type": "url",
+          "id": "link_url",
+          "label": "Link URL"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

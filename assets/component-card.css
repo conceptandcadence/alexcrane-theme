@@ -126,6 +126,10 @@
   padding: 12px;
 }
 
+.card--media {
+  text-align: left !important;
+}
+
 .card__content {
   display: grid;
   grid-template-rows: minmax(0, 1fr) max-content minmax(0, 1fr);

@@ -25,22 +25,25 @@
 {%- endif -%}
 
 {%- style -%}
-   .section-{{ section.id }}-padding {
-     padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
-     padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
-   }
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+      padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+    }
 
-   @media screen and (min-width: 750px) {
-     .section-{{ section.id }}-padding {
-       padding-top: {{ section.settings.padding_top }}px;
-       padding-bottom: {{ section.settings.padding_bottom }}px;
-     }
-   }
-  {% unless section.settings.enable_pagination %}
-  	#shopify-section-{{ section.id }} .plp-pagination {
-  		display: none !important;
-  	}
-  {% endunless %}
+    @media screen and (min-width: 750px) {
+      .section-{{ section.id }}-padding {
+        padding-top: {{ section.settings.padding_top }}px;
+        padding-bottom: {{ section.settings.padding_bottom }}px;
+      }
+    }
+   {% unless section.settings.enable_pagination %}
+   	#shopify-section-{{ section.id }} .plp-pagination {
+   		display: none !important;
+   	}
+   {% endunless %}
+  .featured-collection .plp-actions {
+  	display: none !important;
+  }
 {%- endstyle -%}
 
 {%- liquid
@@ -69,7 +72,7 @@
   class='color-{{ section.settings.color_scheme }} isolate gradient'
 >
   <div
-    class='collection page-width{% if section.settings.quick_add == 'bulk' %} collection-quick-add-bulk{% endif %} section-{{ section.id }}-padding{% if section.settings.full_width %} collection--full-width{% endif %}'
+    class='featured-collection collection page-width{% if section.settings.quick_add == 'bulk' %} collection-quick-add-bulk{% endif %} section-{{ section.id }}-padding{% if section.settings.full_width %} collection--full-width{% endif %}'
     id='collection-{{ section.id }}'
     data-id='{{ section.id }}'
   >

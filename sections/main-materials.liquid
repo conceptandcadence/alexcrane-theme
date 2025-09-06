@@ -207,7 +207,7 @@
                       class='tw-text-[14px] tw-leading-[17px] tw-inline-block !tw-text-black !tw-border-b !tw-border-black'
                       aria-label='{{ 'sections.featured_collection.view_all_label' | t: collection_name: section.settings.collection.title | escape }}'
                     >
-                      <div class='tw-flex tw-items-center tw-gap-2 {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %} tw-text-[14px] tw-leading-[20px] !tw-text-black'>
+                      <div class='tw-flex tw-items-center tw-gap-2 !tw-text-black {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %} tw-text-[14px] tw-leading-[20px] !tw-text-black'>
                         Shop {{ material.collection.value.title }}
                       </div>
                     </a>
