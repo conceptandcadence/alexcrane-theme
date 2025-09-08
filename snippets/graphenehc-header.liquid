@@ -10,78 +10,128 @@
       const isLocalDev = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost';
       const grapheneUrl = '{{ settings.graphenehc_js_url }}';
 
-       if (isLocalDev) {
-         console.warn('[GrapheneHC] Skipping GrapheneHC load on local development server to prevent CORS errors');
-         // Create a comprehensive GrapheneHC stub for local development
-         window.graphenehc = {
-           init: function () {
-             console.log('[GrapheneHC] Stub init called');
-           },
-           autocomplete: function () {
-             console.log('[GrapheneHC] Stub autocomplete called');
-           },
-         };
-         window.$g = {
-           load: function () {
-             console.log('[GrapheneHC] Stub $g.load called');
-           },
-           autocomplete: function () {
-             console.log('[GrapheneHC] Stub $g.autocomplete called');
-           },
-           search: function () {
-             console.log('[GrapheneHC] Stub $g.search called');
-           },
-           collection: function () {
-             console.log('[GrapheneHC] Stub $g.collection called');
-           },
-           product: function () {
-             console.log('[GrapheneHC] Stub $g.product called');
-           },
-         };
-         return;
-       }
+      if (isLocalDev) {
+        console.warn('[GrapheneHC] Skipping GrapheneHC load on local development server to prevent CORS errors');
+        // Create a comprehensive GrapheneHC stub for local development
+        window.graphenehc = {
+          init: function (config) {
+            console.log('[GrapheneHC] Local dev stub init called with config:', config);
+            return Promise.resolve();
+          },
+          autocomplete: function () {
+            console.log('[GrapheneHC] Local dev stub autocomplete called');
+            return Promise.resolve();
+          },
+        };
+        window.$g = {
+          load: function (config) {
+            console.log('[GrapheneHC] Local dev stub $g.load called with config:', config);
+            // Provide basic fallback behavior for collection pages in local dev
+            if (config && config.template && config.template.target) {
+              const targetElement = document.querySelector(config.template.target);
+              if (targetElement) {
+                targetElement.innerHTML = `
+                   <div class="collection collection--empty page-width" style="padding: 2rem; text-align: center;">
+                     <h2>Local Development Mode</h2>
+                     <p>GrapheneHC is disabled in local development. Products would normally load here.</p>
+                     <p><small>This prevents CORS errors during local development.</small></p>
+                   </div>
+                 `;
+              }
+            }
+            return Promise.resolve();
+          },
+          autocomplete: function () {
+            console.log('[GrapheneHC] Local dev stub $g.autocomplete called');
+            return Promise.resolve();
+          },
+          search: function () {
+            console.log('[GrapheneHC] Local dev stub $g.search called');
+            return Promise.resolve();
+          },
+          collection: function () {
+            console.log('[GrapheneHC] Local dev stub $g.collection called');
+            return Promise.resolve();
+          },
+          product: function () {
+            console.log('[GrapheneHC] Local dev stub $g.product called');
+            return Promise.resolve();
+          },
+        };
+        return;
+      }
 
       // Production loading with error handling
       const script = document.createElement('script');
       script.src = grapheneUrl;
+      script.async = true;
       script.onload = function () {
         try {
-          graphenehc.init({
-            theme: '38caf17c88c5431c932b42cdc117b64e',
-          });
+          console.log('[GrapheneHC] Script loaded, initializing...');
+
+          // Wait a moment for the script to fully initialize its globals
+          setTimeout(() => {
+            if (window.graphenehc && typeof window.graphenehc.init === 'function') {
+              graphenehc.init({
+                theme: '38caf17c88c5431c932b42cdc117b64e',
+              });
+              console.log('[GrapheneHC] Successfully initialized');
+            } else {
+              console.error('[GrapheneHC] graphenehc.init not available after script load');
+            }
+          }, 100);
         } catch (error) {
           console.error('[GrapheneHC] Init error:', error);
         }
       };
-       script.onerror = function (error) {
-         console.error('[GrapheneHC] Failed to load GrapheneHC script:', error);
-         // Create comprehensive fallback stubs
-         window.graphenehc = {
-           init: function () {
-             console.log('[GrapheneHC] Fallback init');
-           },
-           autocomplete: function () {
-             console.log('[GrapheneHC] Fallback autocomplete');
-           },
-         };
-         window.$g = {
-           load: function () {
-             console.log('[GrapheneHC] Fallback $g.load');
-           },
-           autocomplete: function () {
-             console.log('[GrapheneHC] Fallback $g.autocomplete');
-           },
-           search: function () {
-             console.log('[GrapheneHC] Fallback $g.search');
-           },
-           collection: function () {
-             console.log('[GrapheneHC] Fallback $g.collection');
-           },
-           product: function () {
-             console.log('[GrapheneHC] Fallback $g.product');
-           },
-         };
-       };
+      script.onerror = function (error) {
+        console.error('[GrapheneHC] Failed to load GrapheneHC script:', error);
+        // Create comprehensive fallback stubs
+        window.graphenehc = {
+          init: function (config) {
+            console.log('[GrapheneHC] Fallback init called with config:', config);
+            return Promise.resolve();
+          },
+          autocomplete: function () {
+            console.log('[GrapheneHC] Fallback autocomplete');
+            return Promise.resolve();
+          },
+        };
+        window.$g = {
+          load: function (config) {
+            console.log('[GrapheneHC] Fallback $g.load called with config:', config);
+            // Provide basic fallback behavior for collection pages
+            if (config && config.template && config.template.target) {
+              const targetElement = document.querySelector(config.template.target);
+              if (targetElement) {
+                targetElement.innerHTML = `
+                   <div class="collection collection--empty page-width" style="padding: 2rem; text-align: center;">
+                     <h2>Unable to load products</h2>
+                     <p>There was an issue connecting to our product search. Please <a href="${window.location.href}" class="underlined-link">refresh the page</a> to try again.</p>
+                   </div>
+                 `;
+              }
+            }
+            return Promise.resolve();
+          },
+          autocomplete: function () {
+            console.log('[GrapheneHC] Fallback $g.autocomplete');
+            return Promise.resolve();
+          },
+          search: function () {
+            console.log('[GrapheneHC] Fallback $g.search');
+            return Promise.resolve();
+          },
+          collection: function () {
+            console.log('[GrapheneHC] Fallback $g.collection');
+            return Promise.resolve();
+          },
+          product: function () {
+            console.log('[GrapheneHC] Fallback $g.product');
+            return Promise.resolve();
+          },
+        };
+      };
       document.head.appendChild(script);
     })();
   </script>

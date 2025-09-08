@@ -1652,3 +1652,14 @@ a.product__text {
   font-size: 10px;
   color: #767676;
 }
+
+h3.product-detail-label {
+  min-width: 42px;
+}
+h3.product-detail-label span {
+  color: #767676 !important;
+}
+.product-detail {
+  display: flex;
+  gap: 10px;
+}

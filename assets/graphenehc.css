@@ -333,6 +333,7 @@
   opacity: 0;
   transition: opacity 0.6s ease;
   pointer-events: none;
+  z-index: 99;
 }
 
 .acs_auto_prods .grid__item:hover .card__quick-add {

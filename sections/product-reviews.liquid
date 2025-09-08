@@ -1,8 +1,6 @@
 {% capture review_header %}
 	<div class="swiper-slide reviews-carousel__quote !tw-flex tw-flex-col tw-relative tw-items-center tw-justify-between tw-p-12 tw-border tw-border-[#ececec] tw-rounded-[5px]">
 		<div class="reviews-carousel__quote-wrapper tw-flex tw-flex-col tw-text-left tw-justify-between tw-items-start tw-relative tw-h-full tw-flex-grow tw-w-full">
-			
-			{% if product.metafields.yotpo.reviews_average != blank and product.metafields.yotpo.reviews_count != blank %}
 				<div class="review-top-wrapper tw-flex tw-flex-col tw-gap-4">
 					<h3 class="reviews-carousel__headline tw-text-left tw-max-w-sm tw-font-normal tw-text-[20px] tw-leading-[24px] tw-m-0 md:tw-max-w-full tw-flex-grow tw-flex tw-items-center tw-gap-3">
 						<span class='reviews-overview__average'>{{ product.metafields.yotpo.reviews_average }}</span>
@@ -20,17 +18,6 @@
 					</div>
 				</div>
 				<a href="#" class="show-reviews-toggle button button--secondary">Read All Reviews</a>
-			{% else %}
-			<div class="review-top-wrapper tw-flex tw-flex-col tw-gap-4">
-				<h3 class="reviews-carousel__headline tw-text-left tw-max-w-sm tw-font-normal tw-text-[20px] tw-leading-[24px] tw-m-0 md:tw-max-w-full tw-flex-grow tw-flex tw-items-center tw-gap-3">
-					<span class='reviews-overview__average'>No reviews yet</span>
-				</h3>
-				<div>
-					Be the first to leave a review.
-				</div>
-			</div>
-			<a href="#" class="button button--secondary">Write a Review</a>
-			{% endif %}
 		</div>
 	</div>
 {% endcapture %}
@@ -129,26 +116,47 @@
 	{% endif %}
 {% endcapture %}
 
-<section id='section-{{ section.id }}' class='product-reviews tw-py-12 lg:tw-py-24'>
+<section
+  id='section-{{ section.id }}'
+  class='product-reviews tw-py-12 lg:tw-py-24'
+  data-reviews-average='{{ product.metafields.yotpo.reviews_average }}'
+  data-reviews-count='{{ product.metafields.yotpo.reviews_count }}'
+>
   <div class='reviews-carousel page-width !tw-pr-0 tw-flex tw-flex-col tw-justify-center tw-items-center'>
     <!-- Swiper -->
     <div
       class='swiper reviews-carousel-swiper tw-relative tw-w-full{% if section.blocks.size <= section.settings.cell_count %} disabled-on-desktop{% endif %}'
       data-cell-count='{{ section.settings.cell_count }}'
     >
-      <div class='swiper-wrapper'>
-        {{ review_header }}
-        {{ review_blocks }}
-      </div>
-      {% comment %}
-           <!-- Navigation buttons -->
-           <div class="swiper-button-next reviews-carousel-next tw-absolute tw-right-4 tw-top-1/2 tw-transform tw--translate-y-1/2 tw-w-12 tw-h-5 tw-bg-center tw-bg-no-repeat tw-bg-transparent tw-border-0 tw-p-0 tw-transition-opacity tw-duration-300 tw-ease-in-out tw-z-10 tw-cursor-pointer">
-        	<span class="tw-sr-only">Next</span>
+      {% assign reviews_count = product.metafields.yotpo.reviews_count | plus: 0 %}
+      {% if reviews_count > 0 %}
+        <div class='swiper-wrapper'>
+          {{ review_header }}
+          {{ review_blocks }}
         </div>
-           <div class="swiper-button-prev reviews-carousel-prev tw-absolute tw-left-4 tw-top-1/2 tw-transform tw--translate-y-1/2 tw-w-12 tw-h-5 tw-bg-center tw-bg-no-repeat tw-bg-transparent tw-border-0 tw-p-0 tw-transition-opacity tw-duration-300 tw-ease-in-out tw-z-10 tw-cursor-pointer tw-hidden">
-        	<span class="tw-sr-only">Previous</span>
+      {% else %}
+        <div
+          class='no-reviews-carousel__quote reviews-carousel__quote !tw-flex tw-flex-col tw-relative tw-items-center tw-justify-between tw-p-12 tw-border tw-border-[#ececec] tw-rounded-[5px] tw-max-w-[450px]'
+          role='group'
+        >
+          <div class='reviews-carousel__quote-wrapper tw-flex tw-flex-col tw-text-left tw-justify-between tw-items-start tw-relative tw-h-full tw-flex-grow tw-w-full'>
+            <div class='review-top-wrapper tw-flex tw-flex-col tw-gap-4 tw-mb-6'>
+              <h3 class='reviews-carousel__headline tw-text-left tw-max-w-sm tw-font-normal tw-text-[20px] tw-leading-[24px] tw-m-0 md:tw-max-w-full tw-flex-grow tw-flex tw-items-center tw-gap-3'>
+                <span class='reviews-overview__average'>No reviews yet</span>
+                <ul class='reviews-overview__stars tw-text-[16px] tw-flex tw-items-center tw-gap-1'>
+                  <li class='reviews-overview__star'><div class='reviews-overview__star-icon'>★</div></li>
+                  <li class='reviews-overview__star'><div class='reviews-overview__star-icon'>★</div></li>
+                  <li class='reviews-overview__star'><div class='reviews-overview__star-icon'>★</div></li>
+                  <li class='reviews-overview__star'><div class='reviews-overview__star-icon'>★</div></li>
+                  <li class='reviews-overview__star'><div class='reviews-overview__star-icon'>★</div></li>
+                </ul>
+              </h3>
+              <div class='tw-text-[14px] tw-leading-[20px]'>Be the first to leave a review.</div>
+            </div>
+            <a href='#' class='show-reviews-toggle button button--secondary'>Write a Review</a>
+          </div>
         </div>
-      {% endcomment %}
+      {% endif %}
     </div>
   </div>
 </section>
@@ -159,6 +167,16 @@
 <script>
   document.addEventListener('DOMContentLoaded', function () {
     const swiperElement = document.querySelector('#section-{{ section.id }} .reviews-carousel-swiper');
+    const productReviewsSection = document.querySelector('#section-{{ section.id }}');
+
+    // Check if we have reviews by looking at the data-reviews-count attribute
+    const reviewsCount = productReviewsSection ? parseInt(productReviewsSection.dataset.reviewsCount) || 0 : 0;
+
+    // If no reviews, don't initialize Swiper at all
+    if (reviewsCount === 0) {
+      console.log('No reviews available, skipping Swiper initialization');
+      return;
+    }
 
     if (swiperElement && !swiperElement.classList.contains('disabled-on-desktop')) {
       const cellCount = parseInt(swiperElement.dataset.cellCount) || 3;
@@ -533,6 +551,16 @@
 
   // Review Data Population Script
   function populateReviewCarousel() {
+    // First check the data-reviews-count attribute on the section
+    const productReviewsSection = document.querySelector('.product-reviews');
+    const reviewsCount = productReviewsSection ? parseInt(productReviewsSection.dataset.reviewsCount) || 0 : 0;
+
+    // If no reviews according to the data attribute, don't proceed
+    if (reviewsCount === 0) {
+      console.log('No reviews available (data-reviews-count = 0), skipping carousel population');
+      return true; // Return true to stop retrying
+    }
+
     const yotpoWidget = document.querySelector('.yotpo-main-widget');
     const carouselQuotes = document.querySelectorAll('.reviews-carousel__quote');
 
@@ -541,17 +569,12 @@
       return false;
     }
 
-    // Check if this product has any reviews at all
+    // Double-check if this product has any reviews at all
     const averageElement = document.querySelector('.reviews-overview__average');
     const hasReviews = averageElement && !averageElement.textContent.includes('No reviews yet');
 
     if (!hasReviews) {
-      console.log('No reviews available for this product, hiding review carousel');
-      // Hide the entire carousel section if no reviews
-      const carouselSection = document.querySelector('.reviews-carousel-swiper');
-      if (carouselSection) {
-        carouselSection.style.display = 'none';
-      }
+      console.log('No reviews available for this product (based on UI text), skipping carousel population');
       return true; // Return true to stop retrying
     }
 
@@ -937,6 +960,15 @@
 
   // Wait for Yotpo to load and populate reviews
   function waitForYotpoAndPopulate() {
+    // Early exit if no reviews according to data attribute
+    const productReviewsSection = document.querySelector('.product-reviews');
+    const reviewsCount = productReviewsSection ? parseInt(productReviewsSection.dataset.reviewsCount) || 0 : 0;
+
+    if (reviewsCount === 0) {
+      console.log('No reviews available (data-reviews-count = 0), skipping Yotpo population entirely');
+      return;
+    }
+
     let attempts = 0;
     const maxAttempts = 20; // Try for 10 seconds (500ms * 20)
 
@@ -968,6 +1000,15 @@
 
   // Also listen for Yotpo-specific events
   document.addEventListener('DOMContentLoaded', function () {
+    // Early exit if no reviews
+    const productReviewsSection = document.querySelector('.product-reviews');
+    const reviewsCount = productReviewsSection ? parseInt(productReviewsSection.dataset.reviewsCount) || 0 : 0;
+
+    if (reviewsCount === 0) {
+      console.log('No reviews available (data-reviews-count = 0), skipping Yotpo event listeners');
+      return;
+    }
+
     // Listen for Yotpo events
     window.addEventListener('yotpo-reviews-loaded', function () {
       console.log('Yotpo reviews loaded event detected');
@@ -1037,14 +1078,45 @@
 
   // Start the process when DOM is ready
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', waitForYotpoAndPopulate);
+    document.addEventListener('DOMContentLoaded', function () {
+      // Check reviews count before starting
+      const productReviewsSection = document.querySelector('.product-reviews');
+      const reviewsCount = productReviewsSection ? parseInt(productReviewsSection.dataset.reviewsCount) || 0 : 0;
+
+      if (reviewsCount > 0) {
+        waitForYotpoAndPopulate();
+      } else {
+        console.log('No reviews available (data-reviews-count = 0), skipping initialization');
+      }
+    });
   } else {
-    waitForYotpoAndPopulate();
+    // Check reviews count before starting
+    const productReviewsSection = document.querySelector('.product-reviews');
+    const reviewsCount = productReviewsSection ? parseInt(productReviewsSection.dataset.reviewsCount) || 0 : 0;
+
+    if (reviewsCount > 0) {
+      waitForYotpoAndPopulate();
+    } else {
+      console.log('No reviews available (data-reviews-count = 0), skipping initialization');
+    }
   }
 
-  // Also try when Yotpo fires its events (if available)
-  window.addEventListener('yotpo-reviews-loaded', waitForYotpoAndPopulate);
-  window.addEventListener('yotpo-widget-loaded', waitForYotpoAndPopulate);
+  // Also try when Yotpo fires its events (if available) - but only if we have reviews
+  window.addEventListener('yotpo-reviews-loaded', function () {
+    const productReviewsSection = document.querySelector('.product-reviews');
+    const reviewsCount = productReviewsSection ? parseInt(productReviewsSection.dataset.reviewsCount) || 0 : 0;
+    if (reviewsCount > 0) {
+      waitForYotpoAndPopulate();
+    }
+  });
+
+  window.addEventListener('yotpo-widget-loaded', function () {
+    const productReviewsSection = document.querySelector('.product-reviews');
+    const reviewsCount = productReviewsSection ? parseInt(productReviewsSection.dataset.reviewsCount) || 0 : 0;
+    if (reviewsCount > 0) {
+      waitForYotpoAndPopulate();
+    }
+  });
 
   // Add debug function to global scope for manual testing
   window.debugYotpoStructure = debugYotpoStructure;

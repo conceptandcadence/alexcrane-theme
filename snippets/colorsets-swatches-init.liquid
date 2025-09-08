@@ -31,10 +31,50 @@
       document.addEventListener('graphene:loaded', function () {
         setTimeout(() => {
           if (window.ColorsetSwatches && window.ColorsetSwatches.isInitialized) {
+            console.log('🎨 GrapheneHC content loaded, refreshing swatches...');
             window.ColorsetSwatches.refresh();
           }
         }, 500);
       });
+
+      // Infinite Scroll integration - refresh swatches when new products load
+      document.addEventListener('endlessScroll:loaded', function (event) {
+        console.log('🎨 Endless scroll loaded new content, refreshing swatches...');
+        if (window.ColorsetSwatches && window.ColorsetSwatches.isInitialized) {
+          setTimeout(() => {
+            window.ColorsetSwatches.refresh();
+          }, 300);
+        }
+      });
+
+      // Monitor for EndlessScroll initialization and hook into it
+      const checkEndlessScroll = () => {
+        if (window.endlessScroll && typeof window.endlessScroll.refresh === 'function') {
+          console.log('🎨 Found EndlessScroll instance, setting up integration...');
+
+          // Store original methods if they exist
+          if (window.endlessScroll.loadMore && !window.endlessScroll._colorsetHooked) {
+            const originalLoadMore = window.endlessScroll.loadMore.bind(window.endlessScroll);
+            window.endlessScroll.loadMore = async function (...args) {
+              const result = await originalLoadMore(...args);
+              console.log('🎨 EndlessScroll loadMore completed, refreshing swatches...');
+              if (window.ColorsetSwatches && window.ColorsetSwatches.isInitialized) {
+                setTimeout(() => {
+                  window.ColorsetSwatches.refresh();
+                }, 500);
+              }
+              return result;
+            };
+            window.endlessScroll._colorsetHooked = true;
+          }
+        } else {
+          // Check again in a bit
+          setTimeout(checkEndlessScroll, 1000);
+        }
+      };
+
+      // Start checking for EndlessScroll
+      setTimeout(checkEndlessScroll, 2000);
 
       // Generic AJAX content loading - refresh swatches on common events
       const refreshEvents = ['DOMNodeInserted', 'ajaxComplete', 'load'];

@@ -37,6 +37,16 @@
           padding-top: {{ section.settings.padding_top }}px;
           padding-bottom: {{ section.settings.padding_bottom }}px;
         }
+      .product__tab-content .image-with-text__text {
+      	display: flex !important;
+      }
+      .product__tab-content .image-with-text__text > div {
+      	min-width: 120px !important;
+    padding-right: 10px !important;
+     display: flex !important;
+     align-items: flex-start !important;
+     justify-content: flex-start !important;
+      }
       }
     .product__tab-content[aria-expanded="false"] {
     		display: none !important;
@@ -58,6 +68,72 @@
     	min-height: 24px !important;
     	height: 24px !important;
     }
+
+       /* Mobile Accordion Styles */
+       @media screen and (max-width: 767px) {
+         .product__content-wrapper {
+           display: flex !important;
+           flex-direction: column;
+         }
+
+         /* Default order for all sections */
+         .product__accordion-section {
+           order: 2;
+         }
+
+         /* Active section gets order: 1 to appear first */
+         .product__accordion-section.active {
+           order: 1;
+         }
+
+         .product__accordion-header {
+           background: none;
+           border: none;
+           cursor: pointer;
+           transition: all 0.3s ease;
+         }
+
+         .product__accordion-header:hover {
+           background-color: #f9f9f9;
+         }
+
+         .product__accordion-content[aria-expanded="false"] {
+           display: none !important;
+         }
+
+         .product__accordion-content[aria-expanded="true"] {
+           display: block !important;
+           padding: 16px 0 24px 0;
+           border-top: 1px solid #ececec;
+         }
+
+         .product__accordion-content {
+           overflow: hidden;
+           transition: all 0.3s ease;
+         }
+
+         .product__accordion-icon {
+           font-size: 16px;
+           line-height: 1;
+           transition: transform 0.3s ease;
+         }
+       }
+
+       /* Desktop Tab Styles */
+       @media screen and (min-width: 768px) {
+         .product__content-wrapper {
+           display: flex !important;
+           flex-direction: column;
+         }
+
+         .product__tab-content[aria-expanded="false"] {
+           display: none !important;
+         }
+
+         .product__tab-content[aria-expanded="true"] {
+           display: block !important;
+         }
+       }
   {%- endstyle -%}
 
   <script type='text/javascript'>
@@ -80,8 +156,83 @@
   {% if section.settings.image_zoom == 'hover' %}
     <script id='EnableZoomOnHover-main' src='{{ 'magnify.js' | asset_url }}' defer='defer'></script>
   {% endif %}
+
+  <script>
+    // Enhanced Mobile Accordion Functionality that works with existing tab system
+    document.addEventListener('DOMContentLoaded', function () {
+      const accordionHeaders = document.querySelectorAll('.product__accordion-header');
+
+      function isMobile() {
+        return window.innerWidth < 768;
+      }
+
+      function updateAccordionIcons() {
+        accordionHeaders.forEach((header) => {
+          const panel = header.getAttribute('data-panel');
+          const content = document.querySelector(`.product__accordion-content[data-panel="${panel}"]`);
+          const icon = header.querySelector('.product__accordion-icon');
+
+          if (content && icon) {
+            const isExpanded = content.getAttribute('aria-expanded') === 'true';
+            icon.textContent = isExpanded ? '−' : '+';
+          }
+        });
+      }
+
+      accordionHeaders.forEach((header) => {
+        header.addEventListener('click', function () {
+          console.log('Accordion header clicked:', this, 'isMobile:', isMobile());
+
+          // Only handle clicks on mobile
+          if (!isMobile()) return;
+
+          const panel = this.getAttribute('data-panel');
+          const content = document.querySelector(`.product__accordion-content[data-panel="${panel}"]`);
+          const icon = this.querySelector('.product__accordion-icon');
+
+          console.log('Panel:', panel, 'Content:', content, 'Icon:', icon);
+
+          if (content) {
+            const isExpanded = content.getAttribute('aria-expanded') === 'true';
+
+            // Close all other accordion sections on mobile
+            accordionHeaders.forEach((otherHeader) => {
+              if (otherHeader !== header) {
+                const otherPanel = otherHeader.getAttribute('data-panel');
+                const otherContent = document.querySelector(`.product__accordion-content[data-panel="${otherPanel}"]`);
+                const otherIcon = otherHeader.querySelector('.product__accordion-icon');
+
+                if (otherContent) {
+                  otherContent.setAttribute('aria-expanded', 'false');
+                  otherHeader.setAttribute('aria-expanded', 'false');
+                  if (otherIcon) otherIcon.textContent = '+';
+                }
+              }
+            });
+
+            // Toggle current section
+            const newState = !isExpanded;
+            content.setAttribute('aria-expanded', newState);
+            header.setAttribute('aria-expanded', newState);
+
+            if (icon) {
+              icon.textContent = newState ? '−' : '+';
+            }
+          }
+        });
+      });
+
+      // Update icons on initial load
+      updateAccordionIcons();
+
+      // Handle window resize to ensure proper behavior
+      window.addEventListener('resize', function () {
+        updateAccordionIcons();
+      });
+    });
+  </script>
   <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css'>
-  <script src='https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js'></script>
+  <script src='https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js' defer></script>
   <script src='{{ 'modal-media-carousel.js' | asset_url }}?v={{ 'now' | date: '%s' }}&debug=1' defer='defer'></script>
   {%- if request.design_mode -%}
     <script src='{{ 'theme-editor.js' | asset_url }}' defer='defer'></script>
@@ -120,7 +271,13 @@
             </a>
           </div>
           <div id='price-{{ section.id }}'>
-            {%- render 'price', product: product, use_variant: true, show_badges: true, price_class: '' -%}
+            {%- render 'price',
+              product: product,
+              use_variant: true,
+              show_badges: true,
+              price_class: '',
+              show_compare_at_price: true
+            -%}
           </div>
         </div>
         {%- if product.description != blank -%}
@@ -531,154 +688,207 @@
                 -%}
 
               {%- when 'tabbed_list' -%}
-                {% assign active_tab = true %}
+                {% comment %} Determine which tab should be active first {% endcomment %}
+                {% assign first_tab_found = false %}
+                {% assign active_details_tab = false %}
+                {% assign active_materials_tab = false %}
+                {% assign active_returns_tab = false %}
+                {% assign active_shop_look_tab = false %}
+
+                {% if product.metafields.custom_fields.details_model != blank and first_tab_found == false %}
+                  {% assign active_details_tab = true %}
+                  {% assign first_tab_found = true %}
+                {% endif %}
+                {% if product.metafields.options.materials.value != blank %}
+                  {% if first_tab_found == false %}
+                    {% assign active_materials_tab = true %}
+                    {% assign first_tab_found = true %}
+                  {% endif %}
+                {% endif %}
+                {% if product.tags contains 'no-returns' and first_tab_found == false %}
+                  {% assign active_returns_tab = true %}
+                  {% assign first_tab_found = true %}
+                {% endif %}
+                {% if product.metafields.shopthelook.products.value != blank and first_tab_found == false %}
+                  {% assign active_shop_look_tab = true %}
+                  {% assign first_tab_found = true %}
+                {% endif %}
+
                 <div class='product__tabbed-list !tw-mt-0'>
-                  <ul class='tw-flex tw-relative tw-mb-8'>
+                  <!-- Desktop Tab Navigation -->
+                  <ul class='product__tab-nav tw-relative tw-mb-8 tw-hidden md:tw-flex'>
                     {% if product.metafields.custom_fields.details_model != blank %}
                       <li class='product__tab tw-mr-6'>
                         <button
-                          class='product__tab tw-text-[12px] tw-leading-[15px] tw-border-b {% if active_tab %}tw-border-black hover:tw-border-black{% else %}tw-border-[#ececec] hover:tw-border-black{% endif %}'
+                          class='product__tab tw-text-[12px] tw-leading-[15px] tw-border-b {% if active_details_tab %}tw-border-black hover:tw-border-black{% else %}tw-border-[#ececec] hover:tw-border-black{% endif %}'
                           data-panel='details'
                         >
                           Details
                         </button>
                       </li>
-                      {% assign active_tab = false %}
                     {% endif %}
-                    {% if product.metafields.custom_fields.fit
-                      or product.metafields.custom_fields.details_origin
-                      or product.metafields.custom_fields.details_care
-                      or product.metafields.custom_fields.details_model != blank
-                    %}
+                    {% if product.metafields.options.materials.value != blank %}
                       <li class='product__tab tw-mr-4'>
                         <button
-                          class='product__tab tw-text-[12px] tw-leading-[15px] tw-border-b {% if active_tab %}tw-border-black hover:tw-border-black{% else %}tw-border-[#ececec] hover:tw-border-black{% endif %}'
+                          class='product__tab tw-text-[12px] tw-leading-[15px] tw-border-b {% if active_materials_tab %}tw-border-black hover:tw-border-black{% else %}tw-border-[#ececec] hover:tw-border-black{% endif %}'
                           data-panel='materials'
                         >
                           Materials
                         </button>
                       </li>
-                      {% assign active_tab = false %}
                     {% endif %}
                     {% if product.tags contains 'no-returns' %}
                       <li class='product__tab tw-mr-6'>
                         <button
-                          class='product__tab tw-text-[12px] tw-leading-[15px] tw-border-b {% if active_tab %}tw-border-black hover:tw-border-black{% else %}tw-border-[#ececec] hover:tw-border-black{% endif %}'
+                          class='product__tab tw-text-[12px] tw-leading-[15px] tw-border-b {% if active_returns_tab %}tw-border-black hover:tw-border-black{% else %}tw-border-[#ececec] hover:tw-border-black{% endif %}'
                           data-panel='returns'
                         >
                           Returns
                         </button>
                       </li>
-                      {% assign active_tab = false %}
                     {% endif %}
                     {% if product.metafields.shopthelook.products.value != blank %}
                       <li class='product__tab tw-mr-6'>
                         <button
-                          class='product__tab tw-text-[12px] tw-leading-[15px] tw-border-b {% if active_tab %}tw-border-black hover:tw-border-black{% else %}tw-border-[#ececec] hover:tw-border-black{% endif %}'
+                          class='product__tab tw-text-[12px] tw-leading-[15px] tw-border-b {% if active_shop_look_tab %}tw-border-black hover:tw-border-black{% else %}tw-border-[#ececec] hover:tw-border-black{% endif %}'
                           data-panel='shop-the-look'
                         >
                           Shop the Look
                         </button>
                       </li>
-                      {% assign active_tab = false %}
                     {% endif %}
                   </ul>
-                  {% assign active_tab = true %}
-                  <ul class='product__text-body tw-flex tw-flex-col' {{ block.shopify_attributes }}>
-                    <li
-                      class='product__tab tw-text-[12px] tw-leading-[15px]'
-                      data-panel='materials'
-                      aria-expanded='{% if active_tab %}true{% else %}false{% endif %}'
-                    >
-                      {% if product.metafields.options.materials.value != blank %}
-                        {% for material in product.metafields.options.materials.value %}
-                          {% if material.benefit != blank %}
-                            <div class='image-with-text__text rte tw-text-[12px] tw-leading-[15px]'>
-                              <div class='tw-flex tw-items-center tw-pb-3 tw-gap-2'>
-                                {%- if material.collection != blank -%}
-                                  <a
-                                    href='{{ material.collection.value.url }}'
-                                    class='!tw-text-black tw-text-[12px] tw-leading-[15px]'
-                                  >
-                                    {{- material.title -}}
-                                  </a>
-                                {%- else -%}
-                                  <span class='!tw-text-black tw-text-[12px] tw-leading-[15px]'>
-                                    {{- material.title -}}
-                                  </span>
-                                {%- endif -%}
-                                {% if material.icon != blank %}
-                                  <img
-                                    class='tw-image-cover tw-w-[12px] tw-h-[12px] tw-overflow-hidden tw-pointer-events-none !tw-mb-0'
-                                    src='{{ material.icon.value | image_url: width: 24 }}'
-                                    alt='{{ material.title }}'
-                                    width='12'
-                                    height='12'
-                                  >
-                                {% endif %}
+
+                  <!-- Content sections for both desktop tabs and mobile accordion -->
+                  <div class='product__content-wrapper' {{ block.shopify_attributes }}>
+                    {% comment %} Render active section first on mobile {% endcomment %}
+                    {% if active_materials_tab and product.metafields.options.materials.value != blank %}
+                      <!-- Mobile Accordion Header for Materials -->
+                      <button
+                        class='product__accordion-header md:tw-hidden tw-w-full tw-text-left tw-border-b tw-border-[#ececec] tw-py-4 tw-text-[12px] tw-leading-[15px] tw-font-medium'
+                        data-panel='materials'
+                        aria-expanded='true'
+                      >
+                        Materials
+                        <span class='product__accordion-icon tw-float-right'>−</span>
+                      </button>
+
+                      <div
+                        class='product__tab-content product__accordion-content tw-text-[12px] tw-leading-[15px]'
+                        data-panel='materials'
+                        aria-expanded='true'
+                      >
+                        {% if product.metafields.options.materials.value != blank %}
+                          {% for material in product.metafields.options.materials.value %}
+                            {% if material.benefit != blank %}
+                              <div class='image-with-text__text rte tw-text-[12px] tw-leading-[15px] tw-mb-6'>
+                                <div class='tw-flex tw-items-center tw-pb-2 tw-gap-2'>
+                                  {%- if material.collection != blank -%}
+                                    <a
+                                      href='{{ material.collection.value.url }}'
+                                      class=' tw-text-[12px] tw-leading-[15px] !tw-text-[#767676]'
+                                    >
+                                      {{- material.title -}}
+                                    </a>
+                                  {%- else -%}
+                                    <span class='!tw-text-[12px] tw-leading-[15px] !tw-text-[#767676] !tw-font-medium'>
+                                      {{- material.title -}}
+                                    </span>
+                                  {%- endif -%}
+                                  {% comment %}
+                                    {% if material.icon != blank %}
+                                      <img
+                                          class='tw-image-cover tw-w-[12px] tw-h-[12px] tw-overflow-hidden tw-pointer-events-none !tw-mb-0 tw-opacity-20'
+                                        src='{{ material.icon.value | image_url: width: 24 }}'
+                                        alt='{{ material.title }}'
+                                        width='12'
+                                        height='12'
+                                      >
+                                    {% endif %}
+                                  {% endcomment %}
+                                </div>
+                                {{ material.benefit | metafield_text }}
                               </div>
-                              {{ material.benefit | metafield_text }}
+                            {% endif %}
+                          {% endfor %}
+                        {% endif %}
+                      </div>
+                    {% endif %}
+
+                    {% if active_details_tab and product.metafields.custom_fields.details_model != blank %}
+                      <!-- Mobile Accordion Header for Details -->
+                      <button
+                        class='product__accordion-header md:tw-hidden tw-w-full tw-text-left tw-border-b tw-border-[#ececec] tw-py-4 tw-text-[12px] tw-leading-[15px] tw-font-medium'
+                        data-panel='details'
+                        aria-expanded='true'
+                      >
+                        Details
+                        <span class='product__accordion-icon tw-float-right'>−</span>
+                      </button>
+
+                      <div
+                        class='product__tab-content product__accordion-content rte tw-text-[12px] tw-leading-[15px]'
+                        data-panel='details'
+                        aria-expanded='true'
+                      >
+                        {% if product.metafields.custom_fields.details_fit != blank %}
+                          <div class='product-detail fit tw-mb-4'>
+                            <h3 class='product-detail-label'>
+                              <span class='!tw-text-black tw-text-[12px] tw-leading-[15px] tw-mb-3'>Fit</span>
+                            </h3>
+                            <div class='product-detail-content !tw-text-black tw-text-[12px] tw-leading-[15px]'>
+                              {{ product.metafields.custom_fields.details_fit }}
                             </div>
-                          {% endif %}
-                        {% endfor %}
-                        {% assign active_tab = false %}
-                      {% endif %}
-                    </li>
-                    <li
-                      class='product__tab-content rte tw-text-[12px] tw-leading-[15px]'
-                      data-panel='details'
-                      aria-expanded='{% if active_tab %}true{% else %}false{% endif %}'
-                    >
-                      {% if product.metafields.custom_fields.details_fit != blank %}
-                        <div class='product-detail fit tw-mb-4'>
-                          <h3 class='product-detail-label'>
-                            <span class='!tw-text-black tw-text-[12px] tw-leading-[15px] tw-mb-3'>Fit</span>
-                          </h3>
-                          <div class='product-detail-content !tw-text-black tw-text-[12px] tw-leading-[15px]'>
-                            {{ product.metafields.custom_fields.details_fit }}
                           </div>
-                        </div>
-                        {% assign active_tab = false %}
-                      {% endif %}
-                      {% if product.metafields.custom_fields.details_model != blank %}
-                        <div class='product-detail model tw-mb-4'>
-                          <h3 class='product-detail-label'>
-                            <span class='!tw-text-black tw-text-[12px] tw-leading-[15px] tw-mb-3'>Model</span>
-                          </h3>
-                          <div class='product-detail-content !tw-text-black tw-text-[12px] tw-leading-[15px]'>
-                            {{ product.metafields.custom_fields.details_model }}
+                        {% endif %}
+                        {% if product.metafields.custom_fields.details_model != blank %}
+                          <div class='product-detail model tw-mb-4'>
+                            <h3 class='product-detail-label'>
+                              <span class='!tw-text-black tw-text-[12px] tw-leading-[15px] tw-mb-3'>Model</span>
+                            </h3>
+                            <div class='product-detail-content !tw-text-black tw-text-[12px] tw-leading-[15px]'>
+                              {{ product.metafields.custom_fields.details_model }}
+                            </div>
                           </div>
-                        </div>
-                        {% assign active_tab = false %}
-                      {% endif %}
-                      {% if product.metafields.custom_fields.details_care != blank %}
-                        <div class='product-detail care tw-mb-4'>
-                          <h3 class='product-detail-label'>
-                            <span class='!tw-text-black tw-text-[12px] tw-leading-[15px] tw-mb-3'>Care</span>
-                          </h3>
-                          <div class='product-detail-content *:tw-mb-4 !tw-text-black tw-text-[12px] tw-leading-[15px]'>
-                            {{ product.metafields.custom_fields.details_care }}
+                        {% endif %}
+                        {% if product.metafields.custom_fields.details_care != blank %}
+                          <div class='product-detail care tw-mb-4'>
+                            <h3 class='product-detail-label'>
+                              <span class='!tw-text-black tw-text-[12px] tw-leading-[15px] tw-mb-3'>Care</span>
+                            </h3>
+                            <div class='product-detail-content *:tw-mb-4 !tw-text-black tw-text-[12px] tw-leading-[15px]'>
+                              {{ product.metafields.custom_fields.details_care }}
+                            </div>
                           </div>
-                        </div>
-                        {% assign active_tab = false %}
-                      {% endif %}
-                      {% if product.metafields.custom_fields.details_origin != blank %}
-                        <div class='product-detail origin tw-mb-4'>
-                          <h3 class='product-detail-label'>
-                            <span class='!tw-text-black tw-text-[12px] tw-leading-[15px] tw-mb-3'>Origin</span>
-                          </h3>
-                          <div class='product-detail-content !tw-text-black tw-text-[12px] tw-leading-[15px]'>
-                            {{ product.metafields.custom_fields.details_origin }}
+                        {% endif %}
+                        {% if product.metafields.custom_fields.details_origin != blank %}
+                          <div class='product-detail origin tw-mb-4'>
+                            <h3 class='product-detail-label'>
+                              <span class='!tw-text-black tw-text-[12px] tw-leading-[15px] tw-mb-3'>Origin</span>
+                            </h3>
+                            <div class='product-detail-content !tw-text-black tw-text-[12px] tw-leading-[15px]'>
+                              {{ product.metafields.custom_fields.details_origin }}
+                            </div>
                           </div>
-                        </div>
-                        {% assign active_tab = false %}
-                      {% endif %}
-                    </li>
-                    {% if product.tags contains 'no-returns' %}
-                      <li
-                        class='product__tab-content rte tw-text-[12px] tw-leading-[15px]'
+                        {% endif %}
+                      </div>
+                    {% endif %}
+
+                    {% if active_returns_tab and product.tags contains 'no-returns' %}
+                      <!-- Mobile Accordion Header for Returns -->
+                      <button
+                        class='product__accordion-header md:tw-hidden tw-w-full tw-text-left tw-border-b tw-border-[#ececec] tw-py-4 tw-text-[12px] tw-leading-[15px] tw-font-medium'
                         data-panel='returns'
-                        aria-expanded='{% if active_tab %}true{% else %}false{% endif %}'
+                        aria-expanded='true'
+                      >
+                        Returns
+                        <span class='product__accordion-icon tw-float-right'>−</span>
+                      </button>
+
+                      <div
+                        class='product__tab-content product__accordion-content rte tw-text-[12px] tw-leading-[15px]'
+                        data-panel='returns'
+                        aria-expanded='true'
                       >
                         <span class='hidden stock-ship__shipping available tw-mb-4'>
                           {{- product.metafields.custom_fields.shipping_time | default: 'Ships in 1-2 business days' -}}
@@ -688,39 +898,41 @@
                           the date of shipping to return for a refund. For exchanges, you have up to 40 days to exchange
                           for something else or store credit.
                         </div>
-                        {% assign active_tab = false %}
-                      </li>
+                      </div>
                     {% endif %}
-                    {% if product.metafields.shopthelook.products.value != blank %}
-                      <li
-                        class='product__tab-content tw-mt-4 rte tw-text-[12px] tw-leading-[15px]'
+
+                    {% if active_shop_look_tab and product.metafields.shopthelook.products.value != blank %}
+                      <!-- Mobile Accordion Header for Shop the Look -->
+                      <button
+                        class='product__accordion-header md:tw-hidden tw-w-full tw-text-left tw-border-b tw-border-[#ececec] tw-py-4 tw-text-[12px] tw-leading-[15px] tw-font-medium'
                         data-panel='shop-the-look'
-                        aria-expanded='{% if active_tab %}true{% else %}false{% endif %}'
+                        aria-expanded='true'
+                      >
+                        Shop the Look
+                        <span class='product__accordion-icon tw-float-right'>−</span>
+                      </button>
+
+                      <div
+                        class='product__tab-content product__accordion-content tw-mt-4 rte tw-text-[12px] tw-leading-[15px]'
+                        data-panel='shop-the-look'
+                        aria-expanded='true'
                       >
                         <div
                           class='product-grid-container'
                         >
                           <ul
                             data-id='{{ section.id }}'
-                            class='
-                              grid product-grid grid--3-col-tablet-down
-                              grid--3-col-desktop lg:!tw-gap-x-[12px] !tw-px-0
-                            '
+                            class='product-grid-container__inner grid product-grid product-grid--2-col-tablet-down product-grid--2-col-tablet product-grid--2-col-desktop !tw-gap-3 !tw-gap-y-0'
                           >
-                            {% assign skip_card_product_styles = false %}
-                            {%- for product in product.metafields.shopthelook.products.value limit: 2 -%}
-                              {% assign lazy_load = false %}
-                              {%- if forloop.index > 2 -%}
-                                {%- assign lazy_load = true -%}
-                              {%- endif -%}
+                            {%- for product in product.metafields.shopthelook.products.value -%}
                               <li class='grid__item'>
                                 {% render 'card-product',
                                   card_product: product,
                                   media_aspect_ratio: 'adapt',
-                                  show_secondary_image: true,
+                                  image_shape: 'default',
+                                  show_secondary_image: false,
                                   show_vendor: false,
                                   show_rating: false,
-                                  show_swatches: true,
                                   lazy_load: true,
                                   quick_add: 'standard'
                                 %}
@@ -729,10 +941,209 @@
                             {%- endfor -%}
                           </ul>
                         </div>
-                      </li>
-                      {% assign active_tab = false %}
+                      </div>
                     {% endif %}
-                  </ul>
+
+                    {% comment %} Now render remaining sections that are not active {% endcomment %}
+                    {% unless active_materials_tab %}
+                      {% if product.metafields.options.materials.value != blank %}
+                        <!-- Mobile Accordion Header for Materials -->
+                        <button
+                          class='product__accordion-header md:tw-hidden tw-w-full tw-text-left tw-border-b tw-border-[#ececec] tw-py-4 tw-text-[12px] tw-leading-[15px] tw-font-medium'
+                          data-panel='materials'
+                          aria-expanded='false'
+                        >
+                          Materials
+                          <span class='product__accordion-icon tw-float-right'>+</span>
+                        </button>
+
+                        <div
+                          class='product__tab-content product__accordion-content tw-text-[12px] tw-leading-[15px]'
+                          data-panel='materials'
+                          aria-expanded='false'
+                        >
+                          {% if product.metafields.options.materials.value != blank %}
+                            {% for material in product.metafields.options.materials.value %}
+                              {% if material.benefit != blank %}
+                                <div class='image-with-text__text rte tw-text-[12px] tw-leading-[15px] tw-mb-6'>
+                                  <div class='tw-flex tw-items-center tw-pb-2 tw-gap-2'>
+                                    {%- if material.collection != blank -%}
+                                      <a
+                                        href='{{ material.collection.value.url }}'
+                                        class=' tw-text-[12px] tw-leading-[15px] !tw-text-[#767676]'
+                                      >
+                                        {{- material.title -}}
+                                      </a>
+                                    {%- else -%}
+                                      <span class='!tw-text-[12px] tw-leading-[15px] !tw-text-[#767676] !tw-font-medium'>
+                                        {{- material.title -}}
+                                      </span>
+                                    {%- endif -%}
+                                    {% comment %}
+                                      {% if material.icon != blank %}
+                                        <img
+                                          class='tw-image-cover tw-w-[12px] tw-h-[12px] tw-overflow-hidden tw-pointer-events-none !tw-mb-0 tw-opacity-20'
+                                          src='{{ material.icon.value | image_url: width: 24 }}'
+                                          alt='{{ material.title }}'
+                                          width='12'
+                                          height='12'
+                                        >
+                                      {% endif %}
+                                    {% endcomment %}
+                                  </div>
+                                  {{ material.benefit | metafield_text }}
+                                </div>
+                              {% endif %}
+                            {% endfor %}
+                          {% endif %}
+                        </div>
+                      {% endif %}
+                    {% endunless %}
+
+                    {% unless active_details_tab %}
+                      {% if product.metafields.custom_fields.details_model != blank %}
+                        <!-- Mobile Accordion Header for Details -->
+                        <button
+                          class='product__accordion-header md:tw-hidden tw-w-full tw-text-left tw-border-b tw-border-[#ececec] tw-py-4 tw-text-[12px] tw-leading-[15px] tw-font-medium'
+                          data-panel='details'
+                          aria-expanded='false'
+                        >
+                          Details
+                          <span class='product__accordion-icon tw-float-right'>+</span>
+                        </button>
+
+                        <div
+                          class='product__tab-content product__accordion-content rte tw-text-[12px] tw-leading-[15px]'
+                          data-panel='details'
+                          aria-expanded='false'
+                        >
+                          {% if product.metafields.custom_fields.details_fit != blank %}
+                            <div class='product-detail fit tw-mb-4'>
+                              <h3 class='product-detail-label'>
+                                <span class='!tw-text-black tw-text-[12px] tw-leading-[15px] tw-mb-3'>Fit</span>
+                              </h3>
+                              <div class='product-detail-content !tw-text-black tw-text-[12px] tw-leading-[15px]'>
+                                {{ product.metafields.custom_fields.details_fit }}
+                              </div>
+                            </div>
+                          {% endif %}
+                          {% if product.metafields.custom_fields.details_model != blank %}
+                            <div class='product-detail model tw-mb-4'>
+                              <h3 class='product-detail-label'>
+                                <span class='!tw-text-black tw-text-[12px] tw-leading-[15px] tw-mb-3'>Model</span>
+                              </h3>
+                              <div class='product-detail-content !tw-text-black tw-text-[12px] tw-leading-[15px]'>
+                                {{ product.metafields.custom_fields.details_model }}
+                              </div>
+                            </div>
+                          {% endif %}
+                          {% if product.metafields.custom_fields.details_care != blank %}
+                            <div class='product-detail care tw-mb-4'>
+                              <h3 class='product-detail-label'>
+                                <span class='!tw-text-black tw-text-[12px] tw-leading-[15px] tw-mb-3'>Care</span>
+                              </h3>
+                              <div class='product-detail-content *:tw-mb-4 !tw-text-black tw-text-[12px] tw-leading-[15px]'>
+                                {{ product.metafields.custom_fields.details_care }}
+                              </div>
+                            </div>
+                          {% endif %}
+                          {% if product.metafields.custom_fields.details_origin != blank %}
+                            <div class='product-detail origin tw-mb-4'>
+                              <h3 class='product-detail-label'>
+                                <span class='!tw-text-black tw-text-[12px] tw-leading-[15px] tw-mb-3'>Origin</span>
+                              </h3>
+                              <div class='product-detail-content !tw-text-black tw-text-[12px] tw-leading-[15px]'>
+                                {{ product.metafields.custom_fields.details_origin }}
+                              </div>
+                            </div>
+                          {% endif %}
+                        </div>
+                      {% endif %}
+                    {% endunless %}
+                    {% unless active_returns_tab %}
+                      {% if product.tags contains 'no-returns' %}
+                        <!-- Mobile Accordion Header for Returns -->
+                        <button
+                          class='product__accordion-header md:tw-hidden tw-w-full tw-text-left tw-border-b tw-border-[#ececec] tw-py-4 tw-text-[12px] tw-leading-[15px] tw-font-medium'
+                          data-panel='returns'
+                          aria-expanded='false'
+                        >
+                          Returns
+                          <span class='product__accordion-icon tw-float-right'>+</span>
+                        </button>
+
+                        <div
+                          class='product__tab-content product__accordion-content rte tw-text-[12px] tw-leading-[15px]'
+                          data-panel='returns'
+                          aria-expanded='false'
+                        >
+                          <span class='hidden stock-ship__shipping available tw-mb-4'>
+                            {{-
+                              product.metafields.custom_fields.shipping_time
+                              | default: 'Ships in 1-2 business days'
+                            -}}
+                          </span>
+                          <div class='!tw-text-black tw-text-[12px] tw-leading-[15px] tw-mb-4'>
+                            We offer returns and exchanges on all domestic (US) orders. For returns, you have 30 days
+                            from the date of shipping to return for a refund. For exchanges, you have up to 40 days to
+                            exchange for something else or store credit.
+                          </div>
+                        </div>
+                      {% endif %}
+                    {% endunless %}
+                    {% unless active_shop_look_tab %}
+                      {% if product.metafields.shopthelook.products.value != blank %}
+                        <!-- Mobile Accordion Header for Shop the Look -->
+                        <button
+                          class='product__accordion-header md:tw-hidden tw-w-full tw-text-left tw-border-b tw-border-[#ececec] tw-py-4 tw-text-[12px] tw-leading-[15px] tw-font-medium'
+                          data-panel='shop-the-look'
+                          aria-expanded='false'
+                        >
+                          Shop the Look
+                          <span class='product__accordion-icon tw-float-right'>+</span>
+                        </button>
+
+                        <div
+                          class='product__tab-content product__accordion-content tw-mt-4 rte tw-text-[12px] tw-leading-[15px]'
+                          data-panel='shop-the-look'
+                          aria-expanded='false'
+                        >
+                          <div
+                            class='product-grid-container'
+                          >
+                            <ul
+                              data-id='{{ section.id }}'
+                              class='
+                                grid product-grid grid--3-col-tablet-down
+                                grid--3-col-desktop lg:!tw-gap-x-[12px] !tw-px-0
+                              '
+                            >
+                              {% assign skip_card_product_styles = false %}
+                              {%- for product in product.metafields.shopthelook.products.value limit: 2 -%}
+                                {% assign lazy_load = false %}
+                                {%- if forloop.index > 2 -%}
+                                  {%- assign lazy_load = true -%}
+                                {%- endif -%}
+                                <li class='grid__item'>
+                                  {% render 'card-product',
+                                    card_product: product,
+                                    media_aspect_ratio: 'adapt',
+                                    show_secondary_image: true,
+                                    show_vendor: false,
+                                    show_rating: false,
+                                    show_swatches: true,
+                                    lazy_load: true,
+                                    quick_add: 'standard'
+                                  %}
+                                </li>
+                                {%- assign skip_card_product_styles = true -%}
+                              {%- endfor -%}
+                            </ul>
+                          </div>
+                        </div>
+                      {% endif %}
+                    {% endunless %}
+                  </div>
                 </div>
 
               {%- when 'rating' -%}
@@ -1283,6 +1694,26 @@
 
             <!-- Custom Styles for Loading/Success States -->
             <style>
+              .product-gallery-nav.swiper-button-prev,
+              .product-gallery-nav.swiper-button-next {
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                z-index: 10;
+                width: 3rem;
+                height: 3rem;
+                border-radius: 50%;
+                background: rgba(var(--color-background), 0.9);
+                border: 1px solid rgba(var(--color-foreground), 0.1);
+                backdrop-filter: blur(10px);
+                cursor: pointer;
+                transition: all 0.3s ease;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                opacity: 0;
+                transform: translateY(-50%) scale(0.8);
+              }
               .rebuy-button {
                 position: relative;
                 display: flex;

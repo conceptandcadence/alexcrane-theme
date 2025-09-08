@@ -1,5 +1,30 @@
+.contact {
+  border: solid 1px #000;
+  border-radius: 2px;
+  padding: 24px !important;
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+
 .contact img {
   max-width: 100%;
+}
+
+.contact .email-icon {
+  width: 36px;
+  height: 36px;
+  max-width: 36px;
+  max-height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+.contact .email-icon img {
+  width: 24px;
+  height: 24px;
+  max-width: 24px;
+  max-height: 24px;
 }
 
 .contact .form__message {
@@ -12,6 +37,10 @@
 
 .contact .field {
   margin-bottom: 1.5rem;
+}
+
+.contact .field:after {
+  box-shadow: 0 0 0 1px var(--color-grey);
 }
 
 @media screen and (min-width: 750px) {

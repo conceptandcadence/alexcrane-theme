@@ -1,6 +1,7 @@
 <link rel='stylesheet' href='{{ 'component-list-menu.css' | asset_url }}' media='print' onload="this.media='all'">
 <link rel='stylesheet' href='{{ 'component-search.css' | asset_url }}' media='print' onload="this.media='all'">
 <link rel='stylesheet' href='{{ 'component-menu-drawer.css' | asset_url }}' media='print' onload="this.media='all'">
+<link rel='stylesheet' href='{{ 'simple-banner-colors.css' | asset_url }}' media='print' onload="this.media='all'">
 <link
   rel='stylesheet'
   href='{{ 'component-cart-notification.css' | asset_url }}'
@@ -130,6 +131,7 @@
 {%- endstyle -%}
 
 <script src='{{ 'cart-notification.js' | asset_url }}' defer='defer'></script>
+<script src='{{ 'simple-banner-colors.js' | asset_url }}' defer='defer'></script>
 
 {%- liquid
   for block in section.blocks
@@ -224,13 +226,13 @@
         <div class='header__heading-logo-wrapper'>
           {%- assign logo_alt = settings.logo.alt | default: shop.name | escape -%}
           {%- assign logo_height = settings.logo_width | divided_by: settings.logo.aspect_ratio -%}
-          {% capture sizes %}(min-width: 750px) {{ settings.logo_width }}px, 50vw{% endcapture %}
+          {% capture sizes %}(max-width: {{ settings.logo_width | times: 2 }}px) 50vw, {{ settings.logo_width }}px{% endcapture %}
           {% capture widths %}{{ settings.logo_width }}, {{ settings.logo_width | times: 1.5 | round }}, {{ settings.logo_width | times: 2 }}{% endcapture %}
           {{
             settings.logo
             | image_url: width: 600
             | image_tag:
-              class: 'header__heading-logo',
+              class: 'header__heading-logo motion-reduce',
               widths: widths,
               height: logo_height,
               width: settings.logo_width,
@@ -240,7 +242,13 @@
           }}
         </div>
       {%- else -%}
-        <span class='h2'>{{ shop.name }}</span>
+        <div class='header__heading-logo-wrapper' style='width:{{settings.logo_width}}px;'>
+          {%- assign logo_alt = settings.logo.alt | default: shop.name | escape -%}
+          {%- assign logo_height = settings.logo_width | divided_by: settings.logo.aspect_ratio -%}
+          {% capture sizes %}(max-width: {{ settings.logo_width | times: 2 }}px) 50vw, {{ settings.logo_width }}px{% endcapture %}
+          {% capture widths %}{{ settings.logo_width }}, {{ settings.logo_width | times: 1.5 | round }}, {{ settings.logo_width | times: 2 }}{% endcapture %}
+          {{ 'logo-min2.svg' | inline_asset_content }}
+        </div>
       {%- endif -%}
     </a>
     {%- if request.page_type == 'index' -%}

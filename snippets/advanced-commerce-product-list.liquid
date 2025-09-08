@@ -270,7 +270,7 @@
     justify-content: center;
     border: none;
     background: transparent;
-    padding: 2px;
+    padding: 0;
     border-radius: 2px;
     cursor: pointer;
     transition: transform 0.2s ease;
@@ -357,7 +357,53 @@
                 columns_desktop: {{ columns_desktop | default: 4 }}
               };
 
-              $g.load(grapheneConfig);
+              // Enhanced Graphene loading with race condition protection
+              (function () {
+                'use strict';
+
+                console.log('🔍 [GRAPHENE-PRODUCT-LIST] Starting Graphene product list loading...');
+
+                // Wait for Graphene to be available with exponential backoff
+                function waitForGraphene(callback, attempt = 1, maxAttempts = 20) {
+                  const delay = Math.min(100 * Math.pow(1.5, attempt - 1), 2000);
+
+                  console.log(
+                    `⏳ [GRAPHENE-PRODUCT-LIST] Attempt ${attempt}/${maxAttempts} - Checking for $g and graphenehc...`,
+                  );
+
+                  if (
+                    window.$g &&
+                    typeof window.$g.load === 'function' &&
+                    window.graphenehc &&
+                    typeof window.graphenehc.init === 'function'
+                  ) {
+                    console.log('✅ [GRAPHENE-PRODUCT-LIST] Graphene dependencies found, executing callback');
+                    callback();
+                    return;
+                  }
+
+                  if (attempt >= maxAttempts) {
+                    console.error('❌ [GRAPHENE-PRODUCT-LIST] Failed to load Graphene after max attempts');
+                    return;
+                  }
+
+                  console.log(`⏳ [GRAPHENE-PRODUCT-LIST] Retrying in ${delay}ms...`);
+                  setTimeout(() => waitForGraphene(callback, attempt + 1, maxAttempts), delay);
+                }
+
+                // Execute Graphene load with error handling
+                function executeGrapheneLoad() {
+                  try {
+                    console.log('🚀 [GRAPHENE-PRODUCT-LIST] Executing $g.load...');
+                    $g.load(grapheneConfig);
+                  } catch (error) {
+                    console.error('❌ [GRAPHENE-PRODUCT-LIST] Exception during $g.load:', error);
+                  }
+                }
+
+                // Start the loading process
+                waitForGraphene(executeGrapheneLoad);
+              })();
             </script>
 
             <!-- Swiper CSS and JS for GrapheneHC Carousels -->

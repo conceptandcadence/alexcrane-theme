@@ -3,7 +3,7 @@
   <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css'>
   <script src='https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js' defer></script>
 
-  <section class='page-width sustainable-features !tw-my-[64px] lg:!tw-my-[96px]'>
+  <section class='page-width sustainable-features !tw-mb-[64px] !tw-mt-[96px] md:!tw-my-[64px] lg:!tw-my-[96px]'>
     {%- comment -%} Mobile Swiper Layout (visible only on mobile) {%- endcomment -%}
     <div class='sustainable-features-mobile lg:tw-hidden max-md:tw-w-[calc(100%+15px)]'>
       <div class='sustainable-feature md:tw-border md:tw-border-[#ececec] md:tw-p-16 tw-rounded-[2px] md:tw-mb-8 max-md:tw-pb-[24px] max-md:tw-pr-[15px]'>
@@ -12,7 +12,7 @@
             <h3 class='sustainable-features__title tw-text-[24px] tw-leading-[32px] tw-mb-6 md:tw-mb-12'>
               {{ section.settings.title }}
             </h3>
-            <div class='sustainable-features__description rte tw-text-[14px] tw-leading-[18px]'>
+            <div class='sustainable-features__description rte lg:tw-text-[14px] lg:tw-leading-[18px] tw-text-[12px] tw-leading-[15px]'>
               {{ section.settings.description }}
             </div>
           </div>
@@ -57,10 +57,10 @@
                     {% endif %}
                   </div>
                   <div class='sustainable-features__text tw-mt-12'>
-                    <h3 class='sustainable-features__title tw-text-[18px] tw-leading-[28px] tw-mb-4'>
+                    <h3 class='sustainable-features__title h3 tw-mb-4'>
                       {{ block.settings.title }}
                     </h3>
-                    <div class='sustainable-features__description rte tw-text-[14px] tw-leading-[18px] tw-mt-4'>
+                    <div class='sustainable-features__description rte tw-text-[12px] tw-leading-[15px] lg:tw-mt-4'>
                       {{ block.settings.description }}
                     </div>
                   </div>
@@ -88,13 +88,13 @@
     {%- comment -%} Desktop Grid Layout (visible only on desktop) {%- endcomment -%}
     <div class='sustainable-features-desktop tw-hidden lg:tw-block'>
       <div class='image-with-text__grid grid grid--1-col grid--4-col-tablet image-with-text__grid lg:!tw-gap-x-[48px]'>
-        <div class='sustainable-feature grid__item tw-border tw-border-[#ececec] tw-p-16 tw-rounded-[2px]'>
+        <div class='sustainable-feature !tw-w-full tw-p-16 tw-rounded-[2px]'>
           <div class='sustainable-features__content'>
             <div class='sustainable-features__text'>
-              <h3 class='sustainable-features__title tw-text-[24px] tw-leading-[32px] tw-mb-12'>
+              <h3 class='sustainable-features__title tw-text-[24px] tw-leading-[32px] tw-mb-6'>
                 {{ section.settings.title }}
               </h3>
-              <div class='sustainable-features__description rte tw-text-[14px] tw-leading-[18px]'>
+              <div class='sustainable-features__description rte tw-text-[14px] tw-leading-[18px] tw-max-w-[480px]'>
                 {{ section.settings.description }}
               </div>
             </div>
@@ -135,7 +135,7 @@
                 {% endif %}
               </div>
               <div class='sustainable-features__text tw-mt-12'>
-                <h3 class='sustainable-features__title tw-text-[18px] tw-leading-[28px] tw-mb-4'>
+                <h3 class='sustainable-features__title h3 tw-mb-4'>
                   {{ block.settings.title }}
                 </h3>
                 <div class='sustainable-features__description rte tw-text-[14px] tw-leading-[18px] tw-mt-4'>
@@ -280,6 +280,11 @@
   .sustainable-features-swiper .sustainable-features__description {
     flex-grow: 1;
   }
+  .sustainable-features__title em {
+    font-style: normal;
+    color: #767676;
+    display: block;
+  }
   @media screen and (max-width: 749px) {
     .sustainable-features__title br {
       display: none;
@@ -287,8 +292,8 @@
   }
   @media screen and (min-width: 990px) {
     .sustainable-feature:first-child {
-      width: 25% !important;
-      padding: 0 84px 0 0;
+      width: 100% !important;
+      padding: 0;
       border: 0;
     }
   }

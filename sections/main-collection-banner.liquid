@@ -88,7 +88,7 @@
                 </div>
               </div>
               <div class='plp-products-filter filter-triggerzz tw-border tw-border-[#ECECEC] tw-rounded-[5px] !tw-px-6 tw-py-4'>
-                <button class='plp-products-filter--trigger' name='filter' onclick="this.classList.toggle('open');">
+                <button class='plp-products-filter--trigger' name='filter' onclick='toggleFilters(this);'>
                   <span>Filter</span>
 
                   <span class='tw-w-4 tw-h-4 tw-mr-0'>
@@ -99,10 +99,10 @@
               <div class='plp-products-view tw-w-full'>
                 <div class='filter-triggerzz tw-border tw-border-[#ECECEC] tw-rounded-[5px] !tw-px-6 tw-py-4'>
                   <label for='view'><span class='visually-hidden'>Sort:</span></label>
-                  <select name='view' onchange='graphenehc.reload({url: this.value});' class='!tw-w-full'>
+                  <select name='view' class='!tw-w-full'>
                     <option disabled='disabled' selected='selected' value=''>View</option>
-                    <option value='/collections/bestsellers/men'>Flats</option>
-                    <option value='/collections/bestsellers/men?view=average_purchases%7edesc'>Lifestyle</option>
+                    <option value='flats'>Flats</option>
+                    <option value='lifestyle'>Lifestyle</option>
                   </select>
                 </div>
               </div>
@@ -151,3 +151,22 @@
   ]
 }
 {% endschema %}
+
+<script src='{{ 'product-view-switcher.js' | asset_url }}?v={{ 'now' | date: '%s' }}' defer></script>
+
+<script>
+  function toggleFilters(button) {
+    // Toggle the 'open' class on the trigger button
+    button.classList.toggle('open');
+
+    // Find the product grid container to toggle the 'revealed' class
+    const productGridContainer = document.querySelector('.product-grid-container');
+    if (productGridContainer) {
+      productGridContainer.classList.toggle('revealed');
+      console.log('Filter toggle:', productGridContainer.classList.contains('revealed') ? 'opened' : 'closed');
+    }
+
+    // Also toggle filters-active class for caret animation
+    button.classList.toggle('filters-active');
+  }
+</script>

@@ -37,6 +37,9 @@
     {%- else -%}
       <h2 class='visually-hidden'>{{ 'templates.contact.form.title' | t }}</h2>
     {%- endif -%}
+    <div class='email-icon'>
+      <img class='email-icon-img' width='36' height='36' src='{{ 'icon-email.svg' | asset_url }}'>
+    </div>
     {%- liquid
       assign contact_form_class = 'isolate'
       if settings.animations_reveal_on_scroll
@@ -148,6 +151,27 @@
     {%- endform -%}
   </div>
 </div>
+
+<script>
+  // Handle clicks on .animate-arrow elements with href='#'
+  document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('click', function (event) {
+      // Check if clicked element matches .animate-arrow[href='#']
+      if (event.target.matches('.animate-arrow[href="#"]') || event.target.closest('.animate-arrow[href="#"]')) {
+        event.preventDefault();
+
+        // Check if GorgiasChat is available
+        if (typeof GorgiasChat !== 'undefined' && GorgiasChat.open) {
+          GorgiasChat.open();
+        } else {
+          console.warn('GorgiasChat is not available');
+        }
+
+        return false;
+      }
+    });
+  });
+</script>
 
 {% schema %}
 {

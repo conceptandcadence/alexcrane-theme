@@ -167,7 +167,7 @@ $product_index = 0
   justify-content: center;
   border: none;
   background: transparent;
-  padding: 2px;
+  padding: 0;
   border-radius: 2px;
   cursor: pointer;
   transition: transform 0.2s ease;

@@ -2703,6 +2703,11 @@ input[type='checkbox'] {
   display: inline-block;
   transition: width 0.3s cubic-bezier(0.52, 0, 0.61, 0.99);
 }
+.header__heading-logo-wrapper svg,
+.header__heading-logo-wrapper img {
+  width: 100%;
+  height: auto;
+}
 
 @media screen and (max-width: 989px) {
   .header__heading,

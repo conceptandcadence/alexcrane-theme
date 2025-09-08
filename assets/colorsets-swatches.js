@@ -534,35 +534,83 @@ class ColorsetSwatches {
     }
 
     this.observer = new MutationObserver((mutations) => {
+      let hasNewContent = false;
+
       mutations.forEach((mutation) => {
         mutation.addedNodes.forEach((node) => {
           if (node.nodeType === Node.ELEMENT_NODE) {
             // Check if the added node is a product card
-            if (
-              node.matches &&
-              node.matches('.product-card-wrapper, .card-wrapper')
-            ) {
-              this.applySwatchesToCard(node);
+            if (node.matches) {
+              const cardSelectors = [
+                '.product-card-wrapper',
+                '.card-wrapper',
+                '.card:not(.product__media)',
+                '[data-product-url]:not(.product__media-wrapper)',
+                '.grid__item:not(.product__media-wrapper)',
+              ];
+
+              if (cardSelectors.some((selector) => node.matches(selector))) {
+                this.applySwatchesToCard(node);
+                hasNewContent = true;
+              }
             }
 
             // Check for product cards within the added node
             const productCards =
               node.querySelectorAll &&
-              node.querySelectorAll('.product-card-wrapper, .card-wrapper');
-            if (productCards) {
-              productCards.forEach((card) => {
+              node.querySelectorAll(
+                '.product-card-wrapper, .card-wrapper, .card:not(.product__media), [data-product-url]:not(.product__media-wrapper), .grid__item:not(.product__media-wrapper)',
+              );
+            if (productCards && productCards.length > 0) {
+              // Filter out product media elements
+              const filteredCards = Array.from(productCards).filter((card) => {
+                if (
+                  card.classList.contains('product__media-wrapper') ||
+                  card.classList.contains('product__media') ||
+                  card.closest('.product__media-gallery') ||
+                  card.closest('.product__media-list') ||
+                  card.closest('[data-media-id]')
+                ) {
+                  return false;
+                }
+                return true;
+              });
+
+              filteredCards.forEach((card) => {
                 this.applySwatchesToCard(card);
               });
+
+              if (filteredCards.length > 0) {
+                hasNewContent = true;
+                console.log(
+                  `🎨 MutationObserver detected ${filteredCards.length} new product cards`,
+                );
+              }
             }
           }
         });
       });
+
+      // If we detected new content, also do a full refresh after a short delay
+      if (hasNewContent) {
+        clearTimeout(this.mutationRefreshTimeout);
+        this.mutationRefreshTimeout = setTimeout(() => {
+          console.log(
+            '🎨 MutationObserver triggering full refresh after new content detection',
+          );
+          this.refresh();
+        }, 1000);
+      }
     });
 
-    // Start observing
+    // Start observing with more comprehensive options
     this.observer.observe(document.body, {
       childList: true,
       subtree: true,
+      attributes: false, // Don't watch attribute changes
+      attributeOldValue: false,
+      characterData: false,
+      characterDataOldValue: false,
     });
 
     console.log('MutationObserver set up for dynamic card detection');

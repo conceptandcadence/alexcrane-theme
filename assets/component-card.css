@@ -144,16 +144,42 @@
   flex-direction: column;
   row-gap: 4px;
 }
-
+@media screen and (max-width: 749px) {
+  .card__content.has-swatches {
+    flex-wrap: wrap;
+  }
+  .card__content-inner {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    row-gap: 4px;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+}
 @media screen and (min-width: 750px) {
   .card__content .colorset-swatches {
     padding-top: 0.375rem;
     padding-bottom: 0;
   }
+  #Results .card__content .colorset-swatches {
+    padding-top: 1.7rem;
+    padding-bottom: 0;
+  }
+  .featured-collection .card__content .colorset-swatches {
+    padding-top: 1.7rem;
+  }
   .rebuy-widget .card__information {
     width: 100%;
     padding-bottom: 0.5rem;
   }
+}
+
+.featured-collection [data-type='shop-the-look'] .card__heading {
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
 }
 
 .card__content.has-swatches {

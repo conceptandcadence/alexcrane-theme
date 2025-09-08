@@ -675,6 +675,10 @@ video {
   order: 2;
 }
 
+.tw-float-right {
+  float: right;
+}
+
 .tw-m-0 {
   margin: 0px;
 }
@@ -790,6 +794,22 @@ video {
 
 .tw-mt-1 {
   margin-top: 0.25rem;
+}
+
+.\!tw-mb-\[64px\] {
+  margin-bottom: 64px !important;
+}
+
+.\!tw-mt-\[96px\] {
+  margin-top: 96px !important;
+}
+
+.tw-mt-\[32px\] {
+  margin-top: 32px;
+}
+
+.tw-mt-\[24px\] {
+  margin-top: 24px;
 }
 
 .tw-block {
@@ -937,6 +957,14 @@ video {
   max-width: 24rem;
 }
 
+.tw-max-w-\[480px\] {
+  max-width: 480px;
+}
+
+.tw-max-w-\[450px\] {
+  max-width: 450px;
+}
+
 .tw-flex-shrink-0 {
   flex-shrink: 0;
 }
@@ -1067,6 +1095,14 @@ video {
 
 .tw-gap-\[16px\] {
   gap: 16px;
+}
+
+.\!tw-gap-3 {
+  gap: 0.75rem !important;
+}
+
+.\!tw-gap-y-0 {
+  row-gap: 0px !important;
 }
 
 .tw-overflow-hidden {
@@ -1275,6 +1311,10 @@ video {
   padding-top: 1px;
 }
 
+.tw-pb-2 {
+  padding-bottom: 0.5rem;
+}
+
 .tw-text-left {
   text-align: left;
 }
@@ -1319,12 +1359,20 @@ video {
   font-size: 24px;
 }
 
+.\!tw-text-\[12px\] {
+  font-size: 12px !important;
+}
+
 .tw-font-medium {
   font-weight: 500;
 }
 
 .tw-font-normal {
   font-weight: 400;
+}
+
+.\!tw-font-medium {
+  font-weight: 500 !important;
 }
 
 .tw-capitalize {
@@ -1395,6 +1443,11 @@ video {
   color: rgb(55 65 81 / var(--tw-text-opacity));
 }
 
+.\!tw-text-\[\#767676\] {
+  --tw-text-opacity: 1 !important;
+  color: rgb(118 118 118 / var(--tw-text-opacity)) !important;
+}
+
 .tw-underline {
   -webkit-text-decoration-line: underline;
   text-decoration-line: underline;
@@ -1402,6 +1455,14 @@ video {
 
 .tw-opacity-0 {
   opacity: 0;
+}
+
+.tw-opacity-40 {
+  opacity: 0.4;
+}
+
+.tw-opacity-20 {
+  opacity: 0.2;
 }
 
 .tw-transition-all {
@@ -1492,6 +1553,11 @@ video {
 }
 
 @media (min-width: 750px) {
+  .md\:\!tw-my-\[64px\] {
+    margin-top: 64px !important;
+    margin-bottom: 64px !important;
+  }
+
   .md\:tw-mb-12 {
     margin-bottom: 3rem;
   }
@@ -1500,12 +1566,24 @@ video {
     margin-bottom: 2rem;
   }
 
+  .md\:tw-mt-4 {
+    margin-top: 1rem;
+  }
+
   .md\:\!tw-block {
     display: block !important;
   }
 
   .md\:tw-block {
     display: block;
+  }
+
+  .md\:tw-flex {
+    display: flex;
+  }
+
+  .md\:tw-hidden {
+    display: none;
   }
 
   .md\:tw-max-w-full {
@@ -1554,6 +1632,14 @@ video {
 
   .lg\:tw-mt-0 {
     margin-top: 0px;
+  }
+
+  .lg\:tw-mt-4 {
+    margin-top: 1rem;
+  }
+
+  .lg\:tw-mt-\[64px\] {
+    margin-top: 64px;
   }
 
   .lg\:tw-block {
@@ -1647,5 +1733,9 @@ video {
 
   .lg\:tw-leading-\[32px\] {
     line-height: 32px;
+  }
+
+  .lg\:tw-leading-\[18px\] {
+    line-height: 18px;
   }
 }

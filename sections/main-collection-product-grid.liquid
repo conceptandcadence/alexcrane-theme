@@ -141,23 +141,148 @@
           class='collection{% if section.settings.filter_type != 'vertical' %} page-width{% endif %}'
         >
           <div class='loading-overlay gradient'></div>
-          <div id='Results'></div>
+          <div id='Results'>
+            <ul id='product-grid' class='grid product-grid grid--1-col-tablet-down grid--3-col-desktop'>
+              {% assign skip_card_product_styles = false %}
+              {%- for product in collection.products -%}
+                {% assign lazy_load = false %}
+                {%- if forloop.index > 2 -%}
+                  {%- assign lazy_load = true -%}
+                {%- endif -%}
+                <li
+                  class='grid__item{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}'
+                  {% if settings.animations_reveal_on_scroll %}
+                    data-cascade
+                    style='--animation-order: {{ forloop.index }};'
+                  {% endif %}
+                >
+                  {% render 'card-product',
+                    card_product: product,
+                    media_aspect_ratio: section.settings.image_ratio,
+                    image_shape: section.settings.image_shape,
+                    show_secondary_image: section.settings.show_secondary_image,
+                    show_vendor: section.settings.show_vendor,
+                    show_rating: section.settings.show_rating,
+                    show_swatches: section.settings.show_swatches,
+                    lazy_load: lazy_load,
+                    skip_styles: skip_card_product_styles,
+                    quick_add: section.settings.quick_add,
+                    section_id: section.id
+                  %}
+                </li>
+                {%- assign skip_card_product_styles = true -%}
+              {%- endfor -%}
+            </ul>
+          </div>
           <script>
-            $g.load({
-              page_context: {
-                currency_id: window.theme.country_code,
-              },
-              template: {
-                id: 'category',
-                target: '#Results',
-                sub_templates: [
-                  {
-                    id: 'sort_and_filters_html', // the id given to the capture in the graphene templates
-                    target: '.shop-filters', // the target selector to push the HTML into
-                  },
-                ],
-              },
-            });
+            // Enhanced Graphene loading with race condition protection
+            (function () {
+              'use strict';
+
+              console.log('🔍 [GRAPHENE-LOADER] Starting Graphene loading sequence...');
+
+              // Wait for Graphene to be available with exponential backoff
+              function waitForGraphene(callback, attempt = 1, maxAttempts = 20) {
+                const delay = Math.min(100 * Math.pow(1.5, attempt - 1), 2000); // Exponential backoff, max 2s
+
+                console.log(
+                  `⏳ [GRAPHENE-LOADER] Attempt ${attempt}/${maxAttempts} - Checking for $g and graphenehc...`,
+                );
+
+                // Check if both $g and graphenehc are available
+                if (
+                  window.$g &&
+                  typeof window.$g.load === 'function' &&
+                  window.graphenehc &&
+                  typeof window.graphenehc.init === 'function'
+                ) {
+                  console.log('✅ [GRAPHENE-LOADER] Graphene dependencies found, executing callback');
+                  callback();
+                  return;
+                }
+
+                if (attempt >= maxAttempts) {
+                  console.error('❌ [GRAPHENE-LOADER] Failed to load Graphene after max attempts');
+                  console.error('Available globals:', {
+                    $g: typeof window.$g,
+                    graphenehc: typeof window.graphenehc,
+                    '$g.load': window.$g ? typeof window.$g.load : 'N/A',
+                    'graphenehc.init': window.graphenehc ? typeof window.graphenehc.init : 'N/A',
+                  });
+
+                  // Show fallback message to user
+                  const resultsDiv = document.getElementById('Results');
+                  if (resultsDiv) {
+                    resultsDiv.innerHTML = `
+                      <div class="collection collection--empty page-width" style="padding: 2rem; text-align: center;">
+                        <h2>Loading products...</h2>
+                        <p>If products don't appear, please <a href="${window.location.href}" class="underlined-link">refresh the page</a>.</p>
+                      </div>
+                    `;
+                  }
+                  return;
+                }
+
+                console.log(`⏳ [GRAPHENE-LOADER] Retrying in ${delay}ms...`);
+                setTimeout(() => waitForGraphene(callback, attempt + 1, maxAttempts), delay);
+              }
+
+              // Execute Graphene load with error handling
+              function executeGrapheneLoad() {
+                try {
+                  console.log('🚀 [GRAPHENE-LOADER] Executing $g.load...');
+
+                  $g.load({
+                    page_context: {
+                      currency_id: window.theme?.country_code || 'USD',
+                    },
+                    template: {
+                      id: 'category',
+                      target: '#Results',
+                      sub_templates: [
+                        {
+                          id: 'sort_and_filters_html', // the id given to the capture in the graphene templates
+                          target: '.shop-filters', // the target selector to push the HTML into
+                        },
+                      ],
+                    },
+                    // Add error callbacks
+                    onError: function (error) {
+                      console.error('❌ [GRAPHENE-LOADER] Graphene load error:', error);
+                      // Show user-friendly error message
+                      const resultsDiv = document.getElementById('Results');
+                      if (resultsDiv) {
+                        resultsDiv.innerHTML = `
+                          <div class="collection collection--empty page-width" style="padding: 2rem; text-align: center;">
+                            <h2>Unable to load products</h2>
+                            <p>Please <a href="${window.location.href}" class="underlined-link">refresh the page</a> to try again.</p>
+                          </div>
+                        `;
+                      }
+                    },
+                    onSuccess: function () {
+                      console.log('✅ [GRAPHENE-LOADER] Graphene load completed successfully');
+                    },
+                  });
+                } catch (error) {
+                  console.error('❌ [GRAPHENE-LOADER] Exception during $g.load:', error);
+
+                  // Show fallback content
+                  const resultsDiv = document.getElementById('Results');
+                  if (resultsDiv) {
+                    resultsDiv.innerHTML = `
+                      <div class="collection collection--empty page-width" style="padding: 2rem; text-align: center;">
+                        <h2>Loading Error</h2>
+                        <p>There was an error loading the products. Please <a href="${window.location.href}" class="underlined-link">refresh the page</a>.</p>
+                      </div>
+                    `;
+                  }
+                }
+              }
+
+              // Start the loading process
+              waitForGraphene(executeGrapheneLoad);
+            })();
           </script>
 
           <!-- Swiper CSS and JS for GrapheneHC Carousels -->

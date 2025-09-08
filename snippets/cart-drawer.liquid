@@ -644,7 +644,7 @@
             {% endif %}
           >
             {{ 'sections.cart.checkout' | t }} &nbsp; &nbsp;
-            {{ cart.total_price | money_without_trailing_zeros }}
+            <span class='cart-drawer-subtotal'>{{ cart.total_price | money_without_trailing_zeros }}</span>
           </button>
           <div class='nvd-mini'></div>
         </div>

@@ -13,6 +13,33 @@
   transition: opacity 0.3s ease;
 }
 
+/* Enhanced transitions for view switching */
+.card-media-carousel[data-view-mode='lifestyle'] .card-media-static {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.card-media-carousel[data-view-mode='flats'] .card-media-static {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Make carousel visible in lifestyle mode even without hover */
+.card-media-carousel[data-view-mode='lifestyle'] .card-slider.swiper {
+  z-index: 3;
+  opacity: 1;
+}
+
+/* Show navigation buttons in lifestyle mode */
+.card-media-carousel[data-view-mode='lifestyle'] .card-slider-buttons {
+  opacity: 1;
+}
+
+/* Show dots in lifestyle mode */
+.card-media-carousel[data-view-mode='lifestyle'] .card-slider-dots {
+  opacity: 1;
+}
+
 /* For single image products, only show the carousel */
 .card-media-carousel:not(.has-multiple-media) .card-media-static {
   display: none;

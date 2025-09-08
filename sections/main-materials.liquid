@@ -25,39 +25,68 @@
 {%- endif -%}
 
 {%- style -%}
-     .section-{{ section.id }}-padding {
-       padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
-       padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
-     }
+          .section-{{ section.id }}-padding {
+            padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+            padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+          }
 
-     @media screen and (min-width: 750px) {
-       .section-{{ section.id }}-padding {
-         padding-top: {{ section.settings.padding_top }}px;
-         padding-bottom: {{ section.settings.padding_bottom }}px;
+          @media screen and (min-width: 750px) {
+            .section-{{ section.id }}-padding {
+              padding-top: {{ section.settings.padding_top }}px;
+              padding-bottom: {{ section.settings.padding_bottom }}px;
+            }
+          }
+         @media screen and (min-width: 990px) {
+            .grid--4-col-desktop .grid__item {
+                width: 100% !important;
+                max-width: calc(25% - 18px) !important;
+            }
+         }
+        @media screen and (max-width: 749px) {
+        .material-block .image-with-text__grid {
+        	flex-direction: row-reverse;
+        }
+        	.material-block .image-with-text__media-item {
+        	width: calc(50% - var(--grid-mobile-horizontal-spacing) / 2);
+        	max-width: calc(50% - var(--grid-mobile-horizontal-spacing) / 2);
+        	}
+        .image-with-text__content {
+        	width: 100%;
+        	padding: 16px 0;
+        }
+       .material-collection .product-grid .grid__item:nth-child(n+3) {
+       display: none;
        }
-     }
-    @media screen and (min-width: 990px) {
-       .grid--4-col-desktop .grid__item {
-           width: 100% !important;
-           max-width: calc(25% - 18px) !important;
-       }
+
+    	.material-details {
+       display: flex;
+       flex-direction: row;
+       margin-bottom: 20px;
+     column-gap: var(--grid-mobile-horizontal-spacing);
     }
-   @media screen and (max-width: 749px) {
-   .material-block .image-with-text__grid {
-   	flex-direction: row-reverse;
-   }
-   	.material-block .image-with-text__media-item {
-   	width: calc(50% - var(--grid-mobile-horizontal-spacing) / 2);
-   	max-width: calc(50% - var(--grid-mobile-horizontal-spacing) / 2);
-   	}
-   .image-with-text__content {
-   	width: 100%;
-   	padding: 16px 0;
-   }
-  .material-collection .product-grid .grid__item:nth-child(n+3) {
-  display: none;
+    .material-details > *{
+       width: 50%;
+    }
+  	.image-with-text__content>*+* {
+      margin-top: 4px;
+      font-size: 12px;
+      line-height: 15px;
+      letter-spacing: 0;
+      font-weight: 400;
+      margin-bottom: 12px;
   }
-   }
+        }
+
+       .sustainable-features__media {
+       position: relative;
+      padding-bottom: 100%;
+       }
+       .sustainable-features__media img {
+     	position: absolute;
+       width: 100%;
+     height: 100%;
+     object-fit: cover;
+       }
 {%- endstyle -%}
 
 {%- liquid
@@ -72,7 +101,7 @@
 
 <section class='materials gradient color-{{ section.settings.section_color_scheme }} tw-flex tw-flex-col tw-gap-0'>
   {% if section.settings.title != blank %}
-    <h2 class='tw-text-[24px] tw-leading-[32px] tw-mt-[64px] tw-text-center'>
+    <h2 class='tw-text-[24px] tw-leading-[32px] lg:tw-mt-[64px] tw-mt-[24px] tw-text-center'>
       {{ section.settings.title }}
     </h2>
   {% endif %}
@@ -177,31 +206,51 @@
                 {% endif %}
 
                 {% if material.description != blank %}
-                  <div class='image-with-text__text rte tw-text-[14px] tw-leading-[17px] tw-mt-4'>
+                  <div
+                    class='
+                      image-with-text__text rte tw-text-[12px] tw-leading-[15px] lg:tw-text-[14px] lg:tw-leading-[17px]
+                      tw-mt-4
+                    '
+                  >
                     {{ material.description | metafield_text }}
                   </div>
                 {% endif %}
-
-                {% if material.benefit != blank %}
-                  <div class='image-with-text__text rte tw-text-[14px] tw-leading-[17px] tw-mt-4'>
-                    <div class='tw-flex tw-items-center tw-pb-3'>
-                      <span class='tw-border-b tw-border-black tw-text-[14px] tw-leading-[17px]'>Why we use it</span>
+                <div class='material-details'>
+                  {% if material.benefit != blank %}
+                    <div
+                      class='
+                        image-with-text__text rte tw-text-[12px] tw-leading-[15px] lg:tw-text-[14px] lg:tw-leading-[17px]
+                        tw-mt-4
+                      '
+                    >
+                      <div class='tw-flex tw-items-center tw-pb-3'>
+                        <span class='tw-border-b tw-border-black tw-text-[14px] tw-leading-[17px]'>Why we use it</span>
+                      </div>
+                      {{ material.benefit | metafield_text }}
                     </div>
-                    {{ material.benefit | metafield_text }}
-                  </div>
-                {% endif %}
+                  {% endif %}
 
-                {% if material.featured != blank %}
-                  <div class='image-with-text__text rte tw-text-[14px] tw-leading-[17px] tw-mt-4'>
-                    <div class='tw-flex tw-items-center tw-pb-3'>
-                      <span class='tw-border-b tw-border-black tw-text-[14px] tw-leading-[17px]'>Featured in</span>
+                  {% if material.featured != blank %}
+                    <div
+                      class='
+                        image-with-text__text rte tw-text-[12px] tw-leading-[15px] lg:tw-text-[14px] lg:tw-leading-[17px]
+                        tw-mt-4
+                      '
+                    >
+                      <div class='tw-flex tw-items-center tw-pb-3'>
+                        <span class='tw-border-b tw-border-black tw-text-[14px] tw-leading-[17px]'>Featured in</span>
+                      </div>
+                      {{ material.featured | metafield_text }}
                     </div>
-                    {{ material.featured | metafield_text }}
-                  </div>
-                {% endif %}
-
-                {% if material.collection != blank %}
-                  <div class='tw-h-full tw-flex tw-flex-grow tw-items-end image-with-text__text rte tw-text-[14px] tw-leading-[17px] tw-mt-4'>
+                  {% endif %}
+                </div>
+                {% if material.collection != blank and material.collection.value.products.size > 0 %}
+                  <div
+                    class='
+                      tw-h-full tw-flex tw-flex-grow tw-items-end image-with-text__text rte tw-text-[12px] tw-leading-[15px] lg:tw-text-[14px] lg:tw-leading-[17px]
+                      tw-mt-4
+                    '
+                  >
                     <a
                       href='{{ material.collection.value.url }}'
                       class='tw-text-[14px] tw-leading-[17px] tw-inline-block !tw-text-black !tw-border-b !tw-border-black'

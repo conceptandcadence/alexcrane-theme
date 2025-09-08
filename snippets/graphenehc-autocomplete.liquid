@@ -4,15 +4,73 @@
 {% if settings.graphenehc_enabled and settings.graphenehc_autocomplete_enabled %}
   <div class='acs_auto_popup acs_scroll'><!-- GrapheneHC will add content here --></div>
   <script>
-    graphenehc.autocomplete({
-      input_selector: "input[name='q']",
-      page_context: { currency_id: window.Shopify.currency.active },
-      dropdown_selector: '.acs_auto_popup',
-      position: function (input) {},
-    });
-    // Replaces the default search url to use /pages/search that Graphene search use.
-    document.querySelectorAll("form[action='/search'], form.search").forEach((item) => {
-      item.action = `${window.theme.marketDirectory}/pages/search/`;
-    });
+    // Enhanced Graphene autocomplete loading with race condition protection
+    (function () {
+      'use strict';
+
+      console.log('🔍 [GRAPHENE-AUTOCOMPLETE] Starting Graphene autocomplete loading sequence...');
+
+      // Wait for Graphene to be available with exponential backoff
+      function waitForGrapheneAutocomplete(callback, attempt = 1, maxAttempts = 20) {
+        const delay = Math.min(100 * Math.pow(1.5, attempt - 1), 2000); // Exponential backoff, max 2s
+
+        console.log(
+          `⏳ [GRAPHENE-AUTOCOMPLETE] Attempt ${attempt}/${maxAttempts} - Checking for graphenehc.autocomplete...`,
+        );
+
+        // Check if graphenehc.autocomplete is available
+        if (window.graphenehc && typeof window.graphenehc.autocomplete === 'function') {
+          console.log('✅ [GRAPHENE-AUTOCOMPLETE] Graphene autocomplete found, executing callback');
+          callback();
+          return;
+        }
+
+        if (attempt >= maxAttempts) {
+          console.error('❌ [GRAPHENE-AUTOCOMPLETE] Failed to load Graphene autocomplete after max attempts');
+          console.error('Available globals:', {
+            graphenehc: typeof window.graphenehc,
+            'graphenehc.autocomplete': window.graphenehc ? typeof window.graphenehc.autocomplete : 'N/A',
+          });
+          return;
+        }
+
+        console.log(`⏳ [GRAPHENE-AUTOCOMPLETE] Retrying in ${delay}ms...`);
+        setTimeout(() => waitForGrapheneAutocomplete(callback, attempt + 1, maxAttempts), delay);
+      }
+
+      // Execute Graphene autocomplete setup with error handling
+      function executeGrapheneAutocomplete() {
+        try {
+          console.log('🚀 [GRAPHENE-AUTOCOMPLETE] Executing graphenehc.autocomplete...');
+
+          graphenehc.autocomplete({
+            input_selector: "input[name='q']",
+            page_context: { currency_id: window.Shopify?.currency?.active || 'USD' },
+            dropdown_selector: '.acs_auto_popup',
+            position: function (input) {},
+            onError: function (error) {
+              console.error('❌ [GRAPHENE-AUTOCOMPLETE] Autocomplete setup error:', error);
+            },
+            onSuccess: function () {
+              console.log('✅ [GRAPHENE-AUTOCOMPLETE] Autocomplete setup completed successfully');
+            },
+          });
+
+          // Replaces the default search url to use /pages/search that Graphene search use.
+          document.querySelectorAll("form[action='/search'], form.search").forEach((item) => {
+            if (window.theme?.marketDirectory) {
+              item.action = `${window.theme.marketDirectory}/pages/search/`;
+            }
+          });
+
+          console.log('✅ [GRAPHENE-AUTOCOMPLETE] Search form actions updated');
+        } catch (error) {
+          console.error('❌ [GRAPHENE-AUTOCOMPLETE] Exception during autocomplete setup:', error);
+        }
+      }
+
+      // Start the loading process
+      waitForGrapheneAutocomplete(executeGrapheneAutocomplete);
+    })();
   </script>
 {% endif %}

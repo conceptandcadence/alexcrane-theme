@@ -7,7 +7,7 @@ $product_index = 0
 	{{~ $limit = $limit > 0 ? $limit : 48 ~}}
 	{{~ $shown = 0 ~}}
 		
-	<ul id="product-grid" class="grid product-grid grid--2-col-tablet-down grid--3-col-desktop">
+	<ul id="product-grid" class="grid product-grid grid--1-col-tablet-down grid--3-col-desktop">
 		{{~ for $result in $results ~}}
 			{{~ if $shown >= $limit }}{{ break }}{{ end }}
 
@@ -168,7 +168,7 @@ $product_index = 0
 					end
 				~}}
 
-				<li class="grid__item scroll-trigger animate--slide-in" data-cascade style="--animation-order: {{ $product_index }};">
+				<li class="grid__item advc-card scroll-trigger animate--slide-in" data-cascade style="--animation-order: {{ $product_index }};">
 					<div class="card-wrapper product-card-wrapper">
 						<div class="card card--standard tw-group card--media color-background-1 gradient card--extend-height" 
 							data-id="{{ $product?.id }}" 
@@ -407,7 +407,7 @@ $product_index = 0
 											</a>
 										</h3>
 									</div>
-																		<div class="price tw-text-[11px] tw-leading-[14px] lg:tw-text-[12px] lg:tw-leading-[15px]">
+									<div class="price tw-text-[11px] tw-leading-[14px] lg:tw-text-[12px] lg:tw-leading-[15px] {{ if $compare_price == $current_price }} price--no-compare{{ else }} price--on-sale{{ end }}">
 										{{~ if $is_gift_card ~}}
 											<div class="price__container">
 												<dl class="price__regular tw-order-2">
@@ -499,7 +499,7 @@ $product_index = 0
 																					<span class="shop-the-look-title tw-text-[12px] tw-leading-[15px] lg:tw-text-[14px] lg:tw-leading-[17px]">
 																							Shop The Look
 																					</span>
-																					<div class="shop-the-look-products tw-text-[11px] tw-leading-[14px] lg:tw-text-[12px] lg:tw-leading-[15px]">
+																					<div class="shop-the-look-products tw-text-[11px] tw-leading-[12px] lg:tw-text-[14px] lg:tw-leading-[17px]">
 																							{{~ if $advert.data.product_1_handle ~}}
 																									<modal-opener data-modal="#ShopTheLookQuickAdd-{{ $advert.id }}-1">
 																											<button type="button" 
@@ -673,7 +673,6 @@ $product_index = 0
   position: relative;
   width: 100%;
   height: 0;
-  padding-bottom: 125%; /* Default aspect ratio */
   overflow: hidden;
 }
 
@@ -830,7 +829,7 @@ $product_index = 0
 	.shop-the-look-product-link {
 		font-size: 12px !important;
 	}
-	.shop-the-look-card .card__heading {
+	.featured-collection .shop-the-look-card .card__heading {
 		flex-direction: column;
     align-items: flex-start;
 	}

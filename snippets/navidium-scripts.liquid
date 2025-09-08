@@ -167,4 +167,86 @@
   document.addEventListener('rebuy:cart.add', (event) => {
     setTimeout(safeNvdInit, 300);
   });
+
+  // Function to remove trailing zeros from price
+  function formatPriceWithoutTrailingZeros(priceText) {
+    // Match patterns like $8.00, $12.50, etc.
+    return priceText.replace(/(\$\d+)\.00\b/g, '$1').replace(/(\$\d+\.\d*?)0+\b/g, '$1');
+  }
+
+  // Observer to format shipping protection prices without trailing zeros
+  function observeShippingPriceChanges() {
+    const targetSelectors = ['.shipping-protection-price-ld', '.nvd-mini .shipping-protection-price'];
+
+    const formatPriceElements = () => {
+      targetSelectors.forEach((selector) => {
+        const elements = document.querySelectorAll(selector);
+        elements.forEach((element) => {
+          if (element.textContent && element.textContent.includes('$')) {
+            const originalText = element.textContent;
+            const formattedText = formatPriceWithoutTrailingZeros(originalText);
+            if (originalText !== formattedText) {
+              element.textContent = formattedText;
+              console.log(`[Navidium] Formatted price: ${originalText} → ${formattedText}`);
+            }
+          }
+        });
+      });
+    };
+
+    // Create observer for price changes
+    const priceObserver = new MutationObserver((mutations) => {
+      let shouldFormat = false;
+      mutations.forEach((mutation) => {
+        if (mutation.type === 'childList' || mutation.type === 'characterData') {
+          // Check if any of our target elements were affected
+          const target = mutation.target;
+          if (target.nodeType === Node.TEXT_NODE) {
+            const parent = target.parentElement;
+            if (parent && targetSelectors.some((selector) => parent.matches(selector))) {
+              shouldFormat = true;
+            }
+          } else if (target.nodeType === Node.ELEMENT_NODE) {
+            if (targetSelectors.some((selector) => target.matches(selector) || target.querySelector(selector))) {
+              shouldFormat = true;
+            }
+          }
+        }
+      });
+
+      if (shouldFormat) {
+        setTimeout(formatPriceElements, 50); // Small delay to ensure DOM is updated
+      }
+    });
+
+    // Observe the entire nvd-mini container and document body for changes
+    const observeTargets = [document.body];
+    const nvdContainers = document.querySelectorAll('.nvd-mini');
+    nvdContainers.forEach((container) => observeTargets.push(container));
+
+    observeTargets.forEach((target) => {
+      priceObserver.observe(target, {
+        childList: true,
+        subtree: true,
+        characterData: true,
+      });
+    });
+
+    // Initial format attempt
+    setTimeout(formatPriceElements, 1000);
+
+    console.log('[Navidium] Price formatting observer initialized');
+  }
+
+  // Start observing price changes
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', observeShippingPriceChanges);
+  } else {
+    observeShippingPriceChanges();
+  }
+
+  // Also format prices when Navidium widgets are initialized
+  document.addEventListener('rebuy:smartcart.ready', () => {
+    setTimeout(observeShippingPriceChanges, 500);
+  });
 </script>

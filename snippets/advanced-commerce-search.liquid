@@ -47,13 +47,61 @@
   </form>
   <div id='Autocomplete' style='display:none'></div>
   <script>
-    $g.autocomplete({
-      page_context: {
-        currency_id: window.theme.country_code,
-      },
-      input_selector: '#Search',
-      dropdown_selector: '#Autocomplete',
-    });
+    // Enhanced Graphene autocomplete loading with race condition protection
+    (function () {
+      'use strict';
+
+      console.log('🔍 [GRAPHENE-SEARCH-AUTOCOMPLETE] Starting Graphene search autocomplete loading...');
+
+      // Wait for Graphene to be available with exponential backoff
+      function waitForGrapheneAutocomplete(callback, attempt = 1, maxAttempts = 20) {
+        const delay = Math.min(100 * Math.pow(1.5, attempt - 1), 2000);
+
+        console.log(
+          `⏳ [GRAPHENE-SEARCH-AUTOCOMPLETE] Attempt ${attempt}/${maxAttempts} - Checking for $g.autocomplete...`,
+        );
+
+        if (window.$g && typeof window.$g.autocomplete === 'function') {
+          console.log('✅ [GRAPHENE-SEARCH-AUTOCOMPLETE] $g.autocomplete found, executing callback');
+          callback();
+          return;
+        }
+
+        if (attempt >= maxAttempts) {
+          console.error('❌ [GRAPHENE-SEARCH-AUTOCOMPLETE] Failed to load $g.autocomplete after max attempts');
+          console.error('Available globals:', {
+            $g: typeof window.$g,
+            '$g.autocomplete': window.$g ? typeof window.$g.autocomplete : 'N/A',
+          });
+          return;
+        }
+
+        console.log(`⏳ [GRAPHENE-SEARCH-AUTOCOMPLETE] Retrying in ${delay}ms...`);
+        setTimeout(() => waitForGrapheneAutocomplete(callback, attempt + 1, maxAttempts), delay);
+      }
+
+      // Execute Graphene autocomplete setup with error handling
+      function executeGrapheneAutocomplete() {
+        try {
+          console.log('🚀 [GRAPHENE-SEARCH-AUTOCOMPLETE] Executing $g.autocomplete...');
+
+          $g.autocomplete({
+            page_context: {
+              currency_id: window.theme?.country_code || 'USD',
+            },
+            input_selector: '#Search',
+            dropdown_selector: '#Autocomplete',
+          });
+
+          console.log('✅ [GRAPHENE-SEARCH-AUTOCOMPLETE] Search autocomplete setup completed');
+        } catch (error) {
+          console.error('❌ [GRAPHENE-SEARCH-AUTOCOMPLETE] Exception during autocomplete setup:', error);
+        }
+      }
+
+      // Start the loading process
+      waitForGrapheneAutocomplete(executeGrapheneAutocomplete);
+    })();
   </script>
   <script>
     function searchSubmit(e) {

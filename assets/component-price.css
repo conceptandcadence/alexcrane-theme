@@ -22,8 +22,8 @@
 
 .price .price__sale .price-item--regular {
   color: #767676;
-  margin: 0 0 0 1rem;
   float: right;
+  margin: 0;
 }
 
 .price--end {
@@ -32,7 +32,8 @@
 
 .price .price-item {
   display: inline-block;
-  margin: 0 1rem 0 0;
+  margin: 0 0.5rem 0 0;
+  letter-spacing: 0;
 }
 
 .price__regular .price-item--regular {
@@ -72,7 +73,7 @@
 .price__regular {
   display: block;
 }
-/*
+
 .price__sale,
 .price__availability,
 .price .price__badge-sale,
@@ -81,7 +82,7 @@
 .price--on-sale .price__availability {
   display: none;
 }
-*/
+
 .price--sold-out .price__badge-sold-out,
 .price--on-sale .price__badge-sale,
 .volume-pricing--sale-badge .price__badge-sale {
@@ -93,8 +94,8 @@
 }
 
 .price--on-sale .price__sale {
-  display: initial;
-  flex-direction: row;
+  display: flex;
+  flex-direction: row-reverse;
   flex-wrap: wrap;
 }
 
@@ -121,4 +122,16 @@
 
 .price--no-compare .price__sale {
   display: none !important;
+}
+
+#Results .card:not(.advc-card) .price__sale {
+  column-gap: 6px;
+}
+
+.advc-card .price--on-sale .price__regular {
+  display: flex;
+}
+
+.acs_auto_products .price__container {
+  flex-direction: row-reverse !important;
 }

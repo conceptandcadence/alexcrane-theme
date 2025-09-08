@@ -1,0 +1,31 @@
+/**
+ * Simple Banner Colors CSS
+ * Applies banner heading color to navigation when header is at top
+ */
+
+/* Only apply when header is at top and sticky-header is not hovered */
+.header-at-top sticky-header:not(:hover) .list-menu__item,
+.header-at-top sticky-header:not(:hover) .header__icon,
+.header-at-top sticky-header:not(:hover) .header__heading-logo-wrapper,
+.header-at-top sticky-header:not(:hover) .header__heading-logo-wrapper svg,
+.header-at-top
+  sticky-header:not(:hover)
+  .header__heading-logo-wrapper
+  svg
+  path {
+  color: var(--banner-heading-color) !important;
+  fill: var(--banner-heading-color) !important;
+}
+
+/* Add smooth transition */
+.list-menu__item,
+.header__icon,
+.header__heading-logo-wrapper,
+.header__heading-logo-wrapper svg,
+.header__heading-logo-wrapper svg path {
+  transition: color 0.3s ease, fill 0.3s ease;
+}
+
+.header__heading-logo-wrapper a {
+  padding: 0;
+}

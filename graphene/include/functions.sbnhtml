@@ -167,7 +167,7 @@ func product_card
               <!-- Product Link Area -->
               <a href="{{ $product?.url }}" 
                 class="product-link-area" 
-                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 998; cursor: pointer; display: block; background: transparent; pointer-events: auto;"
+                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 98; cursor: pointer; display: block; background: transparent; pointer-events: auto;"
                 aria-label="View {{ $title }}">
                 &nbsp;
               </a>
@@ -199,7 +199,7 @@ func product_card
       </div>
       
       <div class="card__content">
-        <div class="price tw-text-[11px] tw-leading-[14px] lg:tw-text-[12px] lg:tw-leading-[15px]">
+        <div class="price tw-text-[11px] tw-leading-[14px] lg:tw-text-[12px] lg:tw-leading-[15px] {{ if $compare_price == $current_price }} price--no-compare{{ else }} price--on-sale{{ end }}">
           {{ if $is_gift_card }}
             <div class="price__container">
               <dl class="price__regular">
@@ -285,7 +285,7 @@ func autocomplete_product_card
 }}
 <li class="grid__item scroll-trigger animate--slide-in" data-id="{{ $product?.id }}" data-handle="{{ $product?.handle }}" data-state="default" data-default-variant="{{ $default_variant?.value?.id }}">
   <div class="card-wrapper product-card-wrapper">
-    <div class="card card--standard tw-group card--media color-background-1 gradient card--extend-height" 
+    <div class="card advc-card card--standard tw-group card--media color-background-1 gradient card--extend-height" 
          data-id="{{ $product?.id }}" 
          data-handle="{{ $product?.handle }}" 
          data-state="default" 
@@ -358,7 +358,7 @@ func autocomplete_product_card
                 <!-- Product Link Area (center 50% clickable area) -->
                 <a href="{{ $product?.url }}" 
                   class="product-link-area" 
-                  style="position: absolute; top: 0; left: 25%; width: 50%; height: 100%; z-index: 998; cursor: pointer; display: block; background: transparent; pointer-events: auto;"
+                  style="position: absolute; top: 0; left: 25%; width: 50%; height: 100%; z-index: 98; cursor: pointer; display: block; background: transparent; pointer-events: auto;"
                   aria-label="View {{ $title }}">
                   &nbsp;
                 </a>
@@ -380,7 +380,7 @@ func autocomplete_product_card
                 <!-- Product Link Area for single image -->
                 <a href="{{ $product?.url }}" 
                   class="product-link-area" 
-                  style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 998; cursor: pointer; display: block; background: transparent; pointer-events: auto;"
+                  style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 98; cursor: pointer; display: block; background: transparent; pointer-events: auto;"
                   aria-label="View {{ $title }}">
                   &nbsp;
                 </a>
@@ -505,7 +505,7 @@ func autocomplete_product_card
       </div>
       
       <div class="card__content">
-        <div class="price tw-text-[11px] tw-leading-[14px] lg:tw-text-[12px] lg:tw-leading-[15px]">
+        <div class="price tw-text-[11px] tw-leading-[14px] lg:tw-text-[12px] lg:tw-leading-[15px] {{ if $pricing?.was > $pricing?.price }} price--on-sale{{ else }} price--no-compare{{ end }}">
           {{ if $is_gift_card }}
             <div class="price__container">
               <dl class="price__regular">
