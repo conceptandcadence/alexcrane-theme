@@ -289,4 +289,43 @@
   border-top: 1px solid rgb(var(--color-foreground) / 0.1);
   display: flex;
   gap: 1.2rem;
+  width: 100%;
+  flex-wrap: wrap;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+/* Safari mobile specific fixes */
+.menu-drawer__featured .mega-menu__featured-item {
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.menu-drawer__featured .mega-menu__featured-image {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1.2;
+}
+
+.menu-drawer__featured .mega-menu__featured-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  max-width: none;
+}
+
+/* Fix for Safari mobile viewport issues */
+@media screen and (max-width: 749px) {
+  .menu-drawer__featured {
+    padding: 1.5rem 2rem 4rem;
+    gap: 1rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .menu-drawer__featured .mega-menu__featured-item {
+    flex: 0 0 calc(50% - 0.5rem);
+    min-width: 140px;
+  }
 }

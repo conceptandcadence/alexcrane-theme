@@ -2,7 +2,7 @@
 function createOverlay(image) {
   const overlayImage = document.createElement('img');
   overlayImage.setAttribute('src', `${image.src}`);
-  overlay = document.createElement('div');
+  const overlay = document.createElement('div');
   prepareOverlay(overlay, overlayImage);
 
   image.style.opacity = '50%';
@@ -10,7 +10,27 @@ function createOverlay(image) {
 
   overlayImage.onload = () => {
     toggleLoadingSpinner(image);
-    image.parentElement.insertBefore(overlay, image);
+
+    // Ensure the parent container has relative positioning for the overlay
+    const parentContainer = image.parentElement;
+    console.log(
+      'magnify.js: Parent container:',
+      parentContainer.className,
+      'Position:',
+      getComputedStyle(parentContainer).position,
+    );
+
+    if (getComputedStyle(parentContainer).position === 'static') {
+      parentContainer.style.position = 'relative';
+      console.log('magnify.js: Set parent container to relative positioning');
+    }
+
+    // Insert overlay after the image instead of before
+    image.parentElement.appendChild(overlay);
+    console.log(
+      'magnify.js: Overlay inserted, z-index:',
+      getComputedStyle(overlay).zIndex,
+    );
     image.style.opacity = '100%';
   };
 
@@ -30,7 +50,7 @@ function toggleLoadingSpinner(image) {
   loadingSpinner.classList.toggle('hidden');
 }
 
-function moveWithHover(image, event, zoomRatio) {
+function moveWithHover(image, event, zoomRatio, overlayElement) {
   // calculate mouse position
   const ratio = image.height / image.width;
   const container = event.target.getBoundingClientRect();
@@ -40,25 +60,44 @@ function moveWithHover(image, event, zoomRatio) {
   const yPercent = `${yPosition / ((image.clientWidth * ratio) / 100)}%`;
 
   // determine what to show in the frame
-  overlay.style.backgroundPosition = `${xPercent} ${yPercent}`;
-  overlay.style.backgroundSize = `${image.width * zoomRatio}px`;
+  overlayElement.style.backgroundPosition = `${xPercent} ${yPercent}`;
+  overlayElement.style.backgroundSize = `${image.width * zoomRatio}px`;
 }
 
 function magnify(image, zoomRatio) {
   const overlay = createOverlay(image);
   overlay.onclick = () => overlay.remove();
-  overlay.onmousemove = (event) => moveWithHover(image, event, zoomRatio);
+  overlay.onmousemove = (event) =>
+    moveWithHover(image, event, zoomRatio, overlay);
   overlay.onmouseleave = () => overlay.remove();
+  return overlay;
 }
 
 function enableZoomOnHover(zoomRatio) {
   const images = document.querySelectorAll('.image-magnify-hover');
+  console.log(
+    'magnify.js: Found',
+    images.length,
+    'images with .image-magnify-hover class',
+  );
+
   images.forEach((image) => {
     image.onclick = (event) => {
-      magnify(image, zoomRatio);
-      moveWithHover(image, event, zoomRatio);
+      console.log('magnify.js: Image clicked, creating magnify overlay');
+      const overlay = magnify(image, zoomRatio);
+      moveWithHover(image, event, zoomRatio, overlay);
     };
   });
 }
 
-enableZoomOnHover(2);
+// Make function globally available for debugging
+window.enableZoomOnHover = enableZoomOnHover;
+
+// Wait for DOM to be ready before initializing
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => enableZoomOnHover(2), 100);
+  });
+} else {
+  setTimeout(() => enableZoomOnHover(2), 100);
+}

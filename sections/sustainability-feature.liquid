@@ -19,11 +19,11 @@
         </div>
       </div>
 
-      <div class='swiper sustainable-features-swiper'>
+      <div class='swiper sustainable-features-swiper' data-section-id='{{ section.id }}'>
         <div class='swiper-wrapper'>
           {% for block in section.blocks %}
             <div class='swiper-slide'>
-              <div class='sustainable-feature tw-rounded-[2px] tw-h-full'>
+              <div class='sustainable-feature tw-rounded-[2px] tw-h-full tw-pb-3'>
                 {% assign current_image = block.settings.image %}
                 {% if current_image != blank %}
                   <div class='sustainable-features__media'>
@@ -60,7 +60,7 @@
                     <h3 class='sustainable-features__title h3 tw-mb-4'>
                       {{ block.settings.title }}
                     </h3>
-                    <div class='sustainable-features__description rte tw-text-[12px] tw-leading-[15px] lg:tw-mt-4'>
+                    <div class='sustainable-features__description rte tw-text-[12px] tw-leading-[15px] tw-mb-8 lg:tw-mt-4'>
                       {{ block.settings.description }}
                     </div>
                   </div>
@@ -71,16 +71,19 @@
         </div>
 
         {%- comment -%} Swiper Navigation - Previous Arrow (left side) {%- endcomment -%}
-        <div class='swiper-button-prev sustainable-nav sustainable-nav--prev'></div>
+        <div class='swiper-button-prev sustainable-nav sustainable-nav--prev' data-section-id='{{ section.id }}'></div>
 
         {%- comment -%} Swiper Counter and Next Arrow (bottom right) {%- endcomment -%}
         <div class='sustainable-controls'>
           <div class='sustainable-counter'>
-            <span class='sustainable-counter__current'>1</span>
+            <span class='sustainable-counter__current' data-section-id='{{ section.id }}'>1</span>
             <span class='sustainable-counter__separator'>/</span>
             <span class='sustainable-counter__total'>{{ section.blocks.size }}</span>
           </div>
-          <div class='swiper-button-next sustainable-nav sustainable-nav--next sustainable-nav--bottom'></div>
+          <div
+            class='swiper-button-next sustainable-nav sustainable-nav--next sustainable-nav--bottom'
+            data-section-id='{{ section.id }}'
+          ></div>
         </div>
       </div>
     </div>
@@ -233,10 +236,10 @@
   .sustainable-controls {
     position: absolute;
     bottom: 0;
-    right: 0.5rem;
+    left: 0;
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 0.5rem;
     z-index: 10;
   }
 
@@ -244,14 +247,13 @@
   .sustainable-counter {
     display: flex;
     align-items: center;
-    font-size: 0.875rem;
-    font-weight: 500;
+    font-size: 1.2rem;
     color: #000;
-    opacity: 0.8;
+    opacity: 1;
   }
 
   .sustainable-counter__current {
-    min-width: 1.5rem;
+    min-width: 1rem;
     text-align: center;
   }
 
@@ -260,7 +262,7 @@
   }
 
   .sustainable-counter__total {
-    min-width: 1.5rem;
+    min-width: 1rem;
     text-align: center;
   }
 
@@ -300,96 +302,114 @@
 </style>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    // Only initialize swiper if we're on mobile and Swiper is available
-    function initSustainableSwiper() {
-      if (typeof Swiper === 'undefined') {
-        setTimeout(initSustainableSwiper, 100);
-        return;
-      }
+  (function () {
+    // Get the current section ID for unique identification
+    // Use currentScript immediately before DOMContentLoaded to avoid null issues
+    const currentScript = document.currentScript;
+    const sectionId = '{{ section.id }}';
 
-      const swiperContainer = document.querySelector('.sustainable-features-swiper');
+    document.addEventListener('DOMContentLoaded', function () {
+      // Find the section by its unique ID
+      const section = document
+        .querySelector('.sustainable-features .sustainable-features-swiper[data-section-id="' + sectionId + '"]')
+        ?.closest('.sustainable-features');
+      if (!section) return;
+
+      // Find the swiper container within this specific section
+      const swiperContainer = section.querySelector(
+        '.sustainable-features-swiper[data-section-id="' + sectionId + '"]',
+      );
       if (!swiperContainer) return;
 
-      // Only initialize on mobile screens (below 1024px based on lg: breakpoint)
-      function shouldInitSwiper() {
-        return window.innerWidth < 1024;
-      }
-
-      let swiper = null;
-
-      // Function to update the counter display
-      function updateCounter(currentSlide) {
-        const counterElement = document.querySelector('.sustainable-counter__current');
-        if (counterElement) {
-          counterElement.textContent = currentSlide;
+      // Only initialize swiper if we're on mobile and Swiper is available
+      function initSustainableSwiper() {
+        if (typeof Swiper === 'undefined') {
+          setTimeout(initSustainableSwiper, 100);
+          return;
         }
-      }
 
-      function initSwiper() {
-        if (shouldInitSwiper() && !swiper) {
-          swiper = new Swiper('.sustainable-features-swiper', {
-            slidesPerView: 1,
-            spaceBetween: 16,
-            centeredSlides: false,
-            loop: false,
-            autoHeight: false,
-            grabCursor: true,
-
-            // Navigation arrows
-            navigation: {
-              nextEl: '.sustainable-nav--next',
-              prevEl: '.sustainable-nav--prev',
-            },
-
-            // Custom events for counter update
-            on: {
-              slideChange: function () {
-                updateCounter(this.activeIndex + 1);
-              },
-              init: function () {
-                updateCounter(1);
-              },
-            },
-
-            // Responsive breakpoints for different mobile sizes
-            breakpoints: {
-              480: {
-                slidesPerView: 1.2,
-                spaceBetween: 20,
-              },
-              640: {
-                slidesPerView: 1.5,
-                spaceBetween: 24,
-              },
-            },
-
-            // Touch settings
-            touchRatio: 1,
-            touchAngle: 45,
-            simulateTouch: true,
-            allowTouchMove: true,
-            touchStartPreventDefault: false,
-          });
-        } else if (!shouldInitSwiper() && swiper) {
-          swiper.destroy(true, true);
-          swiper = null;
+        // Only initialize on mobile screens (below 1024px based on lg: breakpoint)
+        function shouldInitSwiper() {
+          return window.innerWidth < 1024;
         }
+
+        let swiper = null;
+
+        // Function to update the counter display for this specific section
+        function updateCounter(currentSlide) {
+          const counterElement = section.querySelector(
+            '.sustainable-counter__current[data-section-id="' + sectionId + '"]',
+          );
+          if (counterElement) {
+            counterElement.textContent = currentSlide;
+          }
+        }
+
+        function initSwiper() {
+          if (shouldInitSwiper() && !swiper) {
+            swiper = new Swiper(swiperContainer, {
+              slidesPerView: 1,
+              spaceBetween: 16,
+              centeredSlides: false,
+              loop: false,
+              autoHeight: false,
+              grabCursor: true,
+
+              // Navigation arrows - use section-specific selectors
+              navigation: {
+                nextEl: section.querySelector('.sustainable-nav--next[data-section-id="' + sectionId + '"]'),
+                prevEl: section.querySelector('.sustainable-nav--prev[data-section-id="' + sectionId + '"]'),
+              },
+
+              // Custom events for counter update
+              on: {
+                slideChange: function () {
+                  updateCounter(this.activeIndex + 1);
+                },
+                init: function () {
+                  updateCounter(1);
+                },
+              },
+
+              // Responsive breakpoints for different mobile sizes
+              breakpoints: {
+                480: {
+                  slidesPerView: 1.2,
+                  spaceBetween: 20,
+                },
+                640: {
+                  slidesPerView: 1.5,
+                  spaceBetween: 24,
+                },
+              },
+
+              // Touch settings
+              touchRatio: 1,
+              touchAngle: 45,
+              simulateTouch: true,
+              allowTouchMove: true,
+              touchStartPreventDefault: false,
+            });
+          } else if (!shouldInitSwiper() && swiper) {
+            swiper.destroy(true, true);
+            swiper = null;
+          }
+        }
+
+        // Initialize on load
+        initSwiper();
+
+        // Re-initialize on window resize
+        let resizeTimeout;
+        window.addEventListener('resize', function () {
+          clearTimeout(resizeTimeout);
+          resizeTimeout = setTimeout(initSwiper, 250);
+        });
       }
 
-      // Initialize on load
-      initSwiper();
-
-      // Re-initialize on window resize
-      let resizeTimeout;
-      window.addEventListener('resize', function () {
-        clearTimeout(resizeTimeout);
-        resizeTimeout = setTimeout(initSwiper, 250);
-      });
-    }
-
-    initSustainableSwiper();
-  });
+      initSustainableSwiper();
+    });
+  })();
 </script>
 
 {% schema %}

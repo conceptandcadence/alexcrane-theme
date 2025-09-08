@@ -158,18 +158,20 @@
   {% endif %}
 
   <script>
-    // Enhanced Mobile Accordion Functionality that works with existing tab system
-    document.addEventListener('DOMContentLoaded', function () {
-      const accordionHeaders = document.querySelectorAll('.product__accordion-header');
+    // Enhanced Mobile Accordion Functionality that works with existing tab system and modals
+    function initializeMobileAccordion(container = document) {
+      const accordionHeaders = container.querySelectorAll('.product__accordion-header');
+
+      console.log('Initializing mobile accordion in:', container, 'Found headers:', accordionHeaders.length);
 
       function isMobile() {
         return window.innerWidth < 768;
       }
 
-      function updateAccordionIcons() {
-        accordionHeaders.forEach((header) => {
+      function updateAccordionIcons(headers) {
+        headers.forEach((header) => {
           const panel = header.getAttribute('data-panel');
-          const content = document.querySelector(`.product__accordion-content[data-panel="${panel}"]`);
+          const content = container.querySelector(`.product__accordion-content[data-panel="${panel}"]`);
           const icon = header.querySelector('.product__accordion-icon');
 
           if (content && icon) {
@@ -179,15 +181,28 @@
         });
       }
 
+      // Remove existing event listeners to prevent duplicates
       accordionHeaders.forEach((header) => {
-        header.addEventListener('click', function () {
+        // Clone node to remove all event listeners
+        const newHeader = header.cloneNode(true);
+        header.parentNode.replaceChild(newHeader, header);
+      });
+
+      // Get fresh references after cloning
+      const freshAccordionHeaders = container.querySelectorAll('.product__accordion-header');
+
+      freshAccordionHeaders.forEach((header) => {
+        header.addEventListener('click', function (e) {
           console.log('Accordion header clicked:', this, 'isMobile:', isMobile());
 
           // Only handle clicks on mobile
           if (!isMobile()) return;
 
+          e.preventDefault();
+          e.stopPropagation();
+
           const panel = this.getAttribute('data-panel');
-          const content = document.querySelector(`.product__accordion-content[data-panel="${panel}"]`);
+          const content = container.querySelector(`.product__accordion-content[data-panel="${panel}"]`);
           const icon = this.querySelector('.product__accordion-icon');
 
           console.log('Panel:', panel, 'Content:', content, 'Icon:', icon);
@@ -195,11 +210,11 @@
           if (content) {
             const isExpanded = content.getAttribute('aria-expanded') === 'true';
 
-            // Close all other accordion sections on mobile
-            accordionHeaders.forEach((otherHeader) => {
+            // Close all other accordion sections on mobile within this container
+            freshAccordionHeaders.forEach((otherHeader) => {
               if (otherHeader !== header) {
                 const otherPanel = otherHeader.getAttribute('data-panel');
-                const otherContent = document.querySelector(`.product__accordion-content[data-panel="${otherPanel}"]`);
+                const otherContent = container.querySelector(`.product__accordion-content[data-panel="${otherPanel}"]`);
                 const otherIcon = otherHeader.querySelector('.product__accordion-icon');
 
                 if (otherContent) {
@@ -223,12 +238,29 @@
       });
 
       // Update icons on initial load
-      updateAccordionIcons();
+      updateAccordionIcons(freshAccordionHeaders);
 
       // Handle window resize to ensure proper behavior
-      window.addEventListener('resize', function () {
-        updateAccordionIcons();
-      });
+      const resizeHandler = function () {
+        updateAccordionIcons(freshAccordionHeaders);
+      };
+
+      // Remove existing resize listeners and add new one
+      window.removeEventListener('resize', resizeHandler);
+      window.addEventListener('resize', resizeHandler);
+    }
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', function () {
+      initializeMobileAccordion();
+    });
+
+    // Re-initialize when product info is loaded (for modals)
+    document.addEventListener('product-info:loaded', function (e) {
+      setTimeout(() => {
+        const modalContainer = e.target.closest('quick-add-modal');
+        initializeMobileAccordion(modalContainer || document);
+      }, 100);
     });
   </script>
   <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css'>
@@ -1840,6 +1872,7 @@
     {%- if product.media.size > 0 -%}
       <script src='{{ 'product-modal.js' | asset_url }}' defer='defer'></script>
       <script src='{{ 'media-gallery.js' | asset_url }}' defer='defer'></script>
+      <script src='{{ 'product-touch-zoom.js' | asset_url }}' defer='defer'></script>
 
       {%- comment -%} Enhanced gallery with Swiper for all layouts except swiper_thumbnails {%- endcomment -%}
       {%- unless section.settings.gallery_layout == 'swiper_thumbnails' -%}

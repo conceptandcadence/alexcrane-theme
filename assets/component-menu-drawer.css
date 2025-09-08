@@ -177,6 +177,7 @@ details[open].menu-opening > .menu-drawer__submenu {
 }
 
 .menu-drawer__utility-links {
+  display: none;
   padding: 0;
   background-color: rgba(var(--color-foreground), 0.03);
   position: relative;

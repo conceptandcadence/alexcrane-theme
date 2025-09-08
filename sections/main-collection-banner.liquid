@@ -72,7 +72,7 @@
             <div class='shop-filterz tw-flex tw-gap-4 tw-w-full'>
               <!-- sort by list -->
               <div class='plp-products-sort tw-w-full'>
-                <div class='filter-triggerzz tw-border tw-border-[#ECECEC] tw-rounded-[5px] !tw-px-6 tw-py-4'>
+                <div class='filter-triggerzz tw-border tw-border-[#ECECEC] tw-rounded-[5px] !tw-px-6 tw-py-4 tw-flex tw-items-center tw-justify-between'>
                   <label for='sort'><span class='visually-hidden'>Sort:</span></label>
                   <select name='sort' onchange='graphenehc.reload({url: this.value});' class='!tw-w-full'>
                     <option disabled='disabled' selected='selected' value=''>Sort</option>
@@ -85,6 +85,9 @@
                     <option value='/collections/bestsellers/men?sort=price%7easc'>Lowest Price</option>
                     <option value='/collections/bestsellers/men?sort=price%7edesc'>Highest Price</option>
                   </select>
+                  <span class='tw-w-4 tw-h-4 tw-mr-0'>
+                    {{ 'icon-caret.svg' | inline_asset_content }}
+                  </span>
                 </div>
               </div>
               <div class='plp-products-filter filter-triggerzz tw-border tw-border-[#ECECEC] tw-rounded-[5px] !tw-px-6 tw-py-4'>
@@ -97,13 +100,16 @@
                 </button>
               </div>
               <div class='plp-products-view tw-w-full'>
-                <div class='filter-triggerzz tw-border tw-border-[#ECECEC] tw-rounded-[5px] !tw-px-6 tw-py-4'>
+                <div class='filter-triggerzz tw-border tw-border-[#ECECEC] tw-rounded-[5px] !tw-px-6 tw-py-4 tw-flex tw-items-center tw-justify-between'>
                   <label for='view'><span class='visually-hidden'>Sort:</span></label>
                   <select name='view' class='!tw-w-full'>
                     <option disabled='disabled' selected='selected' value=''>View</option>
                     <option value='flats'>Flats</option>
                     <option value='lifestyle'>Lifestyle</option>
                   </select>
+                  <span class='tw-w-4 tw-h-4 tw-mr-0'>
+                    {{ 'icon-caret.svg' | inline_asset_content }}
+                  </span>
                 </div>
               </div>
             </div>

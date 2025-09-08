@@ -58,6 +58,13 @@ if (!customElements.get('quick-add-modal')) {
 
             super.show(opener);
 
+            // Initialize mobile accordion functionality for modal content
+            if (typeof initializeMobileAccordion === 'function') {
+              setTimeout(() => {
+                initializeMobileAccordion(this);
+              }, 150);
+            }
+
             // Trigger custom event for Rebuy initialization
             document.dispatchEvent(
               new CustomEvent('quick-add-modal:opened', {

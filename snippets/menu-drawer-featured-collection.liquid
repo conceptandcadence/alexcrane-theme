@@ -49,8 +49,6 @@
             class='mega-menu__featured-image-main'
             src='{{ main_image | image_url: width: 300 }}'
             alt='{{ main_image_alt | escape }}'
-            width='200'
-            height='240'
             loading='lazy'
           >
           {%- if hover_image -%}
@@ -58,8 +56,6 @@
               class='mega-menu__featured-image-hover'
               src='{{ hover_image | image_url: width: 300 }}'
               alt='{{ hover_image.alt | default: heading | escape }}'
-              width='200'
-              height='240'
               loading='lazy'
             >
           {%- endif -%}

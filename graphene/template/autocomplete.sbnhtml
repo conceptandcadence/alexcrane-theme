@@ -35,7 +35,7 @@
             </ul>
           </div>
         {{~ else ~}}
-          <div class="acs_auto_group">
+          <div class="acs_auto_group popular">
             <h4 class="force-h3">{{ label "autocomplete.headings.popular_searches" }}</h4>
             <ul class="acs_auto_help">
             {{~ for $idx in 1..8 ~}}

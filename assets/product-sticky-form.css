@@ -152,7 +152,7 @@
   }
 
   .product--sticky-form .product-form__submit {
-    min-width: 120px;
+    min-width: 80px;
   }
 
   .product--sticky-form .select__select {
@@ -164,6 +164,9 @@
     font-size: 0.8125rem;
     padding: 0.625rem 1rem;
     min-width: 100px;
+  }
+  .product--sticky-form variant-selects {
+    display: none !important;
   }
 }
 

@@ -64,7 +64,7 @@
         "media_fit": "contain",
         "gallery_layout": "thumbnail_slider",
         "media_position": "left",
-        "image_zoom": "lightbox",
+        "image_zoom": "hover",
         "mobile_thumbnails": "show",
         "show_sticky_cart_button": true,
         "hide_variants": true,

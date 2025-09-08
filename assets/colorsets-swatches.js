@@ -23,18 +23,18 @@ class ColorsetSwatches {
    * Initialize the colorset swatches system
    */
   async init() {
-    console.log('🎨 Starting ColorsetSwatches initialization...');
+    //console.log('🎨 Starting ColorsetSwatches initialization...');
     try {
-      console.log('🎨 Step 1: Loading colorset data...');
+      //console.log('🎨 Step 1: Loading colorset data...');
       await this.loadColorsetData();
-      console.log('🎨 Step 2: Building product map...');
+      //console.log('🎨 Step 2: Building product map...');
       this.buildProductMap();
-      console.log('🎨 Step 3: Setting up mutation observer...');
+      //console.log('🎨 Step 3: Setting up mutation observer...');
       this.setupMutationObserver();
-      console.log('🎨 Step 4: Applying swatches to existing cards...');
+      //console.log('🎨 Step 4: Applying swatches to existing cards...');
       this.applySwatches();
       this.isInitialized = true;
-      console.log('🎨 ColorsetSwatches initialized successfully');
+      //console.log('🎨 ColorsetSwatches initialized successfully');
     } catch (error) {
       console.error('🎨 Failed to initialize ColorsetSwatches:', error);
     }
@@ -44,37 +44,37 @@ class ColorsetSwatches {
    * Load colorset data from the JSON script tag
    */
   async loadColorsetData() {
-    console.log('🎨 Looking for colorsets-data script element...');
+    // console.log('🎨 Looking for colorsets-data script element...');
     const scriptElement = document.getElementById('colorsets-data');
 
     if (!scriptElement) {
-      console.error('🎨 Script element #colorsets-data not found in DOM');
-      console.log(
+      // console.error('🎨 Script element #colorsets-data not found in DOM');
+      /*console.log(
         '🎨 Available script elements with IDs:',
         Array.from(document.querySelectorAll('script[id]')).map((s) => s.id),
-      );
+      ); */
       throw new Error(
         'Colorsets data not found. Make sure colorsets.liquid is included.',
       );
     }
 
-    console.log('🎨 Found colorsets-data script element');
+    // console.log('🎨 Found colorsets-data script element');
 
     try {
       const rawData = scriptElement.textContent;
-      console.log('🎨 Raw colorsets data length:', rawData?.length || 0);
-      console.log(
+      // console.log('🎨 Raw colorsets data length:', rawData?.length || 0);
+      /*console.log(
         '🎨 First 200 chars of raw data:',
         rawData?.substring(0, 200),
-      );
+      ); */
 
       this.colorsetData = JSON.parse(rawData);
       console.log('🎨 Parsed colorset data successfully');
-      console.log(
+      /*console.log(
         '🎨 Colorsets count:',
         this.colorsetData?.colorsets?.length || 0,
-      );
-      console.log('🎨 Meta info:', this.colorsetData?.meta);
+      ); */
+      //console.log('🎨 Meta info:', this.colorsetData?.meta);
     } catch (error) {
       console.error('🎨 Failed to parse colorsets JSON:', error);
       throw new Error('Failed to parse colorsets data: ' + error.message);
@@ -106,10 +106,10 @@ class ColorsetSwatches {
         });
       });
     });
-
+    /*
     console.log(
       `Built product map with ${this.productToColorsetMap.size} entries`,
-    );
+    ); */
   }
 
   /**
@@ -201,9 +201,9 @@ class ColorsetSwatches {
 
     // Only create swatch if product has colorway data with image_url
     if (!product.colorway?.image_url || product.colorway.image_url === '') {
-      console.log(
+      /* console.log(
         `🎨 Skipping ${product.handle} - no colorway swatch image available`,
-      );
+      ); */
       return '';
     }
 
@@ -213,7 +213,7 @@ class ColorsetSwatches {
       product.colorway.title || product.colorway.admin_name || '';
     const productUrl = product.url || '';
 
-    console.log(`🎨 Using colorway swatch for ${product.handle}:`, swatchImage);
+    //console.log(`🎨 Using colorway swatch for ${product.handle}:`, swatchImage);
 
     // Ensure proper image sizing
     let finalSwatchImage = swatchImage;
@@ -277,9 +277,9 @@ class ColorsetSwatches {
         // Add click handlers for swatch navigation
         this.addSwatchClickHandlers(targetInfo.element);
 
-        console.log(
+        /*console.log(
           `🎨 Applied swatches to existing .secondary for product: ${productIdentifier}`,
-        );
+        ); */
       } else {
         // Create new wrapper with identifier class
         const swatchWrapper = document.createElement('div');
@@ -292,18 +292,18 @@ class ColorsetSwatches {
         // Add click handlers for swatch navigation
         this.addSwatchClickHandlers(swatchWrapper);
 
-        console.log(
+        /*console.log(
           `🎨 Applied swatches to new container for product: ${productIdentifier}`,
-        );
+        ); */
       }
 
       // Add class to card__content for layout modifications
       const cardContent = cardElement.querySelector('.card__content');
       if (cardContent) {
         cardContent.classList.add('has-swatches');
-        console.log(
+        /*console.log(
           `🎨 Added 'has-swatches' class to .card__content for ${productIdentifier}`,
-        );
+        ); */
       }
     }
   }
@@ -366,7 +366,7 @@ class ColorsetSwatches {
    */
   async openQuickAddModal(productUrl) {
     try {
-      console.log(`🎨 Opening quick-add modal for: ${productUrl}`);
+      // console.log(`🎨 Opening quick-add modal for: ${productUrl}`);
 
       // Extract product handle from URL
       const productHandle = productUrl.replace('/products/', '').split('?')[0];
@@ -444,6 +444,14 @@ class ColorsetSwatches {
       const targetElement = document.getElementById(targetElementId);
       if (targetElement) {
         targetElement.innerHTML = html;
+
+        // Initialize mobile accordion functionality for dynamically loaded content
+        if (typeof initializeMobileAccordion === 'function') {
+          setTimeout(() => {
+            const modalContainer = targetElement.closest('quick-add-modal');
+            initializeMobileAccordion(modalContainer || document);
+          }, 100);
+        }
       }
     } catch (error) {
       console.error('🎨 Error loading quick-add content:', error);
@@ -493,11 +501,11 @@ class ColorsetSwatches {
     // Remove duplicates
     productCards = [...new Set(productCards)];
 
-    console.log(`🎨 Found ${productCards.length} product cards to process`);
-    console.log(
+    // console.log(`🎨 Found ${productCards.length} product cards to process`);
+    /*console.log(
       `🎨 Card types found:`,
       selectors.map((s) => `${s}: ${document.querySelectorAll(s).length}`),
-    );
+    ); */
 
     let processedCount = 0;
     let skippedCount = 0;
@@ -520,9 +528,9 @@ class ColorsetSwatches {
       }
     });
 
-    console.log(
+    /* console.log(
       `🎨 Processing complete: ${appliedCount} swatches applied, ${processedCount} processed, ${skippedCount} skipped`,
-    );
+    ); */
   }
 
   /**
@@ -582,9 +590,9 @@ class ColorsetSwatches {
 
               if (filteredCards.length > 0) {
                 hasNewContent = true;
-                console.log(
+                /*console.log(
                   `🎨 MutationObserver detected ${filteredCards.length} new product cards`,
-                );
+                ); */
               }
             }
           }
@@ -595,9 +603,9 @@ class ColorsetSwatches {
       if (hasNewContent) {
         clearTimeout(this.mutationRefreshTimeout);
         this.mutationRefreshTimeout = setTimeout(() => {
-          console.log(
+          /* console.log(
             '🎨 MutationObserver triggering full refresh after new content detection',
-          );
+          ); */
           this.refresh();
         }, 1000);
       }
@@ -613,7 +621,7 @@ class ColorsetSwatches {
       characterDataOldValue: false,
     });
 
-    console.log('MutationObserver set up for dynamic card detection');
+    //console.log('MutationObserver set up for dynamic card detection');
   }
 
   /**
@@ -631,6 +639,7 @@ class ColorsetSwatches {
    * Debug helper - check system status
    */
   debug() {
+    /*
     console.log('🎨 ColorsetSwatches Debug Info:');
     console.log('  - Initialized:', this.isInitialized);
     console.log('  - Colorset data loaded:', !!this.colorsetData);
@@ -640,10 +649,10 @@ class ColorsetSwatches {
     );
     console.log('  - Product map size:', this.productToColorsetMap.size);
     console.log('  - Observer active:', !!this.observer);
-
+		*/
     // Check for colorsets-data element
     const scriptElement = document.getElementById('colorsets-data');
-    console.log('  - colorsets-data element found:', !!scriptElement);
+    //console.log('  - colorsets-data element found:', !!scriptElement);
 
     // Check for product cards with multiple selectors (excluding product page media)
     const cardSelectors = [
@@ -676,27 +685,27 @@ class ColorsetSwatches {
           return true;
         });
         if (filteredCards.length > 0) {
-          console.log(
+          /*console.log(
             `  - ${selector}: ${filteredCards.length} found (${
               cards.length - filteredCards.length
             } excluded)`,
-          );
+          ); */
           totalCards += filteredCards.length;
         }
       }
     });
 
-    console.log('  - Total product cards found:', totalCards);
+    //console.log('  - Total product cards found:', totalCards);
 
     // Check for secondary divs
     const secondaryDivs = document.querySelectorAll('.secondary');
-    console.log('  - Secondary divs found:', secondaryDivs.length);
+    //console.log('  - Secondary divs found:', secondaryDivs.length);
 
     // Check for any elements with product URLs
     const productUrls = document.querySelectorAll(
       '[href*="/products/"], [data-product-url]',
     );
-    console.log('  - Elements with product URLs:', productUrls.length);
+    //console.log('  - Elements with product URLs:', productUrls.length);
 
     return {
       initialized: this.isInitialized,
@@ -728,21 +737,23 @@ window.debugColorsets = function () {
   return window.ColorsetSwatches.debug();
 };
 
-console.log('🎨 ColorsetSwatches script loaded');
-console.log('🎨 Debug function available as: window.debugColorsets()');
+// console.log('🎨 ColorsetSwatches script loaded');
+// console.log('🎨 Debug function available as: window.debugColorsets()');
 
 // Auto-initialize when DOM is ready
 if (document.readyState === 'loading') {
-  console.log('🎨 DOM loading, waiting for DOMContentLoaded...');
+  //console.log('🎨 DOM loading, waiting for DOMContentLoaded...');
   document.addEventListener('DOMContentLoaded', () => {
-    console.log('🎨 DOMContentLoaded fired, initializing ColorsetSwatches...');
+    //console.log('🎨 DOMContentLoaded fired, initializing ColorsetSwatches...');
     window.ColorsetSwatches.init();
   });
 } else {
   // DOM is already ready
+  /*
   console.log(
     '🎨 DOM already ready, initializing ColorsetSwatches immediately...',
   );
+	*/
   window.ColorsetSwatches.init();
 }
 
@@ -750,14 +761,16 @@ if (document.readyState === 'loading') {
 const refreshAttempts = [500, 1000, 2000, 5000];
 refreshAttempts.forEach((delay, index) => {
   setTimeout(() => {
-    console.log(`🎨 Refresh attempt ${index + 1} (${delay}ms)...`);
+    //console.log(`🎨 Refresh attempt ${index + 1} (${delay}ms)...`);
     if (window.ColorsetSwatches.isInitialized) {
-      console.log('🎨 ColorsetSwatches initialized, refreshing...');
+      /*
+      console.log('🎨 ColorsetSwatches initialized, refreshing...'); */
       window.ColorsetSwatches.refresh();
     } else {
+      /*
       console.log(
         '🎨 ColorsetSwatches not initialized yet, attempting init...',
-      );
+      ); */
       window.ColorsetSwatches.init();
     }
   }, delay);

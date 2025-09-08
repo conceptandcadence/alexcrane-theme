@@ -9,25 +9,38 @@ class ShippingMotivator {
     this.bannerMotivator = document.querySelector('[data-motivator]');
     this.cartMotivator = document.querySelector('[data-motivator-cart]');
 
-    console.log(
-      '🔍 Constructor - banner:',
-      !!this.bannerMotivator,
-      'cart:',
-      !!this.cartMotivator,
-    );
-    if (this.bannerMotivator) {
-      console.log(
-        '🔍 Banner motivator found:',
-        this.bannerMotivator.tagName,
-        this.bannerMotivator.className,
+    // Mobile optimization: enable lightweight mode instead of disabling completely
+    this.isMobile =
+      window.innerWidth <= 768 ||
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent,
       );
-    }
-    if (this.cartMotivator) {
+    this.isSmallMobile = window.innerWidth <= 480 && this.isMobile;
+
+    // Reduced console logging for mobile performance
+    if (!this.isMobile) {
       console.log(
-        '🔍 Cart motivator found:',
-        this.cartMotivator.tagName,
-        this.cartMotivator.className,
+        '🔍 Constructor - banner:',
+        !!this.bannerMotivator,
+        'cart:',
+        !!this.cartMotivator,
       );
+      if (this.bannerMotivator) {
+        console.log(
+          '🔍 Banner motivator found:',
+          this.bannerMotivator.tagName,
+          this.bannerMotivator.className,
+        );
+      }
+      if (this.cartMotivator) {
+        console.log(
+          '🔍 Cart motivator found:',
+          this.cartMotivator.tagName,
+          this.cartMotivator.className,
+        );
+      }
+    } else if (this.isSmallMobile) {
+      console.log('📱 Shipping motivator running in lightweight mobile mode');
     }
 
     this.config = this.getConfig();
@@ -38,6 +51,7 @@ class ShippingMotivator {
     this.removingGWP = false; // Track GWP removal to prevent duplicates
     this.internalFetch = false; // Track internal cart fetches to prevent interceptor loops
     this.lastUpdateTime = 0; // Timestamp to prevent excessive updates
+    this.lastFetchTime = 0; // Timestamp to throttle fetch requests
 
     // Cache for performance optimization
     this.lastCartValue = -1;
@@ -120,7 +134,39 @@ class ShippingMotivator {
     await this.update();
     this.show();
     this.initialized = true;
-    console.log('Shipping Motivator initialized with native cart');
+
+    if (!this.isMobile) {
+      console.log('Shipping Motivator initialized with native cart');
+    } else {
+      console.log('📱 Shipping Motivator initialized in mobile mode');
+    }
+
+    // Disable CSS animations on small mobile for performance
+    if (this.isSmallMobile) {
+      this.disableMobileAnimations();
+    }
+  }
+
+  disableMobileAnimations() {
+    // Add a class to disable animations on mobile for better performance
+    if (this.bannerMotivator) {
+      this.bannerMotivator.classList.add('shipping-motivator--no-animations');
+    }
+    if (this.cartMotivator) {
+      this.cartMotivator.classList.add('shipping-motivator--no-animations');
+    }
+
+    // Add CSS to disable transitions and animations
+    const style = document.createElement('style');
+    style.textContent = `
+      .shipping-motivator--no-animations,
+      .shipping-motivator--no-animations * {
+        transition: none !important;
+        animation: none !important;
+        transform: none !important;
+      }
+    `;
+    document.head.appendChild(style);
   }
 
   async fetchCart() {
@@ -129,14 +175,41 @@ class ShippingMotivator {
       return this.fetchingCart;
     }
 
+    // Mobile optimization: reduce fetch frequency based on device
+    const now = Date.now();
+    const minInterval = this.isSmallMobile ? 2000 : this.isMobile ? 1000 : 500;
+    if (this.lastFetchTime && now - this.lastFetchTime < minInterval) {
+      return Promise.resolve();
+    }
+
     this.fetchingCart = (async () => {
       try {
         // Flag to prevent intercepting our own cart fetch
         this.internalFetch = true;
-        const response = await fetch('/cart.js');
+
+        // Use proper headers to prevent CORS issues
+        const response = await fetch('/cart.js', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+          },
+          credentials: 'same-origin',
+        });
+
+        if (!response.ok) {
+          throw new Error(`Cart fetch failed: ${response.status}`);
+        }
+
         this.cart = await response.json();
-        //console.log('🛒 Cart fetched:', this.cart.total_price);
+        this.lastFetchTime = now;
+
+        // Reduced console logging for mobile performance
+        if (!this.isMobile) {
+          console.log('🛒 Cart fetched:', this.cart.total_price);
+        }
       } catch (error) {
+        console.warn('Cart fetch error:', error.message);
         this.cart = { total_price: 0, items: [] };
       } finally {
         this.fetchingCart = null;
@@ -149,7 +222,10 @@ class ShippingMotivator {
 
   setupElements() {
     try {
-      console.log('🔧 Setting up motivator elements...');
+      // Reduced console logging for mobile performance
+      if (!this.isMobile) {
+        console.log('🔧 Setting up motivator elements...');
+      }
 
       this.elements = {
         banner: this.bannerMotivator
@@ -160,15 +236,19 @@ class ShippingMotivator {
           : null,
       };
 
-      console.log('🔧 Elements setup result:', {
-        banner: !!this.elements.banner,
-        bannerProgressFill: !!this.elements.banner?.progressFill,
-        cart: !!this.elements.cart,
-        cartProgressFill: !!this.elements.cart?.progressFill,
-      });
+      if (!this.isMobile) {
+        console.log('🔧 Elements setup result:', {
+          banner: !!this.elements.banner,
+          bannerProgressFill: !!this.elements.banner?.progressFill,
+          cart: !!this.elements.cart,
+          cartProgressFill: !!this.elements.cart?.progressFill,
+        });
+      }
 
-      // Apply proportional widths to all goal elements
-      this.applyProportionalWidths();
+      // Apply proportional widths to all goal elements (skip on small mobile for performance)
+      if (!this.isSmallMobile) {
+        this.applyProportionalWidths();
+      }
     } catch (error) {
       console.error('Error setting up shipping motivator elements:', error);
       this.elements = { banner: null, cart: null };
@@ -312,6 +392,7 @@ class ShippingMotivator {
       const response = await originalFetch(...args);
 
       // Check if this is a cart-related request
+      // Only intercept cart-related requests and add mobile throttling
       if (
         args[0] &&
         (args[0].includes('/cart/') ||
@@ -320,22 +401,49 @@ class ShippingMotivator {
           args[0].includes('/cart/update') ||
           args[0].includes('/cart/change'))
       ) {
-        // Update cart after a minimal delay
+        // Mobile optimization: adaptive delay and throttling
+        const motivator = window.shippingMotivator;
+        const delay = motivator?.isSmallMobile
+          ? 200
+          : motivator?.isMobile
+          ? 100
+          : 10;
+
         setTimeout(() => {
           if (
-            window.shippingMotivator &&
-            window.shippingMotivator.initialized &&
-            !window.shippingMotivator.fetchingCart &&
-            !window.shippingMotivator.processingGWP &&
-            !window.shippingMotivator.removingGWP &&
-            !window.shippingMotivator.internalFetch
+            motivator &&
+            motivator.initialized &&
+            !motivator.fetchingCart &&
+            !motivator.processingGWP &&
+            !motivator.removingGWP &&
+            !motivator.internalFetch
           ) {
-            window.shippingMotivator
+            // Adaptive throttle based on device
+            const now = Date.now();
+            const throttleInterval = motivator.isSmallMobile
+              ? 3000
+              : motivator.isMobile
+              ? 1500
+              : 1000;
+
+            if (
+              motivator.lastUpdateTime &&
+              now - motivator.lastUpdateTime < throttleInterval
+            ) {
+              return;
+            }
+
+            motivator.lastUpdateTime = now;
+            motivator
               .fetchCart()
-              .then(async () => await window.shippingMotivator.update())
-              .catch(console.error);
+              .then(async () => await motivator.update())
+              .catch((error) => {
+                if (!motivator.isMobile) {
+                  console.error('Shipping motivator update error:', error);
+                }
+              });
           }
-        }, 10);
+        }, delay);
       }
 
       return response;
@@ -2078,9 +2186,16 @@ class ShippingMotivator {
 
 // Initialize when DOM is ready
 function initShippingMotivator() {
+  // Prevent multiple instances
+  if (window.shippingMotivator) {
+    return;
+  }
+
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
-      window.shippingMotivator = new ShippingMotivator();
+      if (!window.shippingMotivator) {
+        window.shippingMotivator = new ShippingMotivator();
+      }
     });
   } else {
     window.shippingMotivator = new ShippingMotivator();

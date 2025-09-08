@@ -191,6 +191,9 @@ cart-items {
 }
 
 .cart__ctas {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 0;
   text-align: center;
 }
 
@@ -211,12 +214,6 @@ cart-items {
 
   [data-shopify-buttoncontainer] {
     justify-content: flex-end;
-  }
-
-  .cart__ctas {
-    display: flex;
-    flex-direction: column-reverse;
-    gap: 0;
   }
 }
 

@@ -36,7 +36,7 @@
         {{~ end ~}}
       </div>
       
-      <div class="acs_auto_group">
+      <div class="acs_auto_group popular">
 			<div class="tw-flex tw-items-center">
         <h4 class="force-h3">Popular Collections</h4>
 				</div>

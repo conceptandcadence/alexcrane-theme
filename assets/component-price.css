@@ -132,6 +132,10 @@
   display: flex;
 }
 
+.advc-card .price__container {
+  padding: 1.3rem 0 0.4rem;
+}
+
 .acs_auto_products .price__container {
   flex-direction: row-reverse !important;
 }

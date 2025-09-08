@@ -1717,7 +1717,11 @@ body .shop-filters__container:not(.plp-nav-expanded) {
     transform: translateY(0);
   }
 }
-
+.collection-nav select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-color: transparent;
+}
 /* Filter trigger button caret flip animation */
 .plp-products-filter--trigger span:first-child,
 .collection-nav select {
