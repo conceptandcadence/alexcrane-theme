@@ -426,7 +426,7 @@ func autocomplete_product_card
 
     <a class="plp-item__link" href="{{ $product?.url }}"><span class="visually-hidden">View {{ $title }}</span></a>
 
-    <div class="plp-item__purchase">
+    <div class="plp-item__purchase tw-mt-[7px]">
         <div class="plp-item__sizes">
 
           {{~ if $lengthOptions | object.size > 0 ~}}

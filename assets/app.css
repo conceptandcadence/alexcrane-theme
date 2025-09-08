@@ -812,6 +812,10 @@ video {
   margin-top: 24px;
 }
 
+.tw-mt-\[7px\] {
+  margin-top: 7px;
+}
+
 .tw-block {
   display: block;
 }
