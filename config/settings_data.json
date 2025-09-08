@@ -7,7 +7,7 @@
  * made to this file may be overwritten.
  * ------------------------------------------------------------
  */
-{
+ {
   "current": {
     "graphenehc_enabled": true,
     "graphenehc_js_url": "https://alexcranedev-1.store.advancedcommerce.services/graphenehc.js",
@@ -5354,45 +5354,6 @@
         "type": "shopify://apps/rebuy-personalization-engine/blocks/rebuy-global-embed/a26ae9b9-933b-40bf-bbc6-bf1220bbc4dc",
         "disabled": false,
         "settings": {}
-      },
-      "2699851813924348007": {
-        "type": "shopify://apps/navidium-shipping-protection/blocks/navidium-protection-consent/0127ebe0-a248-4215-97ad-f7db763bd6c8",
-        "disabled": true,
-        "settings": {
-          "show_landing_popup": false,
-          "show_reminder_popup": false,
-          "enablejQuery": false,
-          "product_handle": "navidium-shipping-protection",
-          "checkout_section": "navidium",
-          "subtotal_element": "navidium",
-          "click_triggers": "#cart-icon-bubble",
-          "store_checkout_button": "#checkout-button",
-          "custom_css": ""
-        }
-      },
-      "10862475845122376913": {
-        "type": "shopify://apps/navidium-shipping-protection/blocks/widget_app_embed/0127ebe0-a248-4215-97ad-f7db763bd6c8",
-        "disabled": true,
-        "settings": {
-          "enablejQuery": false,
-          "scriptType": "javascript",
-          "iosDeviceListener": "touchstart",
-          "auto_install": false,
-          "manual_install": false,
-          "nvdContainer1": "REQUIRED",
-          "nvdContainer2": "OPTIONAL",
-          "nvdContainer3": "OPTIONAL",
-          "waitForParent": 1000,
-          "widgetPosition": "afterbegin",
-          "currencyFormatType": "symbol",
-          "currencyPosition": "begin",
-          "nvdCurrency": "{{ shop.money_format | strip_html }}",
-          "product_handle": "navidium-shipping-protection",
-          "subtotal_element": "navidium",
-          "cart_bubble_count": "navidium",
-          "checkoutBtns": "[name='checkout'], [name='checkout'] *, #dyn-checkout",
-          "customCSS": ""
-        }
       }
     },
     "color_schemes": {

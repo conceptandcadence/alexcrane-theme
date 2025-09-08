@@ -10,7 +10,7 @@
 {
   "name": "t:sections.footer.name",
   "type": "footer",
-  "sections": {
+  "sections": { 
     "footer": {
       "type": "footer",
       "blocks": {

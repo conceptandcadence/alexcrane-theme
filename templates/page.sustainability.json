@@ -14,8 +14,8 @@
       "name": "t:sections.video.presets.name",
       "settings": {
         "overlay_title": "Sustainability",
-        "heading": "",
-        "description": "",
+        "heading": "This might come as a surprise",
+        "description": "<p>But most clothes are made from plastic. Our clothes are made from 100% natural, renewable materials—and that makes us pretty rare. Learn more about our sustainability efforts and what sets us apart.</p>",
         "content_width": "half",
         "enable_video_looping": true,
         "enable_autoplay": true,
@@ -24,7 +24,7 @@
         "full_width": false,
         "color_scheme": "",
         "padding_top": 0,
-        "padding_bottom": 0
+        "padding_bottom": 36
       }
     },
     "sustainability_feature_HnQicn": {
@@ -65,7 +65,7 @@
       ],
       "name": "Sustainability Feature",
       "settings": {
-        "title": "<p><em>The Problem:</em> Plastic</p>",
+        "title": "<p>The Problem:<br/>Plastic</p>",
         "description": "<p>This might come as a surprise: most clothes (65%) are made from plastic. Look at the tags in your closet. If they say polyester or nylon or acrylic that means plastic. </p>"
       }
     },
@@ -107,7 +107,7 @@
       ],
       "name": "Sustainability Feature",
       "settings": {
-        "title": "<p><em>The Solution: </em>Natural Materials</p>",
+        "title": "<p>The Solution:<br/>Natural Materials</p>",
         "description": "<p>Our clothes, on the other hand, are made from 100% natural, renewable materials. And that makes us pretty rare: currently, only 1% of clothes are made from natural materials.</p>"
       }
     },

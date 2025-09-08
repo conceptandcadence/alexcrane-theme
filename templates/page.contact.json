@@ -124,8 +124,7 @@
         "column_ydCdzJ"
       ],
       "custom_css": [
-        "@media screen and (min-width: 990px) {slider-component {max-width: 85rem; padding: 0; margin: 0 auto; }}",
-        ".multicolumn.background-primary .multicolumn-card {background: none;}"
+        "@media screen and (min-width: 990px) {slider-component {max-width: 85rem; padding: 0; margin: 0 auto; }}"
       ],
       "name": "t:sections.multicolumn.presets.name",
       "settings": {

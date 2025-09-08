@@ -8,7 +8,7 @@
  * ------------------------------------------------------------
  */
 {
-  "name": "t:sections.header.name",
+  "name": "t:sections.header.name", 
   "type": "header",
   "sections": {
     "announcement-bar": {
