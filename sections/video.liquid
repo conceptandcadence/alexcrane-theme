@@ -100,6 +100,25 @@
          max-width: 90%;
        }
      }
+
+     /* Mobile video display logic */
+     .video-section__desktop {
+       display: block;
+     }
+
+     .video-section__mobile {
+       display: none;
+     }
+
+     @media screen and (max-width: 749px) {
+       .video-section__desktop {
+         display: none;
+       }
+
+       .video-section__mobile {
+         display: block;
+       }
+     }
 {%- endstyle -%}
 
 {%- liquid
@@ -108,10 +127,21 @@
   assign alt = 'sections.video.load_video' | t: description: video_alt | escape
   assign poster = section.settings.video.preview_image | default: section.settings.cover_image
 
+  assign mobile_video_id = section.settings.mobile_video.id
+  assign mobile_video_alt = section.settings.mobile_video.alt | default: section.settings.description
+  assign mobile_poster = section.settings.mobile_video.preview_image | default: section.settings.cover_image
+
   if section.settings.video != null
     assign ratio_diff = section.settings.video.aspect_ratio | minus: poster.aspect_ratio | abs
     if ratio_diff < 0.01 and ratio_diff > 0
       assign fix_ratio = true
+    endif
+  endif
+
+  if section.settings.mobile_video != null
+    assign mobile_ratio_diff = section.settings.mobile_video.aspect_ratio | minus: mobile_poster.aspect_ratio | abs
+    if mobile_ratio_diff < 0.01 and mobile_ratio_diff > 0
+      assign mobile_fix_ratio = true
     endif
   endif
 -%}
@@ -129,8 +159,10 @@
   <div class='video-section isolate{% unless section.settings.full_width %} page-width{% endunless %} section-{{ section.id }}-padding'>
     {%- if section.settings.enable_autoplay -%}
       {%- comment -%} When autoplay is enabled, render video directly without deferred loading {%- endcomment -%}
+
+      {%- comment -%} Desktop Video {%- endcomment -%}
       <div
-        class='video-section__media video-section__media--with-overlay gradient global-media-settings{% if section.settings.full_width %} global-media-settings--full-width{% endif %}{% if fix_ratio %} media-fit-cover{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}'
+        class='video-section__media video-section__media--with-overlay video-section__desktop gradient global-media-settings{% if section.settings.full_width %} global-media-settings--full-width{% endif %}{% if fix_ratio %} media-fit-cover{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}'
         {% if poster != null %}
           style='--ratio-percent: {{ 1 | divided_by: poster.aspect_ratio | times: 100 }}%;'
         {% endif %}
@@ -179,10 +211,40 @@
           </div>
         {%- endunless -%}
       </div>
+
+      {%- comment -%} Mobile Video (only if mobile_video is set) {%- endcomment -%}
+      {%- if section.settings.mobile_video != null -%}
+        <div
+          class='video-section__media video-section__media--with-overlay video-section__mobile gradient global-media-settings{% if section.settings.full_width %} global-media-settings--full-width{% endif %}{% if mobile_fix_ratio %} media-fit-cover{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}'
+          {% if mobile_poster != null %}
+            style='--ratio-percent: {{ 1 | divided_by: mobile_poster.aspect_ratio | times: 100 }}%;'
+          {% endif %}
+        >
+          {{
+            section.settings.mobile_video
+            | video_tag:
+              image_size: '1100x',
+              autoplay: true,
+              loop: section.settings.enable_video_looping,
+              controls: false,
+              muted: true
+          }}
+
+          {%- unless section.settings.overlay_title == blank -%}
+            <div class='video-section__overlay'>
+              <h1 class='video-section__overlay-title h1'>
+                {{ section.settings.overlay_title }}
+              </h1>
+            </div>
+          {%- endunless -%}
+        </div>
+      {%- endif -%}
     {%- else -%}
       {%- comment -%} When autoplay is disabled, use deferred loading with poster image {%- endcomment -%}
+
+      {%- comment -%} Desktop Video with Deferred Loading {%- endcomment -%}
       <deferred-media
-        class='video-section__media video-section__media--with-overlay deferred-media gradient global-media-settings{% if section.settings.full_width %} global-media-settings--full-width{% endif %}{% if fix_ratio %} media-fit-cover{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}'
+        class='video-section__media video-section__media--with-overlay video-section__desktop deferred-media gradient global-media-settings{% if section.settings.full_width %} global-media-settings--full-width{% endif %}{% if fix_ratio %} media-fit-cover{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}'
         data-media-id='{{ video_id }}'
         {% if poster != null %}
           style='--ratio-percent: {{ 1 | divided_by: poster.aspect_ratio | times: 100 }}%;'
@@ -255,6 +317,58 @@
           {%- endif -%}
         </template>
       </deferred-media>
+
+      {%- comment -%} Mobile Video with Deferred Loading (only if mobile_video is set) {%- endcomment -%}
+      {%- if section.settings.mobile_video != null -%}
+        <deferred-media
+          class='video-section__media video-section__media--with-overlay video-section__mobile deferred-media gradient global-media-settings{% if section.settings.full_width %} global-media-settings--full-width{% endif %}{% if mobile_fix_ratio %} media-fit-cover{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}'
+          data-media-id='{{ mobile_video_id }}'
+          {% if mobile_poster != null %}
+            style='--ratio-percent: {{ 1 | divided_by: mobile_poster.aspect_ratio | times: 100 }}%;'
+          {% endif %}
+        >
+          <button
+            id='Deferred-Poster-Modal-{{ mobile_video_id }}'
+            class='video-section__poster media deferred-media__poster media--landscape'
+            type='button'
+            aria-label='{{ mobile_video_alt | escape }}'
+          >
+            {%- if mobile_poster != null -%}
+              {{
+                mobile_poster
+                | image_url: width: 3840
+                | image_tag: sizes: sizes, widths: '375, 750, 1100, 1500, 1780, 2000, 3000, 3840', alt: mobile_video_alt
+              }}
+            {%- else -%}
+              {{ 'hero-apparel-3' | placeholder_svg_tag: 'placeholder-svg placeholder' }}
+            {%- endif -%}
+            <span class='deferred-media__poster-button motion-reduce'>
+              <span class='svg-wrapper'>
+                {{- 'icon-play.svg' | inline_asset_content -}}
+              </span>
+            </span>
+          </button>
+
+          {%- unless section.settings.overlay_title == blank -%}
+            <div class='video-section__overlay'>
+              <h1 class='video-section__overlay-title h1'>
+                {{ section.settings.overlay_title }}
+              </h1>
+            </div>
+          {%- endunless -%}
+          <template>
+            {{
+              section.settings.mobile_video
+              | video_tag:
+                image_size: '1100x',
+                autoplay: true,
+                loop: section.settings.enable_video_looping,
+                controls: true,
+                muted: false
+            }}
+          </template>
+        </deferred-media>
+      {%- endif -%}
     {%- endif -%}
 
     {%- unless section.settings.heading == blank and section.settings.description == blank -%}
@@ -357,6 +471,12 @@
       "type": "video",
       "id": "video",
       "label": "t:sections.video.settings.video.label"
+    },
+    {
+      "type": "video",
+      "id": "mobile_video",
+      "label": "Mobile video (for screens under 750px)",
+      "info": "Optional: Upload a different video optimized for mobile devices"
     },
     {
       "type": "header",
