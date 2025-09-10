@@ -65,7 +65,7 @@
       ],
       "name": "Sustainability Feature",
       "settings": {
-        "title": "<p>The Problem:<br/>Plastic</p>",
+        "title": "<p>The Problem:<br/><em>Plastic</em></p>",
         "description": "<p>This might come as a surprise: most clothes (65%) are made from plastic. Look at the tags in your closet. If they say polyester or nylon or acrylic that means plastic. </p>"
       }
     },
@@ -107,7 +107,7 @@
       ],
       "name": "Sustainability Feature",
       "settings": {
-        "title": "<p>The Solution:<br/>Natural Materials</p>",
+        "title": "<p>The Solution:<br/><em>Natural Materials</em></p>",
         "description": "<p>Our clothes, on the other hand, are made from 100% natural, renewable materials. And that makes us pretty rare: currently, only 1% of clothes are made from natural materials.</p>"
       }
     },
